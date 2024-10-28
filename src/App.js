@@ -1,17 +1,28 @@
 import React from 'react';
 import Login from './components/login';
+import Pwreset from './components/pwreset';
+import Signup from './components/signup';
 
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 
 const App = () => {
   return (
-    // <BrowserRouter>
-    //   <Routes>
-    //     <Route path="/" element={<Navigate to="./components/login" />} />
-    //   </Routes>
-    // </BrowserRouter>
-    <Login />
+
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login/>} />
+
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/pwreset" element={<Pwreset />} />
+      
+        <Route path="/login" element={<Login />} />
+
+      </Routes>
+
+    </BrowserRouter>
+
+
   );
 };
 
