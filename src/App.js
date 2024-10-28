@@ -11,7 +11,7 @@ const App = () => {
     //     <Route path="/" element={<Navigate to="./components/login" />} />
     //   </Routes>
     // </BrowserRouter>
-   <Login />
+    <Login />
   );
 };
 
