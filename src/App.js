@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 const App = () => {
   return (
+
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Pwreset/>} />
@@ -14,6 +15,7 @@ const App = () => {
       </Routes>
 
     </BrowserRouter>
+
 
   );
 };
