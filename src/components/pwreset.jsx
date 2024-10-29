@@ -14,7 +14,7 @@ const Pwreset = () => {
             <h2 id="reseth2">Reset your password</h2>
             <p id="resetp">Enter the email associated with your account, and we'll send you a link to reset your password. </p>
     
-            <input type="email" id='resetemail' placeholder='Email address'/>
+            <input type="email" id='resetemail'  className="textinput" placeholder='Email address'/>
             <br />
             
           
