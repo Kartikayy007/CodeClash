@@ -6,6 +6,7 @@ import Otp from './components/otp';
 import NewPass from './components/newpass';
 import Resetlink from './components/resetlink';
 
+
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 
@@ -21,6 +22,7 @@ const App = () => {
       
       <Route path="/login" element={<Login />} />
       <Route path="/otp" element={<Otp />} />
+     
       <Route path="/newpass" element={<NewPass />} />
       <Route path="/resetlink" element={<Resetlink />} />
       
