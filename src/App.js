@@ -7,22 +7,19 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 
 const App = () => {
-  return (
-
+   return (
+  
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login/>} />
 
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/pwreset" element={<Pwreset />} />
+     <Route path="/signup" element={<Signup />} />
+    <Route path="/pwreset" element={<Pwreset />} />
       
-        <Route path="/login" element={<Login />} />
-
+      <Route path="/login" element={<Login />} />
       </Routes>
 
     </BrowserRouter>
-
-
   );
 };
 
