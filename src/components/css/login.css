@@ -26,7 +26,7 @@
     margin-left: 20%;
 width: 347px;
 }
-.leftSub p{margin-left: 6.5px;
+.leftSub p{
     font-size: 14px;
     margin-bottom: 39px;
     color: #000;
@@ -39,9 +39,8 @@ font-style: normal;
 font-weight: 400;
 line-height: 21px; 
 }
-h2{
+#leftsubh2{
     
-    margin-left: 6.5px;
     font-size: 24px;
     margin-bottom: 8px;
     color: var(--Neutral-1000, #121212);
@@ -264,4 +263,17 @@ height: 8px;
 .slide {
     min-width: 100%; 
     transition: opacity 0.5s ease-in-out;
+}
+input[type="text"]:focus,input[type="email"]:focus,input[type="password"]:focus{
+    outline: none;
+}
+input[type="email"],input[type="password"],input[type="text"]{
+    color: var(--Neutral-1000, #121212);
+
+  
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 25.6px; 
 }
