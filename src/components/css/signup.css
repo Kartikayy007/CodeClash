@@ -18,6 +18,7 @@
 input[type="text"],input[type="email"],input[type="password"]{
     padding: 20px;
     width: -webkit-fill-available;
+    width: -moz-available;
     border-radius: 8px;
     margin-bottom: 24px;
     border: none;
@@ -46,6 +47,7 @@ color: #121212;
 }
 #sub{
     width: -webkit-fill-available;
+    width: -moz-available;
     padding: 10px 24px;
     border-radius: 8px;
     border: none;
