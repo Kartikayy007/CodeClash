@@ -15,12 +15,12 @@ const Otp = () => {
             <p id="otpp">We’ve sent a 6-digit verification code to xxx@gmail.com </p>
     <form className="digits">
     
-    <input type="text" id='digit1' />
-    <input type="text" id="digit2" />
-    <input type="text" id="digit3" />
-    <input type="text" id="digit4" />
-    <input type="text" id="digit5"  />
-    <input type="text" id="digit6" />
+    <input type="text" id='digit1' maxLength="1"/>
+    <input type="text" id="digit2" maxLength="1"/>
+    <input type="text" id="digit3" maxLength="1"/>
+    <input type="text" id="digit4" maxLength="1"/>
+    <input type="text" id="digit5" maxLength="1" />
+    <input type="text" id="digit6" maxLength="1"/>
    
            
             
@@ -34,7 +34,7 @@ const Otp = () => {
            
            
         
-            <input type="submit" id='otpsubmit'value="Send reset link" />
+            <input type="submit" id='otpsubmit'value="Verify" />
             <div className="askSign"> <p>Back to  <Link to="/signup">Sign Up</Link></p></div>
            
            

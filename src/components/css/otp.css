@@ -85,11 +85,21 @@ border: 1px solid var(--Neutral-600, #5D6C6C);
 background: var(--Neutral-00, #FAFAFA);
 }
 #digit1,#digit2,#digit3,#digit4,#digit5,#digit6{
+    text-align: center;
+    padding: 0;
     width: 45px;
     height: 45px;
         border-radius: 8px;
     border: 1px solid var(--Neutral-600, #5D6C6C);
     background: var(--Neutral-00, #FAFAFA);
+    color: var(--Neutral-950, #262B2B);
+
+
+font-family: Poppins;
+font-size: 18px;
+font-style: normal;
+font-weight: 500;
+line-height: 25.2px; 
 }
 #resend{
     color: var(--Neutral-600, #5D6C6C);
@@ -102,4 +112,11 @@ font-style: normal;
 font-weight: 400;
 line-height: 21px;
 margin-bottom: 16px;
+}
+#digit1:focus,#digit2:focus,#digit3:focus,#digit4:focus,#digit5:focus,#digit6:focus{
+    outline: none;
+    border-radius: 8px;
+    border: 2px solid var(--Sucess-500, #46A14B);
+    background: var(--Neutral-00, #FAFAFA);
+        outline: none;
 }

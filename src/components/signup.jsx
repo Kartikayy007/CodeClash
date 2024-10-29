@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 
 import cuate  from '../assets/cuate.svg'
 import './css/signup.css';
@@ -14,6 +14,7 @@ const images = [img4, img5, img6,img7 ,img8];
 const Signup = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -22,6 +23,10 @@ const Signup = () => {
 
     return () => clearInterval(interval);
   }, []);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate('/otp'); 
+  };
 
   return (
     <div className='signUpPage'>
@@ -29,7 +34,7 @@ const Signup = () => {
         <div className="leftSub">
         <h2>Create Your Account</h2>
         <p>start organizing your classes, assignments, and<br/>meetings all in one place</p>
-
+        <form onSubmit={handleSubmit}>
         <input type="text" class="textinput"placeholder="User Name"/>
         <br/>
         <input type="email" class="textinput" placeholder='Email Address'/>
@@ -47,6 +52,7 @@ const Signup = () => {
 
     
         <input type="submit" value="Create Account" id='sub'/>
+        </form>
         <div className="asklogin"> <p>Already have an account?  <Link to="/login">Log in</Link></p></div>
        
        
