@@ -23,7 +23,7 @@ const Login = () => {
     <div className='loginPage' >
       <div className='left'>
         <div className="leftSub">
-          <h2>Log In</h2>
+          <h2 id="leftsubh2">Log In</h2>
           <p>to access your classes, assignments and more.</p>
 
           <input type="email" placeholder='Email address' className='textinput'/>
@@ -32,7 +32,7 @@ const Login = () => {
           <br />
 
           <div className="checkbox-container">
-            <a href="">Forget Password?</a>
+          <Link to="/pwreset">Forget Password?</Link>
             <input type="checkbox" id="remember" name="remember" />
             <label htmlFor="remember">Remember me</label>
           </div>

@@ -12,7 +12,18 @@
   align-items: center;
   height: 100vh;
 }
+#signuph2{
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: var(--Neutral-1000, #121212);
 
+
+font-family: Poppins;
+font-size: 24px;
+font-style: normal;
+font-weight: 600;
+line-height: 31.2px;
+}
  
 
 input[type="text"],input[type="email"],input[type="password"]{
@@ -32,6 +43,7 @@ color: #121212;
 }
 
 #terms{
+    top: 5px;
     font-weight: 400;
     font-size: 12px;
     justify-self: flex-end;
@@ -54,6 +66,9 @@ color: #121212;
     color: white;
     margin-top: 24px;
     background: var(--Primary-800, #066769);
+}
+input[type="submit"]:hover{
+    cursor: pointer;
 }
 .asklogin{
     margin-top: 16px;
