@@ -80,3 +80,13 @@ background: #F7F8F8;
     width: 434px;
 height: 404px;
 }
+input::placeholder{
+    color: var(--Neutral-1000, #121212);
+
+font-family: Poppins;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 25.6px;
+}
+

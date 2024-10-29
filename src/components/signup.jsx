@@ -40,7 +40,7 @@ const Signup = () => {
        
         <div class="policy-container">
         <input type="checkbox" id="terms" name="terms"/>
-        <label for="terms" id="terms">I agree to the &nbsp;<a href="https://example.com" >Terms & conditions  </a>&nbsp;and <a href="https://example.com">  <br/>&emsp;&emsp;&emsp; Privacy Policy</a></label>
+        <label for="terms" id="terms">I agree to the &nbsp;<a href="" >Terms & conditions  </a>&nbsp;and <a href="">  <br/>&emsp;&emsp;&emsp; Privacy Policy</a></label>
 
   
 </div>
