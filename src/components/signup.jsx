@@ -27,20 +27,20 @@ const Signup = () => {
     <div className='signUpPage'>
     <div className='left'>
         <div className="leftSub">
-        <h2>Create Your Account</h2>
+        <h2 id='signuph2'>Create Your Account</h2>
         <p>start organizing your classes, assignments, and<br/>meetings all in one place</p>
 
-        <input type="text" class="textinput"placeholder="User Name"/>
+        <input type="text" className="textinput"placeholder="User Name"/>
         <br/>
-        <input type="email" class="textinput" placeholder='Email Address'/>
+        <input type="email" className="textinput" placeholder='Email Address'/>
         <br />
-        <input type="password"  class="textinput"placeholder='Password' />
+        <input type="password"  className="textinput"placeholder='Password' />
         <br />
       
        
         <div class="policy-container">
         <input type="checkbox" id="terms" name="terms"/>
-        <label for="terms" id="terms">I agree to the &nbsp;<a href="https://example.com" >Terms & conditions  </a>&nbsp;and <a href="https://example.com">  <br/>&emsp;&emsp;&emsp; Privacy Policy</a></label>
+        <label for="terms" id="terms">I agree to the &nbsp;<a href="" >Terms & conditions  </a>&nbsp;and <a href="">  <br/> &emsp;&emsp;&emsp; Privacy Policy</a></label>
 
   
 </div>
