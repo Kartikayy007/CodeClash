@@ -23,7 +23,7 @@ const Login = () => {
     <div className='loginPage' >
       <div className='left'>
         <div className="leftSub">
-          <h2>Log In</h2>
+          <h2 id="leftsubh2">Log In</h2>
           <p>to access your classes, assignments and more.</p>
 
           <input type="email" placeholder='Email address' className='textinput'/>
