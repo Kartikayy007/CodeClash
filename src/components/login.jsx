@@ -32,7 +32,7 @@ const Login = () => {
           <br />
 
           <div className="checkbox-container">
-            <a href="">Forget Password?</a>
+          <Link to="/pwreset">Forget Password?</Link>
             <input type="checkbox" id="remember" name="remember" />
             <label htmlFor="remember">Remember me</label>
           </div>

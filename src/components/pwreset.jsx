@@ -1,4 +1,4 @@
-
+import { Link } from 'react-router-dom';
 
 import React from 'react';
 import './css/pwreset.css';
@@ -22,7 +22,7 @@ const Pwreset = () => {
            
         
             <input type="submit" id='resetsubmit'value="Send reset link" />
-            <div className="askSign"> <p>Remember your password?  <a href="">Login</a></p></div>
+            <div className="askSign"> <p>Remember your password?  <Link to="/login">Log in</Link></p></div>
            
            
             </div>
