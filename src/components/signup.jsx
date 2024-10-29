@@ -37,10 +37,6 @@ const Signup = () => {
 
         <form onSubmit={handleSubmit}>
         <input type="text" className="textinput"placeholder="User Name"/>
-
-
-        
-
         <br/>
         <input type="email" className="textinput" placeholder='Email Address'/>
         <br />
