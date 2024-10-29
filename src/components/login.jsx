@@ -1,62 +1,77 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import heroImage from '../assets/hero.png';
+import { Link } from 'react-router-dom';
+
 import img1 from '../assets/img1.svg';
+import img2 from '../assets/img2.svg'; 
+import img3 from '../assets/img3.svg'; 
 import './css/login.css';
+
+const images = [img1, img2, img3];
+
 const Login = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  
- 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 3000); 
 
- 
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-  <div className='loginPage'>
-    <div className='left'>
+    <div className='loginPage' >
+      <div className='left'>
         <div className="leftSub">
-        <h2>Log In</h2>
-        <p>to access your classes, assignments and more. </p>
+          <h2>Log In</h2>
+          <p>to access your classes, assignments and more.</p>
 
-        <input type="email" placeholder='Email address'/>
-        <br />
-        <input type="password" placeholder='Password' />
-        <br />
-      
-       
-        <div class="checkbox-container">
-        <a href="">Forget Password?</a>
-        <input type="checkbox" id="remember" name="remember"/>
-        <label for="remember">Remember me</label>
+          <input type="email" placeholder='Email address' className='textinput'/>
+          <br />
+          <input type="password" placeholder='Password' className='textinput' />
+          <br />
 
-  
-</div>
+          <div className="checkbox-container">
+          <Link to="/pwreset">Forget Password?</Link>
+            <input type="checkbox" id="remember" name="remember" />
+            <label htmlFor="remember">Remember me</label>
+          </div>
 
-    
-        <input type="submit" value="Log in" />
-        <div className="askSign"> <p>Don't have an account?  <a href="">Sign up</a></p></div>
-       
-       
+          <input type="submit" value="Log in"  />
+          <div className="askSign">
+            <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
+          </div>
         </div>
-  
-    </div>
-    <div className="right">
-     <div className="content">
-      <h1>Welcome back to Classence!</h1>
-      <p>Where learning and collaboration happen seamlessly</p>
-      <img src={img1} alt="" />
-
-      <div className="scroller">
-      <div className="rec1"></div>
-      <div className="rec2"></div>
-      <div className="rec2"></div>
       </div>
+      <div className="right">
+        <div className="content">
+         
 
-   
-     </div>
-     
+          <div className="slider">
+            <div className="slides" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+              {images.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt={`Slide ${index + 1}`}
+                  className="slide"
+                />
+              ))}
+            </div>
+          </div>
 
+          <div className="scroller">
+            {images.map((_, index) => (
+              <div
+                key={index}
+                className={`rec ${currentIndex === index ? 'recActive' : 'rec2'}`}
+              ></div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-)}
+  );
+}
 
 export default Login;
