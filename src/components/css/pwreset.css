@@ -50,6 +50,7 @@ line-height: 31.2px;
 #resetemail{
       padding: 20px;
       width: -webkit-fill-available;
+      width: -moz-available;
       border-radius: 8px;
       margin-bottom: 54px;
       border: none;
@@ -57,6 +58,7 @@ line-height: 31.2px;
 }
 #resetsubmit{
     width: -webkit-fill-available;
+    width: -moz-available;
     padding: 10px 24px;
     border-radius: 8px;
     border: none;
