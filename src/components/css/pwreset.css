@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+
+}
+.resetPage{
+    background-color: #fff;
+
+
+  display: flex;
+  align-items: center;
+  height: 100vh;
+}
+.resetleft{
+   display: flex;
+  width: 50%;
+   align-items: center;
+}
+.resetleftSub{
+    margin-left: 152px;
+width: 347px;
+}
+#resetp{margin-left: 6.5px;
+    font-size: 14px;
+    margin-bottom: 78px;
+    color: #000;
+    white-space: wrap;
+font-family: Poppins;
+font-style: normal;
+font-weight: 400;
+line-height: 21px;
+}
+#reseth2{
+    margin-left: 6.5px;
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: var(--Neutral-1000, #121212);
+
+
+font-family: Poppins;
+font-size: 24px;
+font-style: normal;
+font-weight: 600;
+line-height: 31.2px;
+}
+#resetemail{
+      padding: 20px;
+      width: -webkit-fill-available;
+      border-radius: 8px;
+      margin-bottom: 54px;
+      border: none;
+      border: 1px solid var(--Neutral-700, #4C5858);
+}
+#resetsubmit{
+    width: -webkit-fill-available;
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    background: var(--Primary-800, #066769);
+}
+.resetright{
+   width: 674px;
+   height: 646px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+background: #F7F8F8;
+}   
+
+
+.resetcontent img{
+    width: 434px;
+height: 404px;
+}

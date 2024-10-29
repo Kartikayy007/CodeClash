@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import heroImage from '../assets/hero.png';
 import img1 from '../assets/img1.svg';
-
 import './css/login.css';
 const Login = () => {
 
