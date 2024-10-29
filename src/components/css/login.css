@@ -264,3 +264,16 @@ height: 8px;
     min-width: 100%; 
     transition: opacity 0.5s ease-in-out;
 }
+input[type="text"]:focus,input[type="email"]:focus,input[type="password"]:focus{
+    outline: none;
+}
+input[type="email"],input[type="password"],input[type="text"]{
+    color: var(--Neutral-1000, #121212);
+
+  
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 25.6px; 
+}

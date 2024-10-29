@@ -67,6 +67,9 @@ color: #121212;
     margin-top: 24px;
     background: var(--Primary-800, #066769);
 }
+input[type="submit"]:hover{
+    cursor: pointer;
+}
 .asklogin{
     margin-top: 16px;
     text-align: center;

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 
 import cuate  from '../assets/cuate.svg'
 import './css/signup.css';
@@ -14,6 +14,7 @@ const images = [img4, img5, img6,img7 ,img8];
 const Signup = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -22,6 +23,10 @@ const Signup = () => {
 
     return () => clearInterval(interval);
   }, []);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate('/otp'); 
+  };
 
   return (
     <div className='signUpPage'>
@@ -30,7 +35,12 @@ const Signup = () => {
         <h2 id='signuph2'>Create Your Account</h2>
         <p>start organizing your classes, assignments, and<br/>meetings all in one place</p>
 
+        <form onSubmit={handleSubmit}>
         <input type="text" className="textinput"placeholder="User Name"/>
+
+
+        
+
         <br/>
         <input type="email" className="textinput" placeholder='Email Address'/>
         <br />
@@ -40,13 +50,16 @@ const Signup = () => {
        
         <div class="policy-container">
         <input type="checkbox" id="terms" name="terms"/>
-        <label for="terms" id="terms">I agree to the &nbsp;<a href="" >Terms & conditions  </a>&nbsp;and <a href="">  <br/> &emsp;&emsp;&emsp; Privacy Policy</a></label>
+
+        <label for="terms" id="terms">I agree to the &nbsp;<a href="" >Terms & conditions  </a>&nbsp;and <a href="">  <br/>&emsp;&emsp;&emsp; Privacy Policy</a></label>
+
 
   
 </div>
 
     
         <input type="submit" value="Create Account" id='sub'/>
+        </form>
         <div className="asklogin"> <p>Already have an account?  <Link to="/login">Log in</Link></p></div>
        
        
