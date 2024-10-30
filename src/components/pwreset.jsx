@@ -1,10 +1,16 @@
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 
 import React from 'react';
 import './css/pwreset.css';
 import bro1 from '../assets/bro.svg';
 
 const Pwreset = () => {
+    const navigate = useNavigate();
+
+    const handleResendLink = (e) => {
+      e.preventDefault();
+      navigate('/resetlink');
+    };
 
 
     return(
@@ -21,7 +27,7 @@ const Pwreset = () => {
            
            
         
-            <input type="submit" id='resetsubmit'value="Send reset link" />
+            <input type="submit" id='resetsubmit'value="Send reset link"  onClick={handleResendLink}/>
             <div className="askSign"> <p>Remember your password?  <Link to="/login">Log in</Link></p></div>
            
            

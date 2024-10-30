@@ -231,7 +231,7 @@ line-height: 25.6px;
     width: 10px;
     height: 10px;
     background-color: gray;
-    border-radius: 50%;
+
    
     transition: width 0.3s ease, background-color 0.3s ease; 
   }
