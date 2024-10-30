@@ -120,3 +120,8 @@ margin-bottom: 16px;
     background: var(--Neutral-00, #FAFAFA);
         outline: none;
 }
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

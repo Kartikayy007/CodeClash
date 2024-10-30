@@ -1,4 +1,6 @@
 import { Link,useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useState } from 'react';
 
 import React from 'react';
 import './css/pwreset.css';
@@ -6,11 +8,38 @@ import bro1 from '../assets/bro.svg';
 
 const Pwreset = () => {
     const navigate = useNavigate();
+    const [email, setEmail] = useState('');
 
-    const handleResendLink = (e) => {
+    const handleResendLink = async(e) => {
       e.preventDefault();
       navigate('/resetlink');
+
+
+      try {
+        const response = await axios.post("https://singhanish.me/api/auth/reset-password", {
+          
+         email
+        });
+        
+        if (response.data.success) {
+         
+          
+        }
+      } catch (error) {
+        
+      } finally {
+        
+  
+        setEmail('');
+
+        
+       
+      }
     };
+  
+    
+
+    
 
 
     return(
@@ -20,7 +49,9 @@ const Pwreset = () => {
             <h2 id="reseth2">Reset your password</h2>
             <p id="resetp">Enter the email associated with your account, and we'll send you a link to reset your password. </p>
     
-            <input type="email" id='resetemail'  className="textinput" placeholder='Email address'/>
+            <input type="email" id='resetemail'  className="textinput" placeholder='Email address'  value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required/>
             <br />
             
           
