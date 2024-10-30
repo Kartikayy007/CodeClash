@@ -61,6 +61,9 @@ input[type="email"],input[type="password"]{
       border: none;
       border: 1px solid var(--Neutral-700, #4C5858);
 }
+#forgethover:hover{
+    color: #008080;
+}
 input[type="checkbox"]{
 
     justify-self: flex-end;
