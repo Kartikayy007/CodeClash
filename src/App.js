@@ -3,9 +3,11 @@ import Login from './components/login';
 import Pwreset from './components/pwreset';
 import Signup from './components/signup';
 import Otp from './components/otp';
-import NewPass from './components/newpass';
+
 import Resetlink from './components/resetlink';
 
+
+import Newpass from './components/newpass';
 
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
@@ -22,9 +24,11 @@ const App = () => {
       
       <Route path="/login" element={<Login />} />
       <Route path="/otp" element={<Otp />} />
+      <Route path="/resetlink" element={< Resetlink/>} />
+      <Route path="/reset-password" element={< Newpass/>} />
+      
      
-      <Route path="/newpass" element={<NewPass />} />
-      <Route path="/resetlink" element={<Resetlink />} />
+     
       
       </Routes>
 
