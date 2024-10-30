@@ -1,0 +1,87 @@
+#dashboardpage{
+    background-color: #fff;
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+#dashboardpageleft{
+   width: 17vw; 
+   height: 100%;
+   background-color: #EEF0F0;
+  
+}
+#dashboardpageleftsub1{
+ padding-left:25%;
+    height: 10%;
+    height: 25vh;
+    padding-top: 20%;
+}
+#dashboardpageleftsub2{
+    width: 66%;
+    margin-left:20%;
+    justify-content: space-between;
+    height: 50vh;
+}
+#dashboardpageleftsub21{
+    display: flex;
+    gap: 40px;
+    margin-bottom: 9%;
+  
+}
+
+#dashboardpageleftsub21 span{
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22.4px;
+}
+
+#dashboardpageleftsub3{
+padding-top: 37%;
+  padding-left: 75%;
+    height: 25vh;
+}
+#dashboardpageright{
+    width: 83vw; 
+}
+#dashboardpagerightsub1{
+display: flex;
+height: 25vh;
+}
+#dashboardpagerightsub1 input{
+    width: 400px;
+    height: 40px;
+    padding-left: 70px;
+    margin-top: 25px;
+    margin-left: 46px;
+    border-radius: 8px;
+}
+#dashboardpagerightsub1 img{
+    height: 32px;
+    width:32px;
+    margin-top: 32px;
+    margin-left: 1025px;
+}
+#dashboardpagerightsub2{
+    height: 50vh;
+}
+#dashboardpagerightsub21{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#dashboardpagerightsub212 button{
+    background-color: #008080;
+    color: #fff;
+    height: 40px;
+    width: 180px;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+#dashboardpagerightsub3{
+    height: 25vh;
+    padding-left: 1450px;
+    padding-top: 80px;
+}

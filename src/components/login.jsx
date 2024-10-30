@@ -25,14 +25,13 @@ const Login = () => {
         <div className="leftSub">
           <h2 id="leftsubh2">Log In</h2>
           <p>to access your classes, assignments and more.</p>
-
-          <input type="email" placeholder='Email address' className='textinput'/>
+          <input type="email" placeholder='Email Address' className='textinput'/>
           <br />
           <input type="password" placeholder='Password' className='textinput' />
           <br />
 
           <div className="checkbox-container">
-          <Link to="/pwreset">Forget Password?</Link>
+          <Link to="/pwreset" id="forgethover">Forget Password?</Link>
             <input type="checkbox" id="remember" name="remember" />
             <label htmlFor="remember">Remember me</label>
           </div>

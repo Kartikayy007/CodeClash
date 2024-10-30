@@ -36,11 +36,7 @@ const Signup = () => {
         <p>start organizing your classes, assignments, and<br/>meetings all in one place</p>
 
         <form onSubmit={handleSubmit}>
-        <input type="text" className="textinput"placeholder="User Name"/>
-
-
-        
-
+        <input type="text"className="textinput"placeholder="User Name"/>
         <br/>
         <input type="email" className="textinput" placeholder='Email Address'/>
         <br />
