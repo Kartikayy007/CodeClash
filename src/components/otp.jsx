@@ -50,12 +50,32 @@ const Otp = () => {
        
       }
     };
+
+    const handleClick = async (e) => {
+    
+
+      e.preventDefault();
+
+      try{
+        console.log("email:"+email);
+        const response = await axios.post("https://singhanish.me/api/auth/resend-otp", {
+          email
+        });
+        if(response.data.success){
+          console.log(response);
+          alert('Otp sent successfully')
+        }
+      }
+     
+      catch (error) {
+        console.log(error);
+      }
+    };
   
   
     
     const handleInputChange = (e,index) => {
         const { value, id } = e.target;
-        // Only allow digits 0-9
         if (!/^\d$/.test(value)) {
             e.target.value = '';
             return;
@@ -88,7 +108,7 @@ const Otp = () => {
             
         
     </form>
-    <p id='resend'>Resend OTP in 27s</p>
+    <p id='resend'> <span onClick={handleClick}>Resend Otp </span>in 27s</p>
            
             
             
