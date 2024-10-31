@@ -73,6 +73,7 @@ const Signup = () => {
         <p>start organizing your classes, assignments, and<br/>meetings all in one place</p>
 
         <form onSubmit={handleSubmit}>
+
         <input
               type="text"
               className="textinput"
@@ -97,6 +98,7 @@ const Signup = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
             <br />
+
       
        
         <div className="policy-container">

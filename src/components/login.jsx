@@ -54,6 +54,7 @@ const Login = () => {
           <input type="email" placeholder='Email address' className='textinput'    value={email}
             onChange={(e) => setEmail(e.target.value)}
             required/>
+
           <br />
           <input type="password" placeholder='Password' className='textinput' 
           value={password}
@@ -62,7 +63,7 @@ const Login = () => {
           <br />
 
           <div className="checkbox-container">
-          <Link to="/pwreset">Forget Password?</Link>
+          <Link to="/pwreset" id="forgethover">Forget Password?</Link>
             <input type="checkbox" id="remember" name="remember" />
             <label htmlFor="remember">Remember me</label>
           </div>
