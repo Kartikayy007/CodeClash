@@ -93,3 +93,27 @@ line-height: 25.6px;
 .askSign> p{
     font-size: 14px;
 }
+.resetleftSub .error-message {
+    color: #A62F2F;
+    font-size: 0.9em;
+    margin-top: 5px;
+    margin-left: 16px;
+    margin-bottom: 12px !important;
+    
+  }
+  .resetleftSub .text-input .input-error {
+    border-color:#A62F2F ;
+    border-width: 2px ; 
+  }
+  .resetleftSub .error-message {
+    color: #A62F2F;
+    font-size: 0.9em;
+    margin-top: 5px;
+    margin-left: 16px;
+    margin-bottom: 8px !important;
+    
+  }
+  .input-error{
+    color: #A62F2F !important;
+  }
+  
