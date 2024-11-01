@@ -183,7 +183,7 @@ const Signup = () => {
                     onChange={(e) => setIsChecked(e.target.checked)}
                   />
                   <label htmlFor="terms" id="terms">
-                    I agree to the &nbsp;<a href="">Terms & conditions</a>&nbsp; and <a href="" id='priP'>Privacy Policy</a>
+                   <span>I agree to the &nbsp;<a href="">Terms & conditions</a>&nbsp; and<a href="" id='priP'>Privacy Policy</a></span> 
                   </label>
                 </div>
 

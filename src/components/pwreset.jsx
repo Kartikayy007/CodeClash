@@ -87,7 +87,9 @@ const Pwreset = () => {
 
           <br />
 
-
+          <div id="resmobscreenlogo">
+          <img src={bro1} alt="" />
+        </div>
 
 
 
