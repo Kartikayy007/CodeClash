@@ -66,3 +66,21 @@ line-height: 31.2px;
     width: 434px;
     height: 404px;
 }   
+#mailId{
+    color: var(--Neutral-900, #394141);
+
+font-family: Poppins;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 21px; 
+}
+#resetRem{
+    color: var(--Neutral-1000, #121212);
+
+font-family: Poppins;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 15.6px; 
+}

@@ -5,6 +5,11 @@ import Signup from './components/signup';
 import Otp from './components/otp';
 import Dashboard from './components/dashboard';
 
+import Resetlink from './components/resetlink';
+
+
+import Newpass from './components/newpass';
+
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 
@@ -21,6 +26,12 @@ const App = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/otp" element={<Otp />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/resetlink" element={< Resetlink/>} />
+      <Route path="/reset-password" element={< Newpass/>} />
+      
+     
+     
+      
       </Routes>
 
     </BrowserRouter>
