@@ -80,6 +80,7 @@ const Login = () => {
           <h2 id="leftsubh2">Log In</h2>
           <p>to access your classes, assignments and more.</p>
 
+
           <div className="input-container">
             <input
               type="email"
@@ -122,6 +123,7 @@ const Login = () => {
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
             />
+
             <label htmlFor="remember">Remember me</label>
           </div>
 

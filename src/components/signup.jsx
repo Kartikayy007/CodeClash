@@ -106,6 +106,7 @@ const Signup = () => {
 
           <form onSubmit={handleSubmit}>
             <input
+
               type="text"
               className="textinput"
               placeholder="User Name"
@@ -137,6 +138,7 @@ const Signup = () => {
               }}
             />
             <br />
+
             
             {showPasswordPopup && (
               <div className="password-popup">
@@ -192,6 +194,7 @@ const Signup = () => {
               </>
             )}
           </form>
+
 
           <div className="asklogin">
             <p>Already have an account? <Link to="/login">Log in</Link></p>

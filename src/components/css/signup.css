@@ -24,7 +24,6 @@ font-style: normal;
 font-weight: 600;
 line-height: 31.2px;
 }
- 
 
 input[type="text"],input[type="email"],input[type="password"]{
     padding: 20px;
@@ -112,6 +111,7 @@ line-height: 20px;
     overflow: hidden;
     width: 80%; 
     margin: 0 auto; 
+
 }
 .disabled-button {
     cursor: default; 
@@ -176,3 +176,4 @@ background: rgb(254, 250, 238);  padding: 10px;
 #priP{
     margin-left: 45px;
 }
+
