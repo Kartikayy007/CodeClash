@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import img1 from '../assets/img1.svg';
 import img2 from '../assets/img2.svg';
 import img3 from '../assets/img3.svg';
+import frame from '../assets/Frame.svg'
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -76,6 +77,9 @@ const Login = () => {
   return (
     <div className='loginPage'>
       <div className='left'>
+        <div id="mobscreenlogo">
+          <img src={frame} alt="" />
+        </div>
         <div className="leftSub">
           <h2 id="leftsubh2">Log In</h2>
           <p>to access your classes, assignments and more.</p>
@@ -90,7 +94,7 @@ const Login = () => {
               required
               placeholder=" "
             />
-            <label className={`label  ${emailError ? 'input-error ' : ''}`}>Email address</label>
+            <label className={`label  ${emailError ? 'input-error ' : ''}`}>Email Address</label>
           </div>
           {emailError && <p className="error-message">{emailError}</p>}
 

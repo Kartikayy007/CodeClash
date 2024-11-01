@@ -176,4 +176,7 @@ background: rgb(254, 250, 238);  padding: 10px;
 #priP{
     margin-left: 45px;
 }
+@media (max-width:500px) {
+  
+}
 
