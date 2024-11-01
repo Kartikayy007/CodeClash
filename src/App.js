@@ -25,13 +25,15 @@ const App = () => {
       
       <Route path="/login" element={<Login />} />
       <Route path="/otp" element={<Otp />} />
-      <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/resetlink" element={< Resetlink/>} />
       <Route path="/reset-password" element={< Newpass/>} />
       
      
      
       
+
+      <Route path="/dashboard" element={<Dashboard />} />
+
       </Routes>
 
     </BrowserRouter>

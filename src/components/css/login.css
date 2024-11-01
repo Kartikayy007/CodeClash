@@ -7,6 +7,9 @@
   font-family: "Poppins", sans-serif;
 
 }
+:root{
+    --toastify-color-error:#A62F2F;
+}
 .loginPage{
     background-color: #fff;
 
@@ -30,7 +33,6 @@ width: 347px;
     font-size: 14px;
     margin-bottom: 39px;
     color: #000;
-    white-space: nowrap;
 
 
 font-family: Poppins;
@@ -269,6 +271,7 @@ height: 8px;
 }
 input[type="text"]:focus,input[type="email"]:focus,input[type="password"]:focus{
     outline: none;
+    border: 2px solid #066769;
 }
 input[type="email"],input[type="password"],input[type="text"]{
     color: var(--Neutral-1000, #121212);
@@ -280,3 +283,93 @@ input[type="email"],input[type="password"],input[type="text"]{
     font-weight: 400;
     line-height: 25.6px; 
 }
+.leftSub .error-message {
+    color: #A62F2F;
+    font-size: 0.9em;
+    margin-top: 5px;
+    margin-left: 16px;
+    margin-bottom: 8px !important;
+    
+  }
+  
+  .leftSub .textinput.input-error {
+    border-color: #A62F2F;
+    border-width: 2px; 
+  }
+  
+  .no-margin {
+    margin-bottom: 0!important;
+    border: 2px solid #A62F2F !important;
+  }
+  .password-input-container {
+    position: relative;
+    width: -webkit-fill-available;
+    width: -moz-available;
+  }
+  
+  .password-input {
+    width: 100%;
+    padding-right: 40px; 
+  }
+  
+  .toggle-password-btn {
+    position: absolute;
+    top: 38%;
+    right: 20px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+  }
+  
+  .custom-toast {
+    background-color: #FBE5E5 !important;
+    color: black;          
+    border-radius: 0px;               
+    padding: 10px;   
+    border-left: 5px solid #A62F2F;
+                
+     
+  }
+  .input-container {
+    position: relative;
+    width: 100%;
+  
+  }
+  
+  .textinput {
+    width: 100%;
+    padding: 20px 16px 8px; 
+    font-size: 16px;
+    border: 1px solid var(--Neutral-700, #4C5858);
+    border-radius: 8px;
+  }
+  
+  .label {
+    position: absolute;
+    top: 37%;
+    left: 16px;
+    color: var(--Neutral-700, #4C5858);
+    font-size: 16px;
+    pointer-events: none;
+    transform: translateY(-50%);
+    transition: 0.3s ease;
+padding-left: 5px;
+padding-right: 5px;
+  }
+  
+  .textinput:focus + .label,
+  .textinput:not(:placeholder-shown) + .label {
+    background-color: white;
+    text-align: center;
+   
+    top: 0px;
+    left: 10px;
+    font-size: 12px;
+    color: var(--Primary-800, #066769);
+  }
+  .input-error{
+    color: #A62F2F !important;
+  }
+ 
