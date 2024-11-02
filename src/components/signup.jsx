@@ -7,6 +7,7 @@ import { setEmail } from '../features/authSlice';
 import './css/signup.css';
 import img4 from '../assets/img4.svg';
 import img5 from '../assets/img5.svg';
+import frame from '../assets/Frame.svg'
 import img6 from '../assets/img6.svg';
 import img7 from '../assets/img7.svg';
 import img8 from '../assets/img8.svg';
@@ -100,6 +101,9 @@ const Signup = () => {
   return (
     <div className='signUpPage'>
       <div className='left'>
+      <div id="mobscreenlogo">
+          <img src={frame} alt="" />
+        </div>
         <div className="leftSub">
           <h2 id='signuph2'>Create Your Account</h2>
           <p>Start organizing your classes, assignments, and meetings all in one place.</p>
@@ -179,7 +183,7 @@ const Signup = () => {
                     onChange={(e) => setIsChecked(e.target.checked)}
                   />
                   <label htmlFor="terms" id="terms">
-                    I agree to the &nbsp;<a href="">Terms & conditions</a>&nbsp; and <a href="" id='priP'>Privacy Policy</a>
+                   <span>I agree to the &nbsp;<a href="">Terms & conditions</a>&nbsp; and<a href="" id='priP'>Privacy Policy</a></span> 
                   </label>
                 </div>
 

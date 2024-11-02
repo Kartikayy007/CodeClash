@@ -176,4 +176,27 @@ background: rgb(254, 250, 238);  padding: 10px;
 #priP{
     margin-left: 45px;
 }
+@media (max-width:500px) {
+  .right{
+    display:none;
+  }
+  .left{
+    width: 100%;
+  }
+  .leftSub{
+    margin-left: 3%;
+    width: 90%;
+    margin-right: 7%;
+  }
+  #leftSubh2{
+    font-size: 30px;
+  }
+  .leftSub p{
+   font-size: 18px;
+   margin-right: 5%;
+  }
+  .asklogin a{
+    font-size: 16px;
+  }
+}
 
