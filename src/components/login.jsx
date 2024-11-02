@@ -27,7 +27,6 @@ const Login = () => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 3000);
-
     return () => clearInterval(interval);
   }, []);
 
@@ -55,19 +54,26 @@ const Login = () => {
       });
 
       if (response.data.success) {
-        alert('Logged in successfully');
+        toast.dismiss();
+       
+
         const token = response.data.token;
+
         rememberMe ? localStorage.setItem('authToken', token) : sessionStorage.setItem('authToken', token);
+        toast.dismiss();
+        
       }
     } catch (error) {
       console.log(error);
 
-      toast.error(error.response.data.error, {
-        className: "custom-toast",
-        hideProgressBar: true,
-        autoClose: 3000,
-
-      });
+      toast.dismiss();
+        toast.error(error.response.data.error, {
+          className: "custom-toast",
+          hideProgressBar: true,
+          autoClose: 3000,
+          
+        });
+      
     } finally {
       setEmail('');
       setPassword('');
@@ -107,7 +113,7 @@ const Login = () => {
               required
               placeholder=" "
             />
-            <label className="label" >Password</label>
+            <label className="label">Password</label>
             <button
               type="button"
               className="toggle-password-btn"
@@ -116,7 +122,6 @@ const Login = () => {
               {element}
             </button>
           </div>
-
 
           <div className="checkbox-container">
             <Link to="/pwreset">Forget Password?</Link>

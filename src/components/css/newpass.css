@@ -41,7 +41,7 @@ line-height: 21px;
     border-radius: 8px;
     border: none;
     color: white;
-    margin-top: 136px;
+    margin-top: 19px;
     background: var(--Primary-800, #066769);
 }
 .newpassright{
@@ -59,3 +59,13 @@ line-height: 21px;
     width: 434px;
     height: 404px;
 }   
+
+
+.password-popup2 p.met {
+    
+    color: green;
+  }
+  
+    .password-popup2 p {
+      font-size: 14px;
+    }

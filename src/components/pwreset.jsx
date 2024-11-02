@@ -13,6 +13,8 @@ const Pwreset = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
+  
+
   useEffect(() => {
     if (emailError && email) {
       setEmailError('');
@@ -42,7 +44,7 @@ const Pwreset = () => {
         navigate('/resetlink');
       }
     } catch (error) {
-
+      toast.dismiss();
       toast.error(error.response.data.error, {
         className: "custom-toast",
         hideProgressBar: true,

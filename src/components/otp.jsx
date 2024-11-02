@@ -5,6 +5,8 @@ import React from 'react';
 import './css/otp.css';
 import bro1 from '../assets/pana.svg';
 import { useSelector } from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Otp = () => {
     const email = useSelector((state) => state.auth.email); 
@@ -39,10 +41,20 @@ const Otp = () => {
                 otp
             });
             if (response.data.success) {
-                alert('Signed up successfully');
+                toast.dismiss();
+                toast.success(response.data.message, {
+                    className: "custom-toastS",
+                    hideProgressBar: true,
+                    autoClose: 3000,
+                  });
             }
         } catch (error) {
-            console.log(error);
+            toast.dismiss();
+            toast.error(error.response.data.error, {
+                className: "custom-toast",
+                hideProgressBar: true,
+                autoClose: 3000,
+              });
         }
     };
 
@@ -129,6 +141,7 @@ const Otp = () => {
                     <img src={bro1} alt="" />
                 </div>
             </div>
+            <ToastContainer position='top-center' />    
         </div>
     );
 }
