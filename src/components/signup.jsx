@@ -10,6 +10,9 @@ import frame from '../assets/Frame.svg'
 import img6 from '../assets/img6.svg';
 import img7 from '../assets/img7.svg';
 import img8 from '../assets/img8.svg';
+import tick from '../assets/tick.svg';
+import cross from '../assets/cross.svg';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
@@ -110,6 +113,8 @@ const Signup = () => {
         toast.dismiss();
         toast.success(response.data.message, { className: 'custom-toastS', autoClose: 3000,hideProgressBar:true });
         setTimeout(() => navigate('/otp'), 1000);
+        sessionStorage.setItem('isRegistered', 'true');
+
       }
     } catch (error) {
       toast.error(error.response.data.error, { className: 'custom-toast', autoClose: 3000,hideProgressBar:true  });
@@ -221,16 +226,20 @@ const Signup = () => {
               </div>
 
               <p className={passwordConditions.length ? "met" : "not-met"}>
-                {passwordConditions.length ? '✔️' : '✖️'} Minimum 8 characters
+              <img src={passwordConditions.length ? tick : cross} alt={passwordConditions.length ? "Met" : "Not Met"} />
+              Minimum 8 characters
               </p>
               <p className={passwordConditions.uppercase ? "met" : "not-met"}>
-                {passwordConditions.uppercase ? '✔️' : '✖️'} At least one uppercase letter
+              <img src={passwordConditions.uppercase ? tick : cross} alt={passwordConditions.uppercase ? "Met" : "Not Met"} />
+                At least one uppercase letter
               </p>
               <p className={passwordConditions.specialChar ? "met" : "not-met"}>
-                {passwordConditions.specialChar ? '✔️' : '✖️'} At least one special character
+              <img src={passwordConditions.specialChar ? tick : cross} alt={passwordConditions.specialChar ? "Met" : "Not Met"} />
+                At least one special character
               </p>
               <p className={passwordConditions.number ? "met" : "not-met"}>
-                {passwordConditions.number ? '✔️' : '✖️'} At least one number
+              <img src={passwordConditions.number ? tick : cross} alt={passwordConditions.number ? "Met" : "Not Met"} />
+                At least one number
               </p>
 
               <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
@@ -257,7 +266,7 @@ const Signup = () => {
               id='sub'
               disabled={!formIsValid || loading}
               className={!formIsValid || loading ? 'disabled-button' : ''}
-              style={{ opacity: formIsValid ? 1 : 0.5 }}
+              style={{ opacity: formIsValid ? 1 : 0.5,transition: 'opacity 0.3s ease-in-out' }}
             />
           </form>
 

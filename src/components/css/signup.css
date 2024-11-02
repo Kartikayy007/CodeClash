@@ -152,7 +152,8 @@ background: rgb(254, 250, 238);  padding: 10px;
   
   .progress-bar {
     height: 100%;
-    transition: width 0.3s ease;
+    transition: width 0.3s ease , background-color 0.3s ease;
+    
   }
   
   .progress-bar.weak {
@@ -181,6 +182,11 @@ background: rgb(254, 250, 238);  padding: 10px;
   
 #priP{
     margin-left: 45px !important;
+}
+
+.met,.not-met{
+  gap: 10px;
+  display: flex;
 }
 @media (max-width:500px) {
   .right{

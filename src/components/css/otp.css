@@ -128,3 +128,10 @@ input[type="number"]::-webkit-inner-spin-button {
 span{
     font-size: 14px;
 }
+input.error {
+    border: 2px solid #A62F2F !important; 
+}
+
+input.success {
+    border: 2px solid #46A14B !important; 
+}

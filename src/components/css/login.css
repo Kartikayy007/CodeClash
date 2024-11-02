@@ -385,7 +385,9 @@ padding-right: 5px;
   }
   .input-error{
     color: #A62F2F !important;
+    ;
   }
+  
   .custom-toastS{
     background-color: #E3F5E3 !important;
     color: black;          
