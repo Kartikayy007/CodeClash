@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import img1 from '../assets/img1.svg';
 import img2 from '../assets/img2.svg';
 import img3 from '../assets/img3.svg';
-import frame from '../assets/Frame.svg'
+import frame from '../assets/Frame.svg';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -22,12 +22,12 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 3000);
-
     return () => clearInterval(interval);
   }, []);
 
@@ -48,6 +48,8 @@ const Login = () => {
       setEmailError('');
     }
 
+    setLoading(true);
+
     try {
       const response = await axios.post("https://singhanish.me/api/auth/login", {
         email,
@@ -55,20 +57,22 @@ const Login = () => {
       });
 
       if (response.data.success) {
-        alert('Logged in successfully');
         const token = response.data.token;
         rememberMe ? localStorage.setItem('authToken', token) : sessionStorage.setItem('authToken', token);
+        toast.success("Logged in successfully", {
+          className: "custom-toastS",
+          hideProgressBar: true,
+          autoClose: 3000,
+        });
       }
     } catch (error) {
-      console.log(error);
-
-      toast.error(error.response.data.error, {
+      toast.error(error.response?.data?.error || "Login failed", {
         className: "custom-toast",
         hideProgressBar: true,
         autoClose: 3000,
-
       });
     } finally {
+      setLoading(false); 
       setEmail('');
       setPassword('');
     }
@@ -76,6 +80,12 @@ const Login = () => {
 
   return (
     <div className='loginPage'>
+      {loading && (
+        <div className="loading-overlay">
+          <div className="moving-circle"></div>
+        </div>
+      )}
+      
       <div className='left'>
         <div id="mobscreenlogo">
           <img src={frame} alt="" />
@@ -84,59 +94,65 @@ const Login = () => {
           <h2 id="leftsubh2">Log In</h2>
           <p>to access your classes, assignments and more.</p>
 
+          <form onSubmit={handleSubmit}>
+            <div className="input-container">
+              <input
+                type="email"
+                className={`textinput ${emailError ? 'input-error no-margin' : ''}`}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder=" "
+              />
+              <label className={`label  ${emailError ? 'input-error ' : ''}`}>Email Address</label>
+            </div>
+            {emailError && <p className="error-message">{emailError}</p>}
 
-          <div className="input-container">
+            <div className="input-container">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                className="textinput password-input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder=" "
+              />
+              <label className="label">Password</label>
+              <button
+                type="button"
+                className="toggle-password-btn"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {element}
+              </button>
+            </div>
+
+            <div className="checkbox-container">
+              <Link to="/pwreset">Forget Password?</Link>
+              <input
+                type="checkbox"
+                id="remember"
+                name="remember"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              <label htmlFor="remember">Remember me</label>
+            </div>
+
             <input
-              type="email"
-              className={`textinput ${emailError ? 'input-error no-margin' : ''}`}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder=" "
+              type="submit"
+              value="Log in"
+              disabled={loading} 
+              className={loading ? 'disabled-button' : ''}
             />
-            <label className={`label  ${emailError ? 'input-error ' : ''}`}>Email Address</label>
-          </div>
-          {emailError && <p className="error-message">{emailError}</p>}
+          </form>
 
-          <div className="input-container">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              className="textinput password-input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder=" "
-            />
-            <label className="label" >Password</label>
-            <button
-              type="button"
-              className="toggle-password-btn"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {element}
-            </button>
-          </div>
-
-
-          <div className="checkbox-container">
-            <Link to="/pwreset">Forget Password?</Link>
-            <input
-              type="checkbox"
-              id="remember"
-              name="remember"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-            />
-
-            <label htmlFor="remember">Remember me</label>
-          </div>
-
-          <input type="submit" value="Log in" onClick={handleSubmit} />
           <div className="askSign">
             <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
           </div>
         </div>
       </div>
+
       <div className="right">
         <div className="content">
           <div className="slider">
@@ -154,6 +170,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+
       <ToastContainer position='top-center' />
     </div>
   );

@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setEmail } from '../features/authSlice';
-
 import './css/signup.css';
 import img4 from '../assets/img4.svg';
 import img5 from '../assets/img5.svg';
@@ -11,6 +10,12 @@ import frame from '../assets/Frame.svg'
 import img6 from '../assets/img6.svg';
 import img7 from '../assets/img7.svg';
 import img8 from '../assets/img8.svg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const element = <FontAwesomeIcon icon={faEye} />;
 const images = [img4, img5, img6, img7, img8];
 
 const Signup = () => {
@@ -19,8 +24,11 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
-  const [showPasswordPopup, setShowPasswordPopup] = useState(false);
-  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const [passwordConditions, setPasswordConditions] = useState({
     length: false,
     uppercase: false,
@@ -39,6 +47,12 @@ const Signup = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (emailError && email) {
+      setEmailError('');
+    }
+  }, [email]);
+
   const handlePasswordChange = (e) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
@@ -51,6 +65,13 @@ const Signup = () => {
     };
     setPasswordConditions(updatedConditions);
     calculateStrength(updatedConditions);
+
+    if (newPassword.length > 0) {
+      setPopupVisible(true);
+    } else {
+      setPopupVisible(false);
+    }
+    handleFocus();
   };
 
   const calculateStrength = (conditions) => {
@@ -67,6 +88,11 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+      setEmailError('');
+      setLoading(true);
+    
+
     try {
       const response = await axios.post("https://singhanish.me/api/auth/register", {
         name,
@@ -76,9 +102,12 @@ const Signup = () => {
 
       if (response.data.success) {
         dispatch(setEmail(email));
-        navigate('/otp');
+        toast.dismiss();
+        toast.success(response.data.message, { className: 'custom-toastS', autoClose: 3000,hideProgressBar:true });
+        setTimeout(() => navigate('/otp'), 1000);
       }
     } catch (error) {
+      toast.error(error.response.data.error, { className: 'custom-toast', autoClose: 3000,hideProgressBar:true  });
     } finally {
       setName('');
       setEmailState('');
@@ -91,15 +120,33 @@ const Signup = () => {
         number: false
       });
       setPasswordStrength("Weak");
+      setPopupVisible(false);
+      setLoading(false); 
     }
   };
 
-  const progress = Object.values(passwordConditions).filter(Boolean).length * 25;
+  const handleFocus = () => {
+    if (password.length === 0 || Object.values(passwordConditions).every(condition => condition)) {
+      setPopupVisible(false);
+      return;
+    }
+    setPopupVisible(true);
+  };
 
+  const handleBlur = () => {
+    setPopupVisible(false);
+  };
+
+  const progress = Object.values(passwordConditions).filter(Boolean).length * 25;
   const formIsValid = name && email && password && Object.values(passwordConditions).every(condition => condition) && isChecked;
 
   return (
     <div className='signUpPage'>
+      {loading && (
+        <div className="loading-overlay">
+          <div className="moving-circle"></div>
+        </div>
+      )}
       <div className='left'>
       <div id="mobscreenlogo">
           <img src={frame} alt="" />
@@ -109,50 +156,67 @@ const Signup = () => {
           <p>Start organizing your classes, assignments, and meetings all in one place.</p>
 
           <form onSubmit={handleSubmit}>
-            <input
+            <div className="input-container">
+              <input
+                type="text"
+                className="textinput"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder=" "
+              />
+              <label className="label">User Name</label>
+            </div>
 
-              type="text"
-              className="textinput"
-              placeholder="User Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <br />
-            <input
-              type="email"
-              className="textinput"
-              placeholder="Email Address"
-              value={email}
-              onChange={(e) => setEmailState(e.target.value)}
-            />
-            <br />
-            <input
-              type="password"
-              className="textinput"
-              placeholder="Password"
-              value={password}
-              onChange={handlePasswordChange}
-              onFocus={() => {
-                setShowPasswordPopup(true);
-                setIsPasswordFocused(true);
-              }}
-              onBlur={() => {
-                setShowPasswordPopup(false);
-                setIsPasswordFocused(false);
-              }}
-            />
-            <br />
+            <div className="input-container">
+              <input
+                type="email"
+                className={`textinput ${emailError ? 'input-error no-margin' : ''}`}
+                value={email}
+                onChange={(e) => setEmailState(e.target.value)}
+                required
+                placeholder=" "
+              />
+              <label className={`label ${emailError ? 'input-error' : ''}`}>Email Address</label>
+            </div>
+            {emailError && <p className="error-message">{emailError}</p>}
 
-            
-            {showPasswordPopup && (
-              <div className="password-popup">
+            <div className="input-container">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                className="textinput password-input"
+                value={password}
+                onChange={handlePasswordChange}
+                onFocus={handleFocus} 
+                onBlur={handleBlur}
+                required
+                placeholder=" "
+              />
+              <label className="label">Password</label>
+              <button
+                type="button"
+                className="toggle-password-btn"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {element}
+              </button>
+            </div>
+
+            {popupVisible && (
+              <div
+                className="password-popup"
+                style={{
+                  opacity: 1,
+                  zIndex: 1,
+                  transition: 'opacity 0.3s ease-in-out'
+                }}
+              >
                 <div className="progress-bar-container">
                   <div
                     className={`progress-bar ${passwordStrength.toLowerCase()}`}
                     style={{ width: `${progress}%` }}
                   ></div>
                 </div>
-                
+
                 <p className={passwordConditions.length ? "met" : "not-met"}>
                   {passwordConditions.length ? '✔️' : '✖️'} Minimum 8 characters
                 </p>
@@ -165,38 +229,34 @@ const Signup = () => {
                 <p className={passwordConditions.number ? "met" : "not-met"}>
                   {passwordConditions.number ? '✔️' : '✖️'} At least one number
                 </p>
-              
+
                 <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
                   Strength: {passwordStrength}
                 </p>
               </div>
             )}
 
-            {!isPasswordFocused && (
-              <>
-                <div className="policy-container">
-                  <input
-                    type="checkbox"
-                    id="terms"
-                    name="terms"
-                    checked={isChecked}
-                    onChange={(e) => setIsChecked(e.target.checked)}
-                  />
-                  <label htmlFor="terms" id="terms">
-                   <span>I agree to the &nbsp;<a href="">Terms & conditions</a>&nbsp; and<a href="" id='priP'>Privacy Policy</a></span> 
-                  </label>
-                </div>
+            <div className="policy-container">
+              <input
+                type="checkbox"
+                id="terms"
+                name="terms"
+                checked={isChecked}
+                onChange={(e) => setIsChecked(e.target.checked)}
+              />
+              <label htmlFor="terms" id="terms">
+                I agree to the &nbsp;<a href="">Terms & conditions</a>&nbsp; and <a href="" id='priP'>Privacy Policy</a>
+              </label>
+            </div>
 
-                <input
-                  type="submit"
-                  value="Create Account"
-                  id='sub'
-                  disabled={!formIsValid}
-                  className={!formIsValid ? 'disabled-button' : ''}
-                  style={{ opacity: formIsValid ? 1 : 0.5 }}
-                />
-              </>
-            )}
+            <input
+              type="submit"
+              value="Create Account"
+              id='sub'
+              disabled={!formIsValid||loading}
+              className={!formIsValid||loading ? 'disabled-button' : ''}
+              style={{ opacity: formIsValid ? 1 : 0.5 }}
+            />
           </form>
 
 
@@ -225,6 +285,8 @@ const Signup = () => {
           </div>
         </div>
       </div>
+
+      <ToastContainer position='top-center'/>
     </div>
   );
 };

@@ -58,6 +58,7 @@ line-height: 31.2px;
       border: 1px solid var(--Neutral-700, #4C5858);
 }
 #resetsubmit{
+  margin-top: 30px;
     width: -webkit-fill-available;
     width: -moz-available;
     padding: 10px 24px;
@@ -116,6 +117,7 @@ line-height: 25.6px;
   }
   .input-error{
     color: #A62F2F !important;
+    margin-top: 25px;
   }
   @media (max-width:920px) {
     .resetright{

@@ -119,16 +119,22 @@ line-height: 20px;
 
   }
   .password-popup {
+    z-index: 5;
+    opacity: 0;
+    position: fixed;
+    width: 348px;
 background: rgb(254, 250, 238);  padding: 10px;
   border-radius: 10px;
   margin-top: 5px;
   padding-top: 20px;
+  transition: opacity 0.3s ease;
 }
 
 .password-popup p {
   margin: 5px 0;
-  font-size: 14px;
+  font-size: 14px ;
   color: #555;
+
 }
 
 .password-popup p.met {
@@ -174,7 +180,7 @@ background: rgb(254, 250, 238);  padding: 10px;
   }
   
 #priP{
-    margin-left: 45px;
+    margin-left: 45px !important;
 }
 @media (max-width:500px) {
   .right{
