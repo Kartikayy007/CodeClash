@@ -10,9 +10,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import './css/login.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
+
+const element2 = <FontAwesomeIcon icon={faEyeSlash} />;
 const element = <FontAwesomeIcon icon={faEye} />;
-
 const images = [img1, img2, img3];
 
 const Login = () => {
@@ -123,7 +125,7 @@ const Login = () => {
                 className="toggle-password-btn"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {element}
+                {showPassword?element2:element}
               </button>
             </div>
 

@@ -6,6 +6,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+
+
+const element2 = <FontAwesomeIcon icon={faEyeSlash} />;
+const element = <FontAwesomeIcon icon={faEye} />;
 
 const Newpass = () => {
   const [token, setToken] = useState('');
@@ -164,7 +169,7 @@ const Newpass = () => {
                 className="toggle-password-btn"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                <FontAwesomeIcon icon={faEye} />
+                {showPassword?element2:element}
               </button>
             </div>
 
@@ -180,11 +185,11 @@ const Newpass = () => {
               <label className="label">Confirm Password</label>
             </div>
 
-            {password.length > 0 && (
+          
               <div
                 className="password-popup2"
                 style={{
-                  opacity: 1,
+                  opacity: popupVisible ? 1 : 0,
                   transition: 'opacity 0.3s ease-in-out'
                 }}
               >
@@ -212,7 +217,7 @@ const Newpass = () => {
                   Strength: {passwordStrength}
                 </p>
               </div>
-            )}
+
             
              <div id="newmobscreenlogo">
                                 <img src={createnewpass} alt="" />

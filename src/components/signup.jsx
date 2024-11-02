@@ -14,7 +14,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
+const element2 = <FontAwesomeIcon icon={faEyeSlash} />;
 const element = <FontAwesomeIcon icon={faEye} />;
 const images = [img4, img5, img6, img7, img8];
 
@@ -53,6 +55,10 @@ const Signup = () => {
     }
   }, [email]);
 
+  useEffect(() => {
+    handleFocus();
+  }, [password]);
+
   const handlePasswordChange = (e) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
@@ -71,7 +77,6 @@ const Signup = () => {
     } else {
       setPopupVisible(false);
     }
-    handleFocus();
   };
 
   const calculateStrength = (conditions) => {
@@ -186,7 +191,6 @@ const Signup = () => {
                 className="textinput password-input"
                 value={password}
                 onChange={handlePasswordChange}
-                onFocus={handleFocus} 
                 onBlur={handleBlur}
                 required
                 placeholder=" "
@@ -197,44 +201,42 @@ const Signup = () => {
                 className="toggle-password-btn"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {element}
+                {showPassword ? element2 : element}
               </button>
             </div>
 
-            {popupVisible && (
-              <div
-                className="password-popup"
-                style={{
-                  opacity: 1,
-                  zIndex: 1,
-                  transition: 'opacity 0.3s ease-in-out'
-                }}
-              >
-                <div className="progress-bar-container">
-                  <div
-                    className={`progress-bar ${passwordStrength.toLowerCase()}`}
-                    style={{ width: `${progress}%` }}
-                  ></div>
-                </div>
-
-                <p className={passwordConditions.length ? "met" : "not-met"}>
-                  {passwordConditions.length ? '✔️' : '✖️'} Minimum 8 characters
-                </p>
-                <p className={passwordConditions.uppercase ? "met" : "not-met"}>
-                  {passwordConditions.uppercase ? '✔️' : '✖️'} At least one uppercase letter
-                </p>
-                <p className={passwordConditions.specialChar ? "met" : "not-met"}>
-                  {passwordConditions.specialChar ? '✔️' : '✖️'} At least one special character
-                </p>
-                <p className={passwordConditions.number ? "met" : "not-met"}>
-                  {passwordConditions.number ? '✔️' : '✖️'} At least one number
-                </p>
-
-                <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
-                  Strength: {passwordStrength}
-                </p>
+            <div
+              className="password-popup"
+              style={{
+                opacity: popupVisible ? 1 : 0,
+                zIndex: 1,
+                transition: 'opacity 0.3s ease-in-out'
+              }}
+            >
+              <div className="progress-bar-container">
+                <div
+                  className={`progress-bar ${passwordStrength.toLowerCase()}`}
+                  style={{ width: `${progress}%` }}
+                ></div>
               </div>
-            )}
+
+              <p className={passwordConditions.length ? "met" : "not-met"}>
+                {passwordConditions.length ? '✔️' : '✖️'} Minimum 8 characters
+              </p>
+              <p className={passwordConditions.uppercase ? "met" : "not-met"}>
+                {passwordConditions.uppercase ? '✔️' : '✖️'} At least one uppercase letter
+              </p>
+              <p className={passwordConditions.specialChar ? "met" : "not-met"}>
+                {passwordConditions.specialChar ? '✔️' : '✖️'} At least one special character
+              </p>
+              <p className={passwordConditions.number ? "met" : "not-met"}>
+                {passwordConditions.number ? '✔️' : '✖️'} At least one number
+              </p>
+
+              <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
+                Strength: {passwordStrength}
+              </p>
+            </div>
 
             <div className="policy-container">
               <input
@@ -253,12 +255,11 @@ const Signup = () => {
               type="submit"
               value="Create Account"
               id='sub'
-              disabled={!formIsValid||loading}
-              className={!formIsValid||loading ? 'disabled-button' : ''}
+              disabled={!formIsValid || loading}
+              className={!formIsValid || loading ? 'disabled-button' : ''}
               style={{ opacity: formIsValid ? 1 : 0.5 }}
             />
           </form>
-
 
           <div className="asklogin">
             <p>Already have an account? <Link to="/login">Log in</Link></p>
