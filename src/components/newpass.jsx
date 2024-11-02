@@ -217,7 +217,7 @@ const Newpass = () => {
                   Strength: {passwordStrength}
                 </p>
               </div>
-            
+
             
              <div id="newmobscreenlogo">
                                 <img src={createnewpass} alt="" />

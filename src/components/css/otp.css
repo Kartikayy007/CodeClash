@@ -48,6 +48,11 @@ font-weight: 600;
 line-height: 31.2px;
 }
 
+#digitbox{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
 #otpsubmit{
     width: -webkit-fill-available;
     width: -moz-available;
@@ -127,4 +132,49 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 span{
     font-size: 14px;
+}
+@media (min-width: 921px) {
+    #otpmobscreenlogo {
+        display: none;
+    }
+}
+@media (max-width:920px) {
+    .otpright{
+      width: 0%;
+      display:none;
+    }
+    .otpleft{
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .otpleftSub{
+      height: 100%;
+      margin-left: 0%;
+    }
+    #otph2{
+      top: 0;
+      margin-top: 4vh;
+      font-size: 26px;
+    }
+    #otpmobscreenlogo{
+      height: 40vh;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      margin-bottom: 4vh;
+    }
+    #otpmobscreenlogo img{
+      height: fit-content;
+    }
+.digits{
+    display: flex;
+    flex-direction: column;
+}
+#digitbox {
+    display: flex;
+    justify-content: space-between;
+   }
 }
