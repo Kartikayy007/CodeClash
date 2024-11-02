@@ -49,6 +49,10 @@ const Newpass = () => {
           <form onSubmit={handleSubmit}>
             <input type="password" className="textinput" placeholder='Password' value={password}   onChange={(e) => setNewPassword(e.target.value)} required />
             <input type="password" className="textinput" placeholder='Confirm Password' required />
+            
+            <div id="newmobscreenlogo">
+                                <img src={createnewpass} alt="" />
+                    </div>
             <input type="submit" id='newpasssubmit' value="Reset Password" />
           </form>
         </div>
