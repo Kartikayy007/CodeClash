@@ -147,6 +147,7 @@ const Newpass = () => {
           <h2 id="newpassh2">Create a New Password</h2>
           <p id="newpassp">Enter a new password to regain access to your <br /> account.</p>
           <form onSubmit={handleSubmit}>
+
             <div className="input-container">
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -212,8 +213,13 @@ const Newpass = () => {
                 </p>
               </div>
             )}
+            
+             <div id="newmobscreenlogo">
+                                <img src={createnewpass} alt="" />
+                    </div>
 
             <input type="submit" id='newpasssubmit' value="Reset Password" disabled={loading} />
+
           </form>
         </div>
       </div>
