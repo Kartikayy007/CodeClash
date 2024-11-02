@@ -19,7 +19,9 @@ const App = () => {
     <BrowserRouter>
       <Routes>
 
+
         <Route path="/" element={<Dashboard/>} />
+
 
 
      <Route path="/signup" element={<Signup />} />
