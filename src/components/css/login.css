@@ -391,8 +391,41 @@ padding-right: 5px;
     color: black;          
     border-radius: 0px;               
     padding: 10px;   
-    border-left: 5px solid #358439;
+    border-left: 5px solid #55b938;
    }
+  
+   .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .moving-circle {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #fff;
+    border-top: 5px solid #066769;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .disabled-button {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
  @media (max-width:500px) {
   .right{
     display:none;

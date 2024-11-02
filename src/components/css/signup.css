@@ -180,7 +180,7 @@ background: rgb(254, 250, 238);  padding: 10px;
   }
   
 #priP{
-    margin-left: 45px;
+    margin-left: 45px !important;
 }
 @media (max-width:500px) {
   .right{

@@ -15,6 +15,8 @@ const Newpass = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState("Weak");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const [passwordConditions, setPasswordConditions] = useState({
     length: false,
     uppercase: false,
@@ -44,6 +46,8 @@ const Newpass = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); 
+
 
     
     const allConditionsMet = Object.values(passwordConditions).every(condition => condition);
@@ -52,14 +56,18 @@ const Newpass = () => {
       toast.error('Password does not meet all requirements',{ className: "custom-toast",
         hideProgressBar: true,
         autoClose: 3000,});
+        setLoading(false); 
+
       return;
     }
 
     if (password !== confirmPassword) {
       toast.dismiss(); 
-      toast.error('Passwords do not match',{ className: "custom-toastS",
+      toast.error('Passwords do not match',{ className: "custom-toast",
         hideProgressBar: true,
         autoClose: 3000,});
+        setLoading(false); 
+
       return;
     }
 
@@ -90,6 +98,8 @@ const Newpass = () => {
     } finally {
       setNewPassword('');
       setConfirmPassword('');
+      setLoading(false); 
+
     }
   };
 
@@ -127,6 +137,11 @@ const Newpass = () => {
 
   return (
     <div id='newpasspage'>
+       {loading && (
+        <div className="loading-overlay">
+          <div className="moving-circle"></div>
+        </div>
+      )}
       <div id='newpassleft'>
         <div id='newpassleftsub'>
           <h2 id="newpassh2">Create a New Password</h2>
@@ -198,7 +213,7 @@ const Newpass = () => {
               </div>
             )}
 
-            <input type="submit" id='newpasssubmit' value="Reset Password" />
+            <input type="submit" id='newpasssubmit' value="Reset Password" disabled={loading} />
           </form>
         </div>
       </div>

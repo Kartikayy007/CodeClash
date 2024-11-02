@@ -27,6 +27,8 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [popupVisible, setPopupVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const [passwordConditions, setPasswordConditions] = useState({
     length: false,
     uppercase: false,
@@ -88,6 +90,7 @@ const Signup = () => {
     e.preventDefault();
     
       setEmailError('');
+      setLoading(true);
     
 
     try {
@@ -118,6 +121,7 @@ const Signup = () => {
       });
       setPasswordStrength("Weak");
       setPopupVisible(false);
+      setLoading(false); 
     }
   };
 
@@ -138,6 +142,11 @@ const Signup = () => {
 
   return (
     <div className='signUpPage'>
+      {loading && (
+        <div className="loading-overlay">
+          <div className="moving-circle"></div>
+        </div>
+      )}
       <div className='left'>
       <div id="mobscreenlogo">
           <img src={frame} alt="" />
@@ -244,8 +253,8 @@ const Signup = () => {
               type="submit"
               value="Create Account"
               id='sub'
-              disabled={!formIsValid}
-              className={!formIsValid ? 'disabled-button' : ''}
+              disabled={!formIsValid||loading}
+              className={!formIsValid||loading ? 'disabled-button' : ''}
               style={{ opacity: formIsValid ? 1 : 0.5 }}
             />
           </form>

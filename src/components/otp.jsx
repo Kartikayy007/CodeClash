@@ -8,8 +8,11 @@ import { useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
+
 const Otp = () => {
     const email = useSelector((state) => state.auth.email); 
+    const [loading, setLoading] = useState(false);
     const inputRefs = useRef([]);
     
     const [timer, setTimer] = useState(59);
@@ -34,6 +37,7 @@ const Otp = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const otp = inputRefs.current.map((input) => input.value).join('');
+        setLoading(true);
         
         try {
             const response = await axios.post("https://singhanish.me/api/auth/verify", {
@@ -55,23 +59,38 @@ const Otp = () => {
                 hideProgressBar: true,
                 autoClose: 3000,
               });
+        }finally{
+            setLoading(false);
         }
     };
 
     const handleClick = async (e) => {
         e.preventDefault();
+        setLoading(true);
        
         try {
             const response = await axios.post("https://singhanish.me/api/auth/resend-otp", {
                 email
             });
             if (response.data.success) {
-                alert('Otp sent successfully');
+                toast.dismiss();
+                toast.success(response.data.message, {
+                    className: "custom-toastS",
+                    hideProgressBar: true,
+                    autoClose: 3000,
+                  });
                 setIsResendDisabled(true); 
                 setTimer(59);  
             }
         } catch (error) {
-            console.log(error);
+            toast.dismiss();
+            toast.error(error.response.data.error, {
+                className: "custom-toast",
+                hideProgressBar: true,
+                autoClose: 3000,
+              });
+        } finally{
+            setLoading(false);
         }
     };
 
@@ -101,6 +120,11 @@ const Otp = () => {
 
     return (
         <div className='otpPage'>
+             {loading && (
+        <div className="loading-overlay">
+          <div className="moving-circle"></div>
+        </div>
+      )}
             <div className='otpleft'>
                 <div className="otpleftSub">
                     <h2 id="otph2">Verify Your Email</h2>
@@ -124,13 +148,14 @@ const Otp = () => {
                     <p id='resend'>
                         <span 
                             onClick={isResendDisabled ? null : handleClick}
+                            
                             style={{ color: isResendDisabled ? 'gray' : '#066769', cursor: isResendDisabled ? 'default' : 'pointer' }}
                         >
                             Resend OTP
                         </span> 
                         {isResendDisabled ? ` in ${timer}s` : ''}
                     </p>
-                    <input type="submit" id='otpsubmit' value="Verify" onClick={handleSubmit} />
+                    <input type="submit" id='otpsubmit' value="Verify" onClick={handleSubmit} disabled={loading} />
                     <div className="askSign">
                         <p>Back to <Link to="/signup">Sign Up</Link></p>
                     </div>
