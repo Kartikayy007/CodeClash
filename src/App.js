@@ -4,7 +4,7 @@ import Pwreset from './components/pwreset';
 import Signup from './components/signup';
 import Otp from './components/otp';
 import Dashboard from './components/dashboard';
-
+import Getstarted from './components/getstarted';
 import Resetlink from './components/resetlink';
 
 
@@ -18,7 +18,7 @@ const App = () => {
   
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login/>} />
+        <Route path="/" element={<Getstarted/>} />
 
      <Route path="/signup" element={<Signup />} />
     <Route path="/pwreset" element={<Pwreset />} />
