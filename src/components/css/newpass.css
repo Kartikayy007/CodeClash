@@ -58,7 +58,50 @@ line-height: 21px;
 .newpasscontent img{
     width: 434px;
     height: 404px;
-}   
+
+}  
+
+@media (min-width:921px) {
+    #newmobscreenlogo{
+    display: none;
+    }
+} 
+@media (max-width:920px){
+   #newpassleft{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+   }
+.newpassright{width: 0%;
+display: none;
+}
+#newpassleftsub{
+    height: 100%;
+    margin-left: 0%;
+  }
+  #newpassh2{
+    top: 0;
+    margin-top: 4vh;
+    font-size: 26px;
+  }
+  #newmobscreenlogo{
+    height: 40vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin-bottom: 4vh;
+  }
+  #rnewpassmobscreenlogo img{
+    height: fit-content;
+  }
+  #newpasssubmit{
+    margin-top: 100px;
+  }
+}
+
+
 
 
 .password-popup2 p.met {
@@ -69,3 +112,4 @@ line-height: 21px;
     .password-popup2 p {
       font-size: 14px;
     }
+
