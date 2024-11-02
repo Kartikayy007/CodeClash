@@ -147,7 +147,7 @@ const Otp = () => {
                     <h2 id="otph2">Verify Your Email</h2>
                     <p id="otpp">We’ve sent a 6-digit verification code to {email}</p>
                     <form className="digits">
-                        {Array.from({ length: 6 }).map((_, index) => (
+                        <div id="digitbox">{Array.from({ length: 6 }).map((_, index) => (
                             <input
                                 key={index}
                                 type="text"
@@ -161,7 +161,11 @@ const Otp = () => {
                                 ref={(el) => (inputRefs.current[index] = el)}
                                 className={verificationStatus === false ? 'error' : verificationStatus === true ? 'success' : ''}
                             />
-                        ))}
+                        ))}</div>
+                        
+                                  <div id="otpmobscreenlogo">
+                                <img src={bro1} alt="" />
+                    </div>
                     </form>
                     <p id='resend'>
                         <span 
