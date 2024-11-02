@@ -7,6 +7,14 @@
   font-family: "Poppins", sans-serif;
 
 }
+#mobscreenlogo{
+  display: none; 
+  position: absolute; 
+  top: 0;
+  left: 0;
+  width: 100%; 
+  z-index: 55; 
+}
 :root{
     --toastify-color-error:#A62F2F;
 }
@@ -24,6 +32,9 @@
    width: 50%;
   
    align-items: center;
+}
+#mobscreenlogo img{
+display: none;
 }
 .leftSub{
     margin-left: 20%;
@@ -90,7 +101,10 @@ input[type="submit"]{
 
     
 }
-
+#terms a{
+  margin-left: 5px;
+  margin-right: 5px;
+}
 .checkbox-container a{
     white-space: nowrap;
     font-size: 13px;
@@ -372,4 +386,113 @@ padding-right: 5px;
   .input-error{
     color: #A62F2F !important;
   }
+  .custom-toastS{
+    background-color: #E3F5E3 !important;
+    color: black;          
+    border-radius: 0px;               
+    padding: 10px;   
+    border-left: 5px solid #55b938;
+   }
+  
+   .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .moving-circle {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #fff;
+    border-top: 5px solid #066769;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .disabled-button {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+ @media (max-width:500px) {
+  .right{
+    display:none;
+  }
+  .left{
+    width: 100%;
+  }
+  .leftSub{
+    margin-left: 3%;
+    width: 90%;
+    margin-right: 7%;
+  }
+  #leftSubh2{
+    font-size: 30px;
+  }
+  .leftSub p{
+   font-size: 18px;
+   margin-right: 5%;
+  }
+  .input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.checkbox-container{
+  margin-bottom: 50px;
+  justify-content: space-between;
+}
+.checkbox-container a{
+  font-size: 14px;
+  justify-self: left;
+}
+input[type="checkbox"]{
+  margin-left: 125px;
+}
+#mobscreenlogo {
+  display: flex; 
+  justify-content: center;
+ align-items: center;
+ margin-top: 10vh;
+}
+#mobscreenlogo img{
+ display: block;
+}
+}
+@media (min-width:500px) and (max-width:1040px) {
+  .right{
+    height: 50%;
+    width: 66%;
+    margin-bottom:1vh ;
+  }
+  .left{
+    height:50%;
+    justify-content: center;
+  }
+  .loginPage{
+    flex-direction: column-reverse;
+  }
+  .rec{
+    display: none;
+  }
+  #leftsubh2{
+    text-align: center;
+  }
+  .content{
+    margin-top: 3vh;
+  }
+}
  

@@ -7,6 +7,7 @@
   font-family: "Poppins", sans-serif;
 
 }
+
 .resetPage{
     background-color: #fff;
 
@@ -57,6 +58,7 @@ line-height: 31.2px;
       border: 1px solid var(--Neutral-700, #4C5858);
 }
 #resetsubmit{
+  margin-top: 30px;
     width: -webkit-fill-available;
     width: -moz-available;
     padding: 10px 24px;
@@ -115,5 +117,86 @@ line-height: 25.6px;
   }
   .input-error{
     color: #A62F2F !important;
+    margin-top: 25px;
   }
+  @media (max-width:920px) {
+    .resetright{
+      width: 0%;
+      display:none;
+    }
+    .resetleft{
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .resetleftSub{
+      height: 100%;
+      margin-left: 0%;
+    }
+    #reseth2{
+      top: 0;
+      margin-top: 4vh;
+      font-size: 26px;
+    }
+    #resmobscreenlogo{
+      height: 40vh;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      margin-bottom: 4vh;
+    }
+    #resmobscreenlogo img{
+      height: fit-content;
+    }
+  #resetp{
+    font-size: 16px;
+  }
+}
+@media (min-width: 921px) {
+  #resmobscreenlogo {
+      display: none;
+  }
+}
+@media (max-width:400px) {
+
+  .resetright{
+    width: 0%;
+    display:none;
+  }
+  .resetleft{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .resetleftSub{
+    height: 100%;
+    margin-left: 0%;
+  }
+  #reseth2{
+    top: 0;
+    margin-top: 0.5vh;
+    font-size: 24px;
+  }
+  #resmobscreenlogo{
+    height: 46vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    
+  }
+  #resmobscreenlogo img{
+    height: fit-content;
+  }
+#resetp{
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+input[type="email"]
+{
+  margin-bottom: 15px;
+}}
   
