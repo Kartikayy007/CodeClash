@@ -1,4 +1,5 @@
 import React from 'react';
+
 import Login from './components/login';
 import Pwreset from './components/pwreset';
 import Signup from './components/signup';
@@ -17,7 +18,11 @@ const App = () => {
   
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login/>} />
+
+
+        <Route path="/" element={<Dashboard/>} />
+
+
 
      <Route path="/signup" element={<Signup />} />
     <Route path="/pwreset" element={<Pwreset />} />

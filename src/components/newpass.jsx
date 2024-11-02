@@ -7,6 +7,8 @@ import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import tick from '../assets/tick.svg';
+import cross from '../assets/cross.svg';
 
 
 const element2 = <FontAwesomeIcon icon={faEyeSlash} />;
@@ -201,17 +203,21 @@ const Newpass = () => {
                 </div>
 
                 <p className={passwordConditions.length ? "met" : "not-met"}>
-                  {passwordConditions.length ? '✔️' : '✖️'} Minimum 8 characters
-                </p>
-                <p className={passwordConditions.uppercase ? "met" : "not-met"}>
-                  {passwordConditions.uppercase ? '✔️' : '✖️'} At least one uppercase letter
-                </p>
-                <p className={passwordConditions.specialChar ? "met" : "not-met"}>
-                  {passwordConditions.specialChar ? '✔️' : '✖️'} At least one special character
-                </p>
-                <p className={passwordConditions.number ? "met" : "not-met"}>
-                  {passwordConditions.number ? '✔️' : '✖️'} At least one number
-                </p>
+              <img src={passwordConditions.length ? tick : cross} alt={passwordConditions.length ? "Met" : "Not Met"} />
+              Minimum 8 characters
+              </p>
+              <p className={passwordConditions.uppercase ? "met" : "not-met"}>
+              <img src={passwordConditions.uppercase ? tick : cross} alt={passwordConditions.uppercase ? "Met" : "Not Met"} />
+                At least one uppercase letter
+              </p>
+              <p className={passwordConditions.specialChar ? "met" : "not-met"}>
+              <img src={passwordConditions.specialChar ? tick : cross} alt={passwordConditions.specialChar ? "Met" : "Not Met"} />
+                At least one special character
+              </p>
+              <p className={passwordConditions.number ? "met" : "not-met"}>
+              <img src={passwordConditions.number ? tick : cross} alt={passwordConditions.number ? "Met" : "Not Met"} />
+                At least one number
+              </p>
                 <br />
                 <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
                   Strength: {passwordStrength}
