@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
@@ -10,9 +10,14 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Pwreset = () => {
-  const navigate = useNavigate();
+  
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+
+
   useEffect(() => {
     if (emailError && email) {
       setEmailError('');
@@ -20,10 +25,13 @@ const Pwreset = () => {
   }, [email]);
   const handleResendLink = async (e) => {
     e.preventDefault();
+    setLoading(true); 
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setEmailError('Enter a valid email');
+      setLoading(false); 
+
       return;
     } else {
       setEmailError('');
@@ -38,11 +46,12 @@ const Pwreset = () => {
       });
 
       if (response.data.success) {
-
-        navigate('/resetlink');
+        setSuccess(true); 
+        
+     
       }
     } catch (error) {
-
+      toast.dismiss();
       toast.error(error.response.data.error, {
         className: "custom-toast",
         hideProgressBar: true,
@@ -51,12 +60,7 @@ const Pwreset = () => {
       });
 
     } finally {
-
-
-      setEmail('');
-
-
-
+      setLoading(false); 
     }
   };
 
@@ -67,37 +71,45 @@ const Pwreset = () => {
 
   return (
     <div className='resetPage'>
+       {loading && (
+        <div className="loading-overlay">
+          <div className="moving-circle"></div>
+        </div>
+      )}
       <div className='resetleft'>
         <div className="resetleftSub">
-          <h2 id="reseth2">Reset your password</h2>
-          <p id="resetp">Enter the email associated with your account, and we'll send you a link to reset your password. </p>
-
-          <div className="input-container">
-            <input
-              type="email"
-              className={`textinput ${emailError ? 'input-error no-margin' : ''}`}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder=" "
-            />
-            <label className={`label  ${emailError ? 'input-error ' : ''}`}>Email address</label>
-          </div>
+          <h2 id="reseth2">{success?"Link sent!":"Reset your password"}</h2>
+          <p id="resetp">  {success? "We've  sent a password reset link to "+email+". Click the link to reset your password. If you don't see it in your inbox, check your spam folder.":"Enter the email associated with your account, and we'll send you a link to reset your password. "}  </p>
+          {success?<></>: <div className="input-container">
+          
+          <input
+            type="email"
+            className={`textinput ${emailError ? 'input-error no-margin' : ''}`}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder=" "
+          />
+          <label className={`label  ${emailError ? 'input-error ' : ''}`}>Email address</label>
+        </div>}
+         
           {emailError && <p className="error-message">{emailError}</p>}
 
-          <br />
+        
 
           <div id="resmobscreenlogo">
           <img src={bro1} alt="" />
         </div>
 
 
-
-          <input type="submit" id='resetsubmit' value="Send reset link" onClick={handleResendLink} />
-          <div className="askSign"> <p>Remember your password?  <Link to="/login">Log in</Link></p></div>
+{success?<></>:          <input type="submit" id='resetsubmit' value="Send reset link" onClick={handleResendLink} disabled={loading} />
+}
+                 <div className="askSign"> <p>{success?"Go back to":"Remember your password?"}  <Link to="/login">Log in</Link></p></div>
+          
 
 
         </div>
+
 
       </div>
       <div className="resetright">
