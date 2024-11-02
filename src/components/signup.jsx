@@ -209,7 +209,7 @@ const Signup = () => {
               className="password-popup"
               style={{
                 opacity: popupVisible ? 1 : 0,
-                zIndex: 1,
+                zIndex: popupVisible ? 1 : -1,
                 transition: 'opacity 0.3s ease-in-out'
               }}
             >
