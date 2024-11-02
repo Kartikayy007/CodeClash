@@ -1,10 +1,23 @@
 import React from 'react';
+import  { useEffect } from 'react';
+
 import './css/dashboard.css';
 import frame from "../assets/Frame.svg"
 import dashboardimg from '../assets/dashboardimg.svg'
 import dashboardmain from '../assets/dashboardmain.svg'
+import { useNavigate } from 'react-router-dom';
+
 import btn from '../assets/btn.svg'
-function Dashboard() {
+function Dashboard() 
+  {
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+      const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
+      if (!token) {
+        navigate('/login'); 
+      }
+    }, [navigate]);
   return (
     <div id="dashboardpage">
      <div id="dashboardpageleft">

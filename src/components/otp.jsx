@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import axios from 'axios';
 import React from 'react';
 import './css/otp.css';
@@ -12,11 +14,21 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Otp = () => {
     const email = useSelector((state) => state.auth.email); 
+    console.log(email);
     const [loading, setLoading] = useState(false);
     const inputRefs = useRef([]);
     
     const [timer, setTimer] = useState(59);
     const [isResendDisabled, setIsResendDisabled] = useState(true);
+    const navigate = useNavigate();
+    const [verificationStatus, setVerificationStatus] = useState(null); 
+
+
+    useEffect(() => {
+        if (!sessionStorage.getItem('isRegistered')|| !email) {
+          navigate('/signup');
+        }
+      }, [navigate]);
 
     useEffect(() => {
         if (isResendDisabled) {
@@ -51,6 +63,9 @@ const Otp = () => {
                     hideProgressBar: true,
                     autoClose: 3000,
                   });
+                  setTimeout(() => {
+                  navigate('/login');}, 1000);
+                  setVerificationStatus(true);
             }
         } catch (error) {
             toast.dismiss();
@@ -59,6 +74,8 @@ const Otp = () => {
                 hideProgressBar: true,
                 autoClose: 3000,
               });
+              setVerificationStatus(false);
+
         }finally{
             setLoading(false);
         }
@@ -142,6 +159,7 @@ const Otp = () => {
                                 onKeyDown={(e) => handleBackspace(e, index)}
                                 onChange={(e) => handleInputChange(e, index)}
                                 ref={(el) => (inputRefs.current[index] = el)}
+                                className={verificationStatus === false ? 'error' : verificationStatus === true ? 'success' : ''}
                             />
                         ))}</div>
                         
