@@ -155,6 +155,7 @@ input.success {
       display:none;
     }
     .otpleft{
+        padding-top: 5vh;
       width: 100%;
       height: 100%;
       display: flex;

@@ -82,7 +82,7 @@ input[type="checkbox"]{
     justify-self: flex-end;
     
     margin-right: 7px;
-    margin-left: 105px;
+    margin-left: auto;
 }
 input[type="submit"]{
     width: -webkit-fill-available;
@@ -450,6 +450,7 @@ padding-right: 5px;
     font-size: 30px;
   }
   .leftSub p{
+   
    font-size: 18px;
    margin-right: 5%;
   }
@@ -461,15 +462,15 @@ padding-right: 5px;
 }
 .checkbox-container{
   margin-bottom: 50px;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 .checkbox-container a{
   font-size: 14px;
   justify-self: left;
 }
 input[type="checkbox"]{
-  margin-left: 125px;
-  margin-top: 4px;
+  margin-left: auto;
+  
 }
 #mobscreenlogo {
   display: flex; 
@@ -520,15 +521,15 @@ input[type="checkbox"]{
 }
 .checkbox-container{
   margin-bottom: 50px;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 .checkbox-container a{
   font-size: 14px;
   justify-self: left;
 }
 input[type="checkbox"]{
-  margin-left: 55px;
-  margin-top: 4px;
+  margin-left: auto;
+  /* margin-top: 4px; */
 }
 #mobscreenlogo {
   display: flex; 
@@ -560,7 +561,7 @@ input[type="checkbox"]{
     font-size: 14px;
   }
 }
-@media(min-width:600px) and (max-width:1050px) {
+@media(min-width:600px) and (max-width:1020px) {
   .right{
     display:none;
   }
@@ -587,15 +588,15 @@ input[type="checkbox"]{
 }
 .checkbox-container{
   margin-bottom: 50px;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 .checkbox-container a{
   font-size: 14px;
   justify-self: left;
 }
 input[type="checkbox"]{
-  margin-left: 125px;
-  margin-top: 4px;
+  margin-left: auto;
+  /* margin-top: 4px; */
 }
 #mobscreenlogo {
   display: flex; 
@@ -618,4 +619,13 @@ input[type="checkbox"]{
   margin-left: 10px;
   font-size: 20px;
 }
+}
+@media(max-width:1050px){
+  .passIn{
+    flex-direction: column;
+  }
+  .leftSub .error-message{
+    margin-top: 0;
+    align-self: flex-start;
+  }
 }
