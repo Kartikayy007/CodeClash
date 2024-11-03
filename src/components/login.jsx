@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import img1 from '../assets/img1.svg';
 import img2 from '../assets/img2.svg';
@@ -17,6 +17,9 @@ const element = <FontAwesomeIcon icon={faEye} />;
 const images = [img1, img2, img3];
 
 const Login = () => {
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null); 
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,6 +31,14 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+
+  useEffect(() => {
+    if (emailRef.current) {
+      emailRef.current.focus();
+    }
+  }, []);
+
 
   useEffect(() => {
     const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
@@ -48,6 +59,19 @@ const Login = () => {
       setEmailError('');
     }
   }, [email]);
+
+
+  const handleKeyDown = (e, nextField) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (nextField === 'password' && email) {
+        passwordRef.current.focus(); 
+      } else if (nextField === 'submit' && password) {
+        handleSubmit(e); 
+      }
+    }
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -94,7 +118,7 @@ const Login = () => {
       setPassword('');
     }
   };
-
+  
   return (
     <div className='loginPage'>
       {loading && (
@@ -118,8 +142,11 @@ const Login = () => {
                 className={`textinput ${emailError ? 'input-error no-margin' : ''}`}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e, 'password')}
+
                 required
                 placeholder=" "
+                ref={emailRef} 
               />
               <label className={`label  ${emailError ? 'input-error ' : ''}`}>Email Address</label>
             </div>
@@ -130,12 +157,16 @@ const Login = () => {
                 type={showPassword ? 'text' : 'password'}
                 className={`textinput password-input ${passwordError ? 'input-error no-margin  ' : ''}`}
                 value={password}
+                onKeyDown={(e) => handleKeyDown(e, 'submit')}
+                ref={passwordRef} 
+
                 onChange={(e) => {
                   setPassword(e.target.value);
                   if (passwordError) setPasswordError('');
                 }}
                 required
                 placeholder=" "
+             
               />
 
               <label className={`label  ${passwordError ? 'input-error ' : ''}`}>Password</label>

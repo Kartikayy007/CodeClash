@@ -1,22 +1,29 @@
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 
 import React from 'react';
 import './css/pwreset.css';
+
 
 import bro1 from '../assets/bro.svg';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Pwreset = () => {
+  const emailRef = useRef(null);
+
   
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
-
+  useEffect(() => {
+    if (emailRef.current) {
+      emailRef.current.focus();
+    }
+  }, []);
 
   useEffect(() => {
     if (emailError && email) {
@@ -63,6 +70,14 @@ const Pwreset = () => {
       setLoading(false); 
     }
   };
+  const handleKeyDown = (e, nextField) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (nextField === 'submit' && email) {
+        handleResendLink(e); 
+      }
+    }
+  };
 
 
 
@@ -84,9 +99,11 @@ const Pwreset = () => {
           
           <input
             type="email"
+            ref={emailRef}
             className={`textinput ${emailError ? 'input-error no-margin' : ''}`}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onKeyDown={(e) => handleKeyDown(e, 'submit')}
             required
             placeholder=" "
           />

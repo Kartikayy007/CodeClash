@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -28,6 +28,9 @@ const element = <FontAwesomeIcon icon={faEye} />;
 const images = [img4, img5, img6, img7, img8];
 
 const Signup = () => {
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null); 
+  const nameRef = useRef(null); 
   const [name, setName] = useState('');
   const [email, setEmailState] = useState('');
   const [password, setPassword] = useState('');
@@ -68,6 +71,12 @@ const Signup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+
+  useEffect(() => {
+    if (nameRef.current) {
+      nameRef.current.focus();
+    }
+  }, []);
   useEffect(() => {
     const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
     if (token) {
@@ -121,6 +130,21 @@ const Signup = () => {
       setPasswordStrength("Medium");
     } else {
       setPasswordStrength("Weak");
+    }
+  };
+
+  const handleKeyDown = (e, nextField) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (nextField === 'email' && name) {
+        emailRef.current.focus();
+
+      }
+      else if (nextField === 'password' && email) {
+        passwordRef.current.focus(); 
+      } else if (nextField === 'submit' && password) {
+        handleSubmit(e); 
+      }
     }
   };
 
@@ -199,10 +223,12 @@ const Signup = () => {
             <div className="input-container">
               <input
                 type="text"
+                ref={nameRef}
                 className="textinput"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder=" "
+                onKeyDown={(e) => handleKeyDown(e, 'email')}
               />
               <label className="label">User Name</label>
             </div>
@@ -210,11 +236,13 @@ const Signup = () => {
             <div className="input-container">
               <input
                 type="email"
+                ref={emailRef}
                 className={`textinput ${emailError ? 'input-error no-margin' : ''}`}
                 value={email}
                 onChange={(e) => setEmailState(e.target.value)}
                 required
                 placeholder=" "
+                onKeyDown={(e) => handleKeyDown(e, 'password')}
               />
               <label className={`label ${emailError ? 'input-error' : ''}`}>Email Address</label>
             </div>
@@ -225,6 +253,7 @@ const Signup = () => {
                 type={showPassword ? 'text' : 'password'}
                 className="textinput password-input"
                 value={password}
+                ref={passwordRef}
                 onChange={handlePasswordChange}
                 onBlur={handleBlur}
                 required
