@@ -65,6 +65,7 @@ line-height: 21px;
     #newmobscreenlogo{
     display: none;
     }
+    
 } 
 @media (max-width:920px){
    #newpassleft{
@@ -95,9 +96,10 @@ display: none;
   }
   #rnewpassmobscreenlogo img{
     height: fit-content;
+    max-width: 90%;
   }
   #newpasssubmit{
-    margin-top: 100px;
+    margin-bottom: 50px;
   }
 }
 

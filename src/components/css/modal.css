@@ -37,4 +37,9 @@
     padding: 5px 10px;
    
   }
+  @media(max-width:1050px){
+    .modal-content{
+     max-width: 90vw;
+    }
+   }
   

@@ -120,6 +120,9 @@ line-height: 25.6px;
    
   }
   @media (max-width:1020px) {
+    .resetPage{
+      padding-top: 20px;
+    }
     .resetright{
       width: 0%;
       display:none;
@@ -133,10 +136,12 @@ line-height: 25.6px;
     .resetleftSub{
       height: 100%;
       margin-left: 0%;
+      width: 90vw;
+        max-width: 400px;
     }
     #reseth2{
       top: 0;
-      margin-top: 4vh;
+      margin-top: 6vh;
       font-size: 26px;
     }
     #resmobscreenlogo{
@@ -144,13 +149,15 @@ line-height: 25.6px;
       width: 100%;
       display: flex;
       justify-content: center;
-      align-content: center;
+      align-items: center;
     }
     #resmobscreenlogo img{
       height: fit-content;
+      width: 90%;
     }
   #resetp{
     font-size: 16px;
+    margin-bottom: 68px;
   }
   .resaskSign a{
     font-size: small;
@@ -160,7 +167,7 @@ line-height: 25.6px;
   .resaskSign{
     display: flex;
     justify-content: center;
-    margin-top: 5vh;
+    margin-top: 2vh;
   }
 }
 @media (min-width: 1021px) {

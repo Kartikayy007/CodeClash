@@ -291,7 +291,7 @@ const Signup = () => {
                   Terms & Conditions
                 </span>
                 &nbsp; and &nbsp;
-                <span onClick={handlePrivacyClick} style={{ cursor: 'pointer', color: 'blue', marginLeft:'37px'}} className='tc'>
+                <span onClick={handlePrivacyClick} style={{ cursor: 'pointer', color: 'blue'}} className='tc' id='pp'>
                   Privacy Policy
                 </span>
               </label>
