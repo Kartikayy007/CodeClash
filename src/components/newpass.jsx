@@ -9,12 +9,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import tick from '../assets/tick.svg';
 import cross from '../assets/cross.svg';
+import { useNavigate } from 'react-router-dom';
+import Login from './login';
+
 
 
 const element2 = <FontAwesomeIcon icon={faEyeSlash} />;
 const element = <FontAwesomeIcon icon={faEye} />;
 
 const Newpass = () => {
+  const navigate = useNavigate();
+
   const [token, setToken] = useState('');
   const [password, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -36,8 +41,10 @@ const Newpass = () => {
     const tokenFromUrl = params.get('token');
     if (tokenFromUrl) {
       setToken(tokenFromUrl);
+    }else {
+      navigate('/login');
     }
-  }, []);
+  }, [navigate]);
 
   const calculateStrength = (conditions) => {
     const metConditions = Object.values(conditions).filter(Boolean).length;
@@ -106,6 +113,7 @@ const Newpass = () => {
       setNewPassword('');
       setConfirmPassword('');
       setLoading(false); 
+   
 
     }
   };
