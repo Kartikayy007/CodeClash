@@ -104,7 +104,7 @@ const Pwreset = () => {
 
 {success?<></>:          <input type="submit" id='resetsubmit' value="Send reset link" onClick={handleResendLink} disabled={loading} />
 }
-                 <div className="resaskSign"> <p>{success?"Go back to":"Remember your password?"}  <Link to="/login">Log in</Link></p></div>
+                 <div className="resaskSign askSign"> <p>{success?"Go back to":"Remember your password?"}  <Link to="/login">Log in</Link></p></div>
           
 
 
