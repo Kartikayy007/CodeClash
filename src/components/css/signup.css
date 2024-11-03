@@ -47,7 +47,7 @@ color: #121212;
     font-size: 12px;
     justify-self: flex-end;
     
-    margin-right: 7px;
+    margin-right: 12px;
     margin-left: 10px;
 }
 #terms a{
@@ -211,4 +211,11 @@ background: rgb(254, 250, 238);  padding: 10px;
     font-size: 16px;
   }
 }
-
+.tc{
+  color: #066769 !important;
+  font-weight: 600;
+}
+label[for="terms"]{
+  
+ font-size: 14px;
+}

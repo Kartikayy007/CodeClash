@@ -150,7 +150,7 @@ const Login = () => {
             </div>
 
             <div className="checkbox-container">
-              <Link to="/pwreset">Forget Password?</Link>
+              <Link to="/pwreset" id='Fp'>Forget Password?</Link>
               <input
                 type="checkbox"
                 id="remember"

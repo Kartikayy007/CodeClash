@@ -18,6 +18,10 @@ import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import Modal from './modal'; 
+import PrivacyPolicy from './content/Policy';
+import TermsAndConditions from './content/Terms';
+
 
 const element2 = <FontAwesomeIcon icon={faEyeSlash} />;
 const element = <FontAwesomeIcon icon={faEye} />;
@@ -33,6 +37,10 @@ const Signup = () => {
   const [emailError, setEmailError] = useState('');
   const [popupVisible, setPopupVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+
+  
 
   const [passwordConditions, setPasswordConditions] = useState({
     length: false,
@@ -40,10 +48,32 @@ const Signup = () => {
     specialChar: false,
     number: false
   });
+  const closeTermsModal = () => {
+    setShowTermsModal(false);
+  };
+
+  const closePrivacyModal = () => {
+    setShowPrivacyModal(false);
+  };
+  const handleTermsClick = () => {
+    setShowTermsModal(true);
+  };
+
+  const handlePrivacyClick = () => {
+    setShowPrivacyModal(true);
+  };
+
   const [passwordStrength, setPasswordStrength] = useState("Weak");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
+    if (token) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -255,8 +285,15 @@ const Signup = () => {
                 checked={isChecked}
                 onChange={(e) => setIsChecked(e.target.checked)}
               />
-              <label htmlFor="terms" id="terms">
-                I agree to the &nbsp;<a href="">Terms & conditions</a>&nbsp; and <a href="" id='priP'>Privacy Policy</a>
+               <label htmlFor="terms">
+                I agree to the &nbsp;
+                <span onClick={handleTermsClick} style={{ cursor: 'pointer', color: 'blue' }} className='tc'>
+                  Terms & Conditions
+                </span>
+                &nbsp; and &nbsp;
+                <span onClick={handlePrivacyClick} style={{ cursor: 'pointer', color: 'blue', marginLeft:'37px'}} className='tc'>
+                  Privacy Policy
+                </span>
               </label>
             </div>
 
@@ -297,6 +334,20 @@ const Signup = () => {
       </div>
 
       <ToastContainer position='top-center'/>
+      {showTermsModal && (
+        <Modal
+          title="Terms and Conditions"
+          content={TermsAndConditions()}       
+           onClose={closeTermsModal}
+        />
+      )}
+      {showPrivacyModal && (
+        <Modal
+          title="Privacy Policy"
+          content={PrivacyPolicy()}
+          onClose={closePrivacyModal}
+        />
+      )}
     </div>
   );
 };
