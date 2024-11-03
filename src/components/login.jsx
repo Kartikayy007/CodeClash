@@ -125,7 +125,7 @@ const Login = () => {
             </div>
             {emailError && <p className="error-message">{emailError}</p>}
 
-            <div className="input-container">
+            <div className="input-container passIn">
               <input
                 type={showPassword ? 'text' : 'password'}
                 className={`textinput password-input ${passwordError ? 'input-error no-margin  ' : ''}`}

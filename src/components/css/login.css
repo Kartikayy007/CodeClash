@@ -620,3 +620,12 @@ input[type="checkbox"]{
   font-size: 20px;
 }
 }
+@media(max-width:1050px){
+  .passIn{
+    flex-direction: column;
+  }
+  .leftSub .error-message{
+    margin-top: 0;
+    align-self: flex-start;
+  }
+}
