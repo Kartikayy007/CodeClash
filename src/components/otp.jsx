@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import axios from 'axios';
 import React from 'react';
 import './css/otp.css';
@@ -10,25 +9,21 @@ import { useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
-
 const Otp = () => {
-    const email = useSelector((state) => state.auth.email); 
-    console.log(email);
+    const email = useSelector((state) => state.auth.email);
     const [loading, setLoading] = useState(false);
     const inputRefs = useRef([]);
     
     const [timer, setTimer] = useState(59);
     const [isResendDisabled, setIsResendDisabled] = useState(true);
     const navigate = useNavigate();
-    const [verificationStatus, setVerificationStatus] = useState(null); 
-
+    const [verificationStatus, setVerificationStatus] = useState(null);
 
     useEffect(() => {
-        if (!sessionStorage.getItem('isRegistered')|| !email) {
-          navigate('/signup');
+        if (!sessionStorage.getItem('isRegistered') || !email) {
+            navigate('/signup');
         }
-      }, [navigate]);
+    }, [navigate]);
 
     useEffect(() => {
         if (isResendDisabled) {
@@ -36,7 +31,7 @@ const Otp = () => {
                 setTimer((prevTimer) => {
                     if (prevTimer <= 1) {
                         clearInterval(countdown);
-                        setIsResendDisabled(false); 
+                        setIsResendDisabled(false);
                         return 59;
                     }
                     return prevTimer - 1;
@@ -46,11 +41,17 @@ const Otp = () => {
         }
     }, [isResendDisabled]);
 
+    useEffect(() => {
+        if (inputRefs.current[0]) {
+            inputRefs.current[0].focus();
+        }
+    }, []);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const otp = inputRefs.current.map((input) => input.value).join('');
         setLoading(true);
-        
+
         try {
             const response = await axios.post("https://singhanish.me/api/auth/verify", {
                 email,
@@ -62,10 +63,11 @@ const Otp = () => {
                     className: "custom-toastS",
                     hideProgressBar: true,
                     autoClose: 3000,
-                  });
-                  setTimeout(() => {
-                  navigate('/login');}, 1000);
-                  setVerificationStatus(true);
+                });
+                setTimeout(() => {
+                    navigate('/login');
+                }, 1000);
+                setVerificationStatus(true);
             }
         } catch (error) {
             toast.dismiss();
@@ -73,10 +75,9 @@ const Otp = () => {
                 className: "custom-toast",
                 hideProgressBar: true,
                 autoClose: 3000,
-              });
-              setVerificationStatus(false);
-
-        }finally{
+            });
+            setVerificationStatus(false);
+        } finally {
             setLoading(false);
         }
     };
@@ -84,7 +85,7 @@ const Otp = () => {
     const handleClick = async (e) => {
         e.preventDefault();
         setLoading(true);
-       
+
         try {
             const response = await axios.post("https://singhanish.me/api/auth/resend-otp", {
                 email
@@ -95,9 +96,9 @@ const Otp = () => {
                     className: "custom-toastS",
                     hideProgressBar: true,
                     autoClose: 3000,
-                  });
-                setIsResendDisabled(true); 
-                setTimer(59);  
+                });
+                setIsResendDisabled(true);
+                setTimer(59);
             }
         } catch (error) {
             toast.dismiss();
@@ -105,8 +106,8 @@ const Otp = () => {
                 className: "custom-toast",
                 hideProgressBar: true,
                 autoClose: 3000,
-              });
-        } finally{
+            });
+        } finally {
             setLoading(false);
         }
     };
@@ -137,40 +138,41 @@ const Otp = () => {
 
     return (
         <div className='otpPage'>
-             {loading && (
-        <div className="loading-overlay">
-          <div className="moving-circle"></div>
-        </div>
-      )}
+            {loading && (
+                <div className="loading-overlay">
+                    <div className="moving-circle"></div>
+                </div>
+            )}
             <div className='otpleft'>
                 <div className="otpleftSub">
                     <h2 id="otph2">Verify Your Email</h2>
                     <p id="otpp">We’ve sent a 6-digit verification code to {email}</p>
                     <form className="digits">
-                        <div id="digitbox">{Array.from({ length: 6 }).map((_, index) => (
-                            <input
-                                key={index}
-                                type="text"
-                                id={`digit${index + 1}`}
-                                maxLength="1"
-                                inputMode="numeric"
-                                pattern="\d*"
-                                onKeyPress={handleKeyPress}
-                                onKeyDown={(e) => handleBackspace(e, index)}
-                                onChange={(e) => handleInputChange(e, index)}
-                                ref={(el) => (inputRefs.current[index] = el)}
-                                className={verificationStatus === false ? 'error' : verificationStatus === true ? 'success' : ''}
-                            />
-                        ))}</div>
-                        
-                                  <div id="otpmobscreenlogo">
-                                <img src={bro1} alt="" />
-                    </div>
+                        <div id="digitbox">
+                            {Array.from({ length: 6 }).map((_, index) => (
+                                <input
+                                    key={index}
+                                    type="text"
+                                    id={`digit${index + 1}`}
+                                    maxLength="1"
+                                    inputMode="numeric"
+                                    pattern="\d*"
+                                    onKeyPress={handleKeyPress}
+                                    onKeyDown={(e) => handleBackspace(e, index)}
+                                    onChange={(e) => handleInputChange(e, index)}
+                                    ref={(el) => (inputRefs.current[index] = el)}
+                                    className={verificationStatus === false ? 'error' : verificationStatus === true ? 'success' : ''}
+                                />
+                            ))}
+                        </div>
+
+                        <div id="otpmobscreenlogo">
+                            <img src={bro1} alt="" />
+                        </div>
                     </form>
                     <p id='resend'>
                         <span 
                             onClick={isResendDisabled ? null : handleClick}
-                            
                             style={{ color: isResendDisabled ? 'gray' : '#066769', cursor: isResendDisabled ? 'default' : 'pointer' }}
                         >
                             Resend OTP
@@ -188,7 +190,7 @@ const Otp = () => {
                     <img src={bro1} alt="" />
                 </div>
             </div>
-            <ToastContainer position='top-center' />    
+            <ToastContainer position='top-center' />
         </div>
     );
 }
