@@ -25,12 +25,12 @@ function Getstarted() {
       <div className="flex justify-center space-x-4 mt-[5vh]">
         <Link 
           to="/login" 
-          className="bg-[#008080] w-[12vw] text-white px-8 py-4 rounded-md text-2xl font-semibold shadow-md hover:bg-teal-700 transition-all duration-200">
+          className="bg-[#008080] w-[250px] text-white px-8 py-4 rounded-md text-2xl font-semibold ">
           Log In
         </Link>
         <Link 
           to="/signup" 
-          className="bg-[#008080] w-[12vw] text-white px-8 py-4 rounded-md text-2xl font-semibold shadow-md hover:bg-teal-700 transition-all duration-200">
+          className="bg-[#008080] w-[250px] text-white px-8 py-4 rounded-md text-2xl font-semibold ">
           Create Account
         </Link>
       </div>
