@@ -129,7 +129,6 @@ line-height: 21px;
     text-align: center;
 }
 .askSign a{
-    padding: 8px;
     color: var(--Primary-800, #066769);
     color: var(--Primary-700, #008080);
 
@@ -435,7 +434,7 @@ padding-right: 5px;
     cursor: not-allowed;
   }
   
- @media (max-width:500px) {
+ @media (max-width:600px) {
   .right{
     display:none;
   }
@@ -443,9 +442,9 @@ padding-right: 5px;
     width: 100%;
   }
   .leftSub{
-    margin-left: 3%;
+    margin-left: 5%;
     width: 90%;
-    margin-right: 7%;
+    margin-right: 5%;
   }
   #leftSubh2{
     font-size: 30px;
@@ -470,6 +469,7 @@ padding-right: 5px;
 }
 input[type="checkbox"]{
   margin-left: 125px;
+  margin-top: 4px;
 }
 #mobscreenlogo {
   display: flex; 
@@ -480,28 +480,142 @@ input[type="checkbox"]{
 #mobscreenlogo img{
  display: block;
 }
+.askSign{
+  display: flex;
+    justify-content: center;
 }
-@media (min-width:500px) and (max-width:1040px) {
+.askSign> p{
+  display: flex;
+  align-self: center;
+}
+.askSign a{
+  margin-left: 10px;
+  font-size: 20px;
+}
+}
+@media (max-width:421px) {
   .right{
-    height: 50%;
-    width: 66%;
-    margin-bottom:1vh ;
+    display:none;
   }
   .left{
-    height:50%;
+    width: 100%;
+  }
+  .leftSub{
+    margin-left: 5%;
+    width: 90%;
+    margin-right: 5%;
+  }
+  #leftSubh2{
+    font-size: 30px;
+  }
+  .leftSub p{
+   font-size: 18px;
+   margin-right: 5%;
+  }
+  .input-container {
+    display: flex;
+    align-items: center;
     justify-content: center;
+    margin-bottom: 10px;
+}
+.checkbox-container{
+  margin-bottom: 50px;
+  justify-content: space-between;
+}
+.checkbox-container a{
+  font-size: 14px;
+  justify-self: left;
+}
+input[type="checkbox"]{
+  margin-left: 55px;
+  margin-top: 4px;
+}
+#mobscreenlogo {
+  display: flex; 
+  justify-content: center;
+ align-items: center;
+ margin-top: 10vh;
+}
+#mobscreenlogo img{
+ display: block;
+}
+.askSign{
+  display: flex;
+    justify-content: center;
+}
+.askSign> p{
+  display: flex;
+  align-self: center;
+}
+.askSign a{
+  margin-left: 10px;
+  font-size: 20px;
+}
+}
+@media (max-width:350px) {
+  .askSign a{
+    font-size: 14px;
   }
-  .loginPage{
-    flex-direction: column-reverse;
-  }
-  .rec{
-    display: none;
-  }
-  #leftsubh2{
-    text-align: center;
-  }
-  .content{
-    margin-top: 3vh;
+  .askSign> p{
+    font-size: 14px;
   }
 }
- 
+@media(min-width:600px) and (max-width:1050px) {
+  .right{
+    display:none;
+  }
+  .left{
+    width: 100%;
+  }
+  .leftSub{
+    margin-left: 20%;
+    width: 60%;
+    margin-right: 20%;
+  }
+  #leftSubh2{
+    font-size: 30px;
+  }
+  .leftSub p{
+   font-size: 18px;
+   margin-right: 5%;
+  }
+  .input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.checkbox-container{
+  margin-bottom: 50px;
+  justify-content: space-between;
+}
+.checkbox-container a{
+  font-size: 14px;
+  justify-self: left;
+}
+input[type="checkbox"]{
+  margin-left: 125px;
+  margin-top: 4px;
+}
+#mobscreenlogo {
+  display: flex; 
+  justify-content: center;
+ align-items: center;
+ margin-top: 10vh;
+}
+#mobscreenlogo img{
+ display: block;
+}
+.askSign{
+  display: flex;
+    justify-content: center;
+}
+.askSign> p{
+  display: flex;
+  align-self: center;
+}
+.askSign a{
+  margin-left: 10px;
+  font-size: 20px;
+}
+}

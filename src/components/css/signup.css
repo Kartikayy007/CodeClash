@@ -5,12 +5,31 @@
   font-family: "Poppins", sans-serif;
 
 }
+#signmobscreenlogo{
+  display: none; 
+  position: absolute; 
+  top: 0;
+  left: 0;
+  width: 100%; 
+  z-index: 55; 
+}
 .signUpPage{
     background-color: #fff;
 
   display: flex;
   align-items: center;
   height: 100vh;
+}
+.signupleft{
+    
+  display: flex;
+  width: 50%;
+ 
+  align-items: center;
+}
+.signupleftSub{
+  margin-left: 20%;
+width: 347px;
 }
 #signuph2{
     font-size: 24px;
@@ -24,7 +43,18 @@ font-style: normal;
 font-weight: 600;
 line-height: 31.2px;
 }
+.signupleftSub p{
+  font-size: 14px;
+  margin-bottom: 39px;
+  color: #000;
 
+
+font-family: Poppins;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 21px; 
+}
 input[type="text"],input[type="email"],input[type="password"]{
     padding: 20px;
     width: -webkit-fill-available;
@@ -85,7 +115,15 @@ font-style: normal;
 font-weight: 600;
 line-height: 20px; 
 }   
-
+.signupright{
+  width: 50%;
+  height: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   border-radius: 8px;
+background: #F7F8F8;
+} 
 
 
 
@@ -183,33 +221,104 @@ background: rgb(254, 250, 238);  padding: 10px;
 #priP{
     margin-left: 45px !important;
 }
-
 .met,.not-met{
   gap: 10px;
   display: flex;
 }
-@media (max-width:500px) {
-  .right{
+
+@media (max-width:600px) {
+  .signupright{
     display:none;
   }
-  .left{
+  .signupleft{
     width: 100%;
   }
-  .leftSub{
-    margin-left: 3%;
+  .signupleftSub{
+    margin-left: 5%;
     width: 90%;
-    margin-right: 7%;
+    margin-right: 5%;
+    margin-top: 5vh;
   }
   #leftSubh2{
     font-size: 30px;
   }
-  .leftSub p{
-   font-size: 18px;
-   margin-right: 5%;
-  }
+  .asklogin p{
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
   .asklogin a{
     font-size: 16px;
   }
+  #signmobscreenlogo {
+    display: flex; 
+    justify-content: center;
+   align-items: center;
+   margin-top: 2vh;
+  }
+  #signmobscreenlogo img{
+   display: block;
+  }
+
+}
+@media (max-width:1050px) and (min-width:600px) {
+  .signupright{
+    display:none;
+  }
+  .signupleft{
+    width: 100%;
+  }
+  .signupleftSub{
+    margin-left: 20%;
+    width: 60%;
+    margin-right: 20%;
+  }
+  #leftSubh2{
+    font-size: 30px;
+  }
+  .signupleftSub p{
+   font-size: 18px;
+   margin-right: 5%;
+  }
+  .input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.checkbox-container{
+  margin-bottom: 50px;
+  justify-content: space-between;
+}
+.checkbox-container a{
+  font-size: 14px;
+  justify-self: left;
+}
+input[type="checkbox"]{
+  margin-left: 125px;
+  margin-top: 4px;
+}
+#signmobscreenlogo {
+  display: flex; 
+  justify-content: center;
+ align-items: center;
+ margin-top: 10vh;
+}
+#signmobscreenlogo img{
+ display: block;
+}
+.asklogin{
+  display: flex;
+    justify-content: center;
+}
+.asklogin> p{
+  display: flex;
+  align-self: center;
+}
+.asklogin a{
+  margin-left: 10px;
+  font-size: 20px;
+}
 }
 .tc{
   color: #066769 !important;

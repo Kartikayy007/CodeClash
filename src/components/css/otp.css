@@ -134,6 +134,7 @@ span{
     font-size: 14px;
 }
 
+
 input.error {
     border: 2px solid #A62F2F !important; 
 }
@@ -143,11 +144,12 @@ input.success {
 }
 
 @media (min-width: 921px) {
+
     #otpmobscreenlogo {
         display: none;
     }
 }
-@media (max-width:920px) {
+@media (max-width:1020px) {
     .otpright{
       width: 0%;
       display:none;
@@ -172,8 +174,7 @@ input.success {
       width: 100%;
       display: flex;
       justify-content: center;
-      align-content: center;
-      margin-bottom: 4vh;
+      align-items: center;
     }
     #otpmobscreenlogo img{
       height: fit-content;
@@ -186,5 +187,19 @@ input.success {
     display: flex;
     justify-content: space-between;
    }
+
+   .askSign> p{
+    font-size: 14px;
+   }
+   .askSign a{
+    font-size: 14px;
+   }
+}
+@media (max-width:500px) {
+    .otpleft{
+        width: 90%;
+ margin-left: 5%;
+ margin-right: 5%;
+    }
 }
 

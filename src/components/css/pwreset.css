@@ -92,7 +92,7 @@ font-weight: 400;
 line-height: 25.6px;
 }
 
-.askSign> p{
+.resaskSign> p{
     font-size: 14px;
 }
 .resetleftSub .error-message {
@@ -119,7 +119,7 @@ line-height: 25.6px;
     color: #A62F2F !important;
    
   }
-  @media (max-width:920px) {
+  @media (max-width:1020px) {
     .resetright{
       width: 0%;
       display:none;
@@ -145,7 +145,6 @@ line-height: 25.6px;
       display: flex;
       justify-content: center;
       align-content: center;
-      margin-bottom: 4vh;
     }
     #resmobscreenlogo img{
       height: fit-content;
@@ -153,8 +152,18 @@ line-height: 25.6px;
   #resetp{
     font-size: 16px;
   }
+  .resaskSign a{
+    font-size: small;
+    color: #008080;
+    font-weight: 600;
+  }
+  .resaskSign{
+    display: flex;
+    justify-content: center;
+    margin-top: 5vh;
+  }
 }
-@media (min-width: 921px) {
+@media (min-width: 1021px) {
   #resmobscreenlogo {
       display: none;
   }
@@ -172,8 +181,10 @@ line-height: 25.6px;
     justify-content: center;
   }
   .resetleftSub{
-    height: 100%;
-    margin-left: 0%;
+    height: 96%;
+    margin-left: 2%;
+    margin-top: 5vh;
+    margin-right: 2%;
   }
   #reseth2{
     top: 0;
@@ -186,17 +197,19 @@ line-height: 25.6px;
     display: flex;
     justify-content: center;
     align-content: center;
+    padding: 20px 0;
+    padding-top: 40px;
     
   }
   #resmobscreenlogo img{
     height: fit-content;
+    
   }
 #resetp{
   font-size: 16px;
   margin-bottom: 30px;
 }
-input[type="email"]
-{
+input[type="email"]{
   margin-bottom: 15px;
 }}
   
