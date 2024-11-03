@@ -129,7 +129,8 @@ const Login = () => {
 
             <div className="checkbox-container">
               <Link to="/pwreset">Forget Password?</Link>
-              <input
+             <div id="remembercont">
+             <input
                 type="checkbox"
                 id="remember"
                 name="remember"
@@ -137,6 +138,8 @@ const Login = () => {
                 onChange={(e) => setRememberMe(e.target.checked)}
               />
               <label htmlFor="remember">Remember me</label>
+             </div>
+              
             </div>
 
             <input

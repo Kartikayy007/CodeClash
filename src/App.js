@@ -4,7 +4,7 @@ import Pwreset from './components/pwreset';
 import Signup from './components/signup';
 import Otp from './components/otp';
 import Dashboard from './components/dashboard';
-
+import Getstarted from './components/getstarted'
 
 
 import Newpass from './components/newpass';

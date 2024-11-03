@@ -147,11 +147,11 @@ const Signup = () => {
           <div className="moving-circle"></div>
         </div>
       )}
-      <div className='left'>
-      <div id="mobscreenlogo">
+      <div className='signupleft'>
+      <div id="signmobscreenlogo">
           <img src={frame} alt="" />
         </div>
-        <div className="leftSub">
+        <div className="signupleftSub">
           <h2 id='signuph2'>Create Your Account</h2>
           <p>Start organizing your classes, assignments, and meetings all in one place.</p>
 
@@ -265,7 +265,7 @@ const Signup = () => {
           </div>
         </div>
       </div>
-      <div className="right">
+      <div className="signupright">
         <div className="content">
           <div className="slider2">
             <div className="slides" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
