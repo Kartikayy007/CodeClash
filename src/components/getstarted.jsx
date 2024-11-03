@@ -22,13 +22,17 @@ function Getstarted() {
       </div>
 
 
-      <div className="flex justify-center  space-x-4 mt-[5vh]">
-        <button className="bg-[#008080] w-[10vw] text-white px-6 py-3 rounded-lg  font-semibold   ">
-            <Link to="/login" className='text-xl'> Log In</Link>
-        </button>
-        <button className="bg-[#008080] w-[10vw] text-white px-6 py-3 rounded-lg font-semibold ">
-         <Link to="/signup" className='text-xl'> Create Account</Link>
-        </button>
+      <div className="flex justify-center space-x-4 mt-[5vh]">
+        <Link 
+          to="/login" 
+          className="bg-[#008080] w-[12vw] text-white px-8 py-4 rounded-md text-2xl font-semibold shadow-md hover:bg-teal-700 transition-all duration-200">
+          Log In
+        </Link>
+        <Link 
+          to="/signup" 
+          className="bg-[#008080] w-[12vw] text-white px-8 py-4 rounded-md text-2xl font-semibold shadow-md hover:bg-teal-700 transition-all duration-200">
+          Create Account
+        </Link>
       </div>
 
 
