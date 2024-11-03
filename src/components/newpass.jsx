@@ -100,6 +100,7 @@ const Newpass = () => {
           hideProgressBar: true,
           autoClose: 3000,
         });
+           navigate('/login');
       }
     } catch (error) {
       console.error(error);
