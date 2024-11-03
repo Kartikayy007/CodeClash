@@ -6,8 +6,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import tick from '../assets/tick.svg';
+import cross from '../assets/cross.svg';
+import { useNavigate } from 'react-router-dom';
+import Login from './login';
+
+
+
+const element2 = <FontAwesomeIcon icon={faEyeSlash} />;
+const element = <FontAwesomeIcon icon={faEye} />;
 
 const Newpass = () => {
+  const navigate = useNavigate();
+
   const [token, setToken] = useState('');
   const [password, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -29,8 +41,10 @@ const Newpass = () => {
     const tokenFromUrl = params.get('token');
     if (tokenFromUrl) {
       setToken(tokenFromUrl);
+    }else {
+      navigate('/login');
     }
-  }, []);
+  }, [navigate]);
 
   const calculateStrength = (conditions) => {
     const metConditions = Object.values(conditions).filter(Boolean).length;
@@ -99,6 +113,7 @@ const Newpass = () => {
       setNewPassword('');
       setConfirmPassword('');
       setLoading(false); 
+   
 
     }
   };
@@ -164,7 +179,7 @@ const Newpass = () => {
                 className="toggle-password-btn"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                <FontAwesomeIcon icon={faEye} />
+                {showPassword?element2:element}
               </button>
             </div>
 
@@ -180,11 +195,11 @@ const Newpass = () => {
               <label className="label">Confirm Password</label>
             </div>
 
-            {password.length > 0 && (
+          
               <div
                 className="password-popup2"
                 style={{
-                  opacity: 1,
+                  opacity: popupVisible ? 1 : 0,
                   transition: 'opacity 0.3s ease-in-out'
                 }}
               >
@@ -196,23 +211,27 @@ const Newpass = () => {
                 </div>
 
                 <p className={passwordConditions.length ? "met" : "not-met"}>
-                  {passwordConditions.length ? '✔️' : '✖️'} Minimum 8 characters
-                </p>
-                <p className={passwordConditions.uppercase ? "met" : "not-met"}>
-                  {passwordConditions.uppercase ? '✔️' : '✖️'} At least one uppercase letter
-                </p>
-                <p className={passwordConditions.specialChar ? "met" : "not-met"}>
-                  {passwordConditions.specialChar ? '✔️' : '✖️'} At least one special character
-                </p>
-                <p className={passwordConditions.number ? "met" : "not-met"}>
-                  {passwordConditions.number ? '✔️' : '✖️'} At least one number
-                </p>
+              <img src={passwordConditions.length ? tick : cross} alt={passwordConditions.length ? "Met" : "Not Met"} />
+              Minimum 8 characters
+              </p>
+              <p className={passwordConditions.uppercase ? "met" : "not-met"}>
+              <img src={passwordConditions.uppercase ? tick : cross} alt={passwordConditions.uppercase ? "Met" : "Not Met"} />
+                At least one uppercase letter
+              </p>
+              <p className={passwordConditions.specialChar ? "met" : "not-met"}>
+              <img src={passwordConditions.specialChar ? tick : cross} alt={passwordConditions.specialChar ? "Met" : "Not Met"} />
+                At least one special character
+              </p>
+              <p className={passwordConditions.number ? "met" : "not-met"}>
+              <img src={passwordConditions.number ? tick : cross} alt={passwordConditions.number ? "Met" : "Not Met"} />
+                At least one number
+              </p>
                 <br />
                 <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
                   Strength: {passwordStrength}
                 </p>
               </div>
-            )}
+
             
              <div id="newmobscreenlogo">
                                 <img src={createnewpass} alt="" />

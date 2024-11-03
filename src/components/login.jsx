@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import img1 from '../assets/img1.svg';
 import img2 from '../assets/img2.svg';
 import img3 from '../assets/img3.svg';
@@ -10,9 +10,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import './css/login.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
+const element2 = <FontAwesomeIcon icon={faEyeSlash} />;
 const element = <FontAwesomeIcon icon={faEye} />;
-
 const images = [img1, img2, img3];
 
 const Login = () => {
@@ -21,8 +22,19 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [emailError, setEmailError] = useState('');
+  const navigate = useNavigate();
+  const [passwordError, setPasswordError] = useState('');
+
+
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
+    if (token) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -39,16 +51,17 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setEmailError('Enter a valid email');
+      setLoading(false);
       return;
     } else {
       setEmailError('');
     }
 
-    setLoading(true);
+
 
     try {
       const response = await axios.post("https://singhanish.me/api/auth/login", {
@@ -64,16 +77,20 @@ const Login = () => {
           hideProgressBar: true,
           autoClose: 3000,
         });
+        navigate('/dashboard');
       }
     } catch (error) {
-      toast.error(error.response?.data?.error || "Login failed", {
+      if (error.response.data.error.includes('Password')) {
+        setPasswordError('Incorrect password');
+      }
+
+      toast.error(error.response.data.error || "Login failed", {
         className: "custom-toast",
         hideProgressBar: true,
         autoClose: 3000,
       });
     } finally {
-      setLoading(false); 
-      setEmail('');
+      setLoading(false);
       setPassword('');
     }
   };
@@ -85,7 +102,7 @@ const Login = () => {
           <div className="moving-circle"></div>
         </div>
       )}
-      
+
       <div className='left'>
         <div id="mobscreenlogo">
           <img src={frame} alt="" />
@@ -111,26 +128,32 @@ const Login = () => {
             <div className="input-container">
               <input
                 type={showPassword ? 'text' : 'password'}
-                className="textinput password-input"
+                className={`textinput password-input ${passwordError ? 'input-error no-margin  ' : ''}`}
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (passwordError) setPasswordError('');
+                }}
                 required
                 placeholder=" "
               />
-              <label className="label">Password</label>
+
+              <label className={`label  ${passwordError ? 'input-error ' : ''}`}>Password</label>
+              {passwordError && <p className="error-message">{passwordError}</p>}
               <button
                 type="button"
                 className="toggle-password-btn"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {element}
+                {showPassword ? element2 : element}
               </button>
             </div>
 
             <div className="checkbox-container">
-              <Link to="/pwreset">Forget Password?</Link>
-             <div id="remembercont">
-             <input
+
+              <Link to="/pwreset" id='Fp'>Forget Password?</Link>
+              <input
+
                 type="checkbox"
                 id="remember"
                 name="remember"
@@ -145,9 +168,11 @@ const Login = () => {
             <input
               type="submit"
               value="Log in"
-              disabled={loading} 
-              className={loading ? 'disabled-button' : ''}
+              disabled={loading || !email || !password}
+              className={`${loading || !email || !password ? 'disabled-button' : ''}`}
+              style={{ opacity: loading || !email || !password ? 0.5 : 1, transition: 'opacity 0.3s ease-in-out' }}
             />
+
           </form>
 
           <div className="askSign">

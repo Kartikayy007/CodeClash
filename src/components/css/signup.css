@@ -74,10 +74,10 @@ color: #121212;
 #terms{
     top: 5px;
     font-weight: 400;
-    font-size: 12px;
+    font-size: 14px;
     justify-self: flex-end;
     
-    margin-right: 7px;
+    margin-right: 12px;
     margin-left: 10px;
 }
 #terms a{
@@ -190,7 +190,8 @@ background: rgb(254, 250, 238);  padding: 10px;
   
   .progress-bar {
     height: 100%;
-    transition: width 0.3s ease;
+    transition: width 0.3s ease , background-color 0.3s ease;
+    
   }
   
   .progress-bar.weak {
@@ -220,6 +221,11 @@ background: rgb(254, 250, 238);  padding: 10px;
 #priP{
     margin-left: 45px !important;
 }
+.met,.not-met{
+  gap: 10px;
+  display: flex;
+}
+
 @media (max-width:600px) {
   .signupright{
     display:none;
@@ -314,4 +320,11 @@ input[type="checkbox"]{
   font-size: 20px;
 }
 }
-
+.tc{
+  color: #066769 !important;
+  font-weight: 600;
+}
+label[for="terms"]{
+  
+ font-size: 14px;
+}

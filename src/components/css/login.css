@@ -384,7 +384,9 @@ padding-right: 5px;
   }
   .input-error{
     color: #A62F2F !important;
+    ;
   }
+  
   .custom-toastS{
     background-color: #E3F5E3 !important;
     color: black;          
@@ -405,6 +407,12 @@ padding-right: 5px;
     justify-content: center;
     z-index: 1000;
   }
+  #Fp:hover{
+    color: #066769 ;
+  }
+  label {
+    user-select: none; 
+  }
   
   .moving-circle {
     width: 50px;
@@ -414,6 +422,7 @@ padding-right: 5px;
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
+  
   
   @keyframes spin {
     0% { transform: rotate(0deg); }
