@@ -225,8 +225,11 @@ background: rgb(254, 250, 238);  padding: 10px;
   gap: 10px;
   display: flex;
 }
-
+#pp{margin-left: 37px;}
 @media (max-width:600px) {
+  .password-popup{
+    width: 90vw;
+  }
   .signupright{
     display:none;
   }
@@ -238,6 +241,7 @@ background: rgb(254, 250, 238);  padding: 10px;
     width: 90%;
     margin-right: 5%;
     margin-top: 5vh;
+    
   }
   #leftSubh2{
     font-size: 30px;
@@ -248,13 +252,16 @@ background: rgb(254, 250, 238);  padding: 10px;
     align-items: end;
 }
   .asklogin a{
-    font-size: 16px;
+    font-size: 14px;
+    padding: 0;
+    padding-left: 8px;
   }
   #signmobscreenlogo {
     display: flex; 
     justify-content: center;
    align-items: center;
-   margin-top: 2vh;
+   margin-top: 5vh;
+   height: 100px;
   }
   #signmobscreenlogo img{
    display: block;
@@ -262,6 +269,12 @@ background: rgb(254, 250, 238);  padding: 10px;
 
 }
 @media (max-width:1050px) and (min-width:600px) {
+  .password-popup{
+    width: 60%;
+  }
+  #pp{
+    margin-left: 0;
+  }
   .signupright{
     display:none;
   }
@@ -272,12 +285,13 @@ background: rgb(254, 250, 238);  padding: 10px;
     margin-left: 20%;
     width: 60%;
     margin-right: 20%;
+    margin-top: 5vh;
   }
   #leftSubh2{
     font-size: 30px;
   }
   .signupleftSub p{
-   font-size: 18px;
+   font-size: 14px;
    margin-right: 5%;
   }
   .input-container {
@@ -288,22 +302,25 @@ background: rgb(254, 250, 238);  padding: 10px;
 }
 .checkbox-container{
   margin-bottom: 50px;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 .checkbox-container a{
   font-size: 14px;
   justify-self: left;
 }
 input[type="checkbox"]{
-  margin-left: 125px;
-  margin-top: 4px;
+  margin-left: auto;
+  /* margin-top: 4px; */
 }
 #signmobscreenlogo {
   display: flex; 
   justify-content: center;
  align-items: center;
- margin-top: 10vh;
+ margin-top: 5vh;
+ height: 100px;
+ 
 }
+
 #signmobscreenlogo img{
  display: block;
 }
@@ -316,8 +333,9 @@ input[type="checkbox"]{
   align-self: center;
 }
 .asklogin a{
-  margin-left: 10px;
-  font-size: 20px;
+  font-size: 14px;
+  padding: 0;
+  padding-left: 8px;
 }
 }
 .tc{
@@ -328,3 +346,19 @@ label[for="terms"]{
   
  font-size: 14px;
 }
+@media(max-width:702px){
+  #pp{
+    white-space: nowrap;
+    margin-left: 37px;
+  }
+}
+@media (max-width:600px) {
+  #pp{
+    white-space: nowrap;
+    margin-left: 0;
+  }}
+@media (max-width:468px) {
+  #pp{
+  
+    margin-left: 37px;
+  }}
