@@ -20,7 +20,7 @@ const App = () => {
       <Routes>
 
 
-        <Route path="/" element={<Dashboard/>} />
+        <Route path="/" element={<Getstarted/>} />
 
 
 
