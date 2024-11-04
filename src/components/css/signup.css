@@ -259,8 +259,8 @@ background: rgb(254, 250, 238);  padding: 10px;
   #signmobscreenlogo {
     display: flex; 
     justify-content: center;
-   align-items: center;
-   margin-top: 5vh;
+   align-items: baseline;
+   margin-top: 2vh;
    height: 100px;
   }
   #signmobscreenlogo img{
@@ -302,7 +302,7 @@ background: rgb(254, 250, 238);  padding: 10px;
 }
 .checkbox-container{
   margin-bottom: 50px;
-  /* justify-content: space-between; */
+
 }
 .checkbox-container a{
   font-size: 14px;
@@ -310,7 +310,7 @@ background: rgb(254, 250, 238);  padding: 10px;
 }
 input[type="checkbox"]{
   margin-left: auto;
-  /* margin-top: 4px; */
+
 }
 #signmobscreenlogo {
   display: flex; 
@@ -359,6 +359,16 @@ label[for="terms"]{
   }}
 @media (max-width:468px) {
   #pp{
-  
-    margin-left: 37px;
-  }}
+  margin-left: 37px;
+  }
+}
+@media(max-height:750px){
+  #signupmobscreenlogo{
+    margin-top: 0;
+  }
+  .signupleftSub p{
+    margin-bottom: 10px;
+  }#sub {
+    margin-top: 10px;
+  }
+}
