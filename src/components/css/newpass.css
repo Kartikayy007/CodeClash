@@ -114,3 +114,8 @@ display: none;
       font-size: 14px;
     }
 
+@media(max-width:400px){
+  #newpassleftsub{
+    width: 90%;
+  }
+}

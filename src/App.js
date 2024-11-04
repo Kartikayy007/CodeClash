@@ -8,6 +8,7 @@ import Dashboard from './components/dashboard';
 import Getstarted from './components/getstarted'
 
 
+
 import Newpass from './components/newpass';
 
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';

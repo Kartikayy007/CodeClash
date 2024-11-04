@@ -93,7 +93,9 @@ const Newpass = () => {
           hideProgressBar: true,
           autoClose: 3000,
         });
+
         navigate('/login');
+
       }
     } catch (error) {
       console.error(error);
@@ -152,7 +154,7 @@ const Newpass = () => {
       <div id='newpassleft'>
         <div id='newpassleftsub'>
           <h2 id="newpassh2">Create a New Password</h2>
-          <p id="newpassp">Enter a new password to regain access to your <br /> account.</p>
+          <p id="newpassp">Enter a new password to regain access to your account.</p>
           <form onSubmit={handleSubmit}>
 
             <div className="input-container">
