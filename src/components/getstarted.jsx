@@ -43,8 +43,8 @@ const Getstarted = () => {
       )}
 
       <div className="flex items-center justify-center lg:mt-[5vh] hidden lg:flex">
-        <h1 className="text-4xl black md:text-4xl lg:text-6xl text-[#008080] font-bold mr-4">Welcome to</h1>
-        <img src={frame} alt="Frame" className="h-16 md:h-16 lg:h-20" />
+        <h1 className="text-4xl black md:text-4xl lg:text-6xl text-[#008080] font-bold mr-4">Welcome to Classence</h1>
+        <img src={frame} alt="Frame" className="hidden h-16 md:h-16 lg:h-20 " />
       </div>
 
       <div className="flex justify-center mt-4">
