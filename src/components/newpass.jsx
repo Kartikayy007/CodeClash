@@ -3,19 +3,12 @@ import createnewpass from '../assets/creatnewpass.svg';
 import './css/newpass.css';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import tick from '../assets/tick.svg';
 import cross from '../assets/cross.svg';
 import { useNavigate } from 'react-router-dom';
-import Login from './login';
-
-
-
-const element2 = <FontAwesomeIcon icon={faEyeSlash} />;
-const element = <FontAwesomeIcon icon={faEye} />;
 
 const Newpass = () => {
   const navigate = useNavigate();
@@ -27,6 +20,7 @@ const Newpass = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState("Weak");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
   const [loading, setLoading] = useState(false);
 
   const [passwordConditions, setPasswordConditions] = useState({
@@ -41,7 +35,7 @@ const Newpass = () => {
     const tokenFromUrl = params.get('token');
     if (tokenFromUrl) {
       setToken(tokenFromUrl);
-    }else {
+    } else {
       navigate('/login');
     }
   }, [navigate]);
@@ -60,32 +54,32 @@ const Newpass = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); 
+    setLoading(true);
 
-
-    
     const allConditionsMet = Object.values(passwordConditions).every(condition => condition);
     if (!allConditionsMet) {
       toast.dismiss();
-      toast.error('Password does not meet all requirements',{ className: "custom-toast",
+      toast.error('Password does not meet all requirements', {
+        className: "custom-toast",
         hideProgressBar: true,
-        autoClose: 3000,});
-        setLoading(false); 
-
+        autoClose: 3000,
+      });
+      setLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
-      toast.dismiss(); 
-      toast.error('Passwords do not match',{ className: "custom-toast",
+      toast.dismiss();
+      toast.error('Passwords do not match', {
+        className: "custom-toast",
         hideProgressBar: true,
-        autoClose: 3000,});
-        setLoading(false); 
-
+        autoClose: 3000,
+      });
+      setLoading(false);
       return;
     }
 
-    setPasswordError(''); 
+    setPasswordError('');
 
     try {
       const response = await axios.put(`https://singhanish.me/api/auth/reset-password/${token}`, {
@@ -93,7 +87,6 @@ const Newpass = () => {
       });
 
       if (response.data.success) {
-        console.log(response);
         toast.dismiss();
         toast.success(response.data.message, {
           className: "custom-toastS",
@@ -113,9 +106,7 @@ const Newpass = () => {
     } finally {
       setNewPassword('');
       setConfirmPassword('');
-      setLoading(false); 
-   
-
+      setLoading(false);
     }
   };
 
@@ -143,7 +134,7 @@ const Newpass = () => {
     if (newPassword.length > 0) {
       setPopupVisible(true);
     } else {
-      setPopupVisible(false); 
+      setPopupVisible(false);
     }
   };
 
@@ -153,7 +144,7 @@ const Newpass = () => {
 
   return (
     <div id='newpasspage'>
-       {loading && (
+      {loading && (
         <div className="loading-overlay">
           <div className="moving-circle"></div>
         </div>
@@ -180,13 +171,13 @@ const Newpass = () => {
                 className="toggle-password-btn"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword?element2:element}
+                {showPassword ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}
               </button>
             </div>
 
             <div className="input-container">
               <input
-                type="password"
+                type={showConfirmPassword ? 'text' : 'password'} 
                 className="textinput password-input"
                 value={confirmPassword}
                 onChange={handleConfirmPasswordChange}
@@ -194,52 +185,56 @@ const Newpass = () => {
                 placeholder=" "
               />
               <label className="label">Confirm Password</label>
+              <button
+                type="button"
+                className="toggle-password-btn"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)} 
+              >
+                {showConfirmPassword ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}
+              </button>
             </div>
 
-          
-              <div
-                className="password-popup2"
-                style={{
-                  opacity: popupVisible ? 1 : 0,
-                  transition: 'opacity 0.3s ease-in-out'
-                }}
-              >
-                <div className="progress-bar-container">
-                  <div
-                    className={`progress-bar ${passwordStrength.toLowerCase()}`}
-                    style={{ width: `${progress}%` }}
-                  ></div>
-                </div>
+            <div
+              className="password-popup2"
+              style={{
+                opacity: popupVisible ? 1 : 0,
+                transition: 'opacity 0.3s ease-in-out'
+              }}
+            >
+              <div className="progress-bar-container">
+                <div
+                  className={`progress-bar ${passwordStrength.toLowerCase()}`}
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
 
-                <p className={passwordConditions.length ? "met" : "not-met"}>
-              <img src={passwordConditions.length ? tick : cross} alt={passwordConditions.length ? "Met" : "Not Met"} />
-              Minimum 8 characters
+              <p className={passwordConditions.length ? "met" : "not-met"}>
+                <img src={passwordConditions.length ? tick : cross} alt={passwordConditions.length ? "Met" : "Not Met"} />
+                Minimum 8 characters
               </p>
               <p className={passwordConditions.uppercase ? "met" : "not-met"}>
-              <img src={passwordConditions.uppercase ? tick : cross} alt={passwordConditions.uppercase ? "Met" : "Not Met"} />
+                <img src={passwordConditions.uppercase ? tick : cross} alt={passwordConditions.uppercase ? "Met" : "Not Met"} />
                 At least one uppercase letter
               </p>
               <p className={passwordConditions.specialChar ? "met" : "not-met"}>
-              <img src={passwordConditions.specialChar ? tick : cross} alt={passwordConditions.specialChar ? "Met" : "Not Met"} />
+                <img src={passwordConditions.specialChar ? tick : cross} alt={passwordConditions.specialChar ? "Met" : "Not Met"} />
                 At least one special character
               </p>
               <p className={passwordConditions.number ? "met" : "not-met"}>
-              <img src={passwordConditions.number ? tick : cross} alt={passwordConditions.number ? "Met" : "Not Met"} />
+                <img src={passwordConditions.number ? tick : cross} alt={passwordConditions.number ? "Met" : "Not Met"} />
                 At least one number
               </p>
-                <br />
-                <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
-                  Strength: {passwordStrength}
-                </p>
-              </div>
+              <br />
+              <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
+                Strength: {passwordStrength}
+              </p>
+            </div>
 
-            
-             <div id="newmobscreenlogo">
-                                <img src={createnewpass} alt="" />
-                    </div>
+            <div id="newmobscreenlogo">
+              <img src={createnewpass} alt="" />
+            </div>
 
             <input type="submit" id='newpasssubmit' value="Reset Password" disabled={loading} />
-
           </form>
         </div>
       </div>
