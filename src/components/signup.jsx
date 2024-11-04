@@ -314,7 +314,7 @@ const Signup = () => {
                 checked={isChecked}
                 onChange={(e) => setIsChecked(e.target.checked)}
               />
-               <label htmlFor="terms">
+               <label htmlFor="">
                 I agree to the &nbsp;
                 <span onClick={handleTermsClick} style={{ cursor: 'pointer', color: 'blue' }} className='tc'>
                   Terms & Conditions
