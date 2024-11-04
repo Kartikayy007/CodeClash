@@ -628,7 +628,7 @@ input[type="checkbox"]{
     margin-top: 0;
     align-self: flex-start;
   }
-
+}
 @media (max-height:650px){
   .leftSub p{
     margin-bottom: 10px;
