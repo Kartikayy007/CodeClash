@@ -226,6 +226,9 @@ background: rgb(254, 250, 238);  padding: 10px;
   display: flex;
 }
 #pp{margin-left: 37px;}
+label{
+  font-size: 14px;
+}
 @media (max-width:600px) {
   .password-popup{
     width: 90vw;
