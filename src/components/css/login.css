@@ -462,7 +462,7 @@ padding-right: 5px;
 }
 .checkbox-container{
   margin-bottom: 50px;
-  /* justify-content: space-between; */
+  
 }
 .checkbox-container a{
   font-size: 14px;
@@ -476,7 +476,7 @@ input[type="checkbox"]{
   display: flex; 
   justify-content: center;
  align-items: center;
- margin-top: 10vh;
+ margin-top: 4vh;
 }
 #mobscreenlogo img{
  display: block;
@@ -521,7 +521,7 @@ input[type="checkbox"]{
 }
 .checkbox-container{
   margin-bottom: 50px;
-  /* justify-content: space-between; */
+
 }
 .checkbox-container a{
   font-size: 14px;
@@ -529,13 +529,13 @@ input[type="checkbox"]{
 }
 input[type="checkbox"]{
   margin-left: auto;
-  /* margin-top: 4px; */
+  
 }
 #mobscreenlogo {
   display: flex; 
   justify-content: center;
  align-items: center;
- margin-top: 10vh;
+ margin-top: 4vh;
 }
 #mobscreenlogo img{
  display: block;
@@ -588,7 +588,7 @@ input[type="checkbox"]{
 }
 .checkbox-container{
   margin-bottom: 50px;
-  /* justify-content: space-between; */
+
 }
 .checkbox-container a{
   font-size: 14px;
@@ -596,13 +596,13 @@ input[type="checkbox"]{
 }
 input[type="checkbox"]{
   margin-left: auto;
-  /* margin-top: 4px; */
+
 }
 #mobscreenlogo {
   display: flex; 
   justify-content: center;
  align-items: center;
- margin-top: 10vh;
+ margin-top: 4vh;
 }
 #mobscreenlogo img{
  display: block;
@@ -628,4 +628,13 @@ input[type="checkbox"]{
     margin-top: 0;
     align-self: flex-start;
   }
+  
 }
+@media (max-height:650px){
+  .leftSub p{
+    margin-bottom: 10px;
+  }
+}
+
+ 
+  
