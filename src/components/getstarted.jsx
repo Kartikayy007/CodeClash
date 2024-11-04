@@ -85,10 +85,10 @@ const Getstarted = () => {
       )}
     
       {currentIndex === images.length - 1 && (
-      <div className="flex justify-center space-x-4 mt-[6vh] block lg:hidden">
+      <div className="flex justify-center space-x-4 mt-[6vh] block lg:hidden w-[90%]">
       <Link 
       to="/login" 
-      className="bg-[#008080] w-[200px] text-white px-6 py-3 rounded-md text-lg md:text-2xl font-semibold text-center ml-[vw]">
+      className="bg-[#008080] w-[200px] text-white px-6 py-3 rounded-md text-lg  grid place-content-center md:text-2xl font-semibold text-center ml-[vw]">
       Log In
         </Link>
       <Link 
