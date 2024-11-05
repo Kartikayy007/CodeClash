@@ -91,6 +91,7 @@ const Pwreset = () => {
           <div className="moving-circle"></div>
         </div>
       )}
+      
       <div className='resetleft'>
         <div className="resetleftSub">
           <h2 id="reseth2">{success?"Link sent!":"Reset your password"}</h2>
