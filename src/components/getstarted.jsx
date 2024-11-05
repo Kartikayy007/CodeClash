@@ -115,7 +115,7 @@ const Getstarted = () => {
         <p className="text-lg md:text-xl">Ready to start? Your classroom is just a click away!</p>
       </div>
 
-      <div className="flex justify-center items-center gap-2 text-[#414A4B] text-md md:text-xl mt-[5vh] font-semibold hidden lg:block absolute bottom-8">
+      <div className="flex justify-center items-center gap-2 text-[#414A4B] text-md md:text-xl mt-[5vh] font-semibold hidden lg:block relative">
         <FontAwesomeIcon icon={faCopyright} className="mr-5"/>
         Classence | ESTD. 2024
       </div>

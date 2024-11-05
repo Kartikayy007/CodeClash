@@ -88,15 +88,14 @@ const Newpass = () => {
 
       if (response.data.success) {
         toast.dismiss();
+        
         toast.success(response.data.message, {
           className: "custom-toastS",
           hideProgressBar: true,
           autoClose: 3000,
         });
 
-        navigate('/login');
-
-      }
+        setTimeout(() => navigate('/login'), 1000);      }
     } catch (error) {
       console.error(error);
       toast.dismiss();
