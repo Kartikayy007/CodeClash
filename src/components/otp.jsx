@@ -121,6 +121,10 @@ const Otp = () => {
             const prevInput = inputRefs.current[index - 1];
             if (prevInput) prevInput.focus();
         }
+        
+        if (inputRefs.current.every(input => input.value !== '')) {
+            handleSubmit(e);
+        }
     };
 
     const handleKeyPress = (e) => {
@@ -133,6 +137,25 @@ const Otp = () => {
         if (e.key === 'Backspace' && !e.target.value && index > 0) {
             const prevInput = inputRefs.current[index - 1];
             if (prevInput) prevInput.focus();
+        }
+    };
+
+    const handlePaste = (e) => {
+        e.preventDefault();
+        const pasteData = e.clipboardData.getData('Text'); 
+        const otpDigits = pasteData.slice(0, 6);
+        otpDigits.split('').forEach((digit, index) => {
+            if (inputRefs.current[index]) {
+                inputRefs.current[index].value = digit; 
+            }
+        });
+        const nextEmptyInput = inputRefs.current.find((input) => !input.value);
+        if (nextEmptyInput) {
+            nextEmptyInput.focus();
+        }
+        
+        if (inputRefs.current.every(input => input.value !== '')) {
+            handleSubmit(e);
         }
     };
 
@@ -160,6 +183,7 @@ const Otp = () => {
                                     onKeyPress={handleKeyPress}
                                     onKeyDown={(e) => handleBackspace(e, index)}
                                     onChange={(e) => handleInputChange(e, index)}
+                                    onPaste={handlePaste} 
                                     ref={(el) => (inputRefs.current[index] = el)}
                                     className={verificationStatus === false ? 'error' : verificationStatus === true ? 'success' : ''}
                                 />
