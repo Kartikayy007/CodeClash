@@ -1,15 +1,15 @@
 import React from 'react';
 
-import Login from './components/login';
-import Pwreset from './components/pwreset';
-import Signup from './components/signup';
-import Otp from './components/otp';
-import Dashboard from './components/dashboard';
-import Getstarted from './components/getstarted'
+import Login from './auth/components/login';
+import Pwreset from './auth/components/pwreset';
+import Signup from './auth/components/signup';
+import Otp from './auth/components/otp';
+import Dashboard from './auth/components/dashboard';
+import Getstarted from './auth/components/getstarted'
 
 
 
-import Newpass from './components/newpass';
+import Newpass from './auth/components/newpass';
 
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
