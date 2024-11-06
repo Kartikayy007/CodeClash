@@ -19,7 +19,7 @@ const Newpass = () => {
   const [passwordError, setPasswordError] = useState('');
   const [popupVisible, setPopupVisible] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState("Weak");
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword ,setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
   const [loading, setLoading] = useState(false);
 

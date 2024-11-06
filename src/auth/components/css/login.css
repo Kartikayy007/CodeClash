@@ -638,3 +638,14 @@ input[type="checkbox"]{
  
   
 
+#searchClass{
+    background-color: #F7F8F8 ;
+    border: none;
+
+    font-size: 14px;
+
+}
+#searchClass::placeholder{
+    color: #4C5858;
+    font-size: 12px;
+}

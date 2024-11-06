@@ -4,7 +4,7 @@ import Login from './auth/components/login';
 import Pwreset from './auth/components/pwreset';
 import Signup from './auth/components/signup';
 import Otp from './auth/components/otp';
-import Dashboard from './auth/components/dashboard';
+import Dashboard from './platform/dashboard/dashboard';
 import Getstarted from './auth/components/getstarted'
 
 
