@@ -1,5 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+
+:root {
+    --color-error: #A62F2F;
+    --color-primary:  #066769;
+    --color-primary-light:   #008080;
+    --color-neutral-1000:  #121212;
+    --color-neutral-800:  #414A4B;
+    --color-neutral-700: #4C5858;
+    --color-neutral-300: #ADB8B8;
+    --color-neutral-100:  #EEF0F0;
+  
+    --color-neutral-00: #FAFAFA;
+  
+    --color-background-light:#F7F8F8;
+  
+    --color-toast-error-bg: #FBE5E5;
+  
+    --color-toast-success-bg:  #E3F5E3;
+    
+    --color-toast-success-border:#55b938;
+    
+    --color-toast-error-border: var(--color-error);
+}
+
 *{
     margin: 0;
     padding: 0;
@@ -16,7 +40,7 @@
   z-index: 55; 
 }
 :root{
-    --toastify-color-error:#A62F2F;
+    --toastify-color-error:var(--color-error);
 }
 .loginPage{
     background-color: #fff;
@@ -56,7 +80,7 @@ line-height: 21px;
     
     font-size: 24px;
     margin-bottom: 8px;
-    color: var(--Neutral-1000, #121212);
+    color: var(--Neutral-1000,  var( --color-neutral-1000));
 
 
 font-family: Poppins;
@@ -72,10 +96,10 @@ input[type="email"],input[type="password"]{
       border-radius: 8px;
       margin-bottom: 30px;
       border: none;
-      border: 1px solid var(--Neutral-700, #4C5858);
+      border: 1px solid var(--Neutral-700, var(--color-neutral-700));
 }
 #forgethover:hover{
-    color: #008080;
+    color:   var(--color-primary-light);
 }
 input[type="checkbox"]{
 
@@ -91,7 +115,7 @@ input[type="submit"]{
     border-radius: 8px;
     border: none;
     color: white;
-    background: var(--Primary-800, #066769);
+    background: var(--Primary-800,  var( --color-primary));
 }
 .checkbox-container {
     display: flex;
@@ -109,7 +133,7 @@ input[type="submit"]{
     white-space: nowrap;
     font-size: 13px;
     justify-self: flex-start;
-    color: var(--Neutral-1000, #121212);
+    color: var(--Neutral-1000,  var( --color-neutral-1000));
 
 
 font-family: Poppins;
@@ -129,8 +153,8 @@ line-height: 21px;
     text-align: center;
 }
 .askSign a{
-    color: var(--Primary-800, #066769);
-    color: var(--Primary-700, #008080);
+    color: var(--Primary-800,  var( --color-primary));
+    color: var(--Primary-700,   var(--color-primary-light));
 
 
 font-family: Poppins;
@@ -147,10 +171,10 @@ line-height: 20px;
     justify-content: center;
     align-items: center;
     border-radius: 8px;
-background: #F7F8F8;
+background:   var(--color-background-light);
 }   
 .content h1{
-    color: var(--Neutral-1000, #121212);
+    color: var(--Neutral-1000,  var( --color-neutral-1000));
 text-align: center;
 
 
@@ -162,7 +186,8 @@ line-height: 31.2px;
 padding-bottom: 8px;
 }
 .content p{
-    color: var(--Neutral-800, #414A4B);
+    color: var(--Neutral-800,    var(--color-neutral-800)
+);
 
 
 font-family: Poppins;
@@ -181,7 +206,7 @@ line-height: 22.4px;
     width: 15px;
 height: 8px;
 border-radius: 10px;
-background: var(--Neutral-300, #ADB8B8);
+background: var(--Neutral-300,  var(--color-neutral-300));
 }
 
 .scroller{
@@ -194,7 +219,7 @@ background: var(--Neutral-300, #ADB8B8);
     right: 22vw;
 }
 input[type="submit"]{
-    color: var(--Neutral-00, #FAFAFA);
+    color: var(--Neutral-00,  var( --color-neutral-00));
 
 font-family: Poppins;
 font-size: 14px;
@@ -207,7 +232,7 @@ input[type="checkbox"] {
     width: 18px;
 height: 18px;
 border-radius: 4px;
-background: var(--Neutral-100, #EEF0F0);
+background: var(--Neutral-100,  var(--color-neutral-100));
     position: relative;
     cursor: pointer;
     margin-right: 7px;
@@ -222,11 +247,11 @@ input[type="checkbox"]:checked::before {
     transform: translate(-50%, -50%);
 }
 input[type="checkbox"]:checked {
-    background-color: var(--Primary-800, #066769);
-    border-color: var(--Primary-800, #066769);
+    background-color: var(--Primary-800,  var( --color-primary));
+    border-color: var(--Primary-800,  var( --color-primary));
 }
 ::placeholder{
-    color: var(--Neutral-1000, #121212);
+    color: var(--Neutral-1000,  var( --color-neutral-1000));
 
 font-family: Poppins;
 font-size: 16px;
@@ -256,7 +281,7 @@ line-height: 25.6px;
   
   .recActive {
     border-radius: 10px;
-    background: var(--Primary-700, #008080);
+    background: var(--Primary-700,   var(--color-primary-light));
     width: 30px;
 height: 8px;
   }
@@ -284,10 +309,10 @@ height: 8px;
 }
 input[type="text"]:focus,input[type="email"]:focus,input[type="password"]:focus{
     outline: none;
-    border: 2px solid #066769;
+    border: 2px solid  var( --color-primary);
 }
 input[type="email"],input[type="password"],input[type="text"]{
-    color: var(--Neutral-1000, #121212);
+    color: var(--Neutral-1000,  var( --color-neutral-1000));
 
   
     font-family: Poppins;
@@ -297,7 +322,7 @@ input[type="email"],input[type="password"],input[type="text"]{
     line-height: 25.6px; 
 }
 .leftSub .error-message {
-    color: #A62F2F;
+    color: var(--color-error);
     font-size: 0.9em;
     margin-top: 5px;
     margin-left: 16px;
@@ -306,13 +331,13 @@ input[type="email"],input[type="password"],input[type="text"]{
   }
   
   .leftSub .textinput.input-error {
-    border-color: #A62F2F;
+    border-color: var(--color-error);
     border-width: 2px; 
   }
   
   .no-margin {
     margin-bottom: 0!important;
-    border: 2px solid #A62F2F !important;
+    border: 2px solid var(--color-error) !important;
   }
   .password-input-container {
     position: relative;
@@ -337,11 +362,11 @@ input[type="email"],input[type="password"],input[type="text"]{
   }
   
   .custom-toast {
-    background-color: #FBE5E5 !important;
+    background-color:   var(--color-toast-error-bg) !important;
     color: black;          
     border-radius: 0px;               
     padding: 10px;   
-    border-left: 5px solid #A62F2F;
+    border-left: 5px solid var(--color-error);
                 
      
   }
@@ -355,7 +380,7 @@ input[type="email"],input[type="password"],input[type="text"]{
     width: 100%;
     padding: 20px 16px 8px; 
     font-size: 16px;
-    border: 1px solid var(--Neutral-700, #4C5858);
+    border: 1px solid var(--Neutral-700, var(--color-neutral-700));
     border-radius: 8px;
   }
   
@@ -363,7 +388,7 @@ input[type="email"],input[type="password"],input[type="text"]{
     position: absolute;
     top: 37%;
     left: 16px;
-    color: var(--Neutral-700, #4C5858);
+    color: var(--Neutral-700, var(--color-neutral-700));
     font-size: 16px;
     pointer-events: none;
     transform: translateY(-50%);
@@ -374,25 +399,25 @@ padding-right: 5px;
   
   .textinput:focus + .label,
   .textinput:not(:placeholder-shown) + .label {
-    background-color: white;
+    background-color: #fff;
     text-align: center;
    
     top: 0px;
     left: 10px;
     font-size: 12px;
-    color: var(--Primary-800, #066769);
+    color: var(--Primary-800,  var( --color-primary));
   }
   .input-error{
-    color: #A62F2F !important;
+    color: var(--color-error) !important;
     ;
   }
   
   .custom-toastS{
-    background-color: #E3F5E3 !important;
+    background-color:   var(--color-toast-success-bg) !important;
     color: black;          
     border-radius: 0px;               
     padding: 10px;   
-    border-left: 5px solid #55b938;
+    border-left: 5px solid var(--color-toast-success-border);
    }
   
    .loading-overlay {
@@ -408,7 +433,7 @@ padding-right: 5px;
     z-index: 1000;
   }
   #Fp:hover{
-    color: #066769 ;
+    color:  var( --color-primary) ;
   }
   label {
     user-select: none; 
@@ -418,7 +443,7 @@ padding-right: 5px;
     width: 50px;
     height: 50px;
     border: 5px solid #fff;
-    border-top: 5px solid #066769;
+    border-top: 5px solid  var( --color-primary);
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
@@ -639,13 +664,15 @@ input[type="checkbox"]{
   
 
 #searchClass{
-    background-color: #F7F8F8 ;
+    background-color:   var(--color-background-light) ;
     border: none;
 
     font-size: 14px;
 
 }
 #searchClass::placeholder{
-    color: #4C5858;
+    color: var(--color-neutral-700);
     font-size: 12px;
 }
+
+

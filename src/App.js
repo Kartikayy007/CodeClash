@@ -9,6 +9,7 @@ import Getstarted from './auth/components/getstarted'
 
 
 
+
 import Newpass from './auth/components/newpass';
 
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
