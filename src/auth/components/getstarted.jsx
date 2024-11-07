@@ -102,7 +102,7 @@ const Getstarted = () => {
       </div>
 
       {currentIndex === 0 && (
-        <button onClick={nextimage} className="bg-[#008080] w-[90%] text-white px-6 py-3 rounded-md text-lg md:text-2xl font-semibold mt-[5vh] block lg:hidden">
+        <button onClick={nextimage} className="bg-[#008080] w-[90%] text-white px-6 py-3 rounded-md text-lg md:text-2xl font-semibold mt-[3vh] block lg:hidden">
           Get Started
         </button>
       )}
@@ -114,7 +114,7 @@ const Getstarted = () => {
       )}
     
       {currentIndex === images.length - 1 && (
-      <div className="flex justify-center space-x-4 mt-[6vh] block lg:hidden w-[90%]">
+      <div className="flex justify-center space-x-4 mt-[3vh] block lg:hidden w-[90%]">
       <Link 
       to="/login" 
       className="bg-[#008080] w-[200px] text-white px-6 py-3 rounded-md text-lg  grid place-content-center md:text-2xl font-semibold text-center ml-[vw]">
