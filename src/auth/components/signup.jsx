@@ -28,6 +28,7 @@ const element = <FontAwesomeIcon icon={faEye} />;
 const images = [img4, img5, img6, img7, img8];
 
 const Signup = () => {
+  
   const emailRef = useRef(null);
   const passwordRef = useRef(null); 
   const nameRef = useRef(null); 
@@ -71,6 +72,7 @@ const Signup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  
 
   useEffect(() => {
     if (nameRef.current) {
@@ -92,7 +94,7 @@ const Signup = () => {
   }, []);
 
   useEffect(() => {
-    if (emailError && email) {
+    if ((!emailError && email)||!email) {
       setEmailError('');
     }
   }, [email]);
@@ -156,7 +158,7 @@ const Signup = () => {
     
 
     try {
-      const response = await axios.post("https://singhanish.me/api/auth/register", {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, {
         name,
         email,
         password
@@ -189,6 +191,21 @@ const Signup = () => {
     }
   };
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      setEmailError('Please enter a valid email address.'); 
+    } else {
+      setEmailError('');
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    const newEmail = e.target.value;
+    setEmailState(newEmail);
+    validateEmail(newEmail); 
+  };
+
   const handleFocus = () => {
     if (password.length === 0 || Object.values(passwordConditions).every(condition => condition)) {
       setPopupVisible(false);
@@ -204,6 +221,10 @@ const Signup = () => {
   const progress = Object.values(passwordConditions).filter(Boolean).length * 25;
   const formIsValid = name && email && password && Object.values(passwordConditions).every(condition => condition) && isChecked;
 
+  const handlePasswordToggle = () => {
+    setShowPassword(!showPassword);
+    passwordRef.current.focus(); 
+  };
   return (
     <div className='signUpPage'>
       {loading && (
@@ -239,7 +260,7 @@ const Signup = () => {
                 ref={emailRef}
                 className={`textinput ${emailError ? 'input-error no-margin' : ''}`}
                 value={email}
-                onChange={(e) => setEmailState(e.target.value)}
+                onChange={handleEmailChange}
                 required
                 placeholder=" "
                 onKeyDown={(e) => handleKeyDown(e, 'password')}
@@ -263,7 +284,7 @@ const Signup = () => {
               <button
                 type="button"
                 className="toggle-password-btn"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={handlePasswordToggle}
               >
                 {showPassword ? element2 : element}
               </button>

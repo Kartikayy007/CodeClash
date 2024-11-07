@@ -47,13 +47,12 @@ const Otp = () => {
         }
     }, []);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
         const otp = inputRefs.current.map((input) => input.value).join('');
         setLoading(true);
 
         try {
-            const response = await axios.post("https://singhanish.me/api/auth/verify", {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/verify`, {
                 email,
                 otp
             });
@@ -87,7 +86,7 @@ const Otp = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post("https://singhanish.me/api/auth/resend-otp", {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/resend-otp`, {
                 email
             });
             if (response.data.success) {
@@ -117,13 +116,10 @@ const Otp = () => {
         if (/^\d$/.test(value)) {
             const nextInput = inputRefs.current[index + 1];
             if (nextInput) nextInput.focus();
-        } else if (value === '' && index > 0) {
-            const prevInput = inputRefs.current[index - 1];
-            if (prevInput) prevInput.focus();
         }
         
         if (inputRefs.current.every(input => input.value !== '')) {
-            handleSubmit(e);
+            handleSubmit();
         }
     };
 
@@ -133,12 +129,30 @@ const Otp = () => {
         }
     };
 
-    const handleBackspace = (e, index) => {
-        if (e.key === 'Backspace' && !e.target.value && index > 0) {
-            const prevInput = inputRefs.current[index - 1];
-            if (prevInput) prevInput.focus();
+    const handleKeyDown = (e, index) => {
+        if (e.key === 'Backspace') {
+            if (!e.target.value && index > 0) {
+                const prevInput = inputRefs.current[index - 1];
+                if (prevInput) {
+                    prevInput.value = '';
+                    prevInput.focus();
+                }
+            } else {
+                e.target.value = '';
+            }
+        } else if (e.key === 'ArrowLeft') {
+            if (index > 0) {
+                const prevInput = inputRefs.current[index - 1];
+                if (prevInput) prevInput.focus();
+            }
+        } else if (e.key === 'ArrowRight') {
+            if (index < inputRefs.current.length - 1) {
+                const nextInput = inputRefs.current[index + 1];
+                if (nextInput) nextInput.focus();
+            }
         }
     };
+    
 
     const handlePaste = (e) => {
         e.preventDefault();
@@ -155,7 +169,7 @@ const Otp = () => {
         }
         
         if (inputRefs.current.every(input => input.value !== '')) {
-            handleSubmit(e);
+            handleSubmit();
         }
     };
 
@@ -181,7 +195,7 @@ const Otp = () => {
                                     inputMode="numeric"
                                     pattern="\d*"
                                     onKeyPress={handleKeyPress}
-                                    onKeyDown={(e) => handleBackspace(e, index)}
+                                    onKeyDown={(e) => handleKeyDown(e, index)}
                                     onChange={(e) => handleInputChange(e, index)}
                                     onPaste={handlePaste} 
                                     ref={(el) => (inputRefs.current[index] = el)}
@@ -203,7 +217,6 @@ const Otp = () => {
                         </span> 
                         {isResendDisabled ? ` in ${timer}s` : ''}
                     </p>
-                    <input type="submit" id='otpsubmit' value="Verify" onClick={handleSubmit} disabled={loading} />
                     <div className="askSign">
                         <p>Back to <Link to="/signup">Sign Up</Link></p>
                     </div>

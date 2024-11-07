@@ -23,7 +23,7 @@ const Attendance = () => {
     };
 
     const options = {
-        cutout: '70%', 
+        cutout: '85%', 
         plugins: {
             legend: { display: false },
             tooltip: { enabled: false } 
@@ -31,16 +31,16 @@ const Attendance = () => {
     };
 
     return (
-        <div className="w-[300px] h-[250px] p-4 border border-teal-200 rounded-lg flex flex-col items-center justify-center">
-            <h2 className="text-lg font-semibold mb-4">Your Attendance</h2>
+        <div className="w-[300px] h-[250px] p-4 border border-teal-200 rounded-lg flex flex-col items-center justify-center bg-white">
+            <h2 className="text-lg  mb-4 self-start ">Your Attendance</h2>
             <div className='flex'>
             <div className="relative w-[100px]">
                 <Doughnut data={data} options={options} />
-                <div className="absolute inset-0 flex items-center justify-center font-semibold text-xl">
+                <div className="absolute inset-0 flex items-center justify-center  text-xl">
                     {attendancePercentage}%
                 </div>
             </div>
-            <div className="flex flex-col   space-x-4 justify-center">
+            <div className="flex flex-col   space-x-4 justify-center pl-[10px] items-baseline">
                 <div className="flex items-center justify-center">
                     <span className="w-3 h-3 bg-[#4CAF50] mr-2 rounded-sm"></span>
                     Class Attended
@@ -51,7 +51,7 @@ const Attendance = () => {
                 </div>
             </div>
             </div>
-            <div className="text-center mt-8 text-sm">
+            <div className="text-center mt-8 text-sm flex gap-[15px]">
                 <p>Total Present: {attendedClasses}</p>
                 <p>Total Classes: {totalClasses}</p>
             </div>

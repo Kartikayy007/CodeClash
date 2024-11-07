@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import createnewpass from '../assets/creatnewpass.svg';
 import './css/newpass.css';
 import axios from 'axios';
@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router-dom';
 
 const Newpass = () => {
   const navigate = useNavigate();
+  const passwordRef = useRef(null); 
+  const confirmpasswordRef = useRef(null); 
 
   const [token, setToken] = useState('');
   const [password, setNewPassword] = useState('');
@@ -22,6 +24,7 @@ const Newpass = () => {
   const [showPassword ,setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
   const [loading, setLoading] = useState(false);
+  
 
   const [passwordConditions, setPasswordConditions] = useState({
     length: false,
@@ -82,7 +85,7 @@ const Newpass = () => {
     setPasswordError('');
 
     try {
-      const response = await axios.put(`https://singhanish.me/api/auth/reset-password/${token}`, {
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/auth/reset-password/${token}`, {
         password,
       });
 
@@ -142,7 +145,14 @@ const Newpass = () => {
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
   };
-
+  const handlePasswordToggle = () => {
+    setShowPassword(!showPassword);
+    passwordRef.current.focus(); 
+  };
+  const handleConfirmPasswordToggle = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+    confirmpasswordRef.current.focus(); 
+  };
   return (
     <div id='newpasspage'>
       {loading && (
@@ -163,6 +173,7 @@ const Newpass = () => {
                 value={password}
                 onFocus={handleFocus}
                 onChange={handlePasswordChange}
+                ref={passwordRef} 
                 required
                 placeholder=" "
               />
@@ -170,7 +181,7 @@ const Newpass = () => {
               <button
                 type="button"
                 className="toggle-password-btn"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={handlePasswordToggle}
               >
                 {showPassword ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}
               </button>
@@ -181,6 +192,7 @@ const Newpass = () => {
                 type={showConfirmPassword ? 'text' : 'password'} 
                 className="textinput password-input"
                 value={confirmPassword}
+                ref={confirmpasswordRef} 
                 onChange={handleConfirmPasswordChange}
                 required
                 placeholder=" "
@@ -189,7 +201,7 @@ const Newpass = () => {
               <button
                 type="button"
                 className="toggle-password-btn"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)} 
+                onClick={handleConfirmPasswordToggle} 
               >
                 {showConfirmPassword ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}
               </button>
