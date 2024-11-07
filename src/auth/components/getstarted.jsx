@@ -37,19 +37,23 @@ const Getstarted = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
   };
 
-  // Handling touch events for swipe
   const handleTouchStart = (e) => {
     setTouchStart(e.touches[0].clientX);
+    setTouchEnd(e.touches[0].clientX); 
   };
 
   const handleTouchEnd = (e) => {
-    setTouchEnd(e.changedTouches[0].clientX);
-    if (touchStart - touchEnd > 50) {
-      nextimage(); // Swipe left
+    const endTouch = e.changedTouches[0].clientX;
+    setTouchEnd(endTouch); 
+
+    if (touchStart - endTouch > 50) {
+      nextimage(); 
+    } else if (endTouch - touchStart > 50) {
+      prevImage(); 
     }
-    if (touchEnd - touchStart > 50) {
-      prevImage(); // Swipe right
-    }
+
+    setTouchStart(0);
+    setTouchEnd(0);
   };
 
   return (
