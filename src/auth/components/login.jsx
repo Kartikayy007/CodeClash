@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import img1 from '../assets/img1.svg';
 import img2 from '../assets/img2.svg';
@@ -28,17 +28,24 @@ const Login = () => {
   const navigate = useNavigate();
   const [passwordError, setPasswordError] = useState('');
 
-
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Email validation on change
+  useEffect(() => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email && !emailRegex.test(email)) {
+      setEmailError('Enter a valid email');
+    } else {
+      setEmailError('');
+    }
+  }, [email]);
 
   useEffect(() => {
     if (emailRef.current) {
       emailRef.current.focus();
     }
   }, []);
-
 
   useEffect(() => {
     const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
@@ -54,13 +61,6 @@ const Login = () => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    if (emailError && email) {
-      setEmailError('');
-    }
-  }, [email]);
-
-
   const handleKeyDown = (e, nextField) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -72,23 +72,16 @@ const Login = () => {
     }
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setEmailError('Enter a valid email');
+    if (emailError) {
       setLoading(false);
       return;
-    } else {
-      setEmailError('');
     }
 
-
-
     try {
-      const response = await axios.post("https://singhanish.me/api/auth/login", {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, {
         email,
         password
       });
@@ -118,7 +111,12 @@ const Login = () => {
       setPassword('');
     }
   };
-  
+
+  const handlePasswordToggle = () => {
+    setShowPassword(!showPassword);
+    passwordRef.current.focus(); 
+  };
+
   return (
     <div className='loginPage'>
       {loading && (
@@ -143,7 +141,6 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e, 'password')}
-
                 required
                 placeholder=" "
                 ref={emailRef} 
@@ -159,14 +156,12 @@ const Login = () => {
                 value={password}
                 onKeyDown={(e) => handleKeyDown(e, 'submit')}
                 ref={passwordRef} 
-
                 onChange={(e) => {
                   setPassword(e.target.value);
                   if (passwordError) setPasswordError('');
                 }}
                 required
                 placeholder=" "
-             
               />
 
               <label className={`label  ${passwordError ? 'input-error ' : ''}`}>Password</label>
@@ -174,17 +169,15 @@ const Login = () => {
               <button
                 type="button"
                 className="toggle-password-btn"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={handlePasswordToggle}
               >
                 {showPassword ? element2 : element}
               </button>
             </div>
 
             <div className="checkbox-container">
-
               <Link to="/pwreset" id='Fp'>Forget Password?</Link>
               <input
-
                 type="checkbox"
                 id="remember"
                 name="remember"
@@ -192,16 +185,14 @@ const Login = () => {
                 onChange={(e) => setRememberMe(e.target.checked)}
               />
               <label htmlFor="remember">Remember me</label>
-
-              
             </div>
 
             <input
               type="submit"
               value="Log in"
-              disabled={loading || !email || !password}
-              className={`${loading || !email || !password ? 'disabled-button' : ''}`}
-              style={{ opacity: loading || !email || !password ? 0.5 : 1, transition: 'opacity 0.3s ease-in-out' }}
+              disabled={loading || !email || !password || emailError}
+              className={`${loading || !email || !password || emailError ? 'disabled-button' : ''}`}
+              style={{ opacity: loading || !email || !password || emailError ? 0.5 : 1, transition: 'opacity 0.3s ease-in-out' }}
             />
 
           </form>

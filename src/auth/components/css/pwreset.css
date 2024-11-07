@@ -1,222 +1,247 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-*{
+:root {
+    --primary-color: #066769;
+    --primary-color-light: #008080;
+    --neutral-1000: #121212;
+    --neutral-700: #4C5858;
+    --neutral-00: #FAFAFA;
+    --error-color: #A62F2F;
+    --background-light: #F7F8F8;
+}
+
+* {
     margin: 0;
     padding: 0;
-  font-size: 12px;
-  font-family: "Poppins", sans-serif;
-
+    font-size: 12px;
+    font-family: "Poppins", sans-serif;
 }
 
-.resetPage{
+.resetPage {
     background-color: #fff;
-
-
-  display: flex;
-  align-items: center;
-  height: 100vh;
+    display: flex;
+    align-items: center;
+    height: 100vh;
 }
-.resetleft{
-   display: flex;
-  width: 50%;
-   align-items: center;
+
+.resetleft {
+    display: flex;
+    width: 50%;
+    align-items: center;
 }
-.resetleftSub{
+
+.resetleftSub {
     margin-left: 20%;
-width: 347px;
+    width: 347px;
 }
-#resetp{
+
+#resetp {
     font-size: 14px;
     margin-bottom: 78px;
     color: #000;
     white-space: wrap;
-font-family: Poppins;
-font-style: normal;
-font-weight: 400;
-line-height: 21px;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
 }
-#reseth2{
-  
+
+#reseth2 {
     font-size: 24px;
     margin-bottom: 8px;
-    color: var(--Neutral-1000, #121212);
-
-
-font-family: Poppins;
-font-size: 24px;
-font-style: normal;
-font-weight: 600;
-line-height: 31.2px;
+    color: var(--neutral-1000);
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 31.2px;
 }
-#resetemail{
-      padding: 20px;
-      width: -webkit-fill-available;
-      width: -moz-available;
-      border-radius: 8px;
-      margin-bottom: 54px;
-      border: none;
-      border: 1px solid var(--Neutral-700, #4C5858);
+
+#resetemail {
+    padding: 20px;
+    width: -webkit-fill-available;
+    width: -moz-available;
+    border-radius: 8px;
+    margin-bottom: 54px;
+    border: 1px solid var(--neutral-700);
 }
-#resetsubmit{
-  margin-top: 30px;
+
+#resetsubmit {
+    margin-top: 30px;
     width: -webkit-fill-available;
     width: -moz-available;
     padding: 10px 24px;
     border-radius: 8px;
     border: none;
     color: white;
-    background: var(--Primary-800, #066769);
+    background: var(--primary-color);
 }
-.resetright{
-  width: 50%;
-  height: 100%;
+
+.resetright {
+    width: 50%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 8px;
-background: #F7F8F8;
-}   
+    background: var(--background-light);
+}
 
-
-.resetcontent img{
+.resetcontent img {
     width: 434px;
-height: 404px;
-}
-input::placeholder{
-    color: var(--Neutral-1000, #121212);
-
-font-family: Poppins;
-font-size: 16px;
-font-style: normal;
-font-weight: 400;
-line-height: 25.6px;
+    height: 404px;
 }
 
-.resaskSign> p{
+input::placeholder {
+    color: var(--neutral-1000);
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 25.6px;
+}
+
+.resaskSign > p {
     font-size: 14px;
 }
+
 .resetleftSub .error-message {
-    color: #A62F2F;
+    color: var(--error-color);
     font-size: 0.9em;
     margin-top: 5px;
     margin-left: 16px;
     margin-bottom: 12px !important;
-    
-  }
-  .resetleftSub .text-input .input-error {
-    border-color:#A62F2F ;
-    border-width: 2px ; 
-  }
-  .resetleftSub .error-message {
-    color: #A62F2F;
+}
+
+.resetleftSub .text-input .input-error {
+    border-color: var(--error-color);
+    border-width: 2px;
+}
+
+.resetleftSub .error-message {
+    color: var(--error-color);
     font-size: 0.9em;
     margin-top: 5px;
     margin-left: 16px;
     margin-bottom: 8px !important;
-    
-  }
-  .input-error{
-    color: #A62F2F !important;
-   
-  }
-  @media (max-width:1020px) {
-    .resetPage{
-      padding-top: 20px;
+}
+
+.input-error {
+    color: var(--error-color) !important;
+}
+
+@media (max-width: 1020px) {
+    .resetPage {
+        padding-top: 20px;
     }
-    .resetright{
-      width: 0%;
-      display:none;
+
+    .resetright {
+        width: 0%;
+        display: none;
     }
-    .resetleft{
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
+
+    .resetleft {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
     }
-    .resetleftSub{
-      height: 100%;
-      margin-left: 0%;
-      width: 90vw;
+
+    .resetleftSub {
+        height: 100%;
+        margin-left: 0%;
+        width: 90vw;
         max-width: 400px;
     }
-    #reseth2{
-      top: 0;
-      margin-top: 6vh;
-      font-size: 26px;
-    }
-    #resmobscreenlogo{
-      height: 40vh;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    #resmobscreenlogo img{
-      height: fit-content;
-      width: 90%;
-    }
-  #resetp{
-    font-size: 16px;
-    margin-bottom: 68px;
-  }
-  .resaskSign a{
-    font-size: small;
-    color: #008080;
-    font-weight: 600;
-  }
-  .resaskSign{
-    display: flex;
-    justify-content: center;
-    margin-top: 2vh;
-  }
-}
-@media (min-width: 1021px) {
-  #resmobscreenlogo {
-      display: none;
-  }
-}
-@media (max-width:400px) {
 
-  .resetright{
-    width: 0%;
-    display:none;
-  }
-  .resetleft{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-  }
-  .resetleftSub{
-    height: 96%;
-    margin-left: 2%;
-    margin-top: 5vh;
-    margin-right: 2%;
-  }
-  #reseth2{
-    top: 0;
-    margin-top: 0.5vh;
-    font-size: 24px;
-  }
-  #resmobscreenlogo{
-    height: 46vh;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    padding: 20px 0;
-    padding-top: 40px;
-    
-  }
-  #resmobscreenlogo img{
-    height: fit-content;
-    
-  }
-#resetp{
-  font-size: 16px;
-  margin-bottom: 30px;
+    #reseth2 {
+        top: 0;
+        margin-top: 6vh;
+        font-size: 26px;
+    }
+
+    #resmobscreenlogo {
+        height: 40vh;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #resmobscreenlogo img {
+        height: fit-content;
+        width: 90%;
+    }
+
+    #resetp {
+        font-size: 16px;
+        margin-bottom: 68px;
+    }
+
+    .resaskSign a {
+        font-size: small;
+        color: var(--primary-color-light);
+        font-weight: 600;
+    }
+
+    .resaskSign {
+        display: flex;
+        justify-content: center;
+        margin-top: 2vh;
+    }
 }
-input[type="email"]{
-  margin-bottom: 15px;
-}}
-  
+
+@media (min-width: 1021px) {
+    #resmobscreenlogo {
+        display: none;
+    }
+}
+
+@media (max-width: 400px) {
+    .resetright {
+        width: 0%;
+        display: none;
+    }
+
+    .resetleft {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .resetleftSub {
+        height: 96%;
+        margin-left: 2%;
+        margin-top: 5vh;
+        margin-right: 2%;
+    }
+
+    #reseth2 {
+        top: 0;
+        margin-top: 0.5vh;
+        font-size: 24px;
+    }
+
+    #resmobscreenlogo {
+        height: 46vh;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        padding: 20px 0;
+        padding-top: 40px;
+    }
+
+    #resmobscreenlogo img {
+        height: fit-content;
+    }
+
+    #resetp {
+        font-size: 16px;
+        margin-bottom: 30px;
+    }
+
+    input[type="email"] {
+        margin-bottom: 15px;
+    }
+}

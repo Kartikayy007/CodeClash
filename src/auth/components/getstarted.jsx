@@ -15,6 +15,8 @@ const images = [get1, get2, get3, get4, get5];
 const Getstarted = () => {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   useEffect(() => {
     const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
@@ -31,8 +33,31 @@ const Getstarted = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
 
+  const prevImage = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+  };
+
+  // Handling touch events for swipe
+  const handleTouchStart = (e) => {
+    setTouchStart(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e) => {
+    setTouchEnd(e.changedTouches[0].clientX);
+    if (touchStart - touchEnd > 50) {
+      nextimage(); // Swipe left
+    }
+    if (touchEnd - touchStart > 50) {
+      prevImage(); // Swipe right
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-3 text-center">
+    <div
+      className="flex flex-col items-center justify-center min-h-screen p-3 text-center"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       {currentIndex !== images.length - 1 && (
         <button 
           onClick={reachlast} 

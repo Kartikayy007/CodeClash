@@ -59,9 +59,9 @@ const Performance = () => {
         
         <div className="w-fit  ml-[20%] flex  justify-center ">
             <div>
-            <h2 className="text-lg font-normal mb-8 ">Performance Overview</h2>
-            <div className="flex items-center h-[250px] p-4 pt-8 border border-teal-200 rounded-lg">
-                <div className="w-auto h-[100%]">
+            <h2 className="text-2xl font-medium mb-8 ">Performance Overview</h2>
+            <div className="flex items-center h-[250px] p-4 pt-8 border border-teal-200 rounded-lg bg-white">
+                <div className="w-[200px] h-[100%]">
                     <Bar data={data} options={options} />
                 </div>
                 <div className=" pl-[20px] flex flex-col gap-[40px]">
@@ -85,8 +85,10 @@ const Performance = () => {
                 </div>
             </div>
             </div>
-            <div className="flex gap-4 mt-[44px] ml-[20px]">
+            <div className="flex gap-4 mt-[48px] ml-[20px]">
                 <Attendance />
+                
+
                 </div>
         </div>
     );
