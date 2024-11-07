@@ -129,7 +129,11 @@ const Pwreset = () => {
               id='resetsubmit'
               value="Send reset link"
               onClick={handleResendLink}
-              disabled={loading}
+              disabled={loading||!email}
+              style={{
+                opacity: (loading || !email) ? 0.5 : 1,  
+                cursor: (loading || !email) ? 'default' : 'pointer'
+              }}
             />
           )}
 
