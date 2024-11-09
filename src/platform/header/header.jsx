@@ -1,4 +1,3 @@
-// Header.js
 import React, { useState } from 'react';
 import AddIcon from '@mui/icons-material/AddOutlined';
 import NotificationsIcon from '@mui/icons-material/NotificationsNoneOutlined';
@@ -30,14 +29,14 @@ const Header = () => {
                             isEnrolled ? 'text-white' : 'text-gray-700'
                         } transition-color duration-300`}
                     >
-                        Enrolled
+                        Joined
                     </div>
                     <div
                         className={`flex-1 p-2 ${
                             !isEnrolled ? 'text-white' : 'text-gray-700'
                         } transition-color duration-300`}
                     >
-                        Teaching
+                        Created
                     </div>
                 </div>
             </div>

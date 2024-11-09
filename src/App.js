@@ -8,6 +8,8 @@ import Dashboard from './platform/dashboard/dashboard';
 import Getstarted from './auth/components/getstarted'
 import Header from './platform/header/header';
 import Dashsignup from './platform/dashboard/dashsignup';
+import Calender from './platform/calenderPage/calender'
+
 
 
 import Newpass from './auth/components/newpass';
@@ -40,6 +42,7 @@ const App = () => {
 
 
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/calendar" element={<Calender />} />
 
       </Routes>
 

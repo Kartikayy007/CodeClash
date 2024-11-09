@@ -2,6 +2,8 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale } from 'chart.js';
 import Attendance from '../attendance/attendance';
+import RecentClasses from '../cards/recentClasses';
+
 
 
 ChartJS.register(BarElement, CategoryScale, LinearScale);
@@ -57,9 +59,15 @@ const Performance = () => {
 
     return (
         
-        <div className="w-fit  ml-[20%] flex  justify-center ">
-            <div>
-            <h2 className="text-2xl font-medium mb-8 ">Performance Overview</h2>
+        <div className="w-fit  ml-[20%]  ">
+             <div className="w-full h-[70px]">
+                <p className="text-[23px] pt-[15px]  font-semibold mt-[5px]">Good Morning, Shreyanshu!</p>
+            </div>
+            <div className='flex'>
+            
+            <div >
+                
+            <h2 className="text-xl mb-8 ">Class performance Overview</h2>
             <div className="flex items-center h-[250px] p-4 pt-8 border border-teal-200 rounded-lg bg-white">
                 <div className="w-[200px] h-[100%]">
                     <Bar data={data} options={options} />
@@ -85,11 +93,12 @@ const Performance = () => {
                 </div>
             </div>
             </div>
-            <div className="flex gap-4 mt-[48px] ml-[20px]">
+            <div className="flex gap-4 mt-[45px] ml-[20px]">
                 <Attendance />
                 
 
-                </div>
+                </div></div>
+                <RecentClasses/>
         </div>
     );
 };

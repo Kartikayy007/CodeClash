@@ -6,7 +6,6 @@ import Performance from '../performance/performance';
 import WeekView from '../week/week';
 import TodoList from '../todolist/todolist';
 
-
 const Dashboard = () => {
  
 
@@ -19,11 +18,13 @@ const Dashboard = () => {
         <Header/>
         <div className='flex mt-[20px] ml-[15px]'>
         <Performance/>
-        <div> <WeekView />
+        <div className='mt-[86px]'> <WeekView />
         <TodoList /></div>
+
        
         
         </div>
+       
         
         
     </div>

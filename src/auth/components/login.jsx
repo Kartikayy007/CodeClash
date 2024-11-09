@@ -97,11 +97,11 @@ const Login = () => {
         navigate('/dashboard');
       }
     } catch (error) {
-      if (error.response.data.error.includes('Password')) {
+      if (error?.response?.data?.error?.includes('Password') || false) {
         setPasswordError('Incorrect password');
       }
 
-      toast.error(error.response.data.error || "Login failed", {
+      toast.error(error?.response?.data?.error || "Login failed", {
         className: "custom-toast",
         hideProgressBar: true,
         autoClose: 3000,
