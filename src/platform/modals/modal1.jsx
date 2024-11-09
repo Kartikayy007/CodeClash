@@ -1,7 +1,26 @@
-import React from 'react';
-import createclass1 from '../assets/createclass1.svg';
+import React, { useState } from 'react';
+import createclass1 from '../assets/createclass1.svg'
 
 const Modal = ({ onClose }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("Class Privacy");
+
+  const handleSelect = (option) => {
+    setSelectedOption(option.label);
+    setIsOpen(false);
+  };
+
+  const options = [
+    {
+      label: "Public",
+      description: "Visible to all students who have a class code",
+    },
+    {
+      label: "Private",
+      description: "Only students you invite can join",
+    }
+  ];
+
   return (
     <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50'>
       <div className='bg-white w-[78vw] h-[72vh] flex justify-center items-center rounded-lg relative'>
@@ -19,9 +38,35 @@ const Modal = ({ onClose }) => {
             </div>
             <div>
               <form className="flex flex-col gap-6">
-                <input type="text" placeholder='Class Name'/>
-                <input type="text" placeholder='Subject' />
-                <input type="text" placeholder='Class Privacy' />
+                <input type="text" placeholder='Class Name' className="border rounded-md p-2" />
+                <input type="text" placeholder='Subject' className="border rounded-md p-2" />
+
+            
+                <div className="relative">
+                  <button 
+                    type="button" 
+                    className="border border-black rounded-md pl-5 h-24 w-full text-left text-xl "
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
+                    {selectedOption}
+                    <span className="float-right">▼</span>
+                  </button>
+
+                  {isOpen && (
+                    <div className="absolute left-0 w-full mt-1 bg-white border border-black rounded">
+                      {options.map((option, index) => (
+                        <div 
+                          key={index} 
+                          onClick={() => handleSelect(option)}
+                          className="p-3 hover:bg-gray-100 cursor-pointer"
+                        >
+                          <div className="font-semibold">{option.label}</div>
+                          <div className="text-sm text-gray-500">{option.description}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </form>
             </div>
             <div className="flex items-center mt-[7vh]">
@@ -37,7 +82,7 @@ const Modal = ({ onClose }) => {
             announcements, and join class meetings.</p>
           </div>
           <div>
-            <img src={createclass1} alt="" className="w-[600px] h-auto" />
+            <img src={createclass1} alt="Create Class" className="w-[600px] h-auto" />
           </div>
         </div>
       </div>
