@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { format, startOfMonth, endOfMonth, addMonths, subMonths, startOfWeek, endOfWeek, addDays, isSameMonth, isSameDay } from 'date-fns';
+import { useSelector } from 'react-redux';
 
 const Calendar = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -7,6 +8,7 @@ const Calendar = () => {
   const [isPageLoaded, setIsPageLoaded] = useState(false); 
 
 
+  const sidebarWidth = useSelector((state) => state.sidebar.width);
 
   const events = {
     '2024-11-01': ['due', 'class'],
@@ -154,7 +156,7 @@ const Calendar = () => {
   }, []);
 
   return (
-    <div className={`mt-[1.5rem] max-w-lg ml-[18%] transition-all duration-500 ease-in-out ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
+    <div className={`mt-[1.5rem] max-w-lg  transition-all duration-500 ease-in-out ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`} style={{ marginLeft: sidebarWidth,transition: 'margin-left 0.3s ease,translate 0.3 ease'}}>
 
       <div className="flex space-x-4 mb-4 ml-[40px]">
         {['month', 'week', 'day'].map((view) => (

@@ -5,7 +5,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const Card = ({ className, studentCount, teacherName, image }) => {
     return (
-        <div className="bg-white rounded-lg  p-4 flex flex-col items-start w-80  border border-teal-200">
+        <div className="bg-white rounded-lg  p-4 flex flex-col items-start w-[30%]  border border-teal-200">
             <div className='bg-[#919F9E] w-full rounded-lg flex justify-between pr-3 pt-1 text-white'>
             <img src={card1} alt={`${className} illustration`} className="w-fit h-32  object-cover rounded-md mb-4" />
             <MoreHorizIcon/>

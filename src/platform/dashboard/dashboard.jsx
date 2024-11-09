@@ -7,26 +7,27 @@ import WeekView from '../week/week';
 import TodoList from '../todolist/todolist';
 
 const Dashboard = () => {
- 
 
 
-    
+
+
 
     return (<div className='bg-[#E1EAE8] h-[100vh]'>
 
-        <Sidebar/>
-        <Header/>
+        <Sidebar />
+        <Header />
         <div className='flex mt-[20px] ml-[15px]'>
-        <Performance/>
-        <div className='mt-[86px]'> <WeekView />
-        <TodoList /></div>
+            <Performance />
+            <div className='mt-[83px] w-[30%] '> <WeekView />
+                <TodoList />
+            </div>
 
-       
-        
+
+
         </div>
-       
-        
-        
+
+
+
     </div>
     );
 };

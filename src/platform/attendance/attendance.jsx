@@ -31,7 +31,7 @@ const Attendance = () => {
     };
 
     return (
-        <div className="w-[300px] h-[250px] p-4 border border-teal-200 rounded-lg flex flex-col items-center justify-center bg-white">
+        <div className="w-[100%] h-[250px] p-4 border border-teal-200 rounded-lg flex flex-col items-center justify-center bg-white">
             <h2 className="text-lg  mb-4 self-start ">Your Attendance</h2>
             <div className='flex'>
             <div className="relative w-[100px]">

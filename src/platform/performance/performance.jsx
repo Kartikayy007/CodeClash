@@ -3,12 +3,17 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale } from 'chart.js';
 import Attendance from '../attendance/attendance';
 import RecentClasses from '../cards/recentClasses';
+import { useSelector } from 'react-redux';
+
 
 
 
 ChartJS.register(BarElement, CategoryScale, LinearScale);
 
 const Performance = () => {
+
+    const sidebarWidth = useSelector((state) => state.sidebar.width);
+
     const data = {
         labels: ['Assignments'],
         datasets: [
@@ -59,20 +64,20 @@ const Performance = () => {
 
     return (
         
-        <div className="w-fit  ml-[20%]  ">
+        <div className="w-[65%] pl-5   " style={{ marginLeft: sidebarWidth,transition: 'margin-left 0.3s ease'}}>
              <div className="w-full h-[70px]">
                 <p className="text-[23px] pt-[15px]  font-semibold mt-[5px]">Good Morning, Shreyanshu!</p>
             </div>
-            <div className='flex'>
+            <div className='flex '>
             
-            <div >
+            <div className='w-[60%]' >
                 
             <h2 className="text-xl mb-8 ">Class performance Overview</h2>
             <div className="flex items-center h-[250px] p-4 pt-8 border border-teal-200 rounded-lg bg-white">
                 <div className="w-[200px] h-[100%]">
                     <Bar data={data} options={options} />
                 </div>
-                <div className=" pl-[20px] flex flex-col gap-[40px]">
+                <div className=" pl-[20px] flex flex-col gap-[40px] w-[100%]">
                     <ul className=" text-sm space-y-2 flex flex-col gap-[10px]">
                         <li className="flex items-center">
                             <span className="w-3 h-3 bg-[#8ED1FC] mr-2 rounded-sm"></span>
@@ -93,7 +98,7 @@ const Performance = () => {
                 </div>
             </div>
             </div>
-            <div className="flex gap-4 mt-[45px] ml-[20px]">
+            <div className="flex gap-4 mt-[45px] ml-[20px] w-[40%]">
                 <Attendance />
                 
 

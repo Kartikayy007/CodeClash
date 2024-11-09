@@ -12,6 +12,7 @@ import Calender from './platform/calenderPage/calender'
 
 
 
+
 import Newpass from './auth/components/newpass';
 
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
@@ -38,7 +39,6 @@ const App = () => {
       
      
       <Route path="/dashsignup" element={<Dashsignup/>} />
-      <Route path="/header" element={<Header/>} />
 
 
       <Route path="/dashboard" element={<Dashboard />} />

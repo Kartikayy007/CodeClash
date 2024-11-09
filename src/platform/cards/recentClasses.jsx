@@ -9,9 +9,9 @@ const RecentClasses = () => {
     ];
 
     return (
-        <div className=" mt-[58px]">
+        <div className=" mt-[58px] w-[100%]">
             <h1 className="text-xl mb-4">Recent Classes</h1>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 w-[100%]">
                 {classes.map((classData, index) => (
                     <Card key={index} {...classData} />
                 ))}
