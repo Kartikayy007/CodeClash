@@ -53,7 +53,7 @@ const Header = () => {
             </div>
   
   <div className='w-full h-[70px]'>
-    <p className='text-[18px] pt-[15px] pl-[25px] font-medium'>Good Morining, Shreyanshu!</p>
+    <p className='text-[18px] pt-[15px] pl-[25px] font-medium'>Good Morning, Shreyanshu!</p>
   </div>
          
          
