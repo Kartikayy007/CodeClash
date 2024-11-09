@@ -15,6 +15,8 @@ const images = [get1, get2, get3, get4, get5];
 const Getstarted = () => {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   useEffect(() => {
     const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
@@ -31,8 +33,35 @@ const Getstarted = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
 
+  const prevImage = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+  };
+
+  const handleTouchStart = (e) => {
+    setTouchStart(e.touches[0].clientX);
+    setTouchEnd(e.touches[0].clientX); 
+  };
+
+  const handleTouchEnd = (e) => {
+    const endTouch = e.changedTouches[0].clientX;
+    setTouchEnd(endTouch); 
+
+    if (touchStart - endTouch > 50) {
+      nextimage(); 
+    } else if (endTouch - touchStart > 50) {
+      prevImage(); 
+    }
+
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-3 text-center">
+    <div
+      className="flex flex-col items-center justify-center min-h-screen p-3 text-center"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       {currentIndex !== images.length - 1 && (
         <button 
           onClick={reachlast} 
@@ -73,7 +102,7 @@ const Getstarted = () => {
       </div>
 
       {currentIndex === 0 && (
-        <button onClick={nextimage} className="bg-[#008080] w-[90%] text-white px-6 py-3 rounded-md text-lg md:text-2xl font-semibold mt-[5vh] block lg:hidden">
+        <button onClick={nextimage} className="bg-[#008080] w-[90%] text-white px-6 py-3 rounded-md text-lg md:text-2xl font-semibold mt-[3vh] block lg:hidden">
           Get Started
         </button>
       )}
@@ -85,7 +114,7 @@ const Getstarted = () => {
       )}
     
       {currentIndex === images.length - 1 && (
-      <div className="flex justify-center space-x-4 mt-[6vh] block lg:hidden w-[90%]">
+      <div className="flex justify-center space-x-4 mt-[3vh] block lg:hidden w-[90%]">
       <Link 
       to="/login" 
       className="bg-[#008080] w-[200px] text-white px-6 py-3 rounded-md text-lg  grid place-content-center md:text-2xl font-semibold text-center ml-[vw]">
