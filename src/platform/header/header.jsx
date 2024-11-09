@@ -1,18 +1,21 @@
-// Header.js
 import React, { useState } from 'react';
 import AddIcon from '@mui/icons-material/AddOutlined';
 import NotificationsIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import AccountIcon from '@mui/icons-material/AccountCircleOutlined';
+import { useSelector } from 'react-redux';
+
 
 const Header = () => {
     const [isEnrolled, setIsEnrolled] = useState(true);
+    const sidebarWidth = useSelector((state) => state.sidebar.width);
+
 
     const toggleSwitch = () => {
         setIsEnrolled(!isEnrolled);
     };
 
     return (
-        <div className="w-[82%] h-fit flex items-start flex-col pt-[15px] ml-[18%] ">
+        <div className="w-[82%] h-fit flex items-start flex-col pt-[15px] " style={{ marginLeft: sidebarWidth,transition: 'margin-left 0.3s ease'}}>
             <div
                 onClick={toggleSwitch}
                 className="relative flex items-center bg-[#D9DEDE] rounded-lg cursor-pointer ml-[40px]"
@@ -30,14 +33,14 @@ const Header = () => {
                             isEnrolled ? 'text-white' : 'text-gray-700'
                         } transition-color duration-300`}
                     >
-                        Enrolled
+                        Joined
                     </div>
                     <div
                         className={`flex-1 p-2 ${
                             !isEnrolled ? 'text-white' : 'text-gray-700'
                         } transition-color duration-300`}
                     >
-                        Teaching
+                        Created
                     </div>
                 </div>
             </div>
@@ -55,9 +58,7 @@ const Header = () => {
             </div>
 
 
-            <div className="w-full h-[70px]">
-                <p className="text-[23px] pt-[15px] pl-[40px] font-semibold mt-[20px]">Good Morning, Shreyanshu!</p>
-            </div>
+         
 
         </div>
     );

@@ -1,0 +1,21 @@
+
+@import "~react-big-calendar/lib/css/react-big-calendar.css";
+
+
+
+.rbc-event {
+  padding: 0 !important;
+}
+
+.rbc-toolbar {
+  display: none;
+}
+
+.rbc-month-view {
+  border: none;
+}
+
+.rbc-date-cell {
+  font-weight: bold;
+  color: #4a5568;
+}
