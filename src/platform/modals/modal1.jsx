@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
 import createclass1 from '../assets/createclass1.svg'
+import axios from 'axios';
+
 
 const Modal = ({ onClose }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Class Privacy");
+  const [name, setName] = useState('');
+  const [subject, setSubject] = useState('');
+  const [privacy, setPrivacy] = useState('');
+  
 
   const handleSelect = (option) => {
     setSelectedOption(option.label);
     setIsOpen(false);
+    setPrivacy(selectedOption==="Private"?"private":"public")
+
   };
 
   const options = [
@@ -20,6 +28,54 @@ const Modal = ({ onClose }) => {
       description: "Only students you invite can join",
     }
   ];
+  const handleSubmit = async (e) => {
+
+
+
+    e.preventDefault();
+
+
+    const token=sessionStorage.getItem("authToken")
+    console.log(token)
+
+
+
+
+    // console.log(selectedOption);
+
+    
+    try {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      };
+      console.log(name)
+      console.log(subject)
+      console.log(privacy)
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/classroom/create`,
+        {
+          name,
+          subject,
+          privacy,
+        },
+        {
+          headers
+        }
+      );
+      
+
+      if (response.data.success) {
+        console.log(response)
+       
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+   
+    }
+  };
+
 
   return (
     <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50'>
@@ -40,8 +96,8 @@ const Modal = ({ onClose }) => {
             </div>
             <div>
               <form className="flex flex-col gap-6">
-                <input type="text" placeholder='Class Name' className="border rounded-md p-2" />
-                <input type="text" placeholder='Subject' className="border rounded-md p-2" />
+                <input type="text" placeholder='Class Name' className="border rounded-md p-2" value={name} onChange={(e)=>setName(e.target.value)} />
+                <input type="text" placeholder='Subject' className="border rounded-md p-2" value={subject} onChange={(e)=>setSubject(e.target.value)}/>
 
             
                 <div className="relative">
@@ -59,6 +115,7 @@ const Modal = ({ onClose }) => {
                       {options.map((option, index) => (
                         <div 
                           key={index} 
+                          
                           onClick={() => handleSelect(option)}
                           className="p-3 hover:bg-gray-100 cursor-pointer"
                         >
@@ -72,8 +129,9 @@ const Modal = ({ onClose }) => {
               </form>
             </div>
             <div className="flex items-center mt-[7vh]">
-              <button className='bg-[#008080] h-[40px] w-[100%] text-white rounded-md text-lg grid place-content-center font-semibold text-center'>
+              <button className='bg-[#008080] h-[40px] w-[100%] text-white rounded-md text-lg grid place-content-center font-semibold text-center' onClick={handleSubmit}>
                 Create Class
+                
               </button>
             </div>
           </div>
