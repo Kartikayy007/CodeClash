@@ -23,7 +23,7 @@ const Modal = ({ onClose }) => {
 
   return (
     <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50'>
-      <div className='bg-white w-[78vw] h-[72vh] flex justify-center items-center rounded-lg relative'>
+      <div className='bg-white w-[40vw] h-[70vh] flex justify-center items-center rounded-lg relative'>
         <button 
           onClick={onClose} 
           className="absolute top-4 right-4 text-4xl mt-[1%] mr-[1%] font-bold text-gray-600"
@@ -31,8 +31,8 @@ const Modal = ({ onClose }) => {
           &times;
         </button>
         
-        <div className='left w-[39vw] h-[72vh]'>
-          <div className='leftsub w-[50%] ml-[20%]'>
+        <div className=' w-[90%] h-[90%] flex justify-center items-center'>
+          <div className=' w-[80%] '>
             <div>
               <h2 className='text-5xl font-semibold mb-[4vh]'>Create Class</h2>
             </div>
@@ -74,15 +74,6 @@ const Modal = ({ onClose }) => {
                 Create Class
               </button>
             </div>
-          </div>
-        </div>
-        <div className='right w-[39vw] h-[72vh] flex-col bg-[#EEF0F0]'>
-          <div className='ml-[5%] mr-[5%] mb-[7vh] flex flex-col items-center justify-center'>
-            <p className='text-2xl text-[#4C5858] text-center'>Set up a class space for your students to receive assignments,
-            announcements, and join class meetings.</p>
-          </div>
-          <div>
-            <img src={createclass1} alt="Create Class" className="w-[600px] h-auto" />
           </div>
         </div>
       </div>
