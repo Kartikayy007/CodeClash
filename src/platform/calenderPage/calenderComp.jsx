@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { format, startOfMonth, endOfMonth, addMonths, subMonths, startOfWeek, endOfWeek, addDays, isSameMonth, isSameDay } from 'date-fns';
 import { useSelector } from 'react-redux';
+import Reminders from '../reminder/reminder'
+
 
 const Calendar = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -156,7 +158,7 @@ const Calendar = () => {
   }, []);
 
   return (
-    <div className={`mt-[1.5rem] max-w-lg  transition-all duration-500 ease-in-out ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`} style={{ marginLeft: sidebarWidth,transition: 'margin-left 0.3s ease,translate 0.3 ease'}}>
+    <div className={`mt-[1.5rem] bg-[#E1EAE8]  transition-all duration-500 ease-in-out ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`} style={{ marginLeft: sidebarWidth,transition: 'margin-left 0.3s ease,translate 0.3 ease'}}>
 
       <div className="flex space-x-4 mb-4 ml-[40px]">
         {['month', 'week', 'day'].map((view) => (
@@ -172,8 +174,8 @@ const Calendar = () => {
         ))}
       </div>
 
-
-      <div className="rounded-lg p-4 w-[812px] ml-[28px]">
+<div className='flex'>
+      <div className="rounded-lg p-4 w-[70%] ml-[28px]">
 
         <div className="flex items-center mb-4">
           <h2 className="text-lg font-semibold text-gray-800 w-[150px]">
@@ -205,6 +207,8 @@ const Calendar = () => {
           {currentView === 'day' && renderDayView()}
         </div>
       </div>
+<Reminders/>
+    </div>
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { useSelector } from 'react-redux';
+
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -9,6 +11,8 @@ const Attendance = () => {
     const totalClasses = 36;
     const notAttendedClasses = totalClasses - attendedClasses;
     const attendancePercentage = ((attendedClasses / totalClasses) * 100).toFixed(1);
+    const isCollapsed = useSelector((state) => state.sidebar.isCollapsed);
+
 
     const data = {
         labels: ['Class Attended', 'Class Not Attended'],
@@ -32,7 +36,7 @@ const Attendance = () => {
 
     return (
         <div className="w-[100%] h-[250px] p-4 border border-teal-200 rounded-lg flex flex-col items-center justify-center bg-white">
-            <h2 className="text-lg  mb-4 self-start ">Your Attendance</h2>
+            <h2 className={`text-lg  mb-4 ${isCollapsed?'':'self-start '} `}>Your Attendance</h2>
             <div className='flex'>
             <div className="relative w-[100px]">
                 <Doughnut data={data} options={options} />

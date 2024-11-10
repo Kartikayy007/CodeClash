@@ -9,6 +9,7 @@ import Getstarted from './auth/components/getstarted'
 import Header from './platform/header/header';
 import Dashsignup from './platform/dashboard/dashsignup';
 import Calender from './platform/calenderPage/calender'
+import yourClasses from './platform/yourClasses/yourClasses';
 
 
 
@@ -16,6 +17,7 @@ import Calender from './platform/calenderPage/calender'
 import Newpass from './auth/components/newpass';
 
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import YourClasses from './platform/yourClasses/yourClasses';
 
 
 const App = () => {
@@ -38,11 +40,13 @@ const App = () => {
       <Route path="/reset-password" element={< Newpass/>} />
       
      
-      <Route path="/dashsignup" element={<Dashsignup/>} />
+      <Route path="/classes" element={<Dashsignup/>} />
 
 
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/calendar" element={<Calender />} />
+      <Route path="/settings" element={<YourClasses />} />
+      
 
       </Routes>
 

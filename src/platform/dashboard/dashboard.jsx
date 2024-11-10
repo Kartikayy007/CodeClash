@@ -16,7 +16,7 @@ const Dashboard = () => {
 
         <Sidebar />
         <Header />
-        <div className='flex mt-[20px] ml-[15px]'>
+        <div className='flex mt-[20px] ml-[15px] bg-[#E1EAE8]'>
             <Performance />
             <div className='mt-[83px] w-[30%] '> <WeekView />
                 <TodoList />
