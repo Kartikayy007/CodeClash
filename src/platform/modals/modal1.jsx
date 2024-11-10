@@ -3,6 +3,7 @@ import createclass1 from '../assets/createclass1.svg'
 import axios from 'axios';
 
 
+
 const Modal = ({ onClose }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Class Privacy");
