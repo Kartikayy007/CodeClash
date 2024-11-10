@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import createclass1 from '../assets/createclass1.svg'
 
 const Modal = ({ onClose }) => {
   const [isOpen, setIsOpen] = useState(false);
