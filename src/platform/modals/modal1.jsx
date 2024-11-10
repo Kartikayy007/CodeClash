@@ -12,8 +12,8 @@ const Modal = ({ onClose }) => {
           &times;
         </button>
         
-        <div className='left w-[39vw] h-[72vh]'>
-          <div className='leftsub w-[50%] ml-[20%]'>
+        <div className=' w-[39vw] h-[72vh]'>
+          <div className=' w-[50%] ml-[20%]'>
             <div>
               <h2 className='text-5xl font-semibold mb-[4vh]'>Create Class</h2>
             </div>

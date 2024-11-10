@@ -13,6 +13,8 @@ ChartJS.register(BarElement, CategoryScale, LinearScale);
 const Performance = () => {
 
     const sidebarWidth = useSelector((state) => state.sidebar.width);
+    const isCollapsed = useSelector((state) => state.sidebar.isCollapsed);
+
 
     const data = {
         labels: ['Assignments'],
@@ -64,7 +66,7 @@ const Performance = () => {
 
     return (
         
-        <div className="w-[65%] pl-5   " style={{ marginLeft: sidebarWidth,transition: 'margin-left 0.3s ease'}}>
+        <div className="w-[65%] pl-1   " style={{ marginLeft: sidebarWidth,transition: 'margin-left 0.3s ease'}}>
              <div className="w-full h-[70px]">
                 <p className="text-[23px] pt-[15px]  font-semibold mt-[5px]">Good Morning, Shreyanshu!</p>
             </div>
@@ -77,8 +79,8 @@ const Performance = () => {
                 <div className="w-[200px] h-[100%]">
                     <Bar data={data} options={options} />
                 </div>
-                <div className=" pl-[20px] flex flex-col gap-[40px] w-[100%]">
-                    <ul className=" text-sm space-y-2 flex flex-col gap-[10px]">
+                <div className=" ml-[5%] flex flex-col gap-[40px] w-[100%]">
+                    <ul className={`${isCollapsed?"items-center":""} text-sm space-y-2 flex flex-col gap-[10px]`}>
                         <li className="flex items-center">
                             <span className="w-3 h-3 bg-[#8ED1FC] mr-2 rounded-sm"></span>
                             Completed Assignments (4)

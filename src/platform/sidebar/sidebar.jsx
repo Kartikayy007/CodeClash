@@ -49,15 +49,16 @@ const Sidebar = () => {
                     <div
                         key={item.path}
                         className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-start pl-4'} w-[90%] ml-[5%] rounded-full h-[48px] ${
-                            location.pathname === item.path ? 'bg-[#008080] text-white transform scale-105 ' : ''
-                        }`}
+                            location.pathname === item.path ? 'bg-[#008080] text-white transform scale-105  ' : ''
+                        }`
+                    }
                     >
                         <button
                             onClick={() => navigate(item.path)}
                             className="flex items-center gap-4"
                         >
                             {item.icon}
-                            {!isCollapsed && <p className="text-xl">{item.label}</p>}
+                            {!isCollapsed && <p className="text-xl whitespace-nowrap text-clip">{item.label}</p>}
                         </button>
                     </div>
                 ))}

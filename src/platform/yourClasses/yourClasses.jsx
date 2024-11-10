@@ -1,11 +1,7 @@
-import React from 'react';
 import Sidebar from '../sidebar/sidebar';
 import Header from '../header/header';
-import CalendarComponent from './calenderComp';
-import Reminders from '../reminder/reminder'
-
-
-const Calender = () => {
+import JoinedClasses from './joinedClasses';
+const YourClasses = () => {
  
 
 
@@ -15,7 +11,7 @@ const Calender = () => {
 
         <Sidebar/>
         <Header/>
-        <CalendarComponent />
+        <JoinedClasses/>
    
 
         
@@ -30,4 +26,4 @@ const Calender = () => {
     );
 };
 
-export default Calender;
+export default YourClasses;
