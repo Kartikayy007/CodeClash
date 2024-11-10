@@ -4,14 +4,22 @@ import Headersignup from '../header/headersignup';
 import dash1 from '../../auth/assets/dash1.svg';
 import Modal from '../modals/modal1';  
 import { useSelector } from 'react-redux';
+import Modal2 from '../modals/modal2';  
 
 const Dashsignup = () => {
 
   const [createclassModal, setCreateclassModal] = useState(false);
   const sidebarWidth = useSelector((state) => state.sidebar.width);
   const isCollapsed = useSelector((state) => state.sidebar.isCollapsed);
+  const [JoinclassModal, setJoinclassModal] = useState(false);
 
-
+  const handleJoinClass = () => {
+    setJoinclassModal(true);
+  };
+ 
+   const closeJoinclassmodal =() =>{
+    setJoinclassModal(false);
+   }
 
   const handleCreateClass = () => {
     setCreateclassModal(true);
@@ -31,7 +39,9 @@ const Dashsignup = () => {
             <img src={dash1} alt="Dashboard" />
           </div>
           <div className="flex mt-[3vh]">
-            <button className="bg-[#008080] w-[250px] h-[40px] text-white rounded-md text-lg grid place-content-center font-semibold text-center mr-[2vw]">
+            <button 
+            onClick={handleJoinClass} 
+           className="bg-[#008080] w-[250px] h-[40px] text-white rounded-md text-lg grid place-content-center font-semibold text-center mr-[2vw]">
               Join Your first Class
             </button>
             <button 
@@ -47,6 +57,10 @@ const Dashsignup = () => {
       {createclassModal && (
         <Modal
         onClose={closeCreateClassModal}/>
+      )}
+      {JoinclassModal && (
+        <Modal2
+        onClose={closeJoinclassmodal}/>
       )}
     </div>
   );
