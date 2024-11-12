@@ -10,6 +10,7 @@ import { setToggleState, setIsEnrolled  } from '../features/toggleSlice';
 
 const Header = () => {
   
+
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const sidebarWidth = useSelector((state) => state.sidebar.width);
     const location = useLocation();
@@ -21,6 +22,53 @@ const Header = () => {
     const [createdClassesCheck, setCreatedClassesCheck] = useState(0);
     const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); // get toggle state from Redux
 
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const token = sessionStorage.getItem("authToken");
+            try {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                };
+
+                const response = await axios.post(
+                    `${process.env.REACT_APP_API_URL}/user/details`,
+                    {},
+                    { headers }
+                );
+       
+
+                if (response.data.success) {
+                   
+                    const joinedClassesLength = response.data.user.joinedClasses.length;
+                    const createdClassesLength = response.data.user.createdClasses.length;
+
+                    setJoinedClassesCheck(joinedClassesLength);
+                    setCreatedClassesCheck(createdClassesLength);
+                 
+
+    
+                   
+                    if (response.data.user.joinedClasses.length > 0 && response.data.user.createdClasses.length > 0) {
+                        dispatch(setToggleState(true));
+                    } else if (joinedClasses.length > 0) {
+                        setIsEnrolled(true); 
+                        dispatch(setToggleState(false)); 
+                    } else if (createdClasses.length > 0) {
+                        setIsEnrolled(false);  
+                        dispatch(setToggleState(false));
+                    } else {
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching class data:", error);
+            }
+        };
+
+
+        fetchData();
+    }, [dispatch, navigate]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -75,6 +123,16 @@ const Header = () => {
         dispatch(setIsEnrolled(newEnrolledState)); 
     };
 
+
+    const handleProfileClick = () => {
+        setIsPopupVisible(!isPopupVisible);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
+        sessionStorage.removeItem('authToken');
+        navigate('/login');
+    };
 
     const handleProfileClick = () => {
         setIsPopupVisible(!isPopupVisible);

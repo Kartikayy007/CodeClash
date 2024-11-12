@@ -10,6 +10,7 @@ import { setJoinedClasses } from '../features/joinedClasses';
 import { setCreatedClasses } from '../features/createdClasses';
 
 const ClassCard = ({ name, noOfStudents, teacher, index }) => {
+
   return (
     <div
       className={`bg-white rounded-lg p-3 flex flex-col justify-between border border-teal-200 w-[240px] h-[200px] fade-in-up mt-7`}
@@ -28,6 +29,7 @@ const ClassCard = ({ name, noOfStudents, teacher, index }) => {
         <div className="flex items-center gap-2 mt-1 text-gray-600">
           <PeopleIcon fontSize="small" />
           <span>{noOfStudents}</span>
+
           <span className="text-gray-500 text-sm ml-auto">{teacher.name}</span>
         </div>
       </div>
@@ -42,6 +44,7 @@ const JoinedClasses = () => {
   const joinedClasses = useSelector((state) => state.joinedClasses.joinedClasses);
   const createdClasses = useSelector((state) => state.createdClasses.createdClasses);
   const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); 
+
 
 
   useEffect(() => {
@@ -68,6 +71,7 @@ const JoinedClasses = () => {
           const { joinedClasses, createdClasses } = response.data.user;
           dispatch(setJoinedClasses(joinedClasses));
           dispatch(setCreatedClasses(createdClasses)); 
+
 
 
           if (createdClasses.length === 0 && joinedClasses.length === 0) {
@@ -108,10 +112,12 @@ const JoinedClasses = () => {
                 ))
               : <div>No joined classes available.</div>)
           : (createdClasses && createdClasses.length > 0
+
               ? createdClasses.map((classInfo, index) => (
                   <ClassCard key={index} {...classInfo} index={index} />
                 ))
               : <div>No created classes available.</div>)
+
         }
       </div>
     </div>
