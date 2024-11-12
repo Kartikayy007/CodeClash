@@ -11,7 +11,8 @@ import CalendarIcon from '@mui/icons-material/CalendarMonthOutlined';
 import SettingsIcon from '@mui/icons-material/SettingsOutlined';
 import HelpIcon from '@mui/icons-material/HelpOutlineOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
-
+import ViewAgendaIcon from '@mui/icons-material/ViewAgenda';
+import sideBarImg from '../assets/sidebar.svg'
 const Sidebar = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -67,7 +68,7 @@ const Sidebar = () => {
                 onClick={() => dispatch(toggleSidebar())}
                 className={`${isCollapsed?'right-[35%]':'right-[10px]'} absolute bottom-[20px] text-gray-600 hover:text-gray-800 `}
             >
-                <MenuIcon fontSize="large" />
+                <img src={sideBarImg} alt="" />
             </button>
         </div>
     );

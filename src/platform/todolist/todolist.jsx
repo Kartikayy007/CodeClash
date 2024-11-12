@@ -29,10 +29,10 @@ const TodoList = () => {
         {tasks.map(task => (
           <div
             key={task.id}
-            className={`flex items-center justify-start p-3 rounded-lg h-[45px] ${
+            className={`flex items-center justify-between p-3 rounded-lg h-[45px] ${
               task.completed ? "bg-[#EEF0F0]" : "bg-[#ADB8B8]"
             }`}
-          >
+          ><div className="flex">
             <img
               src={task.completed ? checked : unchecked}
               alt={task.completed ? "Checked" : "Unchecked"}
@@ -40,10 +40,13 @@ const TodoList = () => {
               className="mr-2 cursor-pointer w-7 h-7"
             />
             <span className="">{task.text}</span>
+            </div>
+            <div className="flex">
             {task.hasReminder && (
-              <span className="text-lg mr-2 ml-[46%]"><AlarmIcon /></span>
+              <span className="text-lg mr-2 "><AlarmIcon /></span>
             )}
             <span className="text-lg cursor-pointer ml-auto"><MoreVertIcon /></span>
+            </div>
           </div>
         ))}
       </div>
