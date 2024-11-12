@@ -3,6 +3,8 @@ import { format, startOfMonth, endOfMonth, addMonths, subMonths, startOfWeek, en
 import { useSelector } from 'react-redux';
 import Reminders from '../reminder/reminder'
 import { Add } from '@mui/icons-material'; 
+import { setToggleState, setIsEnrolled  } from '../features/toggleSlice';
+
 
 const Calendar = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -12,7 +14,8 @@ const Calendar = () => {
   const [currentDay, setCurrentDay] = useState(new Date());
 
   const sidebarWidth = useSelector((state) => state.sidebar.width);
-  
+  const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); // get toggle state from Redux
+
  const togglemode = "createmode";
   
  const events = {
@@ -187,34 +190,24 @@ const Calendar = () => {
                 <button onClick={nextDay} className="text-gray-500 px-2 py-0.5 mx-1 my-0.5 bg-[#D9DEDE] rounded-2xl">{'>'}</button>
               </>
             )}
-            <div className=' flex gap-2 ml-auto items-center'>
-
-            <div
-               className="w-3 h-3 rounded-full bg-yellow-400"
-                    ></div>
-
-            <h3>Scheduled Class</h3>
-
-
-            {togglemode === 'createmode' && (
-            <button className='w-[80px] h-[35px] pr-[10px] pl-[10px] bg-[#066769] rounded-xl text-white ml-[10px] flex items-center'>
-            <Add className="mr-1" /> Add
-            </button>
-                )}
-             
-
-              {togglemode==='joinedmode' && (
-                <>
-                 <div
-                    className="w-3 h-3 rounded-full bg-red-500"
-                 ></div>
-              <h3>Due Assignment</h3>
-              </>
-              )}
-
-
-  </div>
            
+           <div className="flex items-center justify-end space-x-4 w-[100%]">
+            {isEnrolled?<div className="flex items-center space-x-1">
+              <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+              <span className="text-gray-600 text-sm">Due Assignment</span>
+            </div>:<></>}
+            
+            <div className="flex items-center space-x-1">
+              <span className="w-2 h-2 bg-yellow-400 rounded-full"></span>
+              <span className="text-gray-600 text-sm">Scheduled Class</span>
+            </div>
+
+            {!isEnrolled?<button className='w-[80px] h-[35px] pr-[10px] pl-[10px] bg-[#066769] rounded-xl text-white ml-[10px] flex items-center'>
+            <Add className="mr-1" /> Add
+            </button>:<></>}
+          </div>
+        
+
 
 
 
@@ -222,6 +215,8 @@ const Calendar = () => {
 
 
           </div>
+
+          
 
 
 

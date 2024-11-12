@@ -6,11 +6,8 @@ import Signup from './auth/components/signup';
 import Otp from './auth/components/otp';
 import Dashboard from './platform/dashboard/dashboard';
 import Getstarted from './auth/components/getstarted'
-import Header from './platform/header/header';
 import Dashsignup from './platform/dashboard/dashsignup';
 import Calender from './platform/calenderPage/calender'
-import yourClasses from './platform/yourClasses/yourClasses';
-import CreatedClasses from './platform/yourClasses/createdClasses';
 
 import Card from './platform/cards/cards';
 
@@ -29,7 +26,6 @@ const App = () => {
 
         <Route path="/" element={<Getstarted/>} />
         <Route path="/card" element={<Card/>} />
-        <Route path="/createdclasses" element={<CreatedClasses/>} />
 
      <Route path="/signup" element={<Signup />} />
      
