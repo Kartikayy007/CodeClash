@@ -113,6 +113,7 @@ const Otp = () => {
 
     const handleInputChange = (e, index) => {
         const { value } = e.target;
+        
         if (/^\d$/.test(value)) {
             const nextInput = inputRefs.current[index + 1];
             if (nextInput) nextInput.focus();

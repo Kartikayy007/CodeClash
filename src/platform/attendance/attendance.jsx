@@ -1,6 +1,8 @@
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { useSelector } from 'react-redux';
+
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -9,6 +11,8 @@ const Attendance = () => {
     const totalClasses = 36;
     const notAttendedClasses = totalClasses - attendedClasses;
     const attendancePercentage = ((attendedClasses / totalClasses) * 100).toFixed(1);
+    const isCollapsed = useSelector((state) => state.sidebar.isCollapsed);
+
 
     const data = {
         labels: ['Class Attended', 'Class Not Attended'],
@@ -31,16 +35,16 @@ const Attendance = () => {
     };
 
     return (
-        <div className="w-[300px] h-[250px] p-4 border border-teal-200 rounded-lg flex flex-col items-center justify-center bg-white">
-            <h2 className="text-lg  mb-4 self-start ">Your Attendance</h2>
-            <div className='flex'>
-            <div className="relative w-[100px]">
-                <Doughnut data={data} options={options} />
-                <div className="absolute inset-0 flex items-center justify-center  text-xl">
+        <div className="w-[100%] h-[250px] p-4 border border-teal-200 rounded-lg flex flex-col items-center justify-center bg-white">
+            <div className='flex w-[100%]'>
+            <div className="relative w-[40%]">
+            <h2 className={`text-lg  mb-4 ${isCollapsed?'':'self-start '} whitespace-nowrap `}>Your Attendance</h2>
+                <Doughnut data={data} options={options} className='p-[5%]' />
+                <div className=" mt-10 absolute inset-0 flex items-center justify-center  text-xl">
                     {attendancePercentage}%
                 </div>
             </div>
-            <div className="flex flex-col   space-x-4 justify-center pl-[10px] items-baseline">
+            <div className="flex flex-col w-[60%]  space-x-4 justify-center pl-[5%] items-baseline">
                 <div className="flex items-center justify-center">
                     <span className="w-3 h-3 bg-[#4CAF50] mr-2 rounded-sm"></span>
                     Class Attended
