@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import createclass1 from '../assets/createclass1.svg'
 import axios from 'axios';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 
@@ -79,24 +81,24 @@ const Modal = ({ onClose }) => {
 
 
   return (
-    <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50'>
-      <div className='bg-white w-[40vw] h-[70vh] flex justify-center items-center rounded-lg relative'>
+    <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50 '>
+      <div className='bg-white w-[432px] h-[690px] flex justify-center items-center  relative overflow-y-auto '>
         <button 
           onClick={onClose} 
           className="absolute top-4 right-4 text-4xl mt-[1%] mr-[1%] font-bold text-gray-600"
         >
-          &times;
+          <CloseIcon fontSize='large'/>
         </button>
         
 
-        <div className=' w-[90%] h-[90%] flex justify-center items-center'>
-          <div className=' w-[80%] '>
+        <div className=' w-[90%] h-[90%] flex justify-center items-center '>
+          <div className='  w-[80%] flex flex-col justify-around gap-[50px]'>
 
             <div>
-              <h2 className='text-5xl font-semibold mb-[4vh]'>Create Class</h2>
+              <h2 className='text-4xl font-medium '>Create Class</h2>
             </div>
             <div>
-              <form className="flex flex-col gap-6">
+              <form className="flex flex-col gap-3">
                 <input type="text" placeholder='Class Name' className="border rounded-md p-2" value={name} onChange={(e)=>setName(e.target.value)} />
                 <input type="text" placeholder='Subject' className="border rounded-md p-2" value={subject} onChange={(e)=>setSubject(e.target.value)}/>
 
@@ -108,20 +110,20 @@ const Modal = ({ onClose }) => {
                     onClick={() => setIsOpen(!isOpen)}
                   >
                     {selectedOption}
-                    <span className="float-right">▼</span>
+                    <span className="float-right px-3"><KeyboardArrowDownIcon/></span>
                   </button>
 
                   {isOpen && (
-                    <div className="absolute left-0 w-full mt-1 bg-white border border-black rounded">
+                    <div className=" absolute left-0  w-full mt-1 bg-white border border-black rounded-lg">
                       {options.map((option, index) => (
                         <div 
                           key={index} 
                           
                           onClick={() => handleSelect(option)}
-                          className="p-3 hover:bg-gray-100 cursor-pointer"
+                          className="p-6 h-[80px] hover:bg-gray-100 cursor-pointer rounded-lg"
                         >
-                          <div className="font-semibold">{option.label}</div>
-                          <div className="text-sm text-gray-500">{option.description}</div>
+                          <div className="text-xl">{option.label}</div>
+                          <div className="text-xl text-gray-500">{option.description}</div>
                         </div>
                       ))}
                     </div>
@@ -129,8 +131,8 @@ const Modal = ({ onClose }) => {
                 </div>
               </form>
             </div>
-            <div className="flex items-center mt-[7vh]">
-              <button className='bg-[#008080] h-[40px] w-[100%] text-white rounded-md text-lg grid place-content-center font-semibold text-center' onClick={handleSubmit}>
+            <div className="flex items-center">
+              <button className='bg-[#008080] py-5 w-[100%] text-white rounded-md text-lg grid place-content-center font-semibold text-center' onClick={handleSubmit}>
                 Create Class
                 
               </button>
