@@ -5,12 +5,11 @@ import NotificationsIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import AccountIcon from '@mui/icons-material/AccountCircleOutlined';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import { setJoinedClasses } from '../features/joinedClasses';
-import { setCreatedClasses } from '../features/createdClasses';
-import { setToggleState } from '../features/toggleSlice';
+
+import { setToggleState, setIsEnrolled  } from '../features/toggleSlice';
 
 const Header = () => {
-    const [isEnrolled, setIsEnrolled] = useState(true); 
+  
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const sidebarWidth = useSelector((state) => state.sidebar.width);
     const location = useLocation();
@@ -20,6 +19,8 @@ const Header = () => {
     const createdClasses = useSelector((state) => state.createdClasses.createdClasses);
     const [joinedClassesCheck, setJoinedClassesCheck] = useState(0);
     const [createdClassesCheck, setCreatedClassesCheck] = useState(0);
+    const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); // get toggle state from Redux
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -50,11 +51,12 @@ const Header = () => {
                    
                     if (response.data.user.joinedClasses.length > 0 && response.data.user.createdClasses.length > 0) {
                         dispatch(setToggleState(true));
+                        dispatch(setIsEnrolled(isEnrolled));
                     } else if (joinedClasses.length > 0) {
-                        setIsEnrolled(true); 
+                        dispatch(setIsEnrolled(true)); 
                         dispatch(setToggleState(false)); 
                     } else if (createdClasses.length > 0) {
-                        setIsEnrolled(false);  
+                        dispatch(setIsEnrolled(false));  
                         dispatch(setToggleState(false));
                     } else {
                     }
@@ -67,9 +69,12 @@ const Header = () => {
         fetchData();
     }, [dispatch, navigate]);
 
+    
     const toggleSwitch = () => {
-        setIsEnrolled(!isEnrolled);
+        const newEnrolledState = !isEnrolled;
+        dispatch(setIsEnrolled(newEnrolledState)); 
     };
+
 
     const handleProfileClick = () => {
         setIsPopupVisible(!isPopupVisible);
