@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { format, startOfMonth, endOfMonth, addMonths, subMonths, startOfWeek, endOfWeek, addDays, isSameMonth, subDays } from 'date-fns';
 import { useSelector } from 'react-redux';
 import Reminders from '../reminder/reminder'
+import { Add } from '@mui/icons-material'; 
 
 const Calendar = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -11,8 +12,10 @@ const Calendar = () => {
   const [currentDay, setCurrentDay] = useState(new Date());
 
   const sidebarWidth = useSelector((state) => state.sidebar.width);
-
-  const events = {
+  
+ const togglemode = "createmode";
+  
+ const events = {
     '2024-11-01': ['due', 'class'],
     '2024-11-08': ['due'],
   };
@@ -159,7 +162,7 @@ const Calendar = () => {
 
       <div className='flex'>
         <div className="rounded-lg p-4 w-[70%] ml-[28px]">
-          <div className="flex items-center mb-4">
+          <div className="flex items-center mb-4 ">
             <h2 className="text-lg font-semibold text-gray-800 w-[150px]">
               {currentView === 'month' ? format(currentMonth, 'MMMM yyyy') :
                currentView === 'week' ? ` ${format(currentWeekStart, 'MMMM  yyyy')}` :
@@ -184,7 +187,44 @@ const Calendar = () => {
                 <button onClick={nextDay} className="text-gray-500 px-2 py-0.5 mx-1 my-0.5 bg-[#D9DEDE] rounded-2xl">{'>'}</button>
               </>
             )}
+            <div className=' flex gap-2 ml-auto items-center'>
+
+            <div
+               className="w-3 h-3 rounded-full bg-yellow-400"
+                    ></div>
+
+            <h3>Scheduled Class</h3>
+
+
+            {togglemode === 'createmode' && (
+            <button className='w-[80px] h-[35px] pr-[10px] pl-[10px] bg-[#066769] rounded-xl text-white ml-[10px] flex items-center'>
+            <Add className="mr-1" /> Add
+            </button>
+                )}
+             
+
+              {togglemode==='joinedmode' && (
+                <>
+                 <div
+                    className="w-3 h-3 rounded-full bg-red-500"
+                 ></div>
+              <h3>Due Assignment</h3>
+              </>
+              )}
+
+
+  </div>
+           
+
+
+
+
+
+
           </div>
+
+
+
 
           <div className="grid grid-cols-7">{renderDaysOfWeek()}</div>
 
