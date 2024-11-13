@@ -3,6 +3,10 @@ import createclass1 from '../assets/createclass1.svg'
 import axios from 'axios';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CloseIcon from '@mui/icons-material/Close';
+import {  setIsEnrolled  } from '../features/toggleSlice';
+import { useSelector, useDispatch } from 'react-redux';
+
+
 
 
 
@@ -12,6 +16,8 @@ const Modal = ({ onClose }) => {
   const [name, setName] = useState('');
   const [subject, setSubject] = useState('');
   const [privacy, setPrivacy] = useState('');
+  const dispatch = useDispatch();
+
   
 
   const handleSelect = (option) => {
@@ -70,6 +76,8 @@ const Modal = ({ onClose }) => {
 
       if (response.data.success) {
         console.log(response)
+        dispatch(setIsEnrolled(false));  
+
        
       }
     } catch (error) {
