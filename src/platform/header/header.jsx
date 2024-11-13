@@ -20,7 +20,7 @@ const Header = () => {
     const createdClasses = useSelector((state) => state.createdClasses.createdClasses);
     const [joinedClassesCheck, setJoinedClassesCheck] = useState(0);
     const [createdClassesCheck, setCreatedClassesCheck] = useState(0);
-    const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); // get toggle state from Redux
+    const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); 
 
 
     useEffect(() => {

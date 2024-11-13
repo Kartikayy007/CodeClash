@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from '../sidebar/sidebar';
 import Headersignup from '../header/headersignup';
-import dash1 from '../../auth/assets/dash1.svg';
+import dash1 from '../assets/dashGIF.gif';
 import Modal from '../modals/modal1';  
 import { useSelector } from 'react-redux';
 import Modal2 from '../modals/modal2';  

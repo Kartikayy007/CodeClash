@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import CloseIcon from '@mui/icons-material/Close';
+import {  setIsEnrolled  } from '../features/toggleSlice';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Modal2 = ({ onClose }) => {
   const [code, setCode] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+
 
 
   const handleSubmit = async (e) => {
@@ -42,6 +46,8 @@ const Modal2 = ({ onClose }) => {
 
       if (response.data.success) {
         console.log(response)
+        dispatch(setIsEnrolled(true));  
+
        
       }
     } catch (error) {
