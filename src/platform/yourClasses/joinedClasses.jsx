@@ -8,9 +8,7 @@ import card from '../assets/card1.svg';
 import axios from 'axios';
 import { setJoinedClasses } from '../features/joinedClasses';
 import { setCreatedClasses } from '../features/createdClasses';
-
 import { setIsEnrolled } from '../features/toggleSlice';
-
 
 const JoinedClasses = () => {
   const navigate = useNavigate();
@@ -55,7 +53,6 @@ const JoinedClasses = () => {
     }
   };
 
-
   useEffect(() => {
     const controller = new AbortController();
     const { signal } = controller;
@@ -76,20 +73,15 @@ const JoinedClasses = () => {
         );
 
         if (response.data.success) {
-          
           const { joinedClasses, createdClasses } = response.data.user;
           dispatch(setJoinedClasses(joinedClasses));
           dispatch(setCreatedClasses(createdClasses));
-          
-
 
           if (createdClasses.length === 0 && joinedClasses.length === 0) {
             navigate('/dashsignup');
-          }else if(createdClasses.length>0&& joinedClasses.length===0){
+          } else if (createdClasses.length > 0 && joinedClasses.length === 0) {
             dispatch(setIsEnrolled(false));
-          }else if(createdClasses.length===0&& joinedClasses.length>0){
-            dispatch(setIsEnrolled(true));
-          }else{
+          } else {
             dispatch(setIsEnrolled(true));
           }
         }
@@ -126,11 +118,11 @@ const JoinedClasses = () => {
                     index={index}
                     activePopupIndex={activePopupIndex}
                     onPopupToggle={handlePopupToggle}
+                    navigate={navigate}  // Pass navigate function to ClassCard
                   />
                 ))
               : <div>No joined classes available.</div>)
           : (createdClasses && createdClasses.length > 0
-
               ? createdClasses.map((classInfo, index) => (
                   <ClassCard
                     key={index}
@@ -140,18 +132,23 @@ const JoinedClasses = () => {
                     onPopupToggle={handlePopupToggle}
                     onDelete={() => handleDeleteClass(classInfo.code, index)}
                     isDeleting={deletedClassIndex === index}
+                    navigate={navigate}  // Pass navigate function to ClassCard
                   />
                 ))
               : <div>No created classes available.</div>)
-
         }
       </div>
     </div>
   );
 };
 
-const ClassCard = ({ name, noOfStudents, teacher, index, onDelete, activePopupIndex, onPopupToggle, isDeleting }) => {
+const ClassCard = ({ name, noOfStudents, teacher, code, index, onDelete, activePopupIndex, onPopupToggle, isDeleting, navigate }) => {
   const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
+
+  const handleCardClick = () => {
+    // navigate(`/class/${code}/announcement`);
+    navigate(`/announcement`);
+  };
 
   const handleDelete = () => {
     onPopupToggle(index); // Close the popup when delete is triggered
@@ -162,6 +159,7 @@ const ClassCard = ({ name, noOfStudents, teacher, index, onDelete, activePopupIn
     <div
       className={`bg-white rounded-lg p-3 flex flex-col justify-between border border-teal-200 w-[240px] h-[200px] fade-in-up mt-7 relative ${isDeleting ? 'fade-out' : ''}`}
       style={{ animationDelay: `${index * 0.2}s` }}
+      onClick={handleCardClick}  // Add click handler to navigate to announcement page
     >
       <div className="bg-[#919F9E] rounded-lg relative flex justify-between items-start h-fit p-5">
         <img
@@ -171,7 +169,10 @@ const ClassCard = ({ name, noOfStudents, teacher, index, onDelete, activePopupIn
         />
         <MoreHorizIcon
           className="absolute top-2 right-2 text-white cursor-pointer"
-          onClick={() => onPopupToggle(index)}
+          onClick={(e) => {
+            e.stopPropagation();  // Prevent triggering handleCardClick when clicking the popup icon
+            onPopupToggle(index);
+          }}
         />
         {activePopupIndex === index && !isEnrolled && (
           <PopupMenu
