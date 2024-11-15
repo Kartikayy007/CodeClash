@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleSidebar } from '../../platform/features/sidebarSlice';
@@ -12,14 +12,17 @@ import SettingsIcon from '@mui/icons-material/SettingsOutlined';
 import HelpIcon from '@mui/icons-material/HelpOutlineOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import ViewAgendaIcon from '@mui/icons-material/ViewAgenda';
-import sideBarImg from '../assets/sidebar.svg'
+import sideBarImg from '../assets/sidebar.svg';
+
 const Sidebar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
     const isCollapsed = useSelector((state) => state.sidebar.isCollapsed);
 
-    useEffect(() => {}, [location.pathname]);
+    const handleClick = (path) => {
+        navigate(path);
+    };
 
     const menuItems = [
         { icon: <DashboardIcon fontSize="large" />, label: 'Dashboard', path: '/dashboard' },
@@ -32,9 +35,6 @@ const Sidebar = () => {
 
     return (
         <div className={`bg-[#EEF0F0] ${isCollapsed ? 'w-[80px]' : 'w-[18%]'} h-screen flex flex-col items-start fixed transition-all duration-300`}>
-
-           
-
             <div className="flex items-center w-full pt-[5vh] h-[70px] justify-center">
                 <img
                     src={isCollapsed ? frameImage2 : frameImage}
@@ -42,21 +42,19 @@ const Sidebar = () => {
                     className={`transition-transform duration-300 ease-in-out ${isCollapsed ? 'w-[35px]' : 'w-[70%] scale-100'}`}
                     style={{ opacity: isCollapsed ? 1 : 0.9, transition: 'opacity 0.3s ease, transform 0.3s ease' }}
                 />
-               
             </div>
 
             <div className="w-full mt-[10vh] flex flex-col items-start space-y-4">
                 {menuItems.map((item) => (
                     <div
                         key={item.path}
+                        onClick={() => handleClick(item.path)}
                         className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-start pl-4'} w-[90%] ml-[5%] rounded-full h-[48px] ${
-                            location.pathname === item.path ? 'bg-[#008080] text-white transform scale-105  ' : ''
-                        }`
-                    }
+                            location.pathname === item.path ? 'bg-[#008080] text-white active-animation' : ''
+                        } transition-transform duration-150 ease-in-out active:scale-95 hover:scale-105`}
                     >
                         <button
-                            onClick={() => navigate(item.path)}
-                            className="flex items-center gap-4"
+                            className={`flex items-center gap-4 w-full h-full cursor-default ${isCollapsed ? 'justify-center' : ''}`}
                         >
                             {item.icon}
                             {!isCollapsed && <p className="text-xl whitespace-nowrap text-clip">{item.label}</p>}
@@ -64,9 +62,10 @@ const Sidebar = () => {
                     </div>
                 ))}
             </div>
+
             <button
                 onClick={() => dispatch(toggleSidebar())}
-                className={`${isCollapsed?'right-[35%]':'right-[10px]'} absolute bottom-[20px] text-gray-600 hover:text-gray-800 `}
+                className={`${isCollapsed ? 'right-[35%]' : 'right-[10px]'} absolute bottom-[20px] text-gray-600 hover:text-gray-800`}
             >
                 <img src={sideBarImg} alt="" />
             </button>

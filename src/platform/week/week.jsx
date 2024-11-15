@@ -19,9 +19,11 @@ const WeekView = () => {
     };
 
     return (
-        <div>            <h2 className="text-2xl  mb-4 ml-[21px]">Your Week at a Glance!</h2>
+        <div className='h-[20%]'>         
+      
 
-        <div className="week-view-container flex flex-col items-center bg-white p-4 h-fit w-[90%] ml-[22px] border border-teal-200 rounded-lg">
+
+        <div className="week-view-container flex flex-col items-center bg-white px-4 h-[100%] w-[90%] ml-[20px] border border-teal-200 rounded-lg justify-center">
             
             <div className="week-view-header flex items-center justify-between w-full max-w-md p-3">
                 <button onClick={handlePreviousWeek} className="text-gray-500 text-2xl">

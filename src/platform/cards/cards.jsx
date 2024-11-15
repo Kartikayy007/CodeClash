@@ -19,7 +19,7 @@ const Card = ({ className, studentCount, teacherName }) => {
                 <span>{studentCount}</span>
             </div>
             <div className="flex items-center mt-2">
-                <img src={`https://ui-avatars.com/api/?name=${teacherName}`} alt={teacherName} className="w-6 h-6 rounded-full mr-2" />
+                <img src={`https://ui-avatars.com/api/?name=${teacherName}`} alt={teacherName} className=" rounded-full mr-2" />
                 <span className="text-sm text-gray-600">{teacherName}</span>
             </div>
             </div>

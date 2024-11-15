@@ -149,7 +149,7 @@ const Calendar = () => {
   }, []);
 
   return (
-    <div className={`mt-[1.5rem] bg-[#E1EAE8]  transition-all duration-500 ease-in-out ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`} style={{ marginLeft: sidebarWidth, transition: 'margin-left 0.3s ease,translate 0.3 ease' }}>
+    <div className={`mt-[50px] pt-[15px] bg-[#E1EAE8]  transition-all duration-500 ease-in-out ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`} style={{ marginLeft: sidebarWidth, transition: 'margin-left 0.3s ease,translate 0.3 ease' }}>
 
       <div className="flex space-x-4 mb-4 ml-[40px]">
         {['month', 'week', 'day'].map((view) => (
@@ -165,7 +165,7 @@ const Calendar = () => {
 
       <div className='flex'>
         <div className="rounded-lg p-4 w-[70%] ml-[28px]">
-          <div className="flex items-center mb-4 ">
+          <div className="flex items-center mb-4 h-[7%] ">
             <h2 className="text-lg font-semibold text-gray-800 w-[150px]">
               {currentView === 'month' ? format(currentMonth, 'MMMM yyyy') :
                currentView === 'week' ? ` ${format(currentWeekStart, 'MMMM  yyyy')}` :

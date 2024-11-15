@@ -11,12 +11,13 @@ const Calender = () => {
 
     
 
-    return (<div className='bg-[#E1EAE8] h-[100vh]'>
+    return (<div className='bg-[#E1EAE8] h-[100vh] fixed w-full top-0 '>
 
         <Sidebar/>
         <Header/>
-        <CalendarComponent />
-   
+        <div>
+        <CalendarComponent/>
+        </div>
 
         
       
