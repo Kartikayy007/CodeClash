@@ -62,14 +62,17 @@ console.log(token)
 
 
 
-    return (<div className='bg-[#E1EAE8] h-[100vh]'>
+    return (<div className='bg-[#E1EAE8] h-[110vh]'>
 
         <Sidebar />
         <Header />
-        <div className='flex mt-[20px] ml-[15px] bg-[#E1EAE8]'>
+        <div className='flex  ml-[15px] h-[100vh] bg-[#E1EAE8]'>
             <Performance />
-            <div className='mt-[83px] w-[30%] '> <WeekView />
-                <TodoList />
+            <div className='w-[30%] '> 
+                <div className='h-[10%] mt-[70px]'></div>
+                <WeekView />
+                <div className='h-[60%] mt-[20px]'>   <TodoList /></div>
+             
             </div>
 
 

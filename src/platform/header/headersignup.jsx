@@ -8,7 +8,7 @@ const  Headersignup =() => {
   return (
    
    
-    <div className='  w-[82%] h-fit flex  items-center flex-col pt-[15px] ml-[18%] '>
+    <div className='  w-[82%] h-fit flex  items-center flex-col pt-[15px] ml-[18%]  '>
     <div className=" lg:hidden relative flex ml-[5%]">
      {!isFocused && (
             <SearchIcon
