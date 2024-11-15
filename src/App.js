@@ -18,6 +18,7 @@ import Newpass from './auth/components/newpass';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import YourClasses from './platform/yourClasses/yourClasses';
 import { Settings } from '@mui/icons-material';
+import Announcement from './platform/announcement/announcement';
 
 
 const App = () => {
@@ -46,6 +47,7 @@ const App = () => {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/calendar" element={<Calender />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/announcement" element={<Announcement />} />
  
 
       
