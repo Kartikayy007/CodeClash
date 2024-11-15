@@ -6,11 +6,13 @@ const initialState = {
 };
 
 const createdClassesSlice = createSlice({
+
   name: 'createdClasses',
   initialState,
   reducers: {
     setCreatedClasses: (state, action) => {
       state.createdClasses = action.payload;
+
     },
   },
 });

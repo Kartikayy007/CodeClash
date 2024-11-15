@@ -10,6 +10,7 @@ import CreateClassModal from '../modals/modal1';
 import JoinClassModal from '../modals/modal2';
 
 const Header = () => {
+
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [isAddMenuVisible, setIsAddMenuVisible] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -61,6 +62,7 @@ const Header = () => {
       } catch (error) {
         console.error("Error fetching class data:", error);
       }
+
     };
 
     fetchData();

@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+
 const initialState = {
     showToggle: false,
     isEnrolled: (typeof window !== 'undefined' && sessionStorage.getItem("isEnrolled") !== null)
@@ -25,4 +26,5 @@ const toggleStateSlice = createSlice({
 });
 
 export const { setToggleState, setIsEnrolled } = toggleStateSlice.actions;
+
 export default toggleStateSlice.reducer;

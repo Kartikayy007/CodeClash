@@ -149,7 +149,10 @@ const Calendar = () => {
   }, []);
 
   return (
+
     <div className={`mt-[50px] pt-[15px] bg-[#E1EAE8]  transition-all duration-500 ease-in-out ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`} style={{ marginLeft: sidebarWidth, transition: 'margin-left 0.3s ease,translate 0.3 ease' }}>
+
+
 
       <div className="flex space-x-4 mb-4 ml-[40px]">
         {['month', 'week', 'day'].map((view) => (

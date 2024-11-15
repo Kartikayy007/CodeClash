@@ -8,7 +8,9 @@ import card from '../assets/card1.svg';
 import axios from 'axios';
 import { setJoinedClasses } from '../features/joinedClasses';
 import { setCreatedClasses } from '../features/createdClasses';
+
 import { setIsEnrolled } from '../features/toggleSlice';
+
 
 const JoinedClasses = () => {
   const navigate = useNavigate();
@@ -53,6 +55,7 @@ const JoinedClasses = () => {
     }
   };
 
+
   useEffect(() => {
     const controller = new AbortController();
     const { signal } = controller;
@@ -78,6 +81,7 @@ const JoinedClasses = () => {
           dispatch(setJoinedClasses(joinedClasses));
           dispatch(setCreatedClasses(createdClasses));
           
+
 
           if (createdClasses.length === 0 && joinedClasses.length === 0) {
             navigate('/dashsignup');
@@ -126,6 +130,7 @@ const JoinedClasses = () => {
                 ))
               : <div>No joined classes available.</div>)
           : (createdClasses && createdClasses.length > 0
+
               ? createdClasses.map((classInfo, index) => (
                   <ClassCard
                     key={index}
@@ -138,6 +143,7 @@ const JoinedClasses = () => {
                   />
                 ))
               : <div>No created classes available.</div>)
+
         }
       </div>
     </div>
