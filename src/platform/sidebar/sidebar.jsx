@@ -44,12 +44,12 @@ const Sidebar = () => {
                 />
             </div>
 
-            <div className="w-full mt-[10vh] flex flex-col items-start space-y-4">
+            <div className={`w-full mt-[10vh] flex flex-col ${isCollapsed?'items-center':'items-start'} space-y-4`}>
                 {menuItems.map((item) => (
                     <div
                         key={item.path}
                         onClick={() => handleClick(item.path)}
-                        className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-start pl-4'} w-[90%] ml-[5%] rounded-full h-[48px] ${
+                        className={`flex items-center ${isCollapsed ? 'justify-center w-[50px] h-[50px]' : 'justify-start pl-4 w-[90%] h-[48px]'}  ml-[5%] rounded-full  ${
                             location.pathname === item.path ? 'bg-[#008080] text-white active-animation' : ''
                         } transition-transform duration-150 ease-in-out active:scale-95 hover:scale-105`}
                     >
