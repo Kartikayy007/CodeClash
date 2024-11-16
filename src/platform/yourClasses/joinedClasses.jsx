@@ -52,7 +52,7 @@ const JoinedClasses = () => {
     const { signal } = controller;
 
     const fetchData = async () => {
-      const token = sessionStorage.getItem("authToken");
+      const token = sessionStorage.getItem("authToken")||localStorage.getItem("authToken");
 
       try {
         const headers = {

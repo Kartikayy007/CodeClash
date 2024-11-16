@@ -35,7 +35,7 @@ const Attendance = () => {
     };
 
     return (
-        <div className="w-[100%] h-[250px] p-4 border border-teal-200 rounded-lg flex flex-col items-center justify-center bg-white">
+        <div className="w-[100%] h-[250px] p-4 border border-teal-200 rounded-lg flex flex-col items-center justify-center bg-white mt-[45px] ">
             <div className='flex w-[100%]'>
             <div className="relative w-[40%]">
             <h2 className={`text-lg  mb-4 ${isCollapsed?'':'self-start '} whitespace-nowrap `}>Your Attendance</h2>

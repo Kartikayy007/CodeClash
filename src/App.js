@@ -10,11 +10,12 @@ import Dashsignup from './platform/dashboard/dashsignup';
 import Calender from './platform/calenderPage/calender'
 
 import Card from './platform/cards/cards';
-
+import Assignmentjoined from './platform/assignment/joinedassignment';
 import Newpass from './auth/components/newpass';
 
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import YourClasses from './platform/yourClasses/yourClasses';
+
 
 
 const App = () => {
@@ -26,7 +27,7 @@ const App = () => {
 
         <Route path="/" element={<Getstarted/>} />
         <Route path="/card" element={<Card/>} />
-
+        <Route path="/assignmentjoined" element={<Assignmentjoined/>} />
      <Route path="/signup" element={<Signup />} />
      
     <Route path="/pwreset" element={<Pwreset />} />

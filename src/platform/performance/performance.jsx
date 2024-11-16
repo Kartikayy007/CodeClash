@@ -4,6 +4,8 @@ import { Chart as ChartJS, BarElement, CategoryScale, LinearScale } from 'chart.
 import Attendance from '../attendance/attendance';
 import RecentClasses from '../cards/recentClasses';
 import { useSelector } from 'react-redux';
+import AssignmentChart from '../teacherassignment/assignmentgraph';
+import AttendanceChart from '../teacherassignment/teacherattendancegraph';
 
 
 
@@ -15,7 +17,7 @@ const Performance = () => {
     const sidebarWidth = useSelector((state) => state.sidebar.width);
     const isCollapsed = useSelector((state) => state.sidebar.isCollapsed);
 
-
+    const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); 
     const data = {
         labels: ['Assignments'],
         datasets: [
@@ -63,7 +65,6 @@ const Performance = () => {
        
         
     };
-
     return (
         
         <div className="w-[65%] pl-1   " style={{ marginLeft: sidebarWidth,transition: 'margin-left 0.3s ease'}}>
@@ -74,8 +75,8 @@ const Performance = () => {
             
             <div className='w-[60%]' >
                 
-            <h2 className="text-xl mb-8 ">Class performance Overview</h2>
-            <div className="flex items-center h-[250px] p-4 pt-8 border border-teal-200 rounded-lg bg-white">
+            
+            {isEnrolled?<div className="flex items-center h-[250px] p-4 pt-8 border border-teal-200 rounded-lg bg-white mt-[45px]">
                 <div className="w-[45%] h-[100%]">
                     <Bar data={data} options={options} />
                 </div>
@@ -98,10 +99,11 @@ const Performance = () => {
                         View Analysis
                     </button>
                 </div>
+                
+            </div>:<AssignmentChart/>}
             </div>
-            </div>
-            <div className="flex gap-4 mt-[45px] ml-[20px] w-[40%]">
-                <Attendance />
+            <div className="flex gap-4 ml-[20px] w-[50%]">
+            {isEnrolled?<Attendance/>:<AttendanceChart/>}
                 
 
                 </div></div>

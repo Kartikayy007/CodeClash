@@ -14,9 +14,9 @@ const Calendar = () => {
   const [currentDay, setCurrentDay] = useState(new Date());
 
   const sidebarWidth = useSelector((state) => state.sidebar.width);
-  const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); // get toggle state from Redux
+  const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); 
 
- const togglemode = "createmode";
+
   
  const events = {
     '2024-11-01': ['due', 'class'],
