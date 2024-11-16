@@ -1,5 +1,5 @@
 import React from 'react';
-// import { FaBook } from 'react-icons/fa';
+
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import pana from '../assets/pana.svg';
 

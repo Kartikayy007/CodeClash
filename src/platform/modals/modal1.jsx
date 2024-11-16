@@ -46,11 +46,24 @@ const Modal = ({ onClose }) => {
 
       if (response.data.success) {
         dispatch(setIsEnrolled(false));
-        toast.success("Class created successfully!");
+        toast.dismiss();
+
+        toast.success("Class created successfully!", {
+          className: "custom-toastS",
+          hideProgressBar: true,
+          autoClose: 3000,
+        });
         onClose();
       }
     } catch (error) {
-      toast.error("Failed to create class.");
+      toast.dismiss();
+
+      toast.error("Failed to create class.", {
+        className: "custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+      });
+      
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -107,7 +120,7 @@ const Modal = ({ onClose }) => {
           </div>
         </div>
       </div>
-      {/* <ToastContainer position="top-center" autoClose={3000} /> */}
+
     </div>
   );
 };

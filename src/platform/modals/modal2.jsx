@@ -31,11 +31,23 @@ const Modal2 = ({ onClose }) => {
 
       if (response.data.success) {
         dispatch(setIsEnrolled(true));
-        toast.success("Class joined successfully!");
+        toast.dismiss();
+
+        toast.success("Class joined successfully!", {
+          className: "custom-toastS",
+          hideProgressBar: true,
+          autoClose: 3000,
+        });
        onClose();
       }
     } catch (error) {
-      toast.error("Failed to join class. Please check the code.");
+      toast.dismiss();
+
+      toast.error("Failed to join class.", {
+        className: "custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+      });
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -75,7 +87,7 @@ const Modal2 = ({ onClose }) => {
             </button>
         </div>
       </div>
-      {/* <ToastContainer position="top-center" autoClose={3000} /> */}
+
     </div>
   );
 };
