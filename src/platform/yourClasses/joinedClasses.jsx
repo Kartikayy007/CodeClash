@@ -9,6 +9,8 @@ import axios from 'axios';
 import { setJoinedClasses } from '../features/joinedClasses';
 import { setCreatedClasses } from '../features/createdClasses';
 import { setIsEnrolled } from '../features/toggleSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const JoinedClasses = () => {
   const navigate = useNavigate();
@@ -43,10 +45,15 @@ const JoinedClasses = () => {
       );
 
       if (response.status === 200) {
-        setTimeout(() => {
-          dispatch(setCreatedClasses(createdClasses.filter(classInfo => classInfo.code !== classCode)));
+        dispatch(setCreatedClasses(createdClasses.filter(classInfo => classInfo.code !== classCode)));
+        toast.dismiss();
+          toast.success("Class deleted successfully!", {
+            className: "custom-toastS",
+            hideProgressBar: true,
+            autoClose: 3000,
+          });
           setDeletedClassIndex(null);
-        }, 500); 
+        
       }
     } catch (error) {
       console.log(error);
@@ -118,7 +125,8 @@ const JoinedClasses = () => {
                     index={index}
                     activePopupIndex={activePopupIndex}
                     onPopupToggle={handlePopupToggle}
-                    navigate={navigate}  // Pass navigate function to ClassCard
+                    navigate={navigate}  
+
                   />
                 ))
               : <div>No joined classes available.</div>)
@@ -132,7 +140,8 @@ const JoinedClasses = () => {
                     onPopupToggle={handlePopupToggle}
                     onDelete={() => handleDeleteClass(classInfo.code, index)}
                     isDeleting={deletedClassIndex === index}
-                    navigate={navigate}  // Pass navigate function to ClassCard
+                    navigate={navigate}  
+
                   />
                 ))
               : <div>No created classes available.</div>)
@@ -146,20 +155,25 @@ const ClassCard = ({ name, noOfStudents, teacher, code, index, onDelete, activeP
   const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
 
   const handleCardClick = () => {
-    // navigate(`/class/${code}/announcement`);
-    navigate(`/announcement`);
+
+    if (activePopupIndex !== index) {
+      navigate(`/announcement`);
+    }
   };
 
   const handleDelete = () => {
-    onPopupToggle(index); // Close the popup when delete is triggered
-    onDelete(); // Delete the class
+    onPopupToggle(index); 
+
+    onDelete();
+
   };
 
   return (
     <div
       className={`bg-white rounded-lg p-3 flex flex-col justify-between border border-teal-200 w-[240px] h-[200px] fade-in-up mt-7 relative ${isDeleting ? 'fade-out' : ''}`}
       style={{ animationDelay: `${index * 0.2}s` }}
-      onClick={handleCardClick}  // Add click handler to navigate to announcement page
+      onClick={handleCardClick}  
+
     >
       <div className="bg-[#919F9E] rounded-lg relative flex justify-between items-start h-fit p-5">
         <img
@@ -170,7 +184,8 @@ const ClassCard = ({ name, noOfStudents, teacher, code, index, onDelete, activeP
         <MoreHorizIcon
           className="absolute top-2 right-2 text-white cursor-pointer"
           onClick={(e) => {
-            e.stopPropagation();  // Prevent triggering handleCardClick when clicking the popup icon
+            e.stopPropagation();  
+
             onPopupToggle(index);
           }}
         />

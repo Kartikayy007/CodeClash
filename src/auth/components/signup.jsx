@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setEmail } from '../features/authSlice';
+
 import './css/signup.css';
 import img4 from '../assets/img4.svg';
 import img5 from '../assets/img5.svg';
@@ -21,12 +22,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Modal from './modal'; 
 import PrivacyPolicy from './content/Policy';
+
 import TermsAndConditions from './content/Terms';
 
 
 const element2 = <FontAwesomeIcon icon={faEyeSlash} />;
 const element = <FontAwesomeIcon icon={faEye} />;
 const images = [img4, img5, img6, img7, img8];
+
 
 const Signup = () => {
   
@@ -164,9 +167,12 @@ const Signup = () => {
         email,
         password
       });
+      
 
       if (response.data.success) {
         dispatch(setEmail(email));
+      
+
         toast.dismiss();
         toast.success(response.data.message, { className: 'custom-toastS', autoClose: 3000,hideProgressBar:true });
         setTimeout(() => navigate('/otp'), 1000);
@@ -174,7 +180,7 @@ const Signup = () => {
 
       }
     } catch (error) {
-      toast.error(error.response.data.error, { className: 'custom-toast', autoClose: 3000,hideProgressBar:true  });
+      toast.error(error.response?.data?.error, { className: 'custom-toast', autoClose: 3000,hideProgressBar:true  });
     } finally {
       setName('');
       setEmailState('');
