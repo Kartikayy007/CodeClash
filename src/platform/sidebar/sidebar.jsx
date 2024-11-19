@@ -39,7 +39,7 @@ const Sidebar = () => {
                 <img
                     src={isCollapsed ? frameImage2 : frameImage}
                     alt="logo"
-                    className={`transition-transform duration-300 ease-in-out ${isCollapsed ? 'w-[35px]' : 'w-[70%] scale-100'}`}
+                    className={`max-w-[250px] transition-transform duration-300 ease-in-out ${isCollapsed ? 'w-[35px]' : 'w-[70%] scale-100'}`}
                     style={{ opacity: isCollapsed ? 1 : 0.9, transition: 'opacity 0.3s ease, transform 0.3s ease' }}
                 />
             </div>
