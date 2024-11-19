@@ -10,20 +10,22 @@ const Attendance = () => {
     const attendedClasses = 75;
     const totalClasses = 100;
     const notAttendedClasses = totalClasses - attendedClasses;
+    const attendancePercentage = ((attendedClasses / totalClasses) * 100).toFixed(1);
+    const isCollapsed = useSelector((state) => state.sidebar.isCollapsed);
 
     const data = {
         labels: ['Class Attendance'],
         datasets: [
             {
-                label: 'Attended',
+                label: 'Present',
                 data: [attendedClasses],
-                backgroundColor: '#8A7FF7', // Purple
+                backgroundColor: '#8A7FF7',
                 barThickness: 40,
             },
             {
-                label: 'Not Attended',
+                label: 'Absent',
                 data: [notAttendedClasses],
-                backgroundColor: '#F9A8A8', // Soft red
+                backgroundColor: '#F9A8A8',
                 barThickness: 40,
             },
         ],
@@ -35,57 +37,47 @@ const Attendance = () => {
         plugins: {
             legend: {
                 display: true,
-                position: 'top',
-                align: 'center',
+
+                position: 'right',
                 labels: {
                     usePointStyle: true,
                     pointStyle: 'rect',
-                    boxWidth: 20,
+                    boxWidth: 12,
                     font: {
-                        
-                        size: 12,
-                        family: 'Arial, sans-serif',
-                    },
-                    color: '#4A4A4A',
+                        size: 12
+                    }
                 },
             },
-            tooltip: {
-                enabled: true,
-            },
+            tooltip: { enabled: true },
         },
         scales: {
             x: {
-                grid: {
-                    display: false, // Remove vertical gridlines
-                },
+                grid: { display: false },
+                stacked: true,
+
                 ticks: {
-                    display: false, // Hide x-axis labels
+                    display: true,
+                    autoSkip: false,
+                    maxRotation: 0,
+                    minRotation: 0,
+                    padding: 10,
                 },
             },
             y: {
                 beginAtZero: true,
                 max: 100,
-                ticks: {
-                    stepSize: 25, // Control divisions (100 / 25 = 4 divisions)
-                    color: '#4A4A4A', // Tick label color
-                    font: {
-                        size: 12,
-                        family: 'Arial, sans-serif',
-                    },
-                },
-                grid: {
-                    color: '#E5E7EB', // Light gray gridlines
-                    borderDash: [5, 5], // Dotted gridline style
-                },
+                grid: { color: '#E5E7EB' },
+                stacked: true,
             },
         },
+        barPercentage: 0.6,
     };
 
     return (
-        <div className="w-full h-full p-6 border border-teal-200 rounded-lg bg-white flex flex-col items-center justify-center">
-            <h2 className="text-xl mr-auto mb-6 text-black">Your Attendance</h2>
-            <div className="w-[90%] h-[300px]">
-                <Bar data={data} options={options} />
+        <div className="w-full h-full p-6 border border-teal-200 rounded-lg bg-[#F4F7F9] flex flex-col items-center justify-center">
+            <h2 className="text-xl self-start mb-6 ml-6">Your Attendance</h2>
+            <div className="w-[90%] h-[90%] flex flex-col justify-center">
+                <Bar data={data} options={options} style={{ width: 390 }} />
             </div>
         </div>
     );
