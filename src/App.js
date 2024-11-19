@@ -8,26 +8,30 @@ import Dashboard from './platform/dashboard/dashboard';
 import Getstarted from './auth/components/getstarted'
 import Dashsignup from './platform/dashboard/dashsignup';
 import Calender from './platform/calenderPage/calender'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Card from './platform/cards/cards';
-import Assignmentjoined from './platform/assignment/joinedassignment';
 import Newpass from './auth/components/newpass';
 
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import YourClasses from './platform/yourClasses/yourClasses';
+import { Settings } from '@mui/icons-material';
+import Announcement from './platform/announcement/announcement';
+import Reminderbox from './platform/reminder/reminderbox';
 
 
 
 const App = () => {
    return (
-  
+   <div>
     <BrowserRouter>
       <Routes>
 
 
         <Route path="/" element={<Getstarted/>} />
         <Route path="/card" element={<Card/>} />
-        <Route path="/assignmentjoined" element={<Assignmentjoined/>} />
+        <Route path="/reminderbox" element={<Reminderbox/>} />
      <Route path="/signup" element={<Signup />} />
      
     <Route path="/pwreset" element={<Pwreset />} />
@@ -37,17 +41,23 @@ const App = () => {
       <Route path="/reset-password" element={< Newpass/>} />
       
      
-      <Route path="/classes" element={<Dashsignup/>} />
+      <Route path="/classes" element={<YourClasses/>} />
+      <Route path="/dashsignup" element={<Dashsignup/>} />
 
 
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/calendar" element={<Calender />} />
-      <Route path="/settings" element={<YourClasses />} />
+      <Route path="/settings" element={<Settings />} />
+      <Route path="/announcement" element={<Announcement />} />
+ 
+
       
 
       </Routes>
 
     </BrowserRouter>
+    <ToastContainer position="top-center" autoClose={3000} />
+    </div>
   );
 };
 

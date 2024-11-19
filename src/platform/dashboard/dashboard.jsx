@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../sidebar/sidebar';
 import Header from '../header/header';
@@ -8,6 +8,9 @@ import TodoList from '../todolist/todolist';
 import { useDispatch } from 'react-redux';
 import { setJoinedClasses } from '../features/joinedClasses';
 import { setCreatedClasses } from '../features/createdClasses';
+import { setUserName } from '../features/userSlice';  
+
+
 
 import axios from 'axios';
 
@@ -38,9 +41,11 @@ console.log(token)
               
                 if (response.data.success) {
                     console.log(response.data.user)
+                    
                     const { joinedClasses, createdClasses } = response.data.user;
                     dispatch(setJoinedClasses(joinedClasses));
                     dispatch(setJoinedClasses(createdClasses));
+                    dispatch(setUserName(response.data.user.name)); 
                     console.log(response)
                     
 
@@ -62,14 +67,17 @@ console.log(token)
 
 
 
-    return (<div className='bg-[#E1EAE8] h-[100vh]'>
+    return (<div className='bg-[#E1EAE8] h-[110vh]'>
 
         <Sidebar />
         <Header />
-        <div className='flex mt-[20px] ml-[15px] bg-[#E1EAE8]'>
+        <div className='flex  ml-[15px] h-[100vh] bg-[#E1EAE8]'>
             <Performance />
-            <div className='mt-[83px] w-[30%] '> <WeekView />
-                <TodoList />
+            <div className='w-[30%] '> 
+                <div className='h-[10%] mt-[70px]'></div>
+                <WeekView />
+                <div className='h-[60%] mt-[20px]'><TodoList /></div>
+             
             </div>
 
 

@@ -53,7 +53,7 @@ const AssignmentChart = () => {
 
     return (
         
-                    <div className="flex flex-col h-[270px] p-4 border border-teal-200 rounded-lg bg-white mt-[30px]">
+                    <div className="flex flex-col h-[100%] p-4 border border-teal-200 rounded-lg bg-white ">
                         <h2 className="text-[16px] bold">% of Students completed Assignment</h2>
                         <div className="flex items-center mt-6">
                             <div className="w-[50%] h-[100%] text-gray-500">
@@ -64,7 +64,7 @@ const AssignmentChart = () => {
                                     {subjects.map((subject, index) => (
                                         <li key={subject} className="flex items-center">
                                             <span
-                                                className="w-3 h-3 mr-2 rounded-sm "
+                                                className="w-3 h-3 mr-2 rounded-sm ml-5 "
                                                 style={{ backgroundColor: data.datasets[0].backgroundColor[index] }}
                                                 
                                             ></span>

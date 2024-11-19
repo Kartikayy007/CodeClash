@@ -1,63 +1,83 @@
 import React from 'react';
-import { Doughnut } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, BarElement, Tooltip, Legend, CategoryScale, LinearScale } from 'chart.js';
 import { useSelector } from 'react-redux';
 
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(BarElement, Tooltip, Legend, CategoryScale, LinearScale);
 
 const Attendance = () => {
-    const attendedClasses = 25;
-    const totalClasses = 36;
+    const attendedClasses = 75;
+    const totalClasses = 100;
     const notAttendedClasses = totalClasses - attendedClasses;
     const attendancePercentage = ((attendedClasses / totalClasses) * 100).toFixed(1);
     const isCollapsed = useSelector((state) => state.sidebar.isCollapsed);
 
-
     const data = {
-        labels: ['Class Attended', 'Class Not Attended'],
+        labels: ['Class Attendance'],
         datasets: [
             {
-                data: [attendedClasses, notAttendedClasses],
-                backgroundColor: ['#4CAF50', '#E57373'],
-                hoverBackgroundColor: ['#66BB6A', '#EF9A9A'],
-                borderWidth: 0,
+                label: 'Present',
+                data: [attendedClasses],
+                backgroundColor: '#8A7FF7',
+                barThickness: 40,
+            },
+            {
+                label: 'Absent',
+                data: [notAttendedClasses],
+                backgroundColor: '#F9A8A8',
+                barThickness: 40,
             },
         ],
     };
 
     const options = {
-        cutout: '85%', 
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: {
-            legend: { display: false },
-            tooltip: { enabled: false } 
+            legend: {
+                display: true,
+
+                position: 'right',
+                labels: {
+                    usePointStyle: true,
+                    pointStyle: 'rect',
+                    boxWidth: 12,
+                    font: {
+                        size: 12
+                    }
+                },
+            },
+            tooltip: { enabled: true },
         },
+        scales: {
+            x: {
+                grid: { display: false },
+                stacked: true,
+
+                ticks: {
+                    display: true,
+                    autoSkip: false,
+                    maxRotation: 0,
+                    minRotation: 0,
+                    padding: 10,
+                },
+            },
+            y: {
+                beginAtZero: true,
+                max: 100,
+                grid: { color: '#E5E7EB' },
+                stacked: true,
+            },
+        },
+        barPercentage: 0.6,
     };
 
     return (
-        <div className="w-[100%] h-[250px] p-4 border border-teal-200 rounded-lg flex flex-col items-center justify-center bg-white mt-[45px] ">
-            <div className='flex w-[100%]'>
-            <div className="relative w-[40%]">
-            <h2 className={`text-lg  mb-4 ${isCollapsed?'':'self-start '} whitespace-nowrap `}>Your Attendance</h2>
-                <Doughnut data={data} options={options} className='p-[5%]' />
-                <div className=" mt-10 absolute inset-0 flex items-center justify-center  text-xl">
-                    {attendancePercentage}%
-                </div>
-            </div>
-            <div className="flex flex-col w-[60%]  space-x-4 justify-center pl-[5%] items-baseline">
-                <div className="flex items-center justify-center">
-                    <span className="w-3 h-3 bg-[#4CAF50] mr-2 rounded-sm"></span>
-                    Class Attended
-                </div>
-                <div className="flex items-center justify-center">
-                    <span className="w-3 h-3 bg-[#E57373] mr-2 rounded-sm"></span>
-                    Class Not Attended
-                </div>
-            </div>
-            </div>
-            <div className="text-center mt-8 text-sm flex gap-[15px]">
-                <p>Total Present: {attendedClasses}</p>
-                <p>Total Classes: {totalClasses}</p>
+        <div className="w-full h-full p-6 border border-teal-200 rounded-lg bg-[#F4F7F9] flex flex-col items-center justify-center">
+            <h2 className="text-xl self-start mb-6 ml-6">Your Attendance</h2>
+            <div className="w-[90%] h-[90%] flex flex-col justify-center">
+                <Bar data={data} options={options} style={{ width: 390 }} />
             </div>
         </div>
     );
