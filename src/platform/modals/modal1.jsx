@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CloseIcon from '@mui/icons-material/Close';
@@ -14,7 +14,19 @@ const Modal = ({ onClose }) => {
   const [subject, setSubject] = useState('');
   const [privacy, setPrivacy] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setIsVisible(true); 
+
+  }, []);
+
+  const handleClose = () => {
+    setIsVisible(false); // Trigger fade-out animation
+    setTimeout(onClose, 300); // Wait for the animation to complete
+  };
 
   const handleSelect = (option) => {
     setSelectedOption(option.label);
@@ -30,6 +42,7 @@ const Modal = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    
 
     const token = sessionStorage.getItem("authToken");
 
@@ -46,6 +59,7 @@ const Modal = ({ onClose }) => {
 
       if (response.data.success) {
         dispatch(setIsEnrolled(false));
+        
         toast.dismiss();
 
         toast.success("Class created successfully!", {
@@ -53,7 +67,7 @@ const Modal = ({ onClose }) => {
           hideProgressBar: true,
           autoClose: 3000,
         });
-        onClose();
+        handleClose();
       }
     } catch (error) {
       toast.dismiss();
@@ -71,18 +85,41 @@ const Modal = ({ onClose }) => {
   };
 
   return (
-    <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50'>
-      <div className='bg-white w-[432px] h-[690px] flex justify-center items-center relative overflow-y-auto'>
-        <button onClick={onClose} className="absolute top-4 right-4 text-4xl font-bold text-gray-600">
-          <CloseIcon fontSize='large'/>
+    <div
+      className={`fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50 transition-opacity duration-300 ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
+    >
+      <div
+        className={`bg-white w-[432px] h-[690px] flex justify-center items-center relative overflow-y-auto transform transition-transform duration-300 ${
+          isVisible ? 'scale-100' : 'scale-90'
+        }`}
+      >
+        <button
+          onClick={handleClose}
+          className="absolute top-4 right-4 text-4xl font-bold text-gray-600"
+        >
+          <CloseIcon fontSize="large" />
         </button>
 
-        <div className='w-[90%] h-[90%] flex justify-center items-center'>
-          <div className='w-[80%] flex flex-col justify-around gap-[50px]'>
-            <h2 className='text-4xl font-medium'>Create Class</h2>
+        <div className="w-[90%] h-[90%] flex justify-center items-center">
+          <div className="w-[80%] flex flex-col justify-around gap-[50px]">
+            <h2 className="text-4xl font-medium">Create Class</h2>
             <form className="flex flex-col gap-3">
-              <input type="text" placeholder='Class Name' className="border rounded-md p-2" value={name} onChange={(e) => setName(e.target.value)} />
-              <input type="text" placeholder='Subject' className="border rounded-md p-2" value={subject} onChange={(e) => setSubject(e.target.value)} />
+              <input
+                type="text"
+                placeholder="Class Name"
+                className="border rounded-md p-2"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Subject"
+                className="border rounded-md p-2"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+              />
               <div className="relative">
                 <button
                   type="button"
@@ -91,7 +128,9 @@ const Modal = ({ onClose }) => {
                   disabled={isLoading}
                 >
                   {selectedOption}
-                  <span className="float-right px-3"><KeyboardArrowDownIcon/></span>
+                  <span className="float-right px-3">
+                    <KeyboardArrowDownIcon />
+                  </span>
                 </button>
                 {isOpen && (
                   <div className="absolute left-0 w-full mt-1 bg-white border border-black rounded-lg">
@@ -102,25 +141,25 @@ const Modal = ({ onClose }) => {
                         className="p-6 h-[80px] hover:bg-gray-100 cursor-pointer rounded-lg"
                       >
                         <div className="text-xl">{option.label}</div>
-                        <div className="text-xl text-gray-500">{option.description}</div>
+                        <div className="text-xl text-gray-500">
+                          {option.description}
+                        </div>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
-             
             </form>
             <button
-                className='bg-[#008080] py-5 w-[100%] text-white rounded-md text-lg font-semibold text-center'
-                onClick={handleSubmit}
-                disabled={isLoading}
-              >
-                {isLoading ? "Creating..." : "Create Class"}
-              </button>
+              className="bg-[#008080] py-5 w-[100%] text-white rounded-md text-lg font-semibold text-center"
+              onClick={handleSubmit}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Creating...' : 'Create Class'}
+            </button>
           </div>
         </div>
       </div>
-
     </div>
   );
 };

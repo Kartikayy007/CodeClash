@@ -35,7 +35,7 @@ const Calendar = () => {
   const renderDaysOfWeek = () => {
     const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     return daysOfWeek.map((day) => (
-      <div key={day} className="p-4 h-16 flex items-center justify-center border-[0.5px] border-[#ADB8B8] bg-[#D9DEDE] text-black font-medium">
+      <div key={day} className="p-4 h-full flex items-center justify-center border-[0.5px] border-[#ADB8B8] bg-[#D9DEDE] text-black font-medium">
         {day}
       </div>
     ));
@@ -66,7 +66,7 @@ const Calendar = () => {
                   {dayEvents.map((eventType, index) => (
                     <span
                       key={index}
-                      className={`w-2 h-2 rounded-full ${
+                      className={`w-2 h-2 rounded-full mb-2 ${
                         eventType === 'due' ? 'bg-red-500' : 'bg-yellow-400'
                       }`}
                       title={eventType === 'due' ? 'Due Assignment' : 'Scheduled Class'}
@@ -79,7 +79,7 @@ const Calendar = () => {
         );
         day = addDays(day, 1);
       }
-      rows.push(<div key={day} className="grid grid-cols-7">{days}</div>);
+      rows.push(<div key={day} className="grid grid-cols-7 h-[20%] ">{days}</div>);
       days = [];
     }
     return rows;
@@ -224,9 +224,9 @@ const Calendar = () => {
 
 
 
-          <div className="grid grid-cols-7">{renderDaysOfWeek()}</div>
+          <div className="grid grid-cols-7 h-[10%]">{renderDaysOfWeek()}</div>
 
-          <div>
+          <div className='h-[83%]'>
             {currentView === 'month' && renderMonthView()}
             {currentView === 'week' && renderWeekView()}
             {currentView === 'day' && renderDayView()}

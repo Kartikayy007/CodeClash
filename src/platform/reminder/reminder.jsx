@@ -18,9 +18,9 @@ const reminders = [
 const Reminders = () => {
     return (
         
-        <div className='w-[25%]'>
-            <h2 className="text-xl pl-6 mb-4 mt-[14px] text-gray-800">Upcoming Reminders</h2>
-            <div className="bg-[#F7F8F8] p-6 rounded-lg ml-[10px] w-[100]% h-[90%]">
+        <div className='w-[25%] py-4'>
+            <h2 className="text-xl pl-6  h-[7%] mb-4 flex items-center text-gray-800">Upcoming Reminders</h2>
+            <div className="bg-[#F7F8F8] p-6 rounded-lg ml-[10px] w-[100]% h-[93%]">
             <div className="space-y-4">
                 {reminders.map((reminder, index) => (
                     <div key={index} className=" h-20 flex items-center bg-[#D9DEDE] rounded-lg pr-2 shadow-sm">

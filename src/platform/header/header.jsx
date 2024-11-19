@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/AddOutlined';
 import NotificationsIcon from '@mui/icons-material/NotificationsNoneOutlined';
@@ -8,13 +8,16 @@ import axios from 'axios';
 import { setToggleState, setIsEnrolled } from '../features/toggleSlice';
 import CreateClassModal from '../modals/modal1';
 import JoinClassModal from '../modals/modal2';
+import './popup.css'
 
 const Header = () => {
-
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [isAddMenuVisible, setIsAddMenuVisible] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+
+  const popupRef = useRef(null);
+  const addMenuRef = useRef(null);
 
   const sidebarWidth = useSelector((state) => state.sidebar.width);
   const location = useLocation();
@@ -22,17 +25,18 @@ const Header = () => {
   const dispatch = useDispatch();
   const joinedClasses = useSelector((state) => state.joinedClasses.joinedClasses);
   const createdClasses = useSelector((state) => state.createdClasses.createdClasses);
+  const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
+
   const [joinedClassesCheck, setJoinedClassesCheck] = useState(0);
   const [createdClassesCheck, setCreatedClassesCheck] = useState(0);
-  const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = sessionStorage.getItem("authToken");
+      const token = sessionStorage.getItem('authToken');
       try {
         const headers = {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         };
 
         const response = await axios.post(
@@ -48,25 +52,41 @@ const Header = () => {
           setJoinedClassesCheck(joinedClassesLength);
           setCreatedClassesCheck(createdClassesLength);
 
-          if (response.data.user.joinedClasses.length > 0 && response.data.user.createdClasses.length > 0) {
+          if (joinedClassesLength > 0 && createdClassesLength > 0) {
             dispatch(setToggleState(true));
-            dispatch(setIsEnrolled(isEnrolled));
-          } else if (joinedClasses.length > 0) {
+            dispatch(setIsEnrolled(true));
+          } else if (joinedClassesLength > 0) {
             dispatch(setIsEnrolled(true));
             dispatch(setToggleState(false));
-          } else if (createdClasses.length > 0) {
+          } else if (createdClassesLength > 0) {
             dispatch(setIsEnrolled(false));
             dispatch(setToggleState(false));
           }
         }
       } catch (error) {
-        console.error("Error fetching class data:", error);
+        console.error('Error fetching class data:', error);
       }
-
     };
 
     fetchData();
-  }, [dispatch, navigate]);
+  }, [dispatch]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        setIsPopupVisible(false);
+      }
+      if (addMenuRef.current && !addMenuRef.current.contains(event.target)) {
+        setIsAddMenuVisible(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const toggleSwitch = () => {
     const newEnrolledState = !isEnrolled;
@@ -138,7 +158,7 @@ const Header = () => {
         <div>
           <AddIcon style={{ fontSize: 30 }} onClick={() => setIsAddMenuVisible(!isAddMenuVisible)} />
           {isAddMenuVisible && (
-            <div className="absolute top-[50px] right-0 bg-white border border-gray-300 rounded-lg shadow-lg p-4 w-[150px]">
+            <div ref={addMenuRef} className="popup absolute top-[50px] right-0 bg-white border border-gray-300 rounded-lg shadow-lg p-4 w-[150px]">
               <button onClick={openCreateClassModal} className="w-full text-left hover:bg-gray-100 p-2 rounded-md">
                 Create Class
               </button>
@@ -156,7 +176,7 @@ const Header = () => {
             <AccountIcon style={{ fontSize: 30 }} />
           </div>
           {isPopupVisible && (
-            <div className="absolute top-[50px] right-0 bg-white border border-gray-300 rounded-lg shadow-lg p-4 w-[150px]">
+            <div ref={popupRef} className="popup absolute top-[50px] right-0 bg-white border border-gray-300 rounded-lg shadow-lg p-4 w-[150px]">
               <button onClick={handleLogout} className="w-full text-red-600 hover:bg-gray-100 p-2 rounded-md">
                 Logout
               </button>
