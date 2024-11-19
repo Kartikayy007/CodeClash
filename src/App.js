@@ -18,8 +18,7 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import YourClasses from './platform/yourClasses/yourClasses';
 import { Settings } from '@mui/icons-material';
 import Announcement from './platform/announcement/announcement';
-import Reminderbox from './platform/reminder/reminderbox';
-
+import AssignmentMain from './platform/assignmentMain/assignmentMain'
 
 
 const App = () => {
@@ -49,6 +48,8 @@ const App = () => {
       <Route path="/calendar" element={<Calender />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/announcement" element={<Announcement />} />
+      <Route path="/assignments" element={<AssignmentMain />} />
+
  
 
       
