@@ -1,16 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import PeopleIcon from '@mui/icons-material/People';
+import { MoreHorizontal, Users } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import './joined.css';
-import card from '../assets/card1.svg';
 import axios from 'axios';
 import { setJoinedClasses } from '../features/joinedClasses';
 import { setCreatedClasses } from '../features/createdClasses';
 import { setIsEnrolled } from '../features/toggleSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import card from '../assets/cardImg.svg'
 
 const JoinedClasses = () => {
   const navigate = useNavigate();
@@ -29,7 +28,6 @@ const JoinedClasses = () => {
 
   const handleDeleteClass = async (classCode, index) => {
     const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
-
     setDeletedClassIndex(index);
 
     try {
@@ -71,9 +69,8 @@ const JoinedClasses = () => {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.post(
+        const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/user/details`,
-          {},
           { headers, signal }
         );
 
@@ -86,7 +83,7 @@ const JoinedClasses = () => {
             navigate('/dashsignup');
           } else if (createdClasses.length > 0 && joinedClasses.length === 0) {
             dispatch(setIsEnrolled(false));
-          } else {
+          } else if(createdClasses.length === 0 && joinedClasses.length > 0){
             dispatch(setIsEnrolled(true));
           }
         }
@@ -113,7 +110,7 @@ const JoinedClasses = () => {
         {isEnrolled ? 'Your Joined Classes' : 'Your Created Classes'}
       </h2>
 
-      <div className="flex flex-wrap gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {isEnrolled
           ? joinedClasses?.map((classInfo, index) => (
               <ClassCard
@@ -138,6 +135,7 @@ const JoinedClasses = () => {
               />
             ))}
       </div>
+      <ToastContainer />
     </div>
   );
 };
@@ -153,6 +151,7 @@ const ClassCard = ({
   onPopupToggle,
   isDeleting,
   navigate,
+  _id,
 }) => {
   const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
   const popupRef = useRef(null);
@@ -172,44 +171,63 @@ const ClassCard = ({
 
   const handleCardClick = () => {
     if (activePopupIndex !== index) {
-      navigate(`/announcement`);
+      navigate(`/announcement`, { state: { code, _id } });
     }
   };
 
   return (
     <div
-      className={`bg-white rounded-lg p-3 flex flex-col justify-between border border-teal-200 w-[240px] h-[200px] fade-in-up mt-7 relative ${isDeleting ? 'fade-out' : ''}`}
+      className={`relative rounded-xl overflow-hidden ${
+        isDeleting ? 'fade-out' : 'fade-in-up'
+      }`}
       style={{ animationDelay: `${index * 0.2}s` }}
       onClick={handleCardClick}
     >
-      <div className="bg-[#919F9E] rounded-lg relative flex justify-between items-start h-fit p-5">
-        <img
-          src={card}
-          alt={`${name} Class`}
-          className="rounded-t-lg w-fit h-fit object-cover"
-        />
-        <MoreHorizIcon
-          className="absolute top-2 right-2 text-white cursor-pointer"
-          onClick={(e) => {
-            e.stopPropagation();
-            onPopupToggle(index);
-          }}
-        />
-        {activePopupIndex === index && !isEnrolled && (
-          <PopupMenu
-            onClose={() => onPopupToggle(null)}
-            onDelete={onDelete}
-            ref={popupRef}
-          />
-        )}
-      </div>
+<div className="w-full bg-gradient-to-l from-[#339999] via-[#339999] to-teal-700 text-white p-6 hover:shadow-lg transition-shadow duration-300">
+<div className="flex flex-col h-48">
+          {/* More options button */}
+          <div className="absolute top-4 right-4 z-10">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onPopupToggle(index);
+              }}
+              className="p-1 hover:bg-white/10 rounded-full transition-colors"
+            >
+              <MoreHorizontal className="text-white" size={20} />
+            </button>
+            {activePopupIndex === index && !isEnrolled && (
+              <PopupMenu
+                onClose={() => onPopupToggle(null)}
+                onDelete={onDelete}
+                ref={popupRef}
+              />
+            )}
+          </div>
 
-      <div className="mt-2">
-        <h3 className="text-2xl">{name}</h3>
-        <div className="flex items-center gap-2 mt-1 text-gray-600">
-          <PeopleIcon fontSize="small" />
-          <span>{noOfStudents}</span>
-          <span className="text-gray-500 text-sm ml-auto">{teacher.name}</span>
+          {/* Class name section */}
+          <div className="mb-4 mt-auto flex justify-between">
+            <h2 className="text-3xl font-medium">{name}</h2>
+            <img src={card} alt="" className='absolute bottom-[20px] right-[20px] w-[140px]'/>
+          </div>
+
+          {/* Bottom section with teacher and student count */}
+          <div className="">
+            <div className="flex items-center gap-5">
+              <div className="flex items-center gap-2">
+                <Users size={20} />
+                <span className="text-xl">{noOfStudents}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                  <span className="text-sm font-medium">
+                    {teacher.name.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <span className="text-xl">{teacher.name}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -217,9 +235,15 @@ const ClassCard = ({
 };
 
 const PopupMenu = React.forwardRef(({ onClose, onDelete }, ref) => (
-  <div ref={ref} className="popup absolute right-0 top-8 bg-white border rounded-lg shadow-lg w-40 z-10">
+  <div 
+    ref={ref} 
+    className="popup absolute right-0 top-12 bg-white border rounded-lg shadow-lg w-40 z-20"
+  >
     <ul>
-      <li className="p-2 hover:bg-gray-100 cursor-pointer" onClick={onDelete}>
+      <li 
+        className="p-2 hover:bg-gray-100 cursor-pointer text-gray-700" 
+        onClick={onDelete}
+      >
         Delete Class
       </li>
     </ul>

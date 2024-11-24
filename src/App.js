@@ -10,6 +10,8 @@ import Dashsignup from './platform/dashboard/dashsignup';
 import Calender from './platform/calenderPage/calender'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AssignmentSection from './platform/assignmentSec/assignment';
+import AssignmentDetails from './platform/assignmentSec/viewAssign';
 
 import Card from './platform/cards/cards';
 
@@ -47,9 +49,11 @@ const App = () => {
 
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/calendar" element={<Calender />} />
-      <Route path="/settings" element={<Settings />} />
       <Route path="/announcement" element={<Announcement />} />
       <Route path="/assignments" element={<AssignmentMain />} />
+      <Route path="/" element={<AssignmentSection />} />
+      <Route path="/assignment-details" element={<AssignmentDetails />} />
+      
 
  
 

@@ -32,8 +32,8 @@ console.log(token)
                     'Authorization': `Bearer ${token}`
                 };
 
-                const response = await axios.post(
-                    `${process.env.REACT_APP_API_URL}/user/details`,{},
+                const response = await axios.get(
+                    `${process.env.REACT_APP_API_URL}/user/details`,
                     { headers },
                     { signal }  
                 );
