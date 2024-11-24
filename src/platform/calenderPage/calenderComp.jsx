@@ -5,6 +5,8 @@ import Reminders from '../reminder/reminder'
 import { Add } from '@mui/icons-material'; 
 import { setToggleState, setIsEnrolled  } from '../features/toggleSlice';
 import Reminderbox from '../reminder/reminderbox';
+import ScheduleLectureModal from '../modals/modal3';
+
 
 
 const Calendar = () => {
@@ -13,6 +15,7 @@ const Calendar = () => {
   const [isPageLoaded, setIsPageLoaded] = useState(false);
   const [currentWeekStart, setCurrentWeekStart] = useState(startOfWeek(new Date()));
   const [currentDay, setCurrentDay] = useState(new Date());
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const sidebarWidth = useSelector((state) => state.sidebar.width);
   const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); 
@@ -233,7 +236,7 @@ const Calendar = () => {
               <span className="text-gray-600 text-sm">Scheduled Class</span>
             </div>
 
-            {!isEnrolled?<button className='w-[80px] h-[35px] pr-[10px] pl-[10px] bg-[#066769] rounded-xl text-white ml-[10px] flex items-center'>
+            {isEnrolled?<button  onClick={() => setModalOpen(true)} className='w-[80px] h-[35px] pr-[10px] pl-[10px] bg-[#066769] rounded-xl text-white ml-[10px] flex items-center'>
             <Add className="mr-1" /> Add
             </button>:<></>}
           </div>
@@ -262,6 +265,10 @@ const Calendar = () => {
         </div>
         <Reminders />
       </div>
+      <ScheduleLectureModal
+      isOpen={isModalOpen}
+         onClose={() => setModalOpen(false)}
+/>
     </div>
   );
 };

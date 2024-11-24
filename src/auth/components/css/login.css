@@ -94,9 +94,12 @@ input[type="email"],input[type="password"]{
       width: -webkit-fill-available;
       width: -moz-available;
       border-radius: 8px;
-      margin-bottom: 30px;
+     
       border: none;
       border: 1px solid var(--Neutral-700, var(--color-neutral-700));
+}
+#pass{
+  margin-bottom: 30px;
 }
 #forgethover:hover{
     color:   var(--color-primary-light);

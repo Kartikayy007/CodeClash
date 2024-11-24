@@ -16,21 +16,23 @@ import Newpass from './auth/components/newpass';
 
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import YourClasses from './platform/yourClasses/yourClasses';
-import { Settings } from '@mui/icons-material';
+import Settingpage from './platform/header/settingpage';
 import Announcement from './platform/announcement/announcement';
 import AssignmentMain from './platform/assignmentMain/assignmentMain'
-
-
+import Assignmentcreated from './platform/teacherassignmentinsider/createdassignment';
+import Helpmain from './platform/helpandsupport/helpmain';
+import SettingsPage from './platform/settings/settings';
+import ScheduleLectureModal from './platform/modals/modal3';
 const App = () => {
    return (
    <div>
     <BrowserRouter>
       <Routes>
-
-
+      <Route path="/assignment" element={<Assignmentcreated/>} />
+      <Route path="/schedule" element={<ScheduleLectureModal/>} />
         <Route path="/" element={<Getstarted/>} />
         <Route path="/card" element={<Card/>} />
-        <Route path="/reminderbox" element={<Reminderbox/>} />
+        <Route path="/help" element={<Helpmain/>} />
      <Route path="/signup" element={<Signup />} />
      
     <Route path="/pwreset" element={<Pwreset />} />
@@ -46,7 +48,7 @@ const App = () => {
 
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/calendar" element={<Calender />} />
-      <Route path="/settings" element={<Settings />} />
+      <Route path="/settings" element={<Settingpage />} />
       <Route path="/announcement" element={<Announcement />} />
       <Route path="/assignments" element={<AssignmentMain />} />
 
