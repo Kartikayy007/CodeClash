@@ -24,8 +24,8 @@ const Dashboard = () => {
         const { signal } = controller;
 
         const fetchData = async () => {
-            const token = sessionStorage.getItem("authToken");
-console.log(token)
+            const token = sessionStorage.getItem("authToken")|| localStorage.getItem("authToken");
+           console.log(token)
             try {
                 const headers = {
                     'Content-Type': 'application/json',
@@ -67,7 +67,8 @@ console.log(token)
 
 
 
-    return (<div className='bg-[#E1EAE8] h-[110vh]'>
+    return (
+    <div className='bg-[#E1EAE8] h-[110vh]'>
 
         <Sidebar />
         <Header />
@@ -76,16 +77,10 @@ console.log(token)
             <div className='w-[30%] '> 
                 <div className='h-[10%] mt-[70px]'></div>
                 <WeekView />
-                <div className='h-[60%] mt-[20px]'>   <TodoList /></div>
-             
+                <div className='h-[60%] mt-[20px]'><TodoList />
+                </div>
             </div>
-
-
-
         </div>
-
-
-
     </div>
     );
 };

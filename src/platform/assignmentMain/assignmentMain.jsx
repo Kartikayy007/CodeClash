@@ -5,10 +5,17 @@ import { useSelector } from "react-redux";
 import AssignmentAnalysis from "./assignmentAnalysis";
 import RecentGrades from "./recentGrades";
 import YourAssignments from "./yourAssingSec";
+import Newassignment from "./newassignment";
 import axios from "axios";
+
+
+
+
+
 
 const AssignmentMain = () => {
   const sidebarWidth = useSelector((state) => state.sidebar.width);
+    const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
   const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
 
   useEffect(() => {
@@ -33,6 +40,7 @@ const AssignmentMain = () => {
     }
   };
 
+
   return (
     <div className="h-[100vh] w-full relative">
       <div className="top-0 fixed">
@@ -48,7 +56,7 @@ const AssignmentMain = () => {
             <AssignmentAnalysis />
           </div>
           <div className="flex-1 h-full">
-            <RecentGrades />
+         <Newassignment/>
           </div>
         </div>
         <YourAssignments />

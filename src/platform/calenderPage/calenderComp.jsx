@@ -4,6 +4,9 @@ import { useSelector } from 'react-redux';
 import Reminders from '../reminder/reminder'
 import { Add } from '@mui/icons-material'; 
 import { setToggleState, setIsEnrolled  } from '../features/toggleSlice';
+import Reminderbox from '../reminder/reminderbox';
+import ScheduleLectureModal from '../modals/modal3';
+
 
 
 const Calendar = () => {
@@ -12,11 +15,12 @@ const Calendar = () => {
   const [isPageLoaded, setIsPageLoaded] = useState(false);
   const [currentWeekStart, setCurrentWeekStart] = useState(startOfWeek(new Date()));
   const [currentDay, setCurrentDay] = useState(new Date());
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const sidebarWidth = useSelector((state) => state.sidebar.width);
-  const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); // get toggle state from Redux
+  const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); 
 
- const togglemode = "createmode";
+
   
  const events = {
     '2024-11-01': ['due', 'class'],
@@ -96,6 +100,7 @@ const Calendar = () => {
           const dayEvents = events[formattedDate] || [];
 
           return (
+            <div>
             <div key={day} className="relative p-4 h-20 flex items-center justify-center border-[0.5px] bg-white border-[#ADB8B8]">
               <span className="text-gray-800 font-semibold">{format(day, 'E d')}</span>
               <div className="absolute bottom-1 left-1 flex space-x-1">
@@ -109,7 +114,13 @@ const Calendar = () => {
                   ></span>
                 ))}
               </div>
+             
             </div>
+            <div className=" border-[0.5px] h-[40vh] bg-white border-[#ADB8B8] flex items-center justify-center">
+            
+            <span className="text-gray-600 text-sm "></span>
+          </div>
+             </div>
           );
         })}
       </div>
@@ -120,30 +131,50 @@ const Calendar = () => {
     const day = new Date(currentDay);
     const formattedDate = format(day, 'yyyy-MM-dd');
     const dayEvents = events[formattedDate] || [];
-
+  
     return (
-      <div className="p-4 rounded-lg bg-white border text-center">
-        <span className="text-lg font-semibold">{format(day, 'EEEE, MMMM d, yyyy')}</span>
-        <div className="mt-4">
+      <div className="p-6 rounded-lg bg-white border border-gray-200 shadow-md h-[55vh]">
+        
+        <div className="text-center mb-4">
+          <h2 className="text-2xl font-semibold text-gray-800">
+            {format(day, 'EEEE, MMMM d, yyyy')}
+          </h2>
+        </div>
+  
+        
+        <div className="space-y-4">
           {dayEvents.length > 0 ? (
             dayEvents.map((eventType, index) => (
               <div
                 key={index}
-                className={`p-2 my-1 rounded-md text-white ${
-                  eventType === 'due' ? 'bg-red-500' : 'bg-yellow-400'
+                className={`flex justify-between items-center p-4 border rounded-lg shadow-md ${
+                  eventType === 'due' ? 'border-red-500 bg-red-100' : 'border-yellow-400 bg-yellow-100'
                 }`}
               >
-                {eventType === 'due' ? 'Due Assignment' : 'Scheduled Class'}
+                <span className="text-lg font-medium text-gray-800">
+                  {eventType === 'due' ? 'Due Assignment' : 'Scheduled Class'}
+                </span>
+                <button
+                  className="px-4 py-2 bg-[#107D7E] text-white rounded-lg hover:bg-[#0B6061]"
+                  onClick={() =>
+                    alert(`Event: ${eventType === 'due' ? 'Due Assignment' : 'Scheduled Class'}`)
+                  }
+                >
+                  View Details
+                </button>
               </div>
             ))
           ) : (
-            <div className="text-gray-500">No events</div>
+            <div className="text-center text-gray-500 text-lg">
+              No details
+             
+            </div>
           )}
         </div>
       </div>
     );
   };
-
+  
   useEffect(() => {
     setIsPageLoaded(true);
   }, []);
@@ -205,7 +236,7 @@ const Calendar = () => {
               <span className="text-gray-600 text-sm">Scheduled Class</span>
             </div>
 
-            {!isEnrolled?<button className='w-[80px] h-[35px] pr-[10px] pl-[10px] bg-[#066769] rounded-xl text-white ml-[10px] flex items-center'>
+            {isEnrolled?<button  onClick={() => setModalOpen(true)} className='w-[80px] h-[35px] pr-[10px] pl-[10px] bg-[#066769] rounded-xl text-white ml-[10px] flex items-center'>
             <Add className="mr-1" /> Add
             </button>:<></>}
           </div>
@@ -234,6 +265,10 @@ const Calendar = () => {
         </div>
         <Reminders />
       </div>
+      <ScheduleLectureModal
+      isOpen={isModalOpen}
+         onClose={() => setModalOpen(false)}
+/>
     </div>
   );
 };

@@ -4,6 +4,8 @@ import { Chart as ChartJS, BarElement, CategoryScale, LinearScale } from 'chart.
 import Attendance from '../attendance/attendance';
 import RecentClasses from '../cards/recentClasses';
 import { useSelector } from 'react-redux';
+import AssignmentChart from '../teacherdashboard/assignmentgraph';
+import AttendanceChart from '../teacherdashboard/teacherattendancegraph';
 import DueAssignments from '../dueAssignments/dueAssign';
 
 
@@ -22,7 +24,7 @@ const Performance = () => {
 
 
 
-
+    const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); 
     const data = {
         labels: ['Assignments'],
         datasets: [
@@ -70,19 +72,18 @@ const Performance = () => {
        
         
     };
-
     return (
         
         <div className="w-[65%] pl-1   " style={{ marginLeft: sidebarWidth,transition: 'margin-left 0.3s ease'}}>
              <div className="w-full h-[10%] mt-[70px]">
                 <p className="text-[23px] pt-[15px]  font-semibold ">Good Morning, {formattedUserName}!</p>
             </div>
+            
             <div className='flex h-[35%]'>
             
+            {isEnrolled ?
             <div className='w-[55%] h-[100%]' >
             
-
-
             <div className="flex items-center h-[100%]  p-4 pt-8 border border-teal-200 rounded-lg bg-white">
                 <div className="w-[45%] h-[100%]">
                     <Bar data={data} options={options} />
@@ -106,13 +107,18 @@ const Performance = () => {
                         View Analysis
                     </button>
                 </div>
-            </div>
-            </div>
-            <div className="flex gap-4  ml-[20px] w-[45%] h-[100%]">
-                <Attendance />
                 
-
-                </div></div>
+            
+            </div>
+            </div> : 
+            <div className='w-[55%] h-[100%] '><AssignmentChart/></div>}
+           
+            {isEnrolled ? <div className="flex gap-4  ml-[20px] w-[45%] h-[100%]">
+                <Attendance />
+                </div>
+                : 
+                <div className='flex gap-4  ml-[20px] w-[45%] h-[100%]'><AttendanceChart/></div>}
+            </div>
                 <div className='flex h-[45%]'>
                 <RecentClasses/>
                 <DueAssignments/>
