@@ -39,9 +39,9 @@ const Header = () => {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.post(
+        const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/user/details`,
-          {},
+          
           { headers }
         );
 
@@ -52,13 +52,10 @@ const Header = () => {
           setJoinedClassesCheck(joinedClassesLength);
           setCreatedClassesCheck(createdClassesLength);
 
-          if (joinedClassesLength > 0 && createdClassesLength > 0) {
-            dispatch(setToggleState(true));
-            dispatch(setIsEnrolled(true));
-          } else if (joinedClassesLength > 0) {
+          if (joinedClassesLength > 0&&createdClassesLength === 0) {
             dispatch(setIsEnrolled(true));
             dispatch(setToggleState(false));
-          } else if (createdClassesLength > 0) {
+          } else if (createdClassesLength > 0&&joinedClassesLength === 0) {
             dispatch(setIsEnrolled(false));
             dispatch(setToggleState(false));
           }
@@ -91,6 +88,8 @@ const Header = () => {
   const toggleSwitch = () => {
     const newEnrolledState = !isEnrolled;
     dispatch(setIsEnrolled(newEnrolledState));
+    sessionStorage.setItem("isEnrolled", JSON.stringify(newEnrolledState));
+
   };
 
   const handleProfileClick = () => {
@@ -118,27 +117,27 @@ const Header = () => {
       className="z-10 h-[50px] flex items-center gap-[2%] fixed bg-[#E1EAE8] border-b border-[rgb(218,224,223)]"
       style={{ width: `calc(100% - ${sidebarWidth})`, marginLeft: sidebarWidth, transition: 'margin-left 0.3s ease' }}
     >
-      {joinedClassesCheck > 0 && createdClassesCheck > 0 && (
-        <div
-          onClick={toggleSwitch}
-          className="relative flex items-center bg-[#D9DEDE] rounded-lg cursor-pointer ml-[40px]"
-          style={{ width: '150px', height: '38px' }}
-        >
-          <div
-            className={`absolute top-0 ml-[2%] mt-[4px] left-0 h-[80%] w-[48%] bg-[#008080] rounded-lg transition-transform duration-300 ${
-              isEnrolled ? 'transform translate-x-0' : 'transform translate-x-full'
-            }`}
-          ></div>
-          <div className="flex w-full text-center font-medium z-10">
-            <div className={`flex-1 p-2 ${isEnrolled ? 'text-white' : 'text-gray-700'} transition-color duration-300`}>
-              Joined
-            </div>
-            <div className={`flex-1 p-2 ${!isEnrolled ? 'text-white' : 'text-gray-700'} transition-color duration-300`}>
-              Created
-            </div>
-          </div>
-        </div>
-      )}
+     {joinedClassesCheck > 0 && createdClassesCheck > 0 && location.pathname !== '/announcement' && (
+  <div
+    onClick={toggleSwitch}
+    className="relative flex items-center bg-[#D9DEDE] rounded-lg cursor-pointer ml-[40px]"
+    style={{ width: '150px', height: '38px' }}
+  >
+    <div
+      className={`absolute top-0 ml-[2%] mt-[4px] left-0 h-[80%] w-[48%] bg-[#008080] rounded-lg transition-transform duration-300 ${
+        isEnrolled ? 'transform translate-x-0' : 'transform translate-x-full'
+      }`}
+    ></div>
+    <div className="flex w-full text-center font-medium z-10">
+      <div className={`flex-1 p-2 ${isEnrolled ? 'text-white' : 'text-gray-700'} transition-color duration-300`}>
+        Joined
+      </div>
+      <div className={`flex-1 p-2 ${!isEnrolled ? 'text-white' : 'text-gray-700'} transition-color duration-300`}>
+        Created
+      </div>
+    </div>
+  </div>
+)}
 
       <div className="flex items-center my-auto ml-[2%] text-gray-700 h-[38px]">
         <span>
