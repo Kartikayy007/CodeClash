@@ -22,9 +22,13 @@ const Calendar = () => {
 
 
   
- const events = {
-    '2024-11-01': ['due', 'class'],
-    '2024-11-08': ['due'],
+  const events = {
+    '2024-11-25': ['due', 'class'],
+    '2024-11-26': ['class'],
+    '2024-11-27': ['due'],
+    '2024-11-28': ['class'],
+    '2024-11-29': ['due', 'class'],
+    '2024-11-30': ['class'],
   };
 
   const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
@@ -83,25 +87,26 @@ const Calendar = () => {
         );
         day = addDays(day, 1);
       }
-      rows.push(<div key={day} className="grid grid-cols-7 h-[20%] ">{days}</div>);
+      rows.push(<div key={day} className="grid grid-cols-7 h-[100px] ">{days}</div>);
       days = [];
     }
     return rows;
   };
 
   const renderWeekView = () => {
-    const startDate = startOfWeek(currentWeekStart);
-    const days = Array.from({ length: 7 }, (_, i) => addDays(startDate, i));
+  const startDate = startOfWeek(currentWeekStart);
+  const days = Array.from({ length: 7 }, (_, i) => addDays(startDate, i));
 
-    return (
-      <div className="grid grid-cols-7 text-center">
-        {days.map((day) => {
-          const formattedDate = format(day, 'yyyy-MM-dd');
-          const dayEvents = events[formattedDate] || [];
+  return (
+    <div className="grid grid-cols-7 text-center h-full">
+      {days.map((day) => {
+        const formattedDate = format(day, 'yyyy-MM-dd');
+        const dayEvents = events[formattedDate] || [];
 
-          return (
-            <div>
-            <div key={day} className="relative p-4 h-20 flex items-center justify-center border-[0.5px] bg-white border-[#ADB8B8]">
+        return (
+          <div key={formattedDate} className="border-[0.5px] bg-white border-[#ADB8B8]">
+            {/* Header with day name and date */}
+            <div className="relative p-4 h-[100px] flex items-center justify-center">
               <span className="text-gray-800 font-semibold">{format(day, 'E d')}</span>
               <div className="absolute bottom-1 left-1 flex space-x-1">
                 {dayEvents.map((eventType, index) => (
@@ -114,18 +119,35 @@ const Calendar = () => {
                   ></span>
                 ))}
               </div>
-             
             </div>
-            <div className=" border-[0.5px] h-[40vh] bg-white border-[#ADB8B8] flex items-center justify-center">
-            
-            <span className="text-gray-600 text-sm "></span>
+
+            {/* Event Box Section */}
+            <div className="border-t-[0.5px] h-[40vh] bg-white border-[#ADB8B8] p-2 overflow-y-auto">
+              {dayEvents.length > 0 ? (
+                dayEvents.map((eventType, index) => (
+                  <div
+                    key={index}
+                    className={`flex h-[60px] justify-between items-center p-2 mb-2 border-l-2   ${
+                      eventType === 'due' ? 'border-[#E57373] bg-[#FBE5E5]' : 'border-[#FFB74D] bg-[#FFFAED]'
+                    }`}
+                  >
+                    <span className="text-sm  text-gray-800">
+                      {eventType === 'due' ? 'Due Assignment' : 'Scheduled Class'}
+                    </span>
+                    
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-500 text-sm">No events for this day.</div>
+              )}
+            </div>
           </div>
-             </div>
-          );
-        })}
-      </div>
-    );
-  };
+        );
+      })}
+    </div>
+  );
+};
+
 
   const renderDayView = () => {
     const day = new Date(currentDay);
@@ -133,7 +155,7 @@ const Calendar = () => {
     const dayEvents = events[formattedDate] || [];
   
     return (
-      <div className="p-6 rounded-lg bg-white border border-gray-200 shadow-md h-[55vh]">
+      <div className="p-6  bg-white border border-gray-200  h-[500px]">
         
         <div className="text-center mb-4">
           <h2 className="text-2xl font-semibold text-gray-800">
@@ -147,8 +169,8 @@ const Calendar = () => {
             dayEvents.map((eventType, index) => (
               <div
                 key={index}
-                className={`flex justify-between items-center p-4 border rounded-lg shadow-md ${
-                  eventType === 'due' ? 'border-red-500 bg-red-100' : 'border-yellow-400 bg-yellow-100'
+                className={`flex justify-between items-center p-4 border-l-2  ${
+                  eventType === 'due' ? 'border-[#E57373] bg-[#FDF3F3]' : 'border-[#FFB74D] bg-[#FFFAED]'
                 }`}
               >
                 <span className="text-lg font-medium text-gray-800">
@@ -198,7 +220,7 @@ const Calendar = () => {
       </div>
 
       <div className='flex'>
-        <div className="rounded-lg p-4 w-[70%] ml-[28px]">
+        <div className="rounded-lg p-4 w-[70%] ml-[28px] h-[550px]">
           <div className="flex items-center mb-4 h-[7%] ">
             <h2 className="text-lg font-semibold text-gray-800 w-[150px]">
               {currentView === 'month' ? format(currentMonth, 'MMMM yyyy') :
@@ -236,7 +258,7 @@ const Calendar = () => {
               <span className="text-gray-600 text-sm">Scheduled Class</span>
             </div>
 
-            {isEnrolled?<button  onClick={() => setModalOpen(true)} className='w-[80px] h-[35px] pr-[10px] pl-[10px] bg-[#066769] rounded-xl text-white ml-[10px] flex items-center'>
+            {!isEnrolled?<button  onClick={() => setModalOpen(true)} className='w-[80px] h-[35px] pr-[10px] pl-[10px] bg-[#066769] rounded-xl text-white ml-[10px] flex items-center'>
             <Add className="mr-1" /> Add
             </button>:<></>}
           </div>
@@ -257,7 +279,7 @@ const Calendar = () => {
 
           <div className="grid grid-cols-7 h-[10%]">{renderDaysOfWeek()}</div>
 
-          <div className='h-[83%]'>
+          <div className='h-[500px]'>
             {currentView === 'month' && renderMonthView()}
             {currentView === 'week' && renderWeekView()}
             {currentView === 'day' && renderDayView()}

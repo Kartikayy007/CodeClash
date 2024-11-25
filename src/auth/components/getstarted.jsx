@@ -1,155 +1,379 @@
-import React, { useEffect, useState } from 'react';
-import frame from '../assets/Frame.svg';
-import cuate from '../assets/cuate.svg';
-import { Link, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCopyright } from '@fortawesome/free-regular-svg-icons';
-import get1 from '../assets/get1.svg';
-import get2 from '../assets/get2.svg';
-import get3 from '../assets/get3.svg';
-import get4 from '../assets/get4.svg';
-import get5 from '../assets/get5.svg';
+import React, { useRef, useEffect, useState } from 'react';
+import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion';
+import { BookOpen, Users, Calendar, Trophy, Clock, ChevronDown } from 'lucide-react';
+import heroImg from '../assets/landing.svg';
 
-const images = [get1, get2, get3, get4, get5];
+const features = [
+  {
+    icon: <BookOpen size={32} />,
+    title: "Interactive Learning",
+    description: "Engage students with dynamic content and real-time interaction tools that make learning fun and effective."
+  },
+  {
+    icon: <Users size={32} />,
+    title: "Collaborative Space",
+    description: "Create an environment where students can work together, share ideas, and learn from each other."
+  },
+  {
+    icon: <Calendar size={32} />,
+    title: "Smart Scheduling",
+    description: "Easily manage classes, assignments, and events with our intuitive scheduling system."
+  },
+  {
+    icon: <Clock size={32} />,
+    title: "24/7 Access",
+    description: "Access course materials, assignments, and resources anytime, anywhere, on any device."
+  }
+];
 
-const Getstarted = () => {
-  const navigate = useNavigate();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [touchStart, setTouchStart] = useState(0);
-  const [touchEnd, setTouchEnd] = useState(0);
+const steps = [
+  {
+    step: "1",
+    title: "Create Your Account",
+    description: "Sign up in minutes with our simple registration process. No complex setup required.",
+    image: "/api/placeholder/600/400"
+  },
+  {
+    step: "2",
+    title: "Set Up Your Class",
+    description: "Customize your virtual classroom with course materials, assignments, and resources.",
+    image: "/api/placeholder/600/400"
+  },
+  {
+    step: "3",
+    title: "Invite Students",
+    description: "Share a simple join code or link with your students to get them started.",
+    image: "/api/placeholder/600/400"
+  }
+];
+
+const testimonials = [
+  {
+    text: "Classence has revolutionized how I manage my virtual classroom. The interface is intuitive, and my students love the interactive features.",
+    name: "Sarah Johnson",
+    role: "High School Teacher"
+  },
+  {
+    text: "As a student, I appreciate how organized and accessible everything is. The collaborative tools have made remote learning feel much more engaging.",
+    name: "Michael Chen",
+    role: "University Student"
+  },
+  {
+    text: "The platform has streamlined our entire educational process. We've seen increased engagement and better learning outcomes.",
+    name: "Dr. Emily Martinez",
+    role: "Department Head"
+  },
+  {
+    text: "Setting up and managing classes has never been easier. The support team is fantastic, and the platform keeps getting better.",
+    name: "James Wilson",
+    role: "Online Tutor"
+  }
+];
+
+const ScrollIndicator = () => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  const checkScrollVisibility = () => {
+    if (window.scrollY > 100) {
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+  };
 
   useEffect(() => {
-    const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
-    if (token) {
-      navigate('/dashboard');
-    }
-  }, [navigate]);
-
-  const reachlast = () => {
-    setCurrentIndex(images.length - 1);
-  };
-
-  const nextimage = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-  };
-
-  const prevImage = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
-  };
-
-  const handleTouchStart = (e) => {
-    setTouchStart(e.touches[0].clientX);
-    setTouchEnd(e.touches[0].clientX); 
-  };
-
-  const handleTouchEnd = (e) => {
-    const endTouch = e.changedTouches[0].clientX;
-    setTouchEnd(endTouch); 
-
-    if (touchStart - endTouch > 50) {
-      nextimage(); 
-    } else if (endTouch - touchStart > 50) {
-      prevImage(); 
-    }
-
-    setTouchStart(0);
-    setTouchEnd(0);
-  };
+    window.addEventListener('scroll', checkScrollVisibility);
+    return () => window.removeEventListener('scroll', checkScrollVisibility);
+  }, []);
 
   return (
-    <div
-      className="flex flex-col items-center justify-center min-h-screen p-3 text-center"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
-      {currentIndex !== images.length - 1 && (
-        <button 
-          onClick={reachlast} 
-          className="absolute top-0 right-0 mt-4 mr-4 text-black text-md lg:hidden"
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
         >
-          Skip
-        </button>
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              repeatType: "loop",
+            }}
+          >
+            <ChevronDown className="text-white w-8 h-8 animate-bounce" />
+          </motion.div>
+        </motion.div>
       )}
+    </AnimatePresence>
+  );
+};
 
-      <div className="flex items-center justify-center lg:mt-[5vh] hidden lg:flex">
-        <h1 className="text-4xl black md:text-4xl lg:text-6xl text-[#008080] font-bold mr-4">Welcome to Classence</h1>
-        <img src={frame} alt="Frame" className="hidden h-16 md:h-16 lg:h-20 " />
-      </div>
+const AnimatedSection = ({ children, className, staggerChildren = 0.2 }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={{
+        hidden: { opacity: 0, y: 50 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: {
+            staggerChildren,
+            duration: 0.8
+          }
+        }
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
-      <div className="flex justify-center mt-4">
-        <p className="text-lg md:text-[20px] leading-relaxed text-[#414A4B] w-[90%] md:w-[80vw] hidden lg:block">
-          Your all-in-one platform for collaborative, efficient, and engaging learning. Join or create classes, manage assignments, connect with classmates, and stay on top of your academic journey.
-        </p>
-      </div>
+const ParallaxImage = ({ src, alt, className }) => {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+  
+  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "30%"]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 1.1]);
+  
+  return (
+    <motion.div 
+      ref={ref} 
+      style={{ y, scale }} 
+      className={`${className} overflow-hidden`}
+    >
+      <img 
+        src={src} 
+        alt={alt} 
+        className="w-full h-auto rounded-2xl object-cover" 
+      />
+    </motion.div>
+  );
+};
 
-      <div className="flex justify-center mt-[6vh]">
-        <img src={cuate} alt="Illustration" className="w-[90%] max-w-2xl hidden lg:block" />
-        <div className="flex justify-center max-w-2xl content block lg:hidden">
-          <div className="slider2">
-            <div className="slides" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-              {images.map((image, index) => (
-                <img key={index} src={image} alt={`Slide ${index + 1}`} className="slide" />
-              ))}
-            </div>
+const ClassenceLanding = () => {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  const scrollRef = useRef(null);
+
+  return (
+    <div className="bg-white" ref={scrollRef}>
+      {/* Progress Bar */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-1 bg-teal-600 origin-left z-50"
+        style={{ scaleX }}
+      />
+
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-md shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="text-2xl font-bold text-teal-600">Classence</div>
+          <div className="space-x-6">
+            <a href="#features" className="hover:text-teal-600">Features</a>
+            <a href="#steps" className="hover:text-teal-600">How It Works</a>
+            <a href="#testimonials" className="hover:text-teal-600">Testimonials</a>
+            <motion.button 
+              className="px-4 py-2 bg-teal-600 text-white rounded-md"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Sign Up
+            </motion.button>
           </div>
         </div>
-      </div>
+      </nav>
 
-      <div className="flex mt-[6vh] block gap-x-3 lg:hidden">
-        {images.map((_, index) => (
-          <div key={index} className={`rec ${currentIndex === index ? 'recActive' : 'rec2'}`}></div>
-        ))}
-      </div>
+      {/* Hero Section */}
+      <section className="min-h-screen pt-20 flex items-center bg-gradient-to-b from-teal-500 to-teal-700 relative overflow-hidden text-white">
+        <ScrollIndicator />
+        
+        <div className="max-w-7xl mx-auto px-6 py-24 grid grid-cols-1 lg:grid-cols-2 gap-16 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-col justify-center"
+          >
+            <motion.h1 
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="text-6xl font-bold mb-8 leading-tight"
+            >
+              Your Classroom,<br />Anywhere, Anytime.
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="text-xl mb-12 opacity-80"
+            >
+              Effortlessly manage, teach, and learn with Classence —
+              the all-in-one platform for education.
+            </motion.p>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+              className="flex space-x-6"
+            >
+              <motion.button 
+                className="px-8 py-4 bg-white text-teal-600 rounded-md text-lg"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Get Started
+              </motion.button>
+              <motion.button 
+                className="px-8 py-4 border-2 border-white text-white rounded-md text-lg hover:bg-white/20"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Learn More
+              </motion.button>
+            </motion.div>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            <ParallaxImage 
+              src={heroImg} 
+              alt="Online learning illustration"
+            />
+          </motion.div>
+        </div>
+        
+        <motion.div 
+          className="absolute inset-0 opacity-20"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.2 }}
+          transition={{ duration: 1 }}
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="100%" 
+            height="100%" 
+            className="absolute"
+          >
+            <defs>
+              <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+                <path 
+                  d="M 80 0 L 0 0 0 80" 
+                  fill="none" 
+                  stroke="white" 
+                  strokeWidth="0.5"
+                />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+          </svg>
+        </motion.div>
+      </section>
 
-      {currentIndex === 0 && (
-        <button onClick={nextimage} className="bg-[#008080] w-[90%] text-white px-6 py-3 rounded-md text-lg md:text-2xl font-semibold mt-[3vh] block lg:hidden">
-          Get Started
-        </button>
-      )}
+      {/* Features Section */}
+      <section id="features" className="min-h-screen py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <AnimatedSection className="text-center mb-20">
+            <motion.h2 
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              className="text-4xl font-bold mb-6"
+            >
+              Why Choose Classence?
+            </motion.h2>
+            <motion.p
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              className="text-xl text-gray-600 max-w-3xl mx-auto"
+            >
+              Classence is designed to provide a seamless teaching and learning experience, empowering both students and teachers.
+            </motion.p>
+          </AnimatedSection>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            {features.map((feature, index) => (
+              <AnimatedSection
+                key={index}
+                staggerChildren={0.1}
+                className="group"
+              >
+                <motion.div
+                  variants={{
+                    hidden: { opacity: 0, y: 50 },
+                    visible: { opacity: 1, y: 0 }
+                  }}
+                  className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all relative overflow-hidden"
+                  whileHover={{ 
+                    scale: 1.05,
+                    transition: { duration: 0.3 }
+                  }}
+                >
+                  <motion.div 
+                    className="text-teal-600 mb-6"
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    {feature.icon}
+                  </motion.div>
+                  <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
+                  <p className="text-gray-600">{feature.description}</p>
+                </motion.div>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {currentIndex !== images.length-1 && currentIndex !== 0 && (
-        <button onClick={nextimage} className="bg-[#008080] w-[90%] text-white px-6 py-3 rounded-md text-lg md:text-2xl font-semibold mt-[3vh] block lg:hidden">
-          Next
-        </button>
-      )}
-    
-      {currentIndex === images.length - 1 && (
-      <div className="flex justify-center space-x-4 mt-[3vh] block lg:hidden w-[90%]">
-      <Link 
-      to="/login" 
-      className="bg-[#008080] w-[200px] text-white px-6 py-3 rounded-md text-lg  grid place-content-center md:text-2xl font-semibold text-center ml-[vw]">
-      Log In
-        </Link>
-      <Link 
-      to="/signup" 
-      className="bg-[#008080] w-[200px] text-white px-6 py-3 rounded-md text-lg md:text-2xl font-semibold text-center mr-[1vw]">
-      Create Account
-    </Link>
-     </div>
-     )}
-     <div className="flex justify-center space-x-4 mt-[6vh] lg:flex">
-      <Link 
-      to="/login" 
-      className="bg-[#008080] w-[200px] text-white px-6 py-3 rounded-md text-lg md:text-2xl font-semibold text-center ml-[vw] hidden lg:block">
-      Log In
-        </Link>
-      <Link 
-      to="/signup" 
-      className="bg-[#008080] w-[200px] text-white px-6 py-3 rounded-md text-lg md:text-2xl font-semibold text-center mr-[1vw] hidden lg:block">
-      Create Account
-    </Link>
-     </div>
-  
-      <div className="flex justify-center text-[#4C5858] text-lg mt-[4vh] font-semibold hidden lg:block">
-        <p className="text-lg md:text-xl">Ready to start? Your classroom is just a click away!</p>
-      </div>
+ 
 
-      <div className="flex justify-center items-center gap-2 text-[#414A4B] text-md md:text-xl mt-[5vh] font-semibold hidden lg:block relative">
-        <FontAwesomeIcon icon={faCopyright} className="mr-5"/>
-        Classence | ESTD. 2024
-      </div>
+      <section className="min-h-screen py-24 bg-gradient-to-b from-white to-gray-50">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <AnimatedSection>
+           
+              <h2 className="text-5xl font-bold mb-8">
+                Ready to Transform Your Classroom?
+              </h2>
+            <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
+              Empower your teaching and learning experience with Classence.
+              Start managing classes, assignments, and live sessions like never before.
+            </p>
+            <motion.button 
+              className="px-12 py-6 bg-teal-600 text-white text-xl rounded-md hover:bg-teal-700"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Sign Up Now
+            </motion.button>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      
     </div>
   );
 };
 
-export default Getstarted;
+export default ClassenceLanding;

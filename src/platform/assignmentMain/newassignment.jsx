@@ -9,13 +9,13 @@ const Newassignment = () => {
   };
 
   return (
-    <div className="flex flex-col gap-5 h-full">
+    <div className="flex flex-col gap-5 h-full ">
       <h2 className="text-xl w-[95%] mx-auto">Create New Assignment</h2>
-      <div className="bg-[#FAFAFA] border border-[#BCE2DF] p-4 rounded-md mx-auto w-[95%] h-[80%] overflow-y-auto">
+      <div className="bg-[#FAFAFA] border border-[#BCE2DF] p-6 rounded-md mx-auto w-[95%] h-[80%] ">
         <div className="flex flex-wrap space-y-4">
           
-          <div className="w-[75%]" style={{ marginTop: '10px' }}>
-            <form className="flex flex-col gap-4">
+          <div className="w-[70%]">
+            <form className="flex flex-col ">
              
               <div className="flex flex-col">
                 <input
@@ -33,10 +33,9 @@ const Newassignment = () => {
                   id="class-select"
                   value={selectedClass}
                   onChange={handleChange}
-                  className="rounded-md w-full p-[20px] text-xl  border-1px"
+                  className="rounded-lg w-full p-[20px] text-xl  border border-[#4C5858] "
                   style={{
-                    borderColor: 'gray ',
-                    borderWidth: '1px !important',
+                    
                     outline: 'none',
                   }}
                 >
@@ -52,7 +51,7 @@ const Newassignment = () => {
               
               <button
                 type="submit"
-                className="w-[50%] p-3 bg-[#066769] rounded-md text-white text-xl mt-4"
+                className="w-[70%] p-3 bg-[#066769] rounded-md text-white text-xl mt-8"
               >
                 Create Assignment
               </button>

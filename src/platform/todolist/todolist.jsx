@@ -18,7 +18,7 @@ const TodoList = () => {
   };
 
   return (
-    <div className="h-[100%] p-5 bg-white border border-teal-200 rounded-lg ml-[22px] w-[90%] pb-[100px] ">
+    <div className="h-[100%] p-5 bg-white border border-[#BCE2DF] rounded-lg ml-[22px] w-[90%] pb-[100px] ">
       <h3 className="text-xl mb-3">To-Do List</h3>
       <input
         type="text"

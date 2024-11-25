@@ -5,13 +5,15 @@ import HelpPage from './helpandsupp';
 
 function Helpmain() {
   return (
-    <div className="fixed w-full top-0">
-        <Sidebar/>
-        <Header/>
-        <div>
-        <HelpPage/>
-        </div>
-        </div>
+    <div className="absolute w-full top-0">
+     
+        <Sidebar />
+        <Header />
+      
+
+        <HelpPage />
+      
+    </div>
   )
 }
 

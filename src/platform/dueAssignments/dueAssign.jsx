@@ -44,7 +44,7 @@ const AssignmentCard = ({ title, subject, dueDate, illustration }) => {
 
 const DueAssignments = () => {
   return (
-    <div className="bg-white p-6 border border-teal-200 rounded-lg w-[55%] ml-[20px] mt-[20px] h-[100%]">
+    <div className="bg-white p-6 border border-[#BCE2DF] rounded-lg w-[55%] ml-[20px] mt-[20px] h-[100%]">
       <h2 className="text-2xl  mb-6 h-[10%]">Assignments Due Soon</h2>
       <div className="h-[90%] space-y-4">
         {assignments.map((assignment, index) => (

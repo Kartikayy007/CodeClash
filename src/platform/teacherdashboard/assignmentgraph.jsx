@@ -28,7 +28,7 @@ const AssignmentChart = () => {
         },
         scales: {
             x: {
-                display: true,
+                display: false,
                 ticks: { color: 'black'},
             },
             y: {
@@ -48,19 +48,19 @@ const AssignmentChart = () => {
         },
         responsive: true,
         maintainAspectRatio: false,
-        barThickness: 40,
+        barThickness: 30,
     };
 
     return (
         
-                    <div className="flex flex-col h-[100%] p-4 border border-teal-200 rounded-lg bg-white ">
+                    <div className="flex flex-col h-[100%] p-6 border border-[#BCE2DF] rounded-lg bg-white ">
                         <h2 className="text-[16px] bold">% of Students completed Assignment</h2>
-                        <div className="flex items-center mt-6">
+                        <div className="flex items-center h-full pt-6">
                             <div className="w-[50%] h-[100%] text-gray-500">
                                 <Bar data={data} options={options} />
                             </div>
-                            <div className="flex flex-col gap-[40px] w-[60%]">
-                                <ul className={`${isCollapsed ? "items-center" : "ml-[5%]"} text-sm space-y-2 flex flex-col gap-[10px] text-gray-600`}>
+                            <div className="flex flex-col gap-[40px] w-[60%] items-center">
+                                <ul className={`${isCollapsed ? "items-center" : "self-start"} text-sm space-y-2 flex flex-col gap-[10px] text-gray-600`}>
                                     {subjects.map((subject, index) => (
                                         <li key={subject} className="flex items-center">
                                             <span
@@ -68,11 +68,11 @@ const AssignmentChart = () => {
                                                 style={{ backgroundColor: data.datasets[0].backgroundColor[index] }}
                                                 
                                             ></span>
-                                            {` Greater than ${dataValues[index]}%`}
+                                            {` ${subject} ${dataValues[index]}%`}
                                         </li>
                                     ))}
                                 </ul>
-                                <button className={`${isCollapsed ? "mx-auto" : "ml-[15%]"} mt-4 px-4 py-2 w-[50%] bg-teal-700 text-white rounded-md hover:bg-teal-800`}>
+                                <button className={` mt-4 px-4 py-2 w-[90%] bg-teal-700 text-white rounded-md hover:bg-teal-800`}>
                                     View Analysis
                                 </button>
                             </div>

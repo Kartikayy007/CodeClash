@@ -53,10 +53,12 @@ const AssignmentMain = () => {
       >
         <div className="flex w-full h-[40%] ">
           <div className="flex-1 h-full">
+           
             <AssignmentAnalysis />
           </div>
           <div className="flex-1 h-full">
-         <Newassignment/>
+          {isEnrolled ? <RecentGrades /> :   <Newassignment/>}
+       
           </div>
         </div>
         <YourAssignments />

@@ -6,6 +6,7 @@ import neutralemoj from "../assets/neutralemoj.svg";
 import goodemoj from "../assets/goodemoj.svg";
 import amazingemoj from "../assets/amazingemoj.svg";
 import { FaSearch } from "react-icons/fa";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const FeedbackForm = () => {
   const [rating, setRating] = useState("");
@@ -27,14 +28,14 @@ const FeedbackForm = () => {
   };
 
   return (
-    <div className="bg-[#E1EAE8] items-center justify-center mt-6">
+    <div className="bg-[#E1EAE8] items-center justify-center mt-6 p-6">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">
         Share Your Feedback
       </h2>
       <p className="text-xl text-gray-600 mb-6">
         We’re always looking to improve Classence. Let us know your thoughts.
       </p>
-      <div className="bg-white p-6 rounded-lg shadow-md w-full">
+      <div className="bg-white p-6 rounded-lg  w-full ">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <p className="text-xl text-black mb-5">How Was Your Experience?</p>
@@ -78,7 +79,7 @@ const FeedbackForm = () => {
               value={like}
               onChange={(e) => setLike(e.target.value)}
               placeholder="What Did You Like About Classence?"
-              className="w-full border border-gray-300 p-3 rounded-lg shadow-sm mt-[30px] mb-[30px]"
+              className="w-full border border-gray-300 p-3 rounded-lg  mt-[30px] mb-[30px]"
             />
           </div>
           <div>
@@ -88,20 +89,20 @@ const FeedbackForm = () => {
               value={improve}
               onChange={(e) => setImprove(e.target.value)}
               placeholder="What Can We Improve?"
-              className="w-full border border-gray-300 p-3 rounded-lg shadow-sm mb-[30px]"
+              className="w-full border border-gray-300 p-3 rounded-lg  mb-[30px]"
             />
           </div>
           <div className="flex items-center">
             <button
               type="submit"
-              className="bg-[#008080] text-white py-4 px-8 rounded-lg"
+              className="bg-[#066769] text-white py-4 px-8 rounded-lg"
             >
               Submit Feedback
             </button>
             <button
               type="button"
               onClick={handleReset}
-              className="bg-white text-[#008080] border border-[#008080] py-4 px-8 rounded-lg ml-[40px]"
+              className="bg-white text-[#066769] border border-[#066769] py-4 px-10 rounded-lg ml-[30px]"
             >
               Reset
             </button>
@@ -114,12 +115,12 @@ const FeedbackForm = () => {
 
 const ChatBox = () => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm">
-      <h2 className="text-2xl font-semibold text-gray-800">Chat with Us</h2>
+    <div className="bg-white p-6 rounded-lg  h-full flex flex-col justify-end">
+      <h2 className="text-2xl font-medium text-gray-800">Chat with Us</h2>
       <p className="text-xl text-gray-600 mt-2">
         Connect with our support team in real time.
       </p>
-      <div className="bg-gray-200 w-[60%] rounded-lg p-4 mt-4">
+      <div className="bg-gray-200 w-[60%] rounded-lg p-4 mt-4 mb-auto">
         <p className="text-gray-700 text-xl">
           Hi there! How can we assist you today? Our team is here to help.
         </p>
@@ -127,7 +128,7 @@ const ChatBox = () => {
       <input
         type="text"
         placeholder="Type your question here."
-        className="mt-[15%] border border-gray-200 rounded-lg px-4 py-2 w-full"
+        className=" border border-gray-200 rounded-lg px-4 py-2 w-full"
       />
     </div>
   );
@@ -158,17 +159,17 @@ const GuidesSection = () => {
   };
 
   return (
-    <div className="bg-[#E1EAE8] p-6 w-full">
-      <h2 className="text-2xl font-semibold">Explore Step-by-Step Guides</h2>
+    <div className="bg-[#E1EAE8] p-6  w-full">
+      <h2 className="text-2xl font-medium">Explore Step-by-Step Guides</h2>
       <div className="mt-4 space-y-4">
         {guides.map((guide, index) => (
           <div
             key={index}
-            className="bg-white rounded-lg shadow-sm border border-gray-200"
+            className="bg-white rounded-lg  border border-gray-200"
           >
             <button
               onClick={() => toggleGuide(index)}
-              className="w-full text-left px-4 py-5 flex justify-between items-center text-black"
+              className="w-full text-left px-7 py-8 flex justify-between items-center text-black"
             >
               <span>{guide.title}</span>
               <span
@@ -176,7 +177,7 @@ const GuidesSection = () => {
                   openIndex === index ? "rotate-180" : ""
                 }`}
               >
-                ▼
+                <KeyboardArrowDownIcon/>
               </span>
             </button>
             {openIndex === index && (
@@ -223,9 +224,9 @@ const FAQSection = () => {
   };
 
   return (
-    <div className="bg-[#E1EAE8] p-6 w-full">
+    <div className="bg-[#E1EAE8] p-6 pb-0  w-full ">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Frequently Asked Questions</h2>
+        <h2 className="text-2xl font-medium">Frequently Asked Questions</h2>
         <a href="#" className="text-[#066769] text-xl">
           View All &gt;
         </a>
@@ -234,7 +235,7 @@ const FAQSection = () => {
         {faqs.map((faq, index) => (
           <div
             key={index}
-            className="bg-white rounded-lg shadow-sm border border-gray-200"
+            className="bg-white rounded-lg p-3"
           >
             <button
               onClick={() => toggleFAQ(index)}
@@ -246,7 +247,7 @@ const FAQSection = () => {
                   openIndex === index ? "rotate-180" : ""
                 }`}
               >
-                ▼
+                <KeyboardArrowDownIcon/>
               </span>
             </button>
             {openIndex === index && (
@@ -271,25 +272,26 @@ const HelpPage = () => {
         style={{ marginLeft: sidebarWidth, transition: "margin-left 0.3s ease" }}
       >
         <div className="bg-[#E1EAE8] p-4 flex items-center justify-between">
-          <h1 className="text-4xl font-bold w-[52%] leading-tight">
+          <h1 className="text-4xl font-semi-bold w-[52%] leading-tight">
             How Can We Help You?
           </h1>
 
           <div className="relative w-[49%]">
-            <FaSearch className="absolute left-3 bottom-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
+            <FaSearch className="absolute left-3 bottom-[47%] ml-2 transform -translate-y-1/2 text-gray-400 text-xl" />
             <input
               type="text"
               placeholder="Type your question, e.g., 'How to create a class?'"
-              className="border border-gray-300 rounded-lg pl-10 py-2 w-full px-4"
+              className="border  border-gray-300 rounded-lg py-2 w-full px-4"
+              style={{paddingLeft: "40px",border:"none",backgroundColor:"#EEF0F0"}}
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-5 mb-6">
           <FAQSection />
 
     
-          <div className="mt-3">
+          <div >
             <ChatBox />
           </div>
         </div>

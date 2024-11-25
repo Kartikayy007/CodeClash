@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { useNavigate } from "react-router-dom";
 
 const StudentSubmissions = () => {
+    const navigate =useNavigate();
     const [questions, setQuestions] = useState([
         {
             id: 1,
@@ -51,6 +53,9 @@ const StudentSubmissions = () => {
         );
     };
 
+    const handleViewSubmissions = () => {
+        navigate("/assignment-open"); // Pass assignment details as state
+    };
     return (
         <div className="font-sans w-1/3 max-w-lg mx-auto rounded-lg overflow-y-auto  ">
             {/* Header */}
@@ -105,7 +110,7 @@ const StudentSubmissions = () => {
                   
                 </div>
                 <div>
-                <button className="mt-4 w-full bg-[#066769] text-white px-6 py-3 rounded-md hover:bg-teal-700 transition">
+                <button className="mt-4 w-full bg-[#066769] text-white px-6 py-3 rounded-md hover:bg-teal-700 transition" onClick={handleViewSubmissions}>
                 View Submissions
             </button>
                 </div>

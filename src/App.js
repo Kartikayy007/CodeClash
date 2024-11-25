@@ -5,7 +5,7 @@ import Pwreset from './auth/components/pwreset';
 import Signup from './auth/components/signup';
 import Otp from './auth/components/otp';
 import Dashboard from './platform/dashboard/dashboard';
-import Getstarted from './auth/components/getstarted'
+import ClassenceLanding from './auth/components/getstarted'
 import Dashsignup from './platform/dashboard/dashsignup';
 import Calender from './platform/calenderPage/calender'
 import { ToastContainer, toast } from 'react-toastify';
@@ -25,6 +25,7 @@ import Assignmentcreated from './platform/teacherassignmentinsider/createdassign
 import Helpmain from './platform/helpandsupport/helpmain';
 import SettingsPage from './platform/settings/settings';
 import ScheduleLectureModal from './platform/modals/modal3';
+import AssignOpen from './platform/assignmentSec/openAssign';
 const App = () => {
    return (
    <div>
@@ -32,7 +33,7 @@ const App = () => {
       <Routes>
       <Route path="/assignment" element={<Assignmentcreated/>} />
       <Route path="/schedule" element={<ScheduleLectureModal/>} />
-        <Route path="/" element={<Getstarted/>} />
+        <Route path="/" element={<ClassenceLanding/>} />
         <Route path="/card" element={<Card/>} />
         <Route path="/help" element={<Helpmain/>} />
      <Route path="/signup" element={<Signup />} />
@@ -56,6 +57,8 @@ const App = () => {
       <Route path="/assignments" element={<AssignmentMain />} />
       <Route path="/" element={<AssignmentSection />} />
       <Route path="/assignment-details" element={<AssignmentDetails />} />
+      <Route path="/assignment-open" element={<AssignOpen />} />
+      
       
 
  

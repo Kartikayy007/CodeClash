@@ -28,13 +28,24 @@ const AttendanceChart = () => {
         scales: {
             x: {
                 display: true,
-                ticks: { color: 'black' },
+                ticks: {
+                    color: 'black',
+                    maxRotation: 0, // Prevent label rotation
+                    minRotation: 0, // Prevent label rotation
+                    autoSkip: false, // Ensure all labels are displayed
+                },
+                grid: {
+                    display: false, // Optionally hide x-axis grid lines
+                },
             },
             y: {
                 beginAtZero: true,
                 display: true,
                 max: 100,
-                ticks: { color: 'black', stepSize: 25 },
+                ticks: {
+                    color: 'black',
+                    stepSize: 25,
+                },
                 title: {
                     display: true,
                     text: '% of Students',
@@ -42,6 +53,9 @@ const AttendanceChart = () => {
                     font: {
                         size: 12,
                     },
+                },
+                grid: {
+                    color: 'lightgray',
                 },
             },
         },
@@ -52,18 +66,17 @@ const AttendanceChart = () => {
 
     return (
         <div
-            className='flex flex-col p-4 border border-teal-200 rounded-lg bg-white ml-0 w-full '
-            
+            className="flex flex-col p-4 border border-[#BCE2DF] rounded-lg bg-white ml-0 w-full justify-center gap-[25px]"
             style={{
-                transition: 'margin 0.3s ease', 
+                transition: 'margin 0.3s ease',
             }}
         >
-            <h2 className="text-[16px] pt-5">Average Student</h2>
-            <div className="flex items-center mt-9">
-                <div className="w-full h-[200px] text-gray-500 ">
+            <h2 className="text-[16px] ">Average Attendance</h2>
+            <div className="flex items-center ">
+                <div className="w-[50%] h-[200px] text-gray-500 ">
                     <Bar data={data} options={options} />
                 </div>
-                <div className="flex flex-col gap-10 w-full">
+                <div className="flex flex-col gap-10 w-[50%]">
                     <ul
                         className={`${
                             isCollapsed ? 'items-center' : 'ml-5'
@@ -80,8 +93,7 @@ const AttendanceChart = () => {
                                     className="w-3 h-3 mr-2 rounded-sm ml-2"
                                     style={{
                                         backgroundColor: data.datasets[0].backgroundColor[index],
-                                    }} 
-                                
+                                    }}
                                 ></span>
                                 {`Greater than ${dataValues[index]}%`}
                             </li>

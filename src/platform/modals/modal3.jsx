@@ -15,7 +15,7 @@ const ScheduleLectureModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-500 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-10 bg-black bg-opacity-50 flex items-center justify-center">
       <div
         className="bg-white p-6 rounded-lg shadow-lg flex flex-col"
         style={{ width: "25vw", height: "65vh" }}

@@ -74,7 +74,7 @@ const Attendance = () => {
     };
 
     return (
-        <div className="w-full h-full p-6 border border-teal-200 rounded-lg bg-[#F4F7F9] flex flex-col items-center justify-center">
+        <div className="w-full h-full p-6 border border-[#BCE2DF] rounded-lg bg-white flex flex-col items-center justify-center">
             <h2 className="text-xl self-start mb-6 ml-6">Your Attendance</h2>
             <div className="w-[90%] h-[90%] flex flex-col justify-center">
                 <Bar data={data} options={options} style={{ width: 390 }} />

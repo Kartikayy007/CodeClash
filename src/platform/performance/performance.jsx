@@ -84,7 +84,7 @@ const Performance = () => {
             {isEnrolled ?
             <div className='w-[55%] h-[100%]' >
             
-            <div className="flex items-center h-[100%]  p-4 pt-8 border border-teal-200 rounded-lg bg-white">
+            <div className="flex items-center h-[100%]  p-4 pt-8 border border-[#BCE2DF] rounded-lg bg-white">
                 <div className="w-[45%] h-[100%]">
                     <Bar data={data} options={options} />
                 </div>
@@ -111,13 +111,13 @@ const Performance = () => {
             
             </div>
             </div> : 
-            <div className='w-[55%] h-[100%] '><AssignmentChart/></div>}
+            <div className='w-[45%] h-[100%]  '><AssignmentChart/></div>}
            
             {isEnrolled ? <div className="flex gap-4  ml-[20px] w-[45%] h-[100%]">
                 <Attendance />
                 </div>
                 : 
-                <div className='flex gap-4  ml-[20px] w-[45%] h-[100%]'><AttendanceChart/></div>}
+                <div className='flex gap-4  ml-[20px] w-[55%] h-[100%]'><AttendanceChart/></div>}
             </div>
                 <div className='flex h-[45%]'>
                 <RecentClasses/>

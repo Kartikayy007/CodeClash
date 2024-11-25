@@ -3,10 +3,14 @@ import AttendanceTable from "./attendanceTable";
 import AttendanceDashboard from "./attendanceStreakSec";
 
 
+
+
 const AttendanceSection=()=>{
     return(
         <div >
-                  <AttendanceDashboard/>
+            <AttendanceDashboard/>
+                  
+                 
 
             <AttendanceTable/>
         </div>

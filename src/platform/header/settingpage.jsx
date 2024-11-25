@@ -5,7 +5,7 @@ import SettingsPage from '../settings/settings';
 
 function Settingpage() {
   return (
-    <div className="fixed w-full top-0">
+    <div className="absolute w-full top-0">
     <Sidebar/>
     <Header/>
     <SettingsPage/>

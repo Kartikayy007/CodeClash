@@ -1,13 +1,14 @@
-import './flip.css';
+import './flip.css'; // Keep this for additional animations if needed
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
+import InfoIcon from '@mui/icons-material/Info'; // Material-UI Info Icon
 import defaultImg from '../assets/banner5.jpg';
 import AssignmentSection from '../assignmentSec/assignment';
 import RevisionClassCard from '../schedule/scheduleComp';
 import ClassDetails from "../People/classDetails";
-import { useLocation,useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import RecentAnnouncements from './recentAnnouncement';
 import AttendanceSection from '../attendanceSec/attendance';
@@ -15,18 +16,17 @@ import AttendanceSection from '../attendanceSec/attendance';
 const AnnouncementComponent = () => {
   const location = useLocation();
   const classCode = location.state?.code;
-  const navigate = useNavigate(); // For navigation
-console.log(location.state)
+  const navigate = useNavigate();
 
   const [announcementsList, setAnnouncementsList] = useState([]);
   const [announcement, setAnnouncement] = useState('');
   const [announcementTitle, setAnnouncementTitle] = useState('');
   const [isEditable, setIsEditable] = useState(false);
   const [bannerImage, setBannerImage] = useState(null);
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isInfoVisible, setIsInfoVisible] = useState(false); // For info button toggle
   const [activeTab, setActiveTab] = useState(null);
   const [subjectName, setSubjectName] = useState('');
-  
+  const [className, setClassName] = useState('');
 
   const sidebarWidth = useSelector((state) => state.sidebar.width);
   const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
@@ -42,17 +42,18 @@ console.log(location.state)
     if (classCode) {
       fetchAnnouncements();
     }
-    
-  
   }, [classCode]);
 
   const fetchAnnouncements = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/classroom/details?code=${classCode}`, axiosConfig);
-      console.log(response)
-
-      setAnnouncementsList(response.data.classroom.announcements); // Adjusted to match correct structure
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/classroom/details?code=${classCode}`,
+        axiosConfig
+      );
+      console.log(response);
+      setAnnouncementsList(response.data.classroom.announcements);
       setSubjectName(response.data.classroom.subject);
+      setClassName(response.data.classroom.name);
     } catch (error) {
       console.error('Failed to fetch announcements:', error);
     }
@@ -65,7 +66,7 @@ console.log(location.state)
         { title: announcementTitle, description: announcement, code: classCode },
         axiosConfig
       );
-      setAnnouncementsList([response.data, ...announcementsList]); // Add new announcement to the list
+      setAnnouncementsList([response.data, ...announcementsList]);
       setAnnouncement('');
       setAnnouncementTitle('');
       setIsEditable(false);
@@ -97,9 +98,8 @@ console.log(location.state)
     }
   };
 
-  const handleBannerClick = () => {
-    setIsFlipped((prevState) => !prevState);
-  
+  const handleInfoClick = () => {
+    setIsInfoVisible(!isInfoVisible); // Toggle sliding animation
   };
 
   const handleTabClick = (tabName) => {
@@ -113,10 +113,10 @@ console.log(location.state)
     >
       <div className="w-[95%] mx-auto">
         {activeTab === null && (
-          <div className="flip-container w-full h-[236px] rounded-xl mb-5 mx-auto relative animate-fadeIn">
+          <div className="relative w-full h-[236px] rounded-xl mb-5 mx-auto overflow-hidden">
+            {/* Banner Background */}
             <div
-              className={`flip-card ${isFlipped ? 'flip' : ''} w-full h-full rounded-xl relative`}
-              onClick={handleBannerClick}
+              className="w-full h-full rounded-xl"
               style={{
                 backgroundImage: bannerImage
                   ? `url(${bannerImage})`
@@ -126,35 +126,52 @@ console.log(location.state)
                 backgroundPosition: 'center',
               }}
             >
-              <div className="flip-card-front w-full h-full absolute inset-0 rounded-xl">
-                <input
-                  type="file"
-                  id="bannerUpload"
-                  accept="image/*"
-                  onChange={handleBannerImageChange}
-                  className="hidden"
-                />
-                <label
-                  htmlFor="bannerUpload"
-                  className="absolute bottom-4 right-4 px-4 py-2 bg-white text-black rounded-md cursor-pointer"
-                >
-                  <EditIcon />
-                </label>
-              </div>
+              {/* Info Button */}
+              <button
+                onClick={handleInfoClick}
+                className="absolute top-4 right-4 bg-white text-black p-2 rounded-full shadow-lg focus:outline-none hover:scale-105 transition-transform"
+                style={{ zIndex: 2 }}
+              >
+                <InfoIcon />
+              </button>
+              {/* Sliding Overlay */}
               <div
-                className={`flip-card-back w-full h-full absolute inset-0 rounded-xl flex items-center justify-center bg-black bg-opacity-[70%] text-white p-4 ${
-                  isFlipped ? 'opacity-100' : 'opacity-0'
+                className={`absolute gap-7 inset-0 bg-white bg-opacity-80 flex flex-col justify-start p-5 items-start transition-transform duration-700 ${
+                  isInfoVisible ? 'translate-y-[20%]' : 'translate-y-full'
                 }`}
               >
-                <div className="text-center">
-                  <h2 className="text-xl font-bold">Class Details</h2>
-                  <p className="mt-2">This is the class schedule and details!</p>
+                <h2 className=" text-2xl font-semibold text-black">{className} </h2> 
+                <div className='flex justify-center items-center'>
+                <h2 className=" text-xl font-medium text-black">Subject : </h2> <p className=" text-xl   text-black ml-2">{subjectName}</p>
                 </div>
+                <div className='flex justify-center items-center'>
+                <h2 className=" text-xl font-medium text-black">Class code : </h2> <p className=" text-xl   text-black ml-2">{classCode}</p>
+                </div>
+                <div className='flex justify-center items-center'>
+                <h2 className=" text-xl font-medium text-black">Class invite link : </h2> <p className=" text-xl   text-black ml-2">Link</p>
+                </div>
+                
               </div>
+
+              {/* Edit Button */}
+              <input
+                type="file"
+                id="bannerUpload"
+                accept="image/*"
+                onChange={handleBannerImageChange}
+                className="hidden"
+              />
+              <label
+                htmlFor="bannerUpload"
+                className="absolute bottom-4 right-4 px-4 py-2 bg-white text-black rounded-md cursor-pointer"
+              >
+                <EditIcon />
+              </label>
             </div>
           </div>
         )}
 
+        {/* Tab Navigation */}
         <div className="flex space-x-4 text-gray-600 gap-5">
           <header
             className="py-2 px-4 border-b border-gray-200 flex gap-[20px] animate-slideIn cursor-pointer"
@@ -175,6 +192,7 @@ console.log(location.state)
           ))}
         </div>
 
+        {/* Tab Content */}
         <main className="bg-[#E1EAE8] p-4 rounded-lg animate-fadeIn">
           {activeTab === 'Announcement' && (
             <div>
@@ -232,7 +250,6 @@ console.log(location.state)
           {activeTab === 'Schedule' && <RevisionClassCard />}
           {activeTab === 'People' && <ClassDetails />}
           {activeTab === 'Attendance' && <AttendanceSection />}
-         
         </main>
       </div>
     </div>
