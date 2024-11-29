@@ -19,13 +19,13 @@ const Attendance = () => {
             {
                 label: 'Present',
                 data: [attendedClasses],
-                backgroundColor: '#8A7FF7',
+                backgroundColor: '#0A5757',
                 barThickness: 40,
             },
             {
                 label: 'Absent',
                 data: [notAttendedClasses],
-                backgroundColor: '#F9A8A8',
+                backgroundColor: '#00A8A5',
                 barThickness: 40,
             },
         ],

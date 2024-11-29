@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion';
 import { BookOpen, Users, Calendar, Trophy, Clock, ChevronDown } from 'lucide-react';
 import heroImg from '../assets/landing.svg';
+import logo from '../../auth/assets/Frame.svg'
 
 const features = [
   {
@@ -175,22 +176,28 @@ const ClassenceLanding = () => {
 
   return (
     <div className="bg-white" ref={scrollRef}>
-      {/* Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-teal-600 origin-left z-50"
         style={{ scaleX }}
       />
 
-      {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-md shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold text-teal-600">Classence</div>
+        <div className=" mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="text-2xl font-bold text-[#066769]"><img src={logo} alt="" /></div>
           <div className="space-x-6">
-            <a href="#features" className="hover:text-teal-600">Features</a>
-            <a href="#steps" className="hover:text-teal-600">How It Works</a>
-            <a href="#testimonials" className="hover:text-teal-600">Testimonials</a>
+            <a href="#features" className="hover:text-[#066769]">Home</a>
+            <a href="#steps" className="hover:text-[#066769]">Features</a>
+            <a href="#testimonials" className="hover:text-[#066769]">About</a>
+            <a href="#testimonials" className="hover:text-[#066769]">Contact Us</a>
             <motion.button 
-              className="px-4 py-2 bg-teal-600 text-white rounded-md"
+              className="px-4 py-2 bg-[#066769] text-white rounded-md"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Log In
+            </motion.button>
+            <motion.button 
+              className="px-4 py-2 bg-[#066769] text-white rounded-md"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -200,7 +207,6 @@ const ClassenceLanding = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section className="min-h-screen pt-20 flex items-center bg-gradient-to-b from-teal-500 to-teal-700 relative overflow-hidden text-white">
         <ScrollIndicator />
         
@@ -313,7 +319,7 @@ const ClassenceLanding = () => {
             </motion.p>
           </AnimatedSection>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 ">
             {features.map((feature, index) => (
               <AnimatedSection
                 key={index}
@@ -325,7 +331,7 @@ const ClassenceLanding = () => {
                     hidden: { opacity: 0, y: 50 },
                     visible: { opacity: 1, y: 0 }
                   }}
-                  className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all relative overflow-hidden"
+                  className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all relative overflow-hidden min-h-[300px]"
                   whileHover={{ 
                     scale: 1.05,
                     transition: { duration: 0.3 }

@@ -8,14 +8,16 @@ import axios from "axios";
 
 const AssignmentSection = () => {
     const location = useLocation();
-    const classId = location.state?._id; // Using the existing location state for classId
+    const classId = location.state?._id; 
+
     const navigate = useNavigate();
 
     const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
-    const [assignments, setAssignments] = useState([]); // State for assignments
-    const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
+    const [assignments, setAssignments] = useState([]); 
+    const [isModalOpen, setIsModalOpen] = useState(false); 
 
-    // Open and close modal functions
+
+
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
@@ -26,37 +28,40 @@ const AssignmentSection = () => {
         },
     };
 
-    // Fetch assignments from the existing API
+
     const fetchAssignments = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_API_URL}/assignment/get?classroomId=${classId}`,
                 axiosConfig
             );
-            setAssignments(response.data); // Set the assignments state with the fetched data
+            console.log(response)
+            setAssignments(response.data);
         } catch (error) {
             console.error("Error fetching assignments:", error);
         }
     };
 
-    // Fetch assignments on component mount
+
     useEffect(() => {
         fetchAssignments();
-    }, []); // Empty dependency array ensures this runs only once when the component mounts
+    }, []); 
 
-    // Navigate to the assignment details page
+
+
     const handleAssignmentClick = (assignment) => {
         navigate("/assignment-details", { state: { assignment } });
     };
 
     return (
         <div>
-            {/* Conditionally render the 'Create Assignment' button based on enrollment status */}
+
             {!isEnrolled ? (
                 <div>
                     <button
                         className="bg-[#066769] text-white font-medium mb-4 py-4 px-8 rounded-lg ml-6"
-                        onClick={openModal} // Open modal on button click
+                        onClick={openModal} 
+
                     >
                         Create Assignment
                     </button>
@@ -64,12 +69,14 @@ const AssignmentSection = () => {
                 </div>
             ) : null}
 
-            {/* Assignments list with scrollbar */}
+
             <div
                 className="bg-[#E1EAE8] p-6 rounded-lg"
                 style={{
-                    maxHeight: "75vh", // Adjust the max height based on your design
-                    overflowY: "auto", // Add vertical scrollbar
+                    maxHeight: "75vh",
+
+                    overflowY: "auto", 
+
                 }}
             >
                 {assignments.length === 0 ? (
@@ -79,7 +86,8 @@ const AssignmentSection = () => {
                         <div
                             key={index}
                             className="bg-white rounded-lg p-4 mb-4 flex items-start gap-4 border border-[#BCE2DF] cursor-pointer hover:shadow-md"
-                            onClick={() => handleAssignmentClick(assignment)} // Navigate to details page
+                            onClick={() => handleAssignmentClick(assignment)}
+
                         >
                             <div className="flex-1">
                                 <h2 className="text-2xl text-black">{assignment.name}</h2>

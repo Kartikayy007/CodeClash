@@ -6,8 +6,10 @@ import { useSelector } from 'react-redux';
 ChartJS.register(BarElement, CategoryScale, LinearScale);
 
 const AttendanceChart = () => {
-    const sidebarWidth = useSelector((state) => state.sidebar.width); // Sidebar width state
-    const isCollapsed = useSelector((state) => state.sidebar.isCollapsed); // Sidebar collapsed state
+    const sidebarWidth = useSelector((state) => state.sidebar.width); 
+
+    const isCollapsed = useSelector((state) => state.sidebar.isCollapsed); 
+
 
     const subjects = ['English', 'Maths', 'Science'];
     const dataValues = [25, 50, 75];
@@ -16,7 +18,7 @@ const AttendanceChart = () => {
         datasets: [
             {
                 data: dataValues,
-                backgroundColor: ['#8ED1FC', '#B388EB', '#FF8A80'],
+                backgroundColor: ['#0A5757', '#00A8A5', '#71DBD3'],
             },
         ],
     };
@@ -30,12 +32,16 @@ const AttendanceChart = () => {
                 display: true,
                 ticks: {
                     color: 'black',
-                    maxRotation: 0, // Prevent label rotation
-                    minRotation: 0, // Prevent label rotation
-                    autoSkip: false, // Ensure all labels are displayed
+                    maxRotation: 0, 
+
+                    minRotation: 0, 
+
+                    autoSkip: false, 
+
                 },
                 grid: {
-                    display: false, // Optionally hide x-axis grid lines
+                    display: false, 
+
                 },
             },
             y: {

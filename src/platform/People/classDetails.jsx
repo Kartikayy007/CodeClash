@@ -7,15 +7,17 @@ import { useSelector } from "react-redux";
 import avatar from "../assets/man.png";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import frame from "../assets/Frame.svg"
 
 const ClassDetails = () => {
   const location = useLocation();
   const [instructor, setInstructor] = useState(null);
   const [students, setStudents] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Invite modal state
-  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false); // Remove confirmation modal state
-  const [selectedStudent, setSelectedStudent] = useState(null); // Selected student to remove
-  const [activePopup, setActivePopup] = useState(null); // ID of student with active popup
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null); 
+  const [activePopup, setActivePopup] = useState(null); 
+
   const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
   const classCode = location.state?.code;
 
@@ -66,15 +68,15 @@ const ClassDetails = () => {
 
   return (
     <div className="rounded-lg">
-      {/* Instructor Section */}
+
       <div className="mb-6 h-[90px] bg-white p-4 rounded-lg flex items-center border border-[#BCE2DF] justify-between">
         <div className="flex flex-col gap-[10px]">
           <h1 className="text-lg">Instructor</h1>
-          <div className="flex">
+          <div className="flex ">
             <img
               src={avatar}
               alt="Instructor"
-              className="w-12 h-12 rounded-full mr-4"
+              className="w-12 h-12 rounded-full mr-4 "
             />
             <div className="flex-grow flex flex-col justify-center">
               <p className="text-sm text-gray-700 font-medium">
@@ -102,7 +104,7 @@ const ClassDetails = () => {
         </button>
       </div>
 
-      {/* Students Section */}
+
       <div className="bg-white p-4 rounded-lg border border-[#BCE2DF]">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg">Classmates</h2>
@@ -111,19 +113,23 @@ const ClassDetails = () => {
               {students.length} {students.length === 1 ? "Student" : "Students"}
             </p>
             {!isEnrolled && (
+              <div className="">
               <PersonAddAltIcon
-                onClick={() => setIsModalOpen(true)} // Open invite modal on click
-                className="cursor-pointer"
+                onClick={() => setIsModalOpen(true)}
+
+                className="cursor-pointer bg-[#066769] rounded-full p-2 text-white "
+               sx={{fontSize:'30px'}}
               />
+              </div>
             )}
           </div>
         </div>
 
-        {/* Students List */}
-        <div className="space-y-4 flex flex-col gap-[10px]">
+
+        <div className="space-y-4 flex flex-col">
           {students.length > 0 ? (
             students.map((student) => (
-              <div key={student._id} className="relative flex items-center justify-between">
+              <div key={student._id} className="relative p-5 flex items-center justify-between h-[50px] hover:bg-gray-200 rounded-lg">
                 <div className="flex items-center">
                   <img
                     src={avatar}
@@ -138,16 +144,17 @@ const ClassDetails = () => {
                   }
                   className="cursor-pointer text-gray-500 hover:text-gray-700"
                 />
-                {/* Popup Menu */}
+
                 {activePopup === student._id && (
                   <div className="absolute right-0 top-8 bg-white shadow-lg rounded-lg p-2">
                     <button
                       onClick={() => {
                         setSelectedStudent(student);
-                        setIsRemoveModalOpen(true); // Open confirmation modal
-                        setActivePopup(null); // Close popup
+                        setIsRemoveModalOpen(true); 
+                        setActivePopup(null); 
+
                       }}
-                      className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100 rounded-lg"
+                      className="block w-full text-left px-4 py-2  text-red-500 hover:bg-gray-100 rounded-lg"
                     >
                       Remove
                     </button>
@@ -156,15 +163,46 @@ const ClassDetails = () => {
               </div>
             ))
           ) : (
-            <p className="text-gray-500">No students enrolled yet.</p>
+            <div className="flex flex-col items-center justify-center px-6">
+
+      <div className="mb-6">
+        <img
+          src={frame}
+
+          alt="No students illustration"
+          className="max-w-full h-auto"
+        />
+      </div>
+
+
+      <div className="text-center">
+        <h2 className="text-xl font-semibold text-gray-800 mb-2">
+          No Students in Your Class Yet
+        </h2>
+        <p className="text-gray-600 mb-6">
+          Your class is empty! Share the class code or invite students directly
+          to get started.
+        </p>
+      </div>
+
+
+      <div className="flex space-x-4">
+        <button className="bg-[#066769] text-white px-6 py-3 rounded-lg font-medium hover:bg-teal-900 transition">
+          Copy Class Code
+        </button>
+        <button className="bg-[#066769] text-white px-6 py-3 rounded-lg font-medium hover:bg-teal-900 transition" onClick={() => setIsModalOpen(true)}>
+          Invite Students
+        </button>
+      </div>
+    </div>
           )}
         </div>
       </div>
 
-      {/* Invite Modal */}
+
       <InviteModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
-      {/* Remove Confirmation Modal */}
+
       <RemoveStudentModal
         isOpen={isRemoveModalOpen}
         student={selectedStudent}

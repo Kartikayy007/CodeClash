@@ -19,17 +19,17 @@ const SummaryCard = ({ title, value, bgColor }) => (
 const AssignOpenComp = () => {
   return (
     <div className="p-8 mt-[50px]   bg-[#E1EAE8] min-h-screen ">
-      {/* Header */}
+
       <h1 className="text-2xl   mb-8">Mid-Term Essay Submissions</h1>
 
-      {/* Summary Cards */}
-      <div className="flex justify-between mb-8">
+
+      <div className="flex justify-between mb-8 text-center">
         <SummaryCard title="Total Students" value={60} bgColor="bg-[#FFF3D4]" />
-        <SummaryCard title="Student Completed" value={42} bgColor="bg-[#C8EAC9]" />
+        <SummaryCard title="Student Completed" value={42} bgColor="bg-[#C8EAC9]"/>
         <SummaryCard title="Not Completed" value={18} bgColor="bg-[#F8D0D0]" />
       </div>
 
-      {/* Submissions Table */}
+
       <table className="w-full border-collapse border border-gray-300">
         <thead>
           <tr className="bg-[#D9DEDE]">

@@ -17,7 +17,7 @@ const AssignmentChart = () => {
         datasets: [
             {
                 data: dataValues, 
-                backgroundColor: ['#8ED1FC', '#B388EB', '#FF8A80'], 
+                backgroundColor: ['#0A5757', '#00A8A5', '#71DBD3'], 
             },
         ],
     };
@@ -60,7 +60,7 @@ const AssignmentChart = () => {
                                 <Bar data={data} options={options} />
                             </div>
                             <div className="flex flex-col gap-[40px] w-[60%] items-center">
-                                <ul className={`${isCollapsed ? "items-center" : "self-start"} text-sm space-y-2 flex flex-col gap-[10px] text-gray-600`}>
+                                <ul className={`${isCollapsed ? "items-start" : "self-start"} text-sm space-y-2 flex flex-col gap-[10px] text-gray-600`}>
                                     {subjects.map((subject, index) => (
                                         <li key={subject} className="flex items-center">
                                             <span

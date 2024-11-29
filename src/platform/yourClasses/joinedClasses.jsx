@@ -21,6 +21,7 @@ const JoinedClasses = () => {
 
   const [activePopupIndex, setActivePopupIndex] = useState(null);
   const [deletedClassIndex, setDeletedClassIndex] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
 
   const handlePopupToggle = (index) => {
     setActivePopupIndex((prevIndex) => (prevIndex === index ? null : index));
@@ -101,10 +102,22 @@ const JoinedClasses = () => {
     return () => controller.abort();
   }, [dispatch, navigate]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1024);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div
       className="p-8 bg-[#E1EAE8] min-h-screen"
-      style={{ marginLeft: sidebarWidth, transition: 'margin-left 0.3s ease' }}
+      style={{ 
+        marginLeft: isMobile ? '0' : sidebarWidth,
+        transition: 'margin-left 0.3s ease' 
+      }}
     >
       <h2 className="text-3xl font-semibold mb-4 mt-[50px]">
         {isEnrolled ? 'Your Joined Classes' : 'Your Created Classes'}
@@ -185,7 +198,7 @@ const ClassCard = ({
     >
 <div className="w-full bg-gradient-to-l from-[#339999] via-[#339999] to-teal-700 text-white p-6 hover:shadow-lg transition-shadow duration-300">
 <div className="flex flex-col h-48">
-          {/* More options button */}
+
           <div className="absolute top-4 right-4 z-10">
             <button
               onClick={(e) => {
@@ -205,13 +218,13 @@ const ClassCard = ({
             )}
           </div>
 
-          {/* Class name section */}
+
           <div className="mb-4 mt-auto flex justify-between">
             <h2 className="text-3xl font-medium">{name}</h2>
             <img src={card} alt="" className='absolute bottom-[20px] right-[20px] w-[140px]'/>
           </div>
 
-          {/* Bottom section with teacher and student count */}
+
           <div className="">
             <div className="flex items-center gap-5">
               <div className="flex items-center gap-2">

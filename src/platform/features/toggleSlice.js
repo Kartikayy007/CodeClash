@@ -7,7 +7,8 @@ const initialState = {
       if (typeof window !== "undefined" && sessionStorage.getItem("isEnrolled") !== null) {
         return JSON.parse(sessionStorage.getItem("isEnrolled"));
       }
-      return true; // Default to true if no value is found
+      return true;
+
     })(),
   };
   

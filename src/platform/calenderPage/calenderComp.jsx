@@ -105,7 +105,7 @@ const Calendar = () => {
 
         return (
           <div key={formattedDate} className="border-[0.5px] bg-white border-[#ADB8B8]">
-            {/* Header with day name and date */}
+
             <div className="relative p-4 h-[100px] flex items-center justify-center">
               <span className="text-gray-800 font-semibold">{format(day, 'E d')}</span>
               <div className="absolute bottom-1 left-1 flex space-x-1">
@@ -121,7 +121,7 @@ const Calendar = () => {
               </div>
             </div>
 
-            {/* Event Box Section */}
+
             <div className="border-t-[0.5px] h-[40vh] bg-white border-[#ADB8B8] p-2 overflow-y-auto">
               {dayEvents.length > 0 ? (
                 dayEvents.map((eventType, index) => (
@@ -203,7 +203,7 @@ const Calendar = () => {
 
   return (
 
-    <div className={`mt-[50px] pt-[15px] bg-[#E1EAE8]  transition-all duration-500 ease-in-out ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`} style={{ marginLeft: sidebarWidth, transition: 'margin-left 0.3s ease,translate 0.3 ease' }}>
+    <div className={`h-[100vh] mt-[50px] pt-[15px] bg-[#E1EAE8]  transition-all duration-500 ease-in-out ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`} style={{ marginLeft: sidebarWidth, transition: 'margin-left 0.3s ease,translate 0.3 ease' }}>
 
 
 

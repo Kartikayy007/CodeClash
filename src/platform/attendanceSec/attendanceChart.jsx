@@ -42,7 +42,7 @@ const AnimatedGraph = () => {
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#6366F1",
+                backgroundColor: "#008080",
                 border: "none",
                 borderRadius: "4px",
               }}
@@ -52,9 +52,9 @@ const AnimatedGraph = () => {
             <Line
               type="monotone"
               dataKey="attendance"
-              stroke="#6366F1"
+              stroke="#008080"
               strokeWidth={3}
-              dot={{ fill: "#6366F1", r: 6 }}
+              dot={{ fill: "#008080", r: 6 }}
               activeDot={{ r: 8 }}
               animationDuration={1000}
             />

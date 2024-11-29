@@ -38,6 +38,7 @@
     "react-toastify": "^10.0.6",
     "react-transition-group": "^4.4.5",
     "recharts": "^2.13.3",
+    "redux-persist": "^6.0.0",
     "slick-carousel": "^1.8.1",
     "web-vitals": "^2.1.4"
   },

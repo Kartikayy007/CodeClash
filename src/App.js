@@ -12,6 +12,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AssignmentSection from './platform/assignmentSec/assignment';
 import AssignmentDetails from './platform/assignmentSec/viewAssign';
+import LiveLec from './platform/liveLec/liveLec';
 
 import Card from './platform/cards/cards';
 import Newpass from './auth/components/newpass';
@@ -26,6 +27,7 @@ import Helpmain from './platform/helpandsupport/helpmain';
 import SettingsPage from './platform/settings/settings';
 import ScheduleLectureModal from './platform/modals/modal3';
 import AssignOpen from './platform/assignmentSec/openAssign';
+
 const App = () => {
    return (
    <div>
@@ -52,12 +54,14 @@ const App = () => {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/calendar" element={<Calender />} />
       <Route path="/settings" element={<Settingpage />} />
+      <Route path="/live" element={<LiveLec />} />
 
       <Route path="/announcement" element={<Announcement />} />
       <Route path="/assignments" element={<AssignmentMain />} />
       <Route path="/" element={<AssignmentSection />} />
       <Route path="/assignment-details" element={<AssignmentDetails />} />
       <Route path="/assignment-open" element={<AssignOpen />} />
+
       
       
 

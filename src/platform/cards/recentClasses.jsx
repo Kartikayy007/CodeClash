@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import card1 from '../assets/recent.svg';
 import PeopleIcon from '@mui/icons-material/People';
-
-
 
 const classesData = [
     {
@@ -21,11 +19,20 @@ const classesData = [
     },
 ];
 
-
-
 const RecentClasses = ({ classes }) => {
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 1024);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     return (
-        <div className="bg-[#FAFAFA] p-6 border border-[#BCE2DF]  rounded-lg w-[45%] h-[100%] mt-[20px]">
+        <div className={`bg-[#FAFAFA] p-6 border border-[#BCE2DF] rounded-lg ${isMobile ? 'w-[100%]' : 'w-[45%]'} h-[100%] mt-[20px]`}>
             <h2 className="text-2xl  mb-6 h-[10%]">Recent Classes</h2>
             <div className="space-y-4 h-[90%]">
                 {classesData.map((classItem, index) => (
