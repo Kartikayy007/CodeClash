@@ -19,24 +19,25 @@ const AssignmentAnalysis = () => {
       {
         label: "Completed Assignments",
         data: [4],
-        backgroundColor: "#AEE2FF",
+        backgroundColor: "#0A5757",
       },
       {
         label: "Assignments due soon",
         data: [5],
-        backgroundColor: "#9C9EFE",
+        backgroundColor: "#00A8A5",
       },
       {
         label: "Overdue Assignments",
         data: [3],
-        backgroundColor: "#FCA3B7",
+        backgroundColor: "#71DBD3",
       },
     ],
   };
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // Ensures the graph takes the full height of its parent
+    maintainAspectRatio: false, 
+
     plugins: {
       legend: {
         display: false,
@@ -46,7 +47,8 @@ const AssignmentAnalysis = () => {
       x: {
         grid: { display: false },
         ticks: { display: false },
-        barPercentage: 0.5, // Reduces the bar width (percentage of available width)
+        barPercentage: 0.5, 
+
       },
       y: {
         beginAtZero: true,
@@ -63,7 +65,7 @@ const AssignmentAnalysis = () => {
       <div className="bg-gray-100 p-5 rounded-md h-[80%] border border-[#BCE2DF] w-[95%] flex gap-12 mx-auto">
         <div className="flex flex-col w-[50%] h-full">
           <div className="flex items-center justify-center h-full">
-            {/* Bar graph with dynamic height */}
+
             <Bar data={data} options={options} />
           </div>
         </div>
@@ -73,15 +75,15 @@ const AssignmentAnalysis = () => {
           </button>
           <div className="flex flex-col items-start gap-4 justify-center h-full">
             <div className="flex items-center text-lg">
-              <div className="w-4 h-4 bg-blue-200 rounded-sm mr-2"></div>
+              <div className="w-4 h-4 bg-[#0A5757] rounded-sm mr-2"></div>
               Completed Assignments (4)
             </div>
             <div className="flex items-center text-lg">
-              <div className="w-4 h-4 bg-purple-300 rounded-sm mr-2"></div>
+              <div className="w-4 h-4 bg-[#00A8A5] rounded-sm mr-2"></div>
               Assignments due soon (5)
             </div>
             <div className="flex items-center text-lg">
-              <div className="w-4 h-4 bg-pink-300 rounded-sm mr-2"></div>
+              <div className="w-4 h-4 bg-[#71DBD3] rounded-sm mr-2"></div>
               Overdue Assignments (3)
             </div>
           </div>

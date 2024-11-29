@@ -1,221 +1,332 @@
-import './flip.css';
-import React, { useState } from 'react';
+import './flip.css'; 
+
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
+import InfoIcon from '@mui/icons-material/Info';
+
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import defaultImg from '../assets/banner5.jpg';
 import AssignmentSection from '../assignmentSec/assignment';
 import RevisionClassCard from '../schedule/scheduleComp';
 import ClassDetails from "../People/classDetails";
+import AttendanceSection from '../attendanceSec/attendance';
+import NoDataIllustration from '../assets/noAnnounce.svg';
+import { motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
-
+const tabs = ['Announcement', 'Assignments', 'Schedule', 'Attendance', 'People'];
 
 const AnnouncementComponent = () => {
-  const instructor = {
-    name: "Username",
-    avatar: "https://via.placeholder.com/150",
-  };
   
-  const students = [
-    { name: "Student 1", avatar: "https://via.placeholder.com/150" },
-    { name: "Student 2", avatar: "https://via.placeholder.com/150" },
-    { name: "Student 3", avatar: "https://via.placeholder.com/150" },
-    { name: "Student 4", avatar: "https://via.placeholder.com/150" },
-    { name: "Student 5", avatar: "https://via.placeholder.com/150" },
-    { name: "Student 6", avatar: "https://via.placeholder.com/150" },
-    { name: "Student 7", avatar: "https://via.placeholder.com/150" },
-    { name: "Student 8", avatar: "https://via.placeholder.com/150" },
-    { name: "Student 9", avatar: "https://via.placeholder.com/150" },
-    { name: "Student 10", avatar: "https://via.placeholder.com/150" },
-  ];
-  
-  const [activeTab, setActiveTab] = useState(null);
+  const location = useLocation();
+  const classCode = location.state?.code;
+
+  const [announcementsList, setAnnouncementsList] = useState([]);
   const [announcement, setAnnouncement] = useState('');
-  const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
-  const [announcementsList, setAnnouncementsList] = useState([
-    'Welcome to the English class! Stay tuned for updates.',
-  ]);
-  const sidebarWidth = useSelector((state) => state.sidebar.width);
+  const [announcementTitle, setAnnouncementTitle] = useState('');
   const [isEditable, setIsEditable] = useState(false);
   const [bannerImage, setBannerImage] = useState(null);
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isInfoVisible, setIsInfoVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState('Announcement');
+  const [underlineStyles, setUnderlineStyles] = useState({});
+  const [subjectName, setSubjectName] = useState('');
+  const [className, setClassName] = useState('');
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
+
+  const sidebarWidth = useSelector((state) => state.sidebar.width);
+  const tabsContainerRef = useRef(null);
+
+  const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  useEffect(() => {
+    if (classCode) {
+      fetchClassDetails();
+    }
+  }, [classCode]);
+
+  useEffect(() => {
+
+    const activeTabElement = tabsContainerRef.current?.querySelector(
+      `button[data-tab="${activeTab}"]`
+    );
+    if (activeTabElement) {
+      setUnderlineStyles({
+        width: activeTabElement.offsetWidth,
+        left: activeTabElement.offsetLeft,
+        marginLeft: '0px',
+      });
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1024);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const fetchClassDetails = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/classroom/details?code=${classCode}`,
+        axiosConfig
+      );
+      setAnnouncementsList(response.data.classroom.announcements);
+      setSubjectName(response.data.classroom.subject);
+      setClassName(response.data.classroom.name);
+    } catch (error) {
+      console.error('Failed to fetch announcements:', error);
+    }
+  };
+
+  const postAnnouncement = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/announcement/create`,
+        { title: announcementTitle, description: announcement, code: classCode },
+        axiosConfig
+      );
+      setAnnouncementsList([response.data, ...announcementsList]);
+      setAnnouncement('');
+      setAnnouncementTitle('');
+      setIsEditable(false);
+    } catch (error) {
+      console.error('Failed to post announcement:', error);
+    }
+  };
+
+  const deleteAnnouncement = async (announcementId) => {
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/announcement/delete/${announcementId}`,
+        {code:classCode},
+        axiosConfig
+      );
+      setAnnouncementsList((prev) =>
+        prev.filter((announce) => announce._id !== announcementId)
+      );
+      handleMenuClose();
+    } catch (error) {
+      console.error('Failed to delete announcement:', error);
+    }
+  };
+
+  const handleMenuOpen = (event, announcement) => {
+    setMenuAnchorEl(event.currentTarget);
+    setSelectedAnnouncement(announcement);
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null);
+    setSelectedAnnouncement(null);
+  };
+
+  const handleInfoClick = () => {
+    setIsInfoVisible(!isInfoVisible);
+  };
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
   };
 
-  const handleAnnouncementChange = (event) => {
-    setAnnouncement(event.target.value);
-  };
-
-  const postAnnouncement = () => {
-    if (announcement.trim()) {
-      setAnnouncementsList([announcement, ...announcementsList]);
-      setAnnouncement('');
-      setIsEditable(false);
-    }
-  };
-
-  const enableEditing = () => {
-    setIsEditable(true);
-  };
-
-  const handleBannerImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setBannerImage(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleBannerClick = () => {
-    setIsFlipped((prevState) => !prevState);
-  };
-
   return (
     <div
-      className="font-sans p-4 bg-[#E1EAE8] mt-[50px] transition-all duration-300 h-[100vh] animate-fadeIn"
-      style={{ marginLeft: sidebarWidth }}
+      className="font-sans p-4 bg-[#E1EAE8] mt-[50px] transition-all duration-300 h-[100vh] overflow-y-auto pb-[80px]"
+      style={{ 
+        marginLeft: isMobile ? '0' : sidebarWidth,
+        transition: 'margin-left 0.3s ease' 
+      }}
     >
-      <div className="w-[95%] mx-auto">
-        {/* Show banner only when activeTab is null */}
-        {activeTab === null && (
+      {activeTab === 'Announcement' && (
+        <div className="relative w-full h-[236px] rounded-xl mb-5 mx-auto overflow-hidden">
           <div
-            className={`flip-container w-full h-[236px] rounded-xl mb-5 mx-auto relative animate-fadeIn`}
+            className="w-full h-full rounded-xl"
+            style={{
+              backgroundImage: bannerImage
+                ? `url(${bannerImage})`
+                : `url(${defaultImg})`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+            }}
           >
-            <div
-              className={`flip-card ${isFlipped ? 'flip' : ''} w-full h-full rounded-xl relative`}
-              onClick={handleBannerClick}
-              style={{
-                backgroundImage: bannerImage
-                  ? `url(${bannerImage})`
-                  : `url(${defaultImg})`,
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
-              }}
+            <button
+              onClick={handleInfoClick}
+              className="absolute top-4 right-4 bg-white text-black p-2 rounded-full shadow-lg hover:scale-105 transition-transform"
             >
-              <div className="flip-card-front w-full h-full absolute inset-0 rounded-xl">
-                <input
-                  type="file"
-                  id="bannerUpload"
-                  accept="image/*"
-                  onChange={handleBannerImageChange}
-                  className="hidden"
-                />
-                <label
-                  htmlFor="bannerUpload"
-                  className="absolute bottom-4 right-4 px-4 py-2 bg-white text-black rounded-md cursor-pointer"
-                >
-                  <EditIcon />
-                </label>
-              </div>
+              <InfoIcon />
+            </button>
+            <div
+              className={`absolute inset-0 bg-white bg-opacity-90 flex flex-col justify-start p-5 gap-[20px] items-start transition-transform duration-700 ${
+                isInfoVisible ? 'translate-y-[20%]' : 'translate-y-full'
+              }`}
+            >
+              <h2 className="text-4xl font-medium text-black">{className}</h2>
+              <p className="text-xl text-black">Subject: {subjectName}</p>
+              <p className="text-xl text-black">Class Code: {classCode}</p>
+              <p className="text-xl text-black">Link: Link</p>
+            </div>
+          </div>
+        </div>
+      )}
 
-              <div
-                className={`flip-card-back w-full h-full absolute inset-0 rounded-xl flex items-center justify-center bg-black bg-opacity-[70%] text-white p-4 ${
-                  isFlipped ? 'opacity-100' : 'opacity-0'
-                }`}
+      <div
+        className="relative flex space-x-4 overflow-x-auto text-gray-600 gap-10"
+        ref={tabsContainerRef}
+      >
+        {tabs.map((tab) => (
+          <button
+            key={tab}
+            data-tab={tab}
+            className={`py-2 mb-2 px-4 relative ${
+              activeTab === tab ? 'text-[#394141] font-medium' : ''
+            }`}
+            onClick={() => handleTabClick(tab)}
+          >
+            {tab}
+          </button>
+        ))}
+        <motion.div
+          className="absolute bottom-0 h-[2px] bg-[#00A8A5] rounded"
+          style={underlineStyles}
+          initial={false}
+          animate={underlineStyles}
+          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        />
+      </div>
+
+      <motion.main
+        className="bg-[#E1EAE8] p-4 rounded-lg animate-fadeIn"
+        key={activeTab}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 20 }}
+        transition={{ duration: 0.5 }}
+      >
+        {activeTab === 'Announcement' && (
+          <div>
+            {!isEditable && (
+              <button
+                onClick={() => setIsEditable(true)}
+                className="flex items-center bg-white shadow rounded-lg px-4 py-3 mt-4 w-full h-[80px]"
               >
-                <div className="text-center">
-                  <h2 className="text-xl font-bold">Class Details</h2>
-                  <p className="mt-2">This is the class schedule and details!</p>
+                <AddIcon
+                  className="text-white mr-3 p-1 bg-[#008080] rounded-full"
+                  sx={{ fontSize: '35px' }}
+                />
+                <span className="text-gray-500">Post a new announcement</span>
+              </button>
+            )}
+            {isEditable && (
+              <div className="mt-4">
+                <input
+                  type="text"
+                  value={announcementTitle}
+                  onChange={(e) => setAnnouncementTitle(e.target.value)}
+                  placeholder="Title"
+                  className="w-full mb-2 p-2 border rounded-md"
+                />
+                <textarea
+                  value={announcement}
+                  onChange={(e) => setAnnouncement(e.target.value)}
+                  placeholder="Write your announcement"
+                  className="w-full p-2 border rounded-md"
+                  rows="3"
+                />
+                <div className="flex justify-end mt-2 space-x-2">
+                  <button
+                    onClick={() => setIsEditable(false)}
+                    className="px-4 py-2 bg-gray-300 rounded-md"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={postAnnouncement}
+                    className="px-4 py-2 bg-[#008080] text-white rounded-md"
+                  >
+                    Post
+                  </button>
                 </div>
               </div>
+            )}
+            <div className="mt-6">
+              {announcementsList.length > 0 ? (
+                announcementsList.map((announce) => (
+                  <div
+                    key={announce._id}
+                    className="p-4 bg-white rounded-md shadow mb-3 relative"
+                  >
+                    <div className="flex justify-between">
+                      <div>
+                        <h3 className="text-3xl text-[#394141]">
+                          {announce.title}
+                        </h3>
+                        <p className="text-lg text-[#394141]">
+                          {announce.description}
+                        </p>
+                      </div>
+                      <button
+                        onClick={(e) => handleMenuOpen(e, announce)}
+                        className="text-gray-600 hover:text-black"
+                      >
+                        <MoreVertIcon />
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="flex flex-col h-[500px] items-center justify-center text-gray-500 mt-6">
+                  <img
+                    src={NoDataIllustration}
+                    alt="No Announcements"
+                    className="w-auto h-auto object-contain mb-4"
+                  />
+                  <p className="text-lg">No announcements yet. Stay tuned!</p>
+                </div>
+              )}
             </div>
+            <Menu
+              anchorEl={menuAnchorEl}
+              open={Boolean(menuAnchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem
+                onClick={() => {
+                  setAnnouncementTitle(selectedAnnouncement?.title || '');
+                  setAnnouncement(selectedAnnouncement?.description || '');
+                  setIsEditable(true);
+                  handleMenuClose();
+                }}
+              >
+                Edit
+              </MenuItem>
+              <MenuItem
+                onClick={() => deleteAnnouncement(selectedAnnouncement?._id)}
+              >
+                Delete
+              </MenuItem>
+            </Menu>
           </div>
         )}
 
-        <div className="flex space-x-4 text-gray-600 gap-5">
-          <header
-            className="py-2 px-4 border-b border-gray-200 flex gap-[20px] animate-slideIn cursor-pointer"
-            onClick={() => setActiveTab(null)} // Reset to English and show the banner
-          >
-            <h1 className="text-2xl text-black">English</h1>
-          </header>
-          {['Announcement', 'Assignments', 'Schedule', 'Attendance', 'People'].map((tab) => (
-            <button
-              key={tab}
-              className={`py-2 px-4 ${
-                activeTab === tab ? 'text-[#394141] border-b-2 border-[#00A8A5]' : ''
-              }`}
-              onClick={() => handleTabClick(tab)}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-
-        <main className="bg-[#E1EAE8] p-4 rounded-lg animate-fadeIn">
-          {activeTab === 'Announcement' && (
-            <div>
-              {!isEnrolled ? (
-                <div className="relative mb-6 flex items-center transition-all duration-300">
-                  <button
-                    onClick={enableEditing}
-                    className={`absolute left-3 flex items-center justify-center bg-[#919F9E] text-black rounded-full w-16 h-16 ${
-                      isEditable ? 'hidden' : 'flex'
-                    }`}
-                  >
-                    <AddIcon fontSize="large" />
-                  </button>
-                  <textarea
-                    value={announcement}
-                    onChange={handleAnnouncementChange}
-                    placeholder={!isEditable ? 'Post a new announcement' : ''}
-                    className={`w-full p-3 pl-12 border bg-[#E1EAE8] border-[#738484] rounded-xl resize-none focus:outline-none text-gray-700 ${
-                      !isEditable
-                        ? ' placeholder:translate-y-[85%] pl-[80px] placeholder-black'
-                        : ''
-                    }`}
-                    rows="4"
-                    readOnly={!isEditable}
-                    style={{
-                      minHeight: '80px',
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  />
-                </div>
-              ) : null}
-
-              {isEditable && (
-                <button
-                  onClick={postAnnouncement}
-                  className="px-4 py-2 bg-[#919F9E] text-black rounded-md focus:outline-none hover:scale-105 transition-transform"
-                >
-                  Post
-                </button>
-              )}
-
-              <div className="mt-6 space-y-3 transition-all duration-300">
-                {announcementsList.length > 0 ? (
-                  announcementsList.map((announce, index) => (
-                    <div
-                      key={index}
-                      className={`p-3 border border-[#738484] min-h-[60px] rounded-md animate-staggeredFadeUp flex items-center`}
-                      style={{ animationDelay: `${index * 0.2}s` }}
-                    >
-                      {announce}
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-500">No announcements yet.</p>
-                )}
-              </div>
-            </div>
-          )}
-          {activeTab === 'Assignments' && <AssignmentSection />}
-          {activeTab === 'Schedule' && <RevisionClassCard />}
-          {activeTab === 'People' && <ClassDetails instructor={instructor} students={students} />}
-
-          {activeTab !== 'Announcement' && activeTab !== 'Assignments'&& activeTab !== 'Schedule' && activeTab!=='People' && (
-            <p className="text-gray-500">{`${activeTab} content goes here.`}</p>
-          )}
-        </main>
-      </div>
+        {activeTab === 'Assignments' && <AssignmentSection />}
+        {activeTab === 'Schedule' && <RevisionClassCard />}
+        {activeTab === 'Attendance' && <AttendanceSection />}
+        {activeTab === 'People' && <ClassDetails />}
+      </motion.main>
     </div>
   );
 };

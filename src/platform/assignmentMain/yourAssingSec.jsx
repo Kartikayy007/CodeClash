@@ -55,7 +55,7 @@ const YourAssignments = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 h-[80%]">
         {assignments.map((assignment) => (
           <div
-            key={assignment.id}
+            key={assignment._id}
             className="bg-white p-4 rounded-lg border border-[#BCE2DF] flex gap-4 items-center justify-between"
           >
             <div className="flex flex-col h-full justify-between">

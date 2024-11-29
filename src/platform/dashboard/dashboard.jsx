@@ -8,32 +8,38 @@ import TodoList from '../todolist/todolist';
 import { useDispatch } from 'react-redux';
 import { setJoinedClasses } from '../features/joinedClasses';
 import { setCreatedClasses } from '../features/createdClasses';
-import { setUserName } from '../features/userSlice';  
-
-
-
+import { setUserName,setUserMail, setNoOfJoinedClasses,setNoOfCreatedClasses } from '../features/userSlice';  
 import axios from 'axios';
 
 const Dashboard = () => {
-    const navigate=useNavigate();
+    const [isMobile, setIsMobile] = useState(window.innerWidth >= 1024);
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth >= 1024);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         const controller = new AbortController();
         const { signal } = controller;
 
         const fetchData = async () => {
-            const token = sessionStorage.getItem("authToken");
-console.log(token)
+            const token = sessionStorage.getItem("authToken")|| localStorage.getItem("authToken");
+           console.log(token)
             try {
                 const headers = {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 };
 
-                const response = await axios.post(
-                    `${process.env.REACT_APP_API_URL}/user/details`,{},
+                const response = await axios.get(
+                    `${process.env.REACT_APP_API_URL}/user/details`,
                     { headers },
                     { signal }  
                 );
@@ -41,11 +47,16 @@ console.log(token)
               
                 if (response.data.success) {
                     console.log(response.data.user)
+                    sessionStorage.setItem('userId',response.data.user._id);
                     
                     const { joinedClasses, createdClasses } = response.data.user;
                     dispatch(setJoinedClasses(joinedClasses));
                     dispatch(setJoinedClasses(createdClasses));
                     dispatch(setUserName(response.data.user.name)); 
+                    dispatch(setUserMail(response.data.user.email));
+                    dispatch(setNoOfJoinedClasses(response.data.user.noOfJoinedClasses));
+                    dispatch(setNoOfCreatedClasses(response.data.user.noOfCreatedClasses));
+                    
                     console.log(response)
                     
 
@@ -61,31 +72,21 @@ console.log(token)
             controller.abort(); 
         };
     }, []); 
-   
 
-
-
-
-
-    return (<div className='bg-[#E1EAE8] h-[110vh]'>
+    return (
+    <div className={`bg-[#E1EAE8] ${isMobile?'h-[110vh]':'h-[230vh]'}`}>
 
         <Sidebar />
         <Header />
-        <div className='flex  ml-[15px] h-[100vh] bg-[#E1EAE8]'>
+        <div className={`flex ${isMobile?' ml-[15px]':'flex-col '}  h-[100vh] bg-[#E1EAE8]`}>
             <Performance />
-            <div className='w-[30%] '> 
+            <div className={` ${isMobile?'w-[30%]':'w-[97%]'} `}> 
                 <div className='h-[10%] mt-[70px]'></div>
-                <WeekView />
-                <div className='h-[60%] mt-[20px]'>   <TodoList /></div>
-             
+                {isMobile && <WeekView />}
+                <div className={`h-[60%] ${isMobile?'mt-[20px]':'ml-[3%]'}`}><TodoList />
+                </div>
             </div>
-
-
-
         </div>
-
-
-
     </div>
     );
 };

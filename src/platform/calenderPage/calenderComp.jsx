@@ -4,6 +4,9 @@ import { useSelector } from 'react-redux';
 import Reminders from '../reminder/reminder'
 import { Add } from '@mui/icons-material'; 
 import { setToggleState, setIsEnrolled  } from '../features/toggleSlice';
+import Reminderbox from '../reminder/reminderbox';
+import ScheduleLectureModal from '../modals/modal3';
+
 
 
 const Calendar = () => {
@@ -12,15 +15,20 @@ const Calendar = () => {
   const [isPageLoaded, setIsPageLoaded] = useState(false);
   const [currentWeekStart, setCurrentWeekStart] = useState(startOfWeek(new Date()));
   const [currentDay, setCurrentDay] = useState(new Date());
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const sidebarWidth = useSelector((state) => state.sidebar.width);
-  const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); // get toggle state from Redux
+  const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); 
 
- const togglemode = "createmode";
+
   
- const events = {
-    '2024-11-01': ['due', 'class'],
-    '2024-11-08': ['due'],
+  const events = {
+    '2024-11-25': ['due', 'class'],
+    '2024-11-26': ['class'],
+    '2024-11-27': ['due'],
+    '2024-11-28': ['class'],
+    '2024-11-29': ['due', 'class'],
+    '2024-11-30': ['class'],
   };
 
   const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
@@ -79,24 +87,26 @@ const Calendar = () => {
         );
         day = addDays(day, 1);
       }
-      rows.push(<div key={day} className="grid grid-cols-7 h-[20%] ">{days}</div>);
+      rows.push(<div key={day} className="grid grid-cols-7 h-[100px] ">{days}</div>);
       days = [];
     }
     return rows;
   };
 
   const renderWeekView = () => {
-    const startDate = startOfWeek(currentWeekStart);
-    const days = Array.from({ length: 7 }, (_, i) => addDays(startDate, i));
+  const startDate = startOfWeek(currentWeekStart);
+  const days = Array.from({ length: 7 }, (_, i) => addDays(startDate, i));
 
-    return (
-      <div className="grid grid-cols-7 text-center">
-        {days.map((day) => {
-          const formattedDate = format(day, 'yyyy-MM-dd');
-          const dayEvents = events[formattedDate] || [];
+  return (
+    <div className="grid grid-cols-7 text-center h-full">
+      {days.map((day) => {
+        const formattedDate = format(day, 'yyyy-MM-dd');
+        const dayEvents = events[formattedDate] || [];
 
-          return (
-            <div key={day} className="relative p-4 h-20 flex items-center justify-center border-[0.5px] bg-white border-[#ADB8B8]">
+        return (
+          <div key={formattedDate} className="border-[0.5px] bg-white border-[#ADB8B8]">
+
+            <div className="relative p-4 h-[100px] flex items-center justify-center">
               <span className="text-gray-800 font-semibold">{format(day, 'E d')}</span>
               <div className="absolute bottom-1 left-1 flex space-x-1">
                 {dayEvents.map((eventType, index) => (
@@ -110,47 +120,90 @@ const Calendar = () => {
                 ))}
               </div>
             </div>
-          );
-        })}
-      </div>
-    );
-  };
+
+
+            <div className="border-t-[0.5px] h-[40vh] bg-white border-[#ADB8B8] p-2 overflow-y-auto">
+              {dayEvents.length > 0 ? (
+                dayEvents.map((eventType, index) => (
+                  <div
+                    key={index}
+                    className={`flex h-[60px] justify-between items-center p-2 mb-2 border-l-2   ${
+                      eventType === 'due' ? 'border-[#E57373] bg-[#FBE5E5]' : 'border-[#FFB74D] bg-[#FFFAED]'
+                    }`}
+                  >
+                    <span className="text-sm  text-gray-800">
+                      {eventType === 'due' ? 'Due Assignment' : 'Scheduled Class'}
+                    </span>
+                    
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-500 text-sm">No events for this day.</div>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 
   const renderDayView = () => {
     const day = new Date(currentDay);
     const formattedDate = format(day, 'yyyy-MM-dd');
     const dayEvents = events[formattedDate] || [];
-
+  
     return (
-      <div className="p-4 rounded-lg bg-white border text-center">
-        <span className="text-lg font-semibold">{format(day, 'EEEE, MMMM d, yyyy')}</span>
-        <div className="mt-4">
+      <div className="p-6  bg-white border border-gray-200  h-[500px]">
+        
+        <div className="text-center mb-4">
+          <h2 className="text-2xl font-semibold text-gray-800">
+            {format(day, 'EEEE, MMMM d, yyyy')}
+          </h2>
+        </div>
+  
+        
+        <div className="space-y-4">
           {dayEvents.length > 0 ? (
             dayEvents.map((eventType, index) => (
               <div
                 key={index}
-                className={`p-2 my-1 rounded-md text-white ${
-                  eventType === 'due' ? 'bg-red-500' : 'bg-yellow-400'
+                className={`flex justify-between items-center p-4 border-l-2  ${
+                  eventType === 'due' ? 'border-[#E57373] bg-[#FDF3F3]' : 'border-[#FFB74D] bg-[#FFFAED]'
                 }`}
               >
-                {eventType === 'due' ? 'Due Assignment' : 'Scheduled Class'}
+                <span className="text-lg font-medium text-gray-800">
+                  {eventType === 'due' ? 'Due Assignment' : 'Scheduled Class'}
+                </span>
+                <button
+                  className="px-4 py-2 bg-[#107D7E] text-white rounded-lg hover:bg-[#0B6061]"
+                  onClick={() =>
+                    alert(`Event: ${eventType === 'due' ? 'Due Assignment' : 'Scheduled Class'}`)
+                  }
+                >
+                  View Details
+                </button>
               </div>
             ))
           ) : (
-            <div className="text-gray-500">No events</div>
+            <div className="text-center text-gray-500 text-lg">
+              No details
+             
+            </div>
           )}
         </div>
       </div>
     );
   };
-
+  
   useEffect(() => {
     setIsPageLoaded(true);
   }, []);
 
   return (
 
-    <div className={`mt-[50px] pt-[15px] bg-[#E1EAE8]  transition-all duration-500 ease-in-out ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`} style={{ marginLeft: sidebarWidth, transition: 'margin-left 0.3s ease,translate 0.3 ease' }}>
+    <div className={`h-[100vh] mt-[50px] pt-[15px] bg-[#E1EAE8]  transition-all duration-500 ease-in-out ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`} style={{ marginLeft: sidebarWidth, transition: 'margin-left 0.3s ease,translate 0.3 ease' }}>
 
 
 
@@ -167,7 +220,7 @@ const Calendar = () => {
       </div>
 
       <div className='flex'>
-        <div className="rounded-lg p-4 w-[70%] ml-[28px]">
+        <div className="rounded-lg p-4 w-[70%] ml-[28px] h-[550px]">
           <div className="flex items-center mb-4 h-[7%] ">
             <h2 className="text-lg font-semibold text-gray-800 w-[150px]">
               {currentView === 'month' ? format(currentMonth, 'MMMM yyyy') :
@@ -205,7 +258,7 @@ const Calendar = () => {
               <span className="text-gray-600 text-sm">Scheduled Class</span>
             </div>
 
-            {!isEnrolled?<button className='w-[80px] h-[35px] pr-[10px] pl-[10px] bg-[#066769] rounded-xl text-white ml-[10px] flex items-center'>
+            {!isEnrolled?<button  onClick={() => setModalOpen(true)} className='w-[80px] h-[35px] pr-[10px] pl-[10px] bg-[#066769] rounded-xl text-white ml-[10px] flex items-center'>
             <Add className="mr-1" /> Add
             </button>:<></>}
           </div>
@@ -226,7 +279,7 @@ const Calendar = () => {
 
           <div className="grid grid-cols-7 h-[10%]">{renderDaysOfWeek()}</div>
 
-          <div className='h-[83%]'>
+          <div className='h-[500px]'>
             {currentView === 'month' && renderMonthView()}
             {currentView === 'week' && renderWeekView()}
             {currentView === 'day' && renderDayView()}
@@ -234,6 +287,10 @@ const Calendar = () => {
         </div>
         <Reminders />
       </div>
+      <ScheduleLectureModal
+      isOpen={isModalOpen}
+         onClose={() => setModalOpen(false)}
+/>
     </div>
   );
 };

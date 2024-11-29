@@ -2,11 +2,16 @@ import { createSlice } from '@reduxjs/toolkit';
 
 
 const initialState = {
-    showToggle: false,
-    isEnrolled: (typeof window !== 'undefined' && sessionStorage.getItem("isEnrolled") !== null)
-        ? JSON.parse(sessionStorage.getItem("isEnrolled"))
-        : true
-};
+    showToggle: false, 
+    isEnrolled: (() => {
+      if (typeof window !== "undefined" && sessionStorage.getItem("isEnrolled") !== null) {
+        return JSON.parse(sessionStorage.getItem("isEnrolled"));
+      }
+      return true;
+
+    })(),
+  };
+  
 
 const toggleStateSlice = createSlice({
     name: 'toggleState',

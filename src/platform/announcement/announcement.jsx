@@ -6,7 +6,7 @@ const Announcement = () => {
     return(
         <div className="fixed w-full top-0">
         <Sidebar/>
-<Header/>
+        <Header/>
         <AnnouncementComponent />
         </div>
     )

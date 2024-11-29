@@ -151,6 +151,7 @@ const Login = () => {
 
             <div className="input-container passIn">
               <input
+              id="pass"
                 type={showPassword ? 'text' : 'password'}
                 className={`textinput password-input ${passwordError ? 'input-error no-margin  ' : ''}`}
                 value={password}
