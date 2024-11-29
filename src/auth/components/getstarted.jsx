@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion';
-import { BookOpen, Users, Calendar, Trophy, Clock, ChevronDown } from 'lucide-react';
+import { BookOpen, Users, Calendar, Trophy, Clock, ChevronDown, Menu, X } from 'lucide-react';
 import heroImg from '../assets/landing.svg';
 import logo from '../../auth/assets/Frame.svg'
+import { useNavigate } from 'react-router-dom';
 
 const features = [
   {
@@ -165,6 +166,26 @@ const ParallaxImage = ({ src, alt, className }) => {
 };
 
 const ClassenceLanding = () => {
+  const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
+  
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1024);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
+    if (token) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
+
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -173,6 +194,11 @@ const ClassenceLanding = () => {
   });
 
   const scrollRef = useRef(null);
+  const featuresRef = useRef(null);
+
+  const scrollToFeatures = () => {
+    featuresRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <div className="bg-white" ref={scrollRef}>
@@ -182,28 +208,111 @@ const ClassenceLanding = () => {
       />
 
       <nav className="fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-md shadow-sm">
-        <div className=" mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold text-[#066769]"><img src={logo} alt="" /></div>
-          <div className="space-x-6">
-            <a href="#features" className="hover:text-[#066769]">Home</a>
-            <a href="#steps" className="hover:text-[#066769]">Features</a>
-            <a href="#testimonials" className="hover:text-[#066769]">About</a>
-            <a href="#testimonials" className="hover:text-[#066769]">Contact Us</a>
-            <motion.button 
-              className="px-4 py-2 bg-[#066769] text-white rounded-md"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Log In
-            </motion.button>
-            <motion.button 
-              className="px-4 py-2 bg-[#066769] text-white rounded-md"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Sign Up
-            </motion.button>
+        <div className="mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="text-2xl font-bold text-[#066769]">
+            <img src={logo} alt="" className="h-8" />
           </div>
+
+          {isMobile && (
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-gray-600  hover:text-gray-900 "
+              style={{ zIndex: 60 }}
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          )}
+
+          {!isMobile && (
+            <div className="space-x-6">
+              <a href="#features" className="hover:text-[#066769]">Home</a>
+              <a href="#steps" className="hover:text-[#066769]">Features</a>
+              <a href="#testimonials" className="hover:text-[#066769]">About</a>
+              <a href="#testimonials" className="hover:text-[#066769]">Contact Us</a>
+              <motion.button 
+                onClick={() => navigate('/login')}
+                className="px-4 py-2 bg-[#066769] text-white rounded-md"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Log In
+              </motion.button>
+              <motion.button 
+                onClick={() => navigate('/signup')}
+                className="px-4 py-2 bg-[#066769] text-white rounded-md"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Sign Up
+              </motion.button>
+            </div>
+          )}
+
+          {/* Mobile Menu Overlay */}
+          <AnimatePresence>
+            {isMobile && isMobileMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, x: "100%" }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: "100%" }}
+                transition={{ type: "tween" }}
+                className="fixed inset-0 bg-white z-50 pt-20"
+              >
+                <div className="flex flex-col items-center space-y-8 p-8 bg-white ">
+                  <a 
+                    href="#features" 
+                    className="text-xl hover:text-[#066769]"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Home
+                  </a>
+                  <a 
+                    href="#steps" 
+                    className="text-xl hover:text-[#066769]"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Features
+                  </a>
+                  <a 
+                    href="#testimonials" 
+                    className="text-xl hover:text-[#066769]"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    About
+                  </a>
+                  <a 
+                    href="#testimonials" 
+                    className="text-xl hover:text-[#066769]"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Contact Us
+                  </a>
+                  <motion.button 
+                    onClick={() => {
+                      navigate('/login');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full px-4 py-2 bg-[#066769] text-white rounded-md"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Log In
+                  </motion.button>
+                  <motion.button 
+                    onClick={() => {
+                      navigate('/signup');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full px-4 py-2 bg-[#066769] text-white rounded-md"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Sign Up
+                  </motion.button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </nav>
 
@@ -241,6 +350,7 @@ const ClassenceLanding = () => {
               className="flex space-x-6"
             >
               <motion.button 
+                onClick={() => navigate('/signup')}
                 className="px-8 py-4 bg-white text-teal-600 rounded-md text-lg"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -248,6 +358,7 @@ const ClassenceLanding = () => {
                 Get Started
               </motion.button>
               <motion.button 
+                onClick={scrollToFeatures}
                 className="px-8 py-4 border-2 border-white text-white rounded-md text-lg hover:bg-white/20"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -296,7 +407,7 @@ const ClassenceLanding = () => {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="min-h-screen py-24 bg-gray-50">
+      <section id="features" ref={featuresRef} className="min-h-screen py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <AnimatedSection className="text-center mb-20">
             <motion.h2 
@@ -313,7 +424,7 @@ const ClassenceLanding = () => {
                 hidden: { opacity: 0, y: 50 },
                 visible: { opacity: 1, y: 0 }
               }}
-              className="text-xl text-gray-600 max-w-3xl mx-auto"
+              className="text-xl text-gray-600 max-w-3xl mx-auto "
             >
               Classence is designed to provide a seamless teaching and learning experience, empowering both students and teachers.
             </motion.p>
@@ -370,8 +481,11 @@ const ClassenceLanding = () => {
               className="px-12 py-6 bg-teal-600 text-white text-xl rounded-md hover:bg-teal-700"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => navigate('/signup')}
+
             >
               Sign Up Now
+            
             </motion.button>
           </AnimatedSection>
         </div>

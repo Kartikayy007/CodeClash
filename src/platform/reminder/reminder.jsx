@@ -3,6 +3,7 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Modal from './editModal'; 
 import axios from 'axios'; 
+
 const Reminders = () => {
     const [reminders, setReminders] = useState([]); 
     const [popupIndex, setPopupIndex] = useState(null); 
@@ -11,6 +12,8 @@ const Reminders = () => {
     const [showModal, setShowModal] = useState(false); 
     const [loading, setLoading] = useState(false); 
     const [error, setError] = useState(null); 
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
+
     useEffect(() => {
         const fetchReminders = async () => {
             setLoading(true);
@@ -31,19 +34,32 @@ const Reminders = () => {
         };
         fetchReminders();
     }, []);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 1024);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     const handlePopupToggle = (index) => {
         setPopupIndex(popupIndex === index ? null : index); 
     };
+
     const handleModalOpen = (type, index) => {
         setModalType(type);
         setModalData({ index, ...reminders[index] });
         setShowModal(true);
         setPopupIndex(null); 
     };
+
     const handleModalClose = () => {
         setShowModal(false);
         setModalData({});
     };
+
     const handleEditSave = async () => {
         setLoading(true); 
         try {
@@ -73,6 +89,7 @@ const Reminders = () => {
             setLoading(false); 
         }
     };
+
     const handleDeleteConfirm = async () => {
         setLoading(true); 
         try {
@@ -93,17 +110,20 @@ const Reminders = () => {
             setLoading(false); 
         }
     };
+
     if (loading) {
         return <div>Loading reminders...</div>;
     }
+
     if (error) {
         return <div>{error}</div>;
     }
+
     return (
-        <div className="w-[25%] py-4">
+        <div className={`${isMobile ? 'w-full mt-[80px] p-4' : 'w-[25%]'} py-4`}>
             <h2 className="text-xl pl-6 h-[7%] mb-4 flex items-center text-gray-800">Upcoming Reminders</h2>
             <div
-                className="bg-[#F7F8F8] p-6 rounded-lg ml-[10px] w-[100%] overflow-y-auto"
+                className={`bg-[#F7F8F8] p-6 rounded-lg ${isMobile ? 'mx-auto' : 'ml-[10px]'} w-[100%] overflow-y-auto`}
                 style={{ height: 'calc(10% + 500px)',maxHeight:' 540px'}}
             >
                 <div className="space-y-4">
@@ -197,4 +217,5 @@ const Reminders = () => {
         </div>
     );
 };
+
 export default Reminders;

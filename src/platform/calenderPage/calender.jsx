@@ -11,7 +11,7 @@ const Calender = () => {
 
     
 
-    return (<div className='bg-[#E1EAE8] h-[100vh] fixed w-full top-0 '>
+    return (<div className='bg-[#E1EAE8] h-[100vh] fixed w-full top-0 overflow-y-auto '>
 
         <Sidebar/>
         <Header/>
