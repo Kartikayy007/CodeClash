@@ -132,10 +132,12 @@ const RevisionClassCard = ({ title }) => {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/lecture/?code=${classCode}`,
           axiosConfig
+          
         );
+        console.log(response.data)
         if (response.status === 200) {
           setLectures(response.data.futureLectures);
-          console.log(response.data.futureLectures)
+         
         }
       } catch (error) {
         console.error("Error fetching lectures:", error);

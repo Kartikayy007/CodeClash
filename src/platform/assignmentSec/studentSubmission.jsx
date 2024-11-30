@@ -172,6 +172,7 @@ export const ChatBox = ({ assignmentId }) => {
     const [isParticipantView, setIsParticipantView] = useState(true); 
 
     const token = sessionStorage.getItem("authToken") || localStorage.getItem('authToken');
+    const [enlargedImage, setEnlargedImage] = useState(null);
 
     useEffect(() => {
         const socketConnection = io('http://13.127.67.116:5001', {
@@ -318,6 +319,17 @@ export const ChatBox = ({ assignmentId }) => {
         return `${(bytes / 1048576).toFixed(1)} MB`;
     };
 
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    };
+
+    const handleImageClick = (imageUrl) => {
+        setEnlargedImage(imageUrl);
+    };
+
     return (
         <div className="bg-white p-6 rounded-lg h-auto flex flex-col justify-start">
             {isAdmin && isParticipantView ? (
@@ -385,6 +397,14 @@ export const ChatBox = ({ assignmentId }) => {
                                     >
                                         <div className="text-2xl font-medium">{chat.sender.name}</div>
                                         <div className="text-xl mt-2">{chat.message}</div>
+                                        {chat.file && chat.file.type.startsWith("image/") && (
+                                            <img
+                                                src={chat.file.url}
+                                                alt={chat.file.name}
+                                                className="w-[100px] h-auto rounded-md cursor-pointer hover:opacity-90"
+                                                onClick={() => handleImageClick(chat.file.url)}
+                                            />
+                                        )}
                                         {chat.file && (
                                             <div className="mt-2">
                                                 {chat.file.type.startsWith("image/") ? (
@@ -441,6 +461,7 @@ export const ChatBox = ({ assignmentId }) => {
                             placeholder="Type your message..."
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
+                            onKeyDown={handleKeyPress}
                             style={{ margin: '0px', width: '55%' }}
                         />
 
@@ -474,6 +495,21 @@ export const ChatBox = ({ assignmentId }) => {
                         </div>
                     )}
                 </>
+            )}
+            {enlargedImage && (
+                <div 
+                    className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center"
+                    onClick={() => setEnlargedImage(null)}
+                >
+                    <div className="max-w-[90%] max-h-[90%]">
+                        <img
+                            src={enlargedImage}
+                            alt="Enlarged view"
+                            className="max-w-full max-h-[90vh] object-contain"
+                            onClick={(e) => e.stopPropagation()}
+                        />
+                    </div>
+                </div>
             )}
         </div>
     );

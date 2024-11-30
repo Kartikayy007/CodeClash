@@ -26,6 +26,13 @@ const Dashboard = () => {
     }, []);
 
     useEffect(() => {
+        const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
+        if (!token) {
+            navigate('/login');
+        }
+    }, [navigate]);
+
+    useEffect(() => {
         const controller = new AbortController();
         const { signal } = controller;
 
