@@ -78,7 +78,7 @@ const Performance = () => {
             }}
         >
             <div className="w-full h-[10%] mt-[70px]">
-                <p className="text-[23px] pt-[15px] font-semibold">Good Morning, {formattedUserName}!</p>
+                <p className="text-[23px] pt-[15px] font-semibold">Hello, {formattedUserName}!</p>
             </div>
             
             <div className={`flex h-[35%] overflow-x-auto ${isMobile?'max-h-[300px]':''}`}>

@@ -29,7 +29,7 @@ const LiveVideoCall = () => {
     }
     
 
-    socketRef.current = io('http://13.127.67.116:5001', {
+    socketRef.current = io('https://singhanish.me', {
       query: { token },
       autoConnect: false
     });

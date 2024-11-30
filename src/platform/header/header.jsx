@@ -91,7 +91,7 @@ const createdClasses=useSelector(state=>state.user.noOfCreatedClasses);
         className={`z-10 h-[50px] flex items-center gap-[2%] fixed bg-[#E1EAE8] border-b border-[rgb(218,224,223)] `}
         style={{     width: isMobile ? '100%' : `calc(100% - ${sidebarWidth})`, marginLeft: isMobile ? '0px' : `${sidebarWidth}`, transition: 'margin-left 0.3s ease' }}
       >
-        {location.pathname !== '/announcement'&&location.pathname !== '/assignment-details' && location.pathname !== '/assignment-open' && (
+        {location.pathname !== '/announcement'&&location.pathname !== '/assignment-details' && location.pathname !== '/assignment-open' && location.pathname !== '/live' && (joinedClasses > 0 && createdClasses > 0)&&(
           <div
             onClick={toggleSwitch}
             className={`relative flex items-center bg-[#D9DEDE] rounded-lg cursor-pointer  ${isMobile?'ml-auto mr-[50px]':'ml-[40px]'}`}
