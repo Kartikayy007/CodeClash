@@ -16,6 +16,7 @@ const Calendar = () => {
   const [currentWeekStart, setCurrentWeekStart] = useState(startOfWeek(new Date()));
   const [currentDay, setCurrentDay] = useState(new Date());
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
 
   const sidebarWidth = useSelector((state) => state.sidebar.width);
   const isEnrolled = useSelector((state) => state.toggleState.isEnrolled); 
@@ -201,9 +202,18 @@ const Calendar = () => {
     setIsPageLoaded(true);
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1024);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
 
-    <div className={`h-[100vh] mt-[50px] pt-[15px] bg-[#E1EAE8]  transition-all duration-500 ease-in-out ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`} style={{ marginLeft: sidebarWidth, transition: 'margin-left 0.3s ease,translate 0.3 ease' }}>
+    <div className={`h-[100vh] mt-[50px] pt-[15px] bg-[#E1EAE8]  transition-all duration-500 ease-in-out ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`} style={{ marginLeft: isMobile ? '0' : sidebarWidth, transition: 'margin-left 0.3s ease,translate 0.3 ease' }}>
 
 
 
@@ -219,8 +229,8 @@ const Calendar = () => {
         ))}
       </div>
 
-      <div className='flex'>
-        <div className="rounded-lg p-4 w-[70%] ml-[28px] h-[550px]">
+      <div className={`flex ${isMobile?'flex-col ':''}`}>
+        <div className={`rounded-lg p-4 ${isMobile?'w-full':'w-[70%] ml-[28px]'}  h-[550px]`}>
           <div className="flex items-center mb-4 h-[7%] ">
             <h2 className="text-lg font-semibold text-gray-800 w-[150px]">
               {currentView === 'month' ? format(currentMonth, 'MMMM yyyy') :

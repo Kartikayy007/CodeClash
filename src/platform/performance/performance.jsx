@@ -109,13 +109,13 @@ const Performance = () => {
                         </div>
                     </div>
                 </div> : 
-                <div className='w-[45%] h-[100%] '><AssignmentChart/></div>}
+                <div className='w-[45%] min-w-[360px] h-[100%] '><AssignmentChart/></div>}
                 
                 {isEnrolled ? 
                 <div className="flex gap-4 ml-[20px] w-[45%] h-[100%] min-w-[360px]">
                     <Attendance />
                 </div> : 
-                <div className='flex gap-4 ml-[20px] w-[55%] h-[100%]'><AttendanceChart/></div>}
+                <div className='flex gap-4 ml-[20px] w-[55%] h-[100%] min-w-[360px] '><AttendanceChart/></div>}
             </div>
             
             <div className={`flex h-[45%] ${isMobile?'flex-col':''}`}>
