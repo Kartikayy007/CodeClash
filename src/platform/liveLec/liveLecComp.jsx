@@ -27,6 +27,7 @@ const LiveVideoCall = () => {
         console.log("ASASAS")
       markAttendance();
     }
+    
 
     socketRef.current = io('http://13.127.67.116:5001', {
       query: { token },

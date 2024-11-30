@@ -21,14 +21,14 @@ const AttendanceDashboard = () => {
       {
         label: "Attended",
         data: [80], 
-        backgroundColor: "rgba(99, 102, 241, 0.8)", 
+        backgroundColor: "#0A5757", 
         borderRadius: 5,
         barPercentage: 0.5, 
       },
       {
         label: "Not Attended",
         data: [20], 
-        backgroundColor: "rgba(248, 113, 113, 0.7)", 
+        backgroundColor: "#00A8A5", 
         borderRadius: 5,
         barPercentage: 0.5,
       },
