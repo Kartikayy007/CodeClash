@@ -133,7 +133,7 @@ const ChatBox = () => {
   const token = sessionStorage.getItem("authToken") || localStorage.getItem('authToken');
 
   useEffect(() => {
-    const socketConnection = io('http://13.127.67.116:5001', {
+    const socketConnection = io('https://singhanish.me', {
       query: { token: token },
       autoConnect: false,
     });

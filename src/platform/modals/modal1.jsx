@@ -24,8 +24,8 @@ const Modal = ({ onClose }) => {
   }, []);
 
   const handleClose = () => {
-    setIsVisible(false); // Trigger fade-out animation
-    setTimeout(onClose, 300); // Wait for the animation to complete
+    setIsVisible(false); 
+    setTimeout(onClose, 300);
   };
 
   const handleSelect = (option) => {

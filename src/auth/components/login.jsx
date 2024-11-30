@@ -88,12 +88,15 @@ const Login = () => {
 
       if (response.data.success) {
         const token = response.data.token;
+        sessionStorage.clear();
+        localStorage.clear();
         rememberMe ? localStorage.setItem('authToken', token) : sessionStorage.setItem('authToken', token);
         toast.success("Logged in successfully", {
           className: "custom-toastS",
           hideProgressBar: true,
           autoClose: 3000,
         });
+
         navigate('/dashboard');
       }
     } catch (error) {

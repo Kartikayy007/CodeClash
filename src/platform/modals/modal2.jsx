@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const Modal2 = ({ onClose }) => {
   const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isVisible, setIsVisible] = useState(false); // For fade-in/out animation
+  const [isVisible, setIsVisible] = useState(false); 
   const dispatch = useDispatch();
 
   useEffect(() => {
