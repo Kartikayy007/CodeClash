@@ -9,8 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './css/login.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const element2 = <FontAwesomeIcon icon={faEyeSlash} />;
 const element = <FontAwesomeIcon icon={faEye} />;
@@ -27,7 +26,6 @@ const Login = () => {
   const [emailError, setEmailError] = useState('');
   const navigate = useNavigate();
   const [passwordError, setPasswordError] = useState('');
-
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -41,6 +39,19 @@ const Login = () => {
     }
   }, [email]);
 
+  // Password validation on change
+  useEffect(() => {
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (password && !passwordRegex.test(password)) {
+      setPasswordError(
+        'Enter a valid password'
+      );
+    } else {
+      setPasswordError('');
+    }
+  }, [password]);
+
   useEffect(() => {
     if (emailRef.current) {
       emailRef.current.focus();
@@ -48,7 +59,8 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
+    const token =
+      sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
     if (token) {
       navigate('/dashboard');
     }
@@ -75,7 +87,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    if (emailError) {
+    if (emailError || passwordError) {
       setLoading(false);
       return;
     }
@@ -90,7 +102,9 @@ const Login = () => {
         const token = response.data.token;
         sessionStorage.clear();
         localStorage.clear();
-        rememberMe ? localStorage.setItem('authToken', token) : sessionStorage.setItem('authToken', token);
+        rememberMe
+          ? localStorage.setItem('authToken', token)
+          : sessionStorage.setItem('authToken', token);
         toast.success("Logged in successfully", {
           className: "custom-toastS",
           hideProgressBar: true,
@@ -160,10 +174,7 @@ const Login = () => {
                 value={password}
                 onKeyDown={(e) => handleKeyDown(e, 'submit')}
                 ref={passwordRef} 
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  if (passwordError) setPasswordError('');
-                }}
+                onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder=" "
               />
@@ -194,9 +205,9 @@ const Login = () => {
             <input
               type="submit"
               value="Log in"
-              disabled={loading || !email || !password || emailError}
-              className={`${loading || !email || !password || emailError ? 'disabled-button' : ''}`}
-              style={{ opacity: loading || !email || !password || emailError ? 0.5 : 1, transition: 'opacity 0.3s ease-in-out' }}
+              disabled={loading || !email || !password || emailError || passwordError}
+              className={`${loading || !email || !password || emailError || passwordError ? 'disabled-button' : ''}`}
+              style={{ opacity: loading || !email || !password || emailError || passwordError ? 0.5 : 1, transition: 'opacity 0.3s ease-in-out' }}
             />
 
           </form>

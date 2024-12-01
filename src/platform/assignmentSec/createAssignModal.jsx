@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
-import { X, Plus, Trash2 } from "lucide-react";
+import { X, Plus, Trash2, Loader } from "lucide-react";
 import card from "../assets/assign.svg";
 
-function CreateAssignmentModal({ isOpen, onClose }) {
-  const location = useLocation();
+function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
   const [formData, setFormData] = useState({
-    class: "",
+    class: className,
     dueDate: "",
     title: "",
     description: "",
     attachments: [],
   });
-  const classCode = location.state?.code;
+
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -36,6 +36,10 @@ function CreateAssignmentModal({ isOpen, onClose }) {
   };
 
   const handleSubmit = async () => {
+    console.log(className, classCode);
+    setIsUploading(true);
+    setUploadProgress(0);
+
     const data = new FormData();
     data.append("code", classCode);
     data.append("dueDate", formData.dueDate);
@@ -53,7 +57,10 @@ function CreateAssignmentModal({ isOpen, onClose }) {
     const axiosConfig = {
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
+      },
+      onUploadProgress: (progressEvent) => {
+        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        setUploadProgress(progress);
       },
     };
 
@@ -68,6 +75,9 @@ function CreateAssignmentModal({ isOpen, onClose }) {
       onClose();
     } catch (error) {
       console.error("Error creating assignment:", error);
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -95,7 +105,7 @@ function CreateAssignmentModal({ isOpen, onClose }) {
               <input
                 type="text"
                 name="class"
-                placeholder="English (Class Code)"
+                
                 value={formData.class}
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 rounded-lg border border-gray-200"
@@ -186,12 +196,29 @@ function CreateAssignmentModal({ isOpen, onClose }) {
         </div>
 
         {/* Footer */}
-        <div className="h-[8%] flex justify-center">
+        <div className="h-[8%] flex flex-col items-center justify-center gap-2">
+          {isUploading && (
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="animate-spin">
+                <Loader className="w-4 h-4" />
+              </div>
+              <span>Uploading... {uploadProgress}%</span>
+              <div className="w-48 h-2 bg-gray-200 rounded-full">
+                <div 
+                  className="h-full bg-teal-600 rounded-full transition-all duration-300"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              </div>
+            </div>
+          )}
+          
           <button
             onClick={handleSubmit}
-            className="px-[60px] py-[12px] bg-[#066769] text-white rounded-lg transition-colors"
+            disabled={isUploading}
+            className={`px-[60px] py-[12px] bg-[#066769] text-white rounded-lg transition-colors
+              ${isUploading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-teal-700'}`}
           >
-            Create Assignment
+            {isUploading ? 'Creating Assignment...' : 'Create Assignment'}
           </button>
         </div>
       </div>

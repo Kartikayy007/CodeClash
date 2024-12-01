@@ -79,6 +79,7 @@ const JoinedClasses = () => {
           const { joinedClasses, createdClasses } = response.data.user;
           dispatch(setJoinedClasses(joinedClasses));
           dispatch(setCreatedClasses(createdClasses));
+          fetchData();
 
           if (createdClasses.length === 0 && joinedClasses.length === 0) {
             navigate('/dashsignup');

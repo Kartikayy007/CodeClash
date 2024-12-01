@@ -5,7 +5,7 @@ import Reminders from '../reminder/reminder'
 import { Add } from '@mui/icons-material'; 
 import { setToggleState, setIsEnrolled  } from '../features/toggleSlice';
 import Reminderbox from '../reminder/reminderbox';
-import ScheduleLectureModal from '../modals/modal3';
+import ScheduleLectureModal from '../schedule/scheduleModal';
 
 
 
@@ -24,12 +24,12 @@ const Calendar = () => {
 
   
   const events = {
-    '2024-11-25': ['due', 'class'],
-    '2024-11-26': ['class'],
-    '2024-11-27': ['due'],
-    '2024-11-28': ['class'],
-    '2024-11-29': ['due', 'class'],
-    '2024-11-30': ['class'],
+    '2024-12-01': ['due', 'class'],
+    '2024-12-02': ['class'],
+    '2024-12-03': ['due'],
+    '2024-12-04': ['class'],
+    '2024-12-05': ['due', 'class'],
+    '2024-12-06': ['class'],
   };
 
   const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
