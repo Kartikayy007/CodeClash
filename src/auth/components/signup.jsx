@@ -1,41 +1,33 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setEmail } from '../features/authSlice';
-
 import './css/signup.css';
 import img4 from '../assets/img4.svg';
 import img5 from '../assets/img5.svg';
-import frame from '../assets/Frame.svg'
+import frame from '../assets/Frame.svg';
 import img6 from '../assets/img6.svg';
 import img7 from '../assets/img7.svg';
 import img8 from '../assets/img8.svg';
 import tick from '../assets/tick.svg';
 import cross from '../assets/cross.svg';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import Modal from './modal'; 
+import Modal from './modal';
 import PrivacyPolicy from './content/Policy';
-
 import TermsAndConditions from './content/Terms';
-
 
 const element2 = <FontAwesomeIcon icon={faEyeSlash} />;
 const element = <FontAwesomeIcon icon={faEye} />;
 const images = [img4, img5, img6, img7, img8];
 
-
 const Signup = () => {
-  
   const emailRef = useRef(null);
-  const passwordRef = useRef(null); 
-  const nameRef = useRef(null); 
+  const passwordRef = useRef(null);
+  const nameRef = useRef(null);
   const [name, setName] = useState('');
   const [email, setEmailState] = useState('');
   const [password, setPassword] = useState('');
@@ -43,13 +35,11 @@ const Signup = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState('');
+  const [nameError, setNameError] = useState('');
   const [popupVisible, setPopupVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
-
-  
-
   const [passwordConditions, setPasswordConditions] = useState({
     length: false,
     uppercase: false,
@@ -70,19 +60,17 @@ const Signup = () => {
   const handlePrivacyClick = () => {
     setShowPrivacyModal(true);
   };
-
   const [passwordStrength, setPasswordStrength] = useState("Weak");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  
 
   useEffect(() => {
     if (nameRef.current) {
       nameRef.current.focus();
     }
   }, []);
+
   useEffect(() => {
     const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
     if (token) {
@@ -98,7 +86,7 @@ const Signup = () => {
   }, []);
 
   useEffect(() => {
-    if ((!emailError && email)||!email) {
+    if ((!emailError && email) || !email) {
       setEmailError('');
     }
   }, [email]);
@@ -144,22 +132,18 @@ const Signup = () => {
       e.preventDefault();
       if (nextField === 'email' && name) {
         emailRef.current.focus();
-
-      }
-      else if (nextField === 'password' && email) {
-        passwordRef.current.focus(); 
+      } else if (nextField === 'password' && email) {
+        passwordRef.current.focus();
       } else if (nextField === 'submit' && password) {
-        handleSubmit(e); 
+        handleSubmit(e);
       }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-      setEmailError('');
-      setLoading(true);
-    
+    setEmailError('');
+    setLoading(true);
 
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, {
@@ -167,20 +151,16 @@ const Signup = () => {
         email,
         password
       });
-      
 
       if (response.data.success) {
         dispatch(setEmail(email));
-      
-
         toast.dismiss();
-        toast.success(response.data.message, { className: 'custom-toastS', autoClose: 3000,hideProgressBar:true });
+        toast.success(response.data.message, { className: 'custom-toastS', autoClose: 3000, hideProgressBar: true });
         setTimeout(() => navigate('/otp'), 1000);
         sessionStorage.setItem('isRegistered', 'true');
-
       }
     } catch (error) {
-      toast.error(error.response?.data?.error, { className: 'custom-toast', autoClose: 3000,hideProgressBar:true  });
+      toast.error(error.response?.data?.error, { className: 'custom-toast', autoClose: 3000, hideProgressBar: true });
     } finally {
       setName('');
       setEmailState('');
@@ -194,23 +174,38 @@ const Signup = () => {
       });
       setPasswordStrength("Weak");
       setPopupVisible(false);
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   const validateEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
-      setEmailError('Please enter a valid email address.'); 
+      setEmailError('Please enter a valid email address.');
     } else {
       setEmailError('');
     }
   };
 
+  const validateName = (name) => {
+    const trimmedName = name.trim();
+    if (!/^[A-Za-z]/.test(trimmedName)) {
+      setNameError('Username must start with a letter.');
+    } else {
+      setNameError('');
+    }
+  };
+
+  const handleNameChange = (e) => {
+    const newName = e.target.value;
+    setName(newName);
+    validateName(newName);
+  };
+
   const handleEmailChange = (e) => {
     const newEmail = e.target.value;
     setEmailState(newEmail);
-    validateEmail(newEmail); 
+    validateEmail(newEmail);
   };
 
   const handleFocus = () => {
@@ -226,12 +221,13 @@ const Signup = () => {
   };
 
   const progress = Object.values(passwordConditions).filter(Boolean).length * 25;
-  const formIsValid = name && email && password && Object.values(passwordConditions).every(condition => condition) && isChecked;
+  const formIsValid = name && !nameError && email && password && Object.values(passwordConditions).every(condition => condition) && isChecked;
 
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
-    passwordRef.current.focus(); 
+    passwordRef.current.focus();
   };
+
   return (
     <div className='signUpPage'>
       {loading && (
@@ -240,7 +236,7 @@ const Signup = () => {
         </div>
       )}
       <div className='signupleft'>
-      <div id="signmobscreenlogo">
+        <div id="signmobscreenlogo">
           <img src={frame} alt="" />
         </div>
         <div className="signupleftSub">
@@ -252,9 +248,9 @@ const Signup = () => {
               <input
                 type="text"
                 ref={nameRef}
-                className="textinput"
+                className={`textinput `}
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={handleNameChange}
                 placeholder=" "
                 onKeyDown={(e) => handleKeyDown(e, 'email')}
               />
@@ -313,19 +309,19 @@ const Signup = () => {
               </div>
 
               <p className={passwordConditions.length ? "met" : "not-met"}>
-              <img src={passwordConditions.length ? tick : cross} alt={passwordConditions.length ? "Met" : "Not Met"} />
-              Minimum 8 characters
+                <img src={passwordConditions.length ? tick : cross} alt={passwordConditions.length ? "Met" : "Not Met"} />
+                Minimum 8 characters
               </p>
               <p className={passwordConditions.uppercase ? "met" : "not-met"}>
-              <img src={passwordConditions.uppercase ? tick : cross} alt={passwordConditions.uppercase ? "Met" : "Not Met"} />
+                <img src={passwordConditions.uppercase ? tick : cross} alt={passwordConditions.uppercase ? "Met" : "Not Met"} />
                 At least one uppercase letter
               </p>
               <p className={passwordConditions.specialChar ? "met" : "not-met"}>
-              <img src={passwordConditions.specialChar ? tick : cross} alt={passwordConditions.specialChar ? "Met" : "Not Met"} />
+                <img src={passwordConditions.specialChar ? tick : cross} alt={passwordConditions.specialChar ? "Met" : "Not Met"} />
                 At least one special character
               </p>
               <p className={passwordConditions.number ? "met" : "not-met"}>
-              <img src={passwordConditions.number ? tick : cross} alt={passwordConditions.number ? "Met" : "Not Met"} />
+                <img src={passwordConditions.number ? tick : cross} alt={passwordConditions.number ? "Met" : "Not Met"} />
                 At least one number
               </p>
 
@@ -342,13 +338,13 @@ const Signup = () => {
                 checked={isChecked}
                 onChange={(e) => setIsChecked(e.target.checked)}
               />
-               <label htmlFor="">
+              <label htmlFor="">
                 I agree to the &nbsp;
                 <span onClick={handleTermsClick} style={{ cursor: 'pointer', color: 'blue' }} className='tc'>
                   Terms & Conditions
                 </span>
                 &nbsp; and &nbsp;
-                <span onClick={handlePrivacyClick} style={{ cursor: 'pointer', color: 'blue'}} className='tc' id='pp'>
+                <span onClick={handlePrivacyClick} style={{ cursor: 'pointer', color: 'blue' }} className='tc' id='pp'>
                   Privacy Policy
                 </span>
               </label>
@@ -360,7 +356,7 @@ const Signup = () => {
               id='sub'
               disabled={!formIsValid || loading}
               className={!formIsValid || loading ? 'disabled-button' : ''}
-              style={{ opacity: formIsValid ? 1 : 0.5,transition: 'opacity 0.3s ease-in-out' }}
+              style={{ opacity: formIsValid ? 1 : 0.5, transition: 'opacity 0.3s ease-in-out' }}
             />
           </form>
 
@@ -390,12 +386,12 @@ const Signup = () => {
         </div>
       </div>
 
-      <ToastContainer position='top-center'/>
+      <ToastContainer position='top-center' />
       {showTermsModal && (
         <Modal
           title="Terms and Conditions"
-          content={TermsAndConditions()}       
-           onClose={closeTermsModal}
+          content={TermsAndConditions()}
+          onClose={closeTermsModal}
         />
       )}
       {showPrivacyModal && (

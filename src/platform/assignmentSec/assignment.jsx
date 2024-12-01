@@ -8,18 +8,22 @@ import axios from "axios";
 
 const AssignmentSection = () => {
     const location = useLocation();
-    const classId = location.state?._id; 
+    const classId = location.state?._id;
+    const className = location.state?.name;
+    const classCode = location.state?.code;
 
     const navigate = useNavigate();
 
     const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
-    const [assignments, setAssignments] = useState([]); 
-    const [isModalOpen, setIsModalOpen] = useState(false); 
-
-
+    const [assignments, setAssignments] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [shouldRefetch, setShouldRefetch] = useState(false);
 
     const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setShouldRefetch(true); 
+    };
 
     const token = sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
     const axiosConfig = {
@@ -27,7 +31,6 @@ const AssignmentSection = () => {
             Authorization: `Bearer ${token}`,
         },
     };
-
 
     const fetchAssignments = async () => {
         try {
@@ -40,14 +43,19 @@ const AssignmentSection = () => {
         } catch (error) {
             console.error("Error fetching assignments:", error);
         }
+       
     };
 
+    useEffect(() => {
+        if (shouldRefetch) {
+            fetchAssignments();
+            setShouldRefetch(false);
+        }
+    }, [shouldRefetch]);
 
     useEffect(() => {
         fetchAssignments();
-    }, []); 
-
-
+    }, []);
 
     const handleAssignmentClick = (assignment) => {
         navigate("/assignment-details", { state: { assignment } });
@@ -55,28 +63,22 @@ const AssignmentSection = () => {
 
     return (
         <div>
-
             {!isEnrolled ? (
                 <div>
                     <button
                         className="bg-[#066769] text-white font-medium mb-4 py-4 px-8 rounded-lg ml-6"
-                        onClick={openModal} 
-
+                        onClick={openModal}
                     >
                         Create Assignment
                     </button>
-
                 </div>
             ) : null}
-
 
             <div
                 className="bg-[#E1EAE8] p-6 rounded-lg"
                 style={{
                     maxHeight: "75vh",
-
-                    overflowY: "auto", 
-
+                    overflowY: "auto",
                 }}
             >
                 {assignments.length === 0 ? (
@@ -87,7 +89,6 @@ const AssignmentSection = () => {
                             key={index}
                             className="bg-white rounded-lg p-4 mb-4 flex items-start gap-4 border border-[#BCE2DF] cursor-pointer hover:shadow-md"
                             onClick={() => handleAssignmentClick(assignment)}
-
                         >
                             <div className="flex-1">
                                 <h2 className="text-2xl text-black">{assignment.name}</h2>
@@ -123,7 +124,12 @@ const AssignmentSection = () => {
             </div>
 
             {/* Modal */}
-            <CreateAssignmentModal isOpen={isModalOpen} onClose={closeModal} />
+            <CreateAssignmentModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                className={className}
+                classCode={classCode}
+            />
         </div>
     );
 };

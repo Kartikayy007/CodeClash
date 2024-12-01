@@ -19,6 +19,7 @@ import { motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { Announcement } from '@mui/icons-material';
+import { toast } from 'react-toastify';
 
 const tabs = ['Announcement', 'Assignments', 'Schedule', 'Attendance', 'People'];
 
@@ -42,7 +43,11 @@ const AnnouncementComponent = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
   const [attachments, setAttachments] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState({});
   const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
+  const [shouldRefetch, setShouldRefetch] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const sidebarWidth = useSelector((state) => state.sidebar.width);
   const tabsContainerRef = useRef(null);
@@ -83,18 +88,27 @@ const AnnouncementComponent = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    if (shouldRefetch) {
+      fetchClassDetails();
+      setShouldRefetch(false);
+    }
+  }, [shouldRefetch]);
+
   const fetchClassDetails = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/classroom/details?code=${classCode}`,
         axiosConfig
       );
       setAnnouncementsList(response.data.classroom.announcements);
-      console.log(announcementsList)
       setSubjectName(response.data.classroom.subject);
       setClassName(response.data.classroom.name);
     } catch (error) {
-      console.error('Failed to fetch announcements:', error);
+      toast.error(error.response?.data?.message || 'Failed to fetch class details');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -105,7 +119,13 @@ const AnnouncementComponent = () => {
     if (validFiles.length !== files.length) {
       alert('Some files were too large. Maximum size is 5MB per file.');
     }
-    
+
+    const newProgress = {};
+    validFiles.forEach(file => {
+      newProgress[file.name] = 0;
+    });
+
+    setUploadProgress(prev => ({ ...prev, ...newProgress }));
     setAttachments([...attachments, ...validFiles]);
   };
   
@@ -115,7 +135,7 @@ const AnnouncementComponent = () => {
 
   const postAnnouncement = async () => {
     if (!announcementTitle.trim() || !announcement.trim()) {
-      alert('Please fill in all required fields');
+      toast.error('Please fill in all required fields');
       return;
     }
     
@@ -130,7 +150,7 @@ const AnnouncementComponent = () => {
         formData.append('media', file);
       });
   
-      const response = await axios.post(
+      await axios.post(
         `${process.env.REACT_APP_API_URL}/announcement/create`,
         formData,
         {
@@ -141,33 +161,45 @@ const AnnouncementComponent = () => {
           },
         }
       );
-      console.log(response)
   
-      setAnnouncementsList([response.data, ...announcementsList]);
+      toast.success('Announcement posted successfully!');
       setAnnouncement('');
       setAnnouncementTitle('');
       setAttachments([]);
       setIsEditable(false);
+      setShouldRefetch(true); // Trigger refetch
     } catch (error) {
-      console.error('Failed to post announcement:', error);
+      toast.error(error.response?.data?.message || 'Failed to post announcement');
     } finally {
       setIsUploading(false);
     }
   };
 
   const deleteAnnouncement = async (announcementId) => {
+    if (!announcementId) return;
+    
+    setIsDeleting(true);
     try {
-      await axios.delete(
+      const response = await axios.delete(
         `${process.env.REACT_APP_API_URL}/announcement/delete/${announcementId}`,
-        {code:classCode},
-        axiosConfig
+        {
+          headers: {
+            ...axiosConfig.headers,
+          },
+          data: { code: classCode }
+        }
       );
-      setAnnouncementsList((prev) =>
-        prev.filter((announce) => announce._id !== announcementId)
-      );
-      handleMenuClose();
+
+      if (response.status === 200) {
+        toast.success('Announcement deleted successfully');
+        handleMenuClose();
+        setShouldRefetch(true);
+      }
     } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to delete announcement');
       console.error('Failed to delete announcement:', error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -284,13 +316,14 @@ const AnnouncementComponent = () => {
                   value={announcementTitle}
                   onChange={(e) => setAnnouncementTitle(e.target.value)}
                   placeholder="Title"
-                  className="w-full mb-2 p-2 border rounded-md"
+                  className="w-full mb-2 p-2 border placeholder-gray-400 "
+                  style={{border:'none',borderRadius:'4px'}}
                 />
                 <textarea
                   value={announcement}
                   onChange={(e) => setAnnouncement(e.target.value)}
                   placeholder="Write your announcement"
-                  className="w-full p-2 border rounded-md"
+                  className=" text-[17px] w-full p-[20px] border rounded-md placeholder-gray-400 min-h-[100px] resize-none"
                   rows="3"
                 />
                 
@@ -313,10 +346,10 @@ const AnnouncementComponent = () => {
                     <div className="mt-2 space-y-2">
                       {attachments.map((file, index) => (
                         <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded-md">
-                          <span className="text-sm text-gray-600">{file.name}</span>
+                          <span className="text-md text-gray-600">{file.name}</span>
                           <button
                             onClick={() => removeAttachment(index)}
-                            className="text-red-500 hover:text-red-700"
+                            className=" text-4xl text-gray-500 hover:text-gray-700"
                           >
                             &times;
                           </button>
@@ -338,80 +371,95 @@ const AnnouncementComponent = () => {
                   </button>
                   <button
                     onClick={postAnnouncement}
-                    disabled={isUploading}
-                    className="px-4 py-2 bg-[#008080] text-white rounded-md disabled:opacity-50"
+                    disabled={isUploading || !announcementTitle.trim() || !announcement.trim()}
+                    className={`px-4 py-2 bg-[#008080] text-white rounded-md transition-all
+                      ${(isUploading || !announcementTitle.trim() || !announcement.trim()) ? 
+                        'opacity-50 cursor-not-allowed' : 
+                        'hover:bg-teal-700'}`}
                   >
-                    {isUploading ? 'Posting...' : 'Post'}
+                    {isUploading ? (
+                      <div className="flex items-center gap-2">
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white"></div>
+                        <span>Posting...</span>
+                      </div>
+                    ) : (
+                      'Post'
+                    )}
                   </button>
                 </div>
               </div>
             )}
             <div className="mt-6">
-              {announcementsList.length > 0 ? (
-                announcementsList.map((announcement, index) => (
-                  <div key={index} className="bg-white rounded-lg shadow-md p-6 mb-4">
-                    <div className="flex justify-between items-start">
-                      <h3 className="text-xl font-semibold">{announcement.title}</h3>
-                      <button onClick={(e) => handleMenuOpen(e, announcement)}>
-                        <MoreVertIcon />
-                      </button>
-                    </div>
-                    
-                    <p className="mt-2 text-gray-600">{announcement.description}</p>
-                    
-                    {/* Media Display Section */}
-                    {announcement.media && announcement.media.length > 0 && (
-  <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
-    {announcement.media.map((media, mediaIndex) => (
-      <div key={mediaIndex} className="relative group">
-        {media.url && media.url.match(/\.(jpeg|jpg|gif|png)$/i) ? (
-          // Image preview with zoom on click
-          <div className="aspect-square overflow-hidden rounded-lg">
-            <img 
-              src={media} 
-              alt={media.originalName || `Image ${mediaIndex + 1}`}
-              className="w-full h-full object-cover cursor-zoom-in transition-transform group-hover:scale-105"
-              onClick={() => window.open(media, '_blank')}
-            />
-          </div>
-        ) : (
-          // Download link for other file types
-          <a 
-            href={media}
-            download
-            className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-          >
-            <AttachFileIcon className="mr-3 text-gray-500" />
-            <div className="flex flex-col">
-              <span className="text-sm font-medium text-gray-700 truncate max-w-[200px]">
-                {media.originalName || `File ${mediaIndex + 1}`}
-              </span>
-              <span className="text-xs text-gray-500">
-                Click to download
-              </span>
-            </div>
-          </a>
-        )}
-      </div>
-    ))}
-  </div>
-)}
-
-                    
-                    <div className="mt-4 text-sm text-gray-500">
-                      {new Date(announcement.createdAt).toLocaleString()}
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="flex flex-col h-[500px] items-center justify-center text-gray-500 mt-6">
-                  <img
-                    src={NoDataIllustration}
-                    alt="No Announcements"
-                    className="w-auto h-auto object-contain mb-4"
-                  />
-                  <p className="text-lg">No announcements yet. Stay tuned!</p>
+              {isLoading ? (
+                <div className="flex items-center justify-center h-[400px]">
+                  <div className="animate-spin rounded-full h-8 w-8 border-2 border-teal-600"></div>
                 </div>
+              ) : (
+                announcementsList.length > 0 ? (
+                  announcementsList.map((announcement, index) => (
+                    <div key={index} className="bg-white rounded-lg shadow-md p-6 mb-4">
+                      <div className="flex justify-between items-start">
+                        <h3 className="text-xl font-semibold">{announcement.title}</h3>
+                        <button onClick={(e) => handleMenuOpen(e, announcement)}>
+                          <MoreVertIcon />
+                        </button>
+                      </div>
+                      
+                      <p className="mt-2 text-gray-600">{announcement.description}</p>
+                      
+                      {/* Media Display Section */}
+                      {announcement.media && announcement.media.length > 0 && (
+                        <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
+                          {announcement.media.map((media, mediaIndex) => (
+                            <div key={mediaIndex} className="relative group">
+                              {media.url && media.url.match(/\.(jpeg|jpg|gif|png)$/i) ? (
+                                // Image preview with zoom on click
+                                <div className="aspect-square overflow-hidden rounded-lg">
+                                  <img 
+                                    src={media} 
+                                    alt={media.originalName || `Image ${mediaIndex + 1}`}
+                                    className="w-full h-full object-cover cursor-zoom-in transition-transform group-hover:scale-105"
+                                    onClick={() => window.open(media, '_blank')}
+                                  />
+                                </div>
+                              ) : (
+                                // Download link for other file types
+                                <a 
+                                  href={media}
+                                  download
+                                  className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                                >
+                                  <AttachFileIcon className="mr-3 text-gray-500" />
+                                  <div className="flex flex-col">
+                                    <span className="text-sm font-medium text-gray-700 truncate max-w-[200px]">
+                                      {media.originalName || `File ${mediaIndex + 1}`}
+                                    </span>
+                                    <span className="text-xs text-gray-500">
+                                      Click to download
+                                    </span>
+                                  </div>
+                                </a>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      
+                      <div className="mt-4 text-sm text-gray-500">
+                        {new Date(announcement.createdAt).toLocaleString()}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex flex-col h-[500px] items-center justify-center text-gray-500 mt-6">
+                    <img
+                      src={NoDataIllustration}
+                      alt="No Announcements"
+                      className="w-auto h-auto object-contain mb-4"
+                    />
+                    <p className="text-lg">No announcements yet. Stay tuned!</p>
+                  </div>
+                )
               )}
             </div>
             <Menu
@@ -426,13 +474,23 @@ const AnnouncementComponent = () => {
                   setIsEditable(true);
                   handleMenuClose();
                 }}
+                disabled={isUploading || isDeleting}
               >
                 Edit
               </MenuItem>
               <MenuItem
                 onClick={() => deleteAnnouncement(selectedAnnouncement?._id)}
+                disabled={isDeleting || isUploading}
+                className={`text-red-600 ${(isDeleting || isUploading) ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                Delete
+                {isDeleting ? (
+                  <div className="flex items-center gap-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-red-600"></div>
+                    <span>Deleting...</span>
+                  </div>
+                ) : (
+                  'Delete'
+                )}
               </MenuItem>
             </Menu>
           </div>

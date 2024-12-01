@@ -3,6 +3,7 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Modal from './editModal'; 
 import axios from 'axios'; 
+import noRem from '../assets/noRem.svg';
 
 const Reminders = () => {
     const [reminders, setReminders] = useState([]); 
@@ -120,35 +121,38 @@ const Reminders = () => {
     }
 
     return (
-        <div className={`${isMobile ? 'w-full mt-[80px] p-4' : 'w-[25%]'} py-4`}>
-            <h2 className="text-xl pl-6 h-[7%] mb-4 flex items-center text-gray-800">Upcoming Reminders</h2>
-            <div
-                className={`bg-[#F7F8F8] p-6 rounded-lg ${isMobile ? 'mx-auto' : 'ml-[10px]'} w-[100%] overflow-y-auto`}
-                style={{ height: 'calc(10% + 500px)',maxHeight:' 540px'}}
-            >
+    <div className={`${isMobile ? 'w-full mt-[80px] p-4' : 'w-[25%]'} py-4`}>
+        <h2 className="text-xl pl-6 h-[7%] mb-4 flex items-center text-gray-800">Upcoming Reminders</h2>
+        <div
+            className={`bg-[#F7F8F8] p-6 rounded-lg ${isMobile ? 'mx-auto' : 'ml-[10px]'} w-[100%] overflow-y-auto`}
+            style={{ height: 'calc(10% + 500px)', maxHeight: '540px' }}
+        >
+            {reminders.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full text-gray-600">
+                    <img src={noRem} alt="" />
+                    <h1 className='text-xl font-medium'>No reminders available.</h1>
+                    <p className='text-center'>Never miss a beat! Add a reminder to stay on top of your schedule and deadlines.</p>
+                </div>
+            ) : (
                 <div className="space-y-4">
                     {reminders.map((reminder, index) => (
                         <div
                             key={index}
                             className="h-20 flex items-center bg-[#D9DEDE] rounded-lg pr-2 shadow-sm relative"
                         >
-                            {}
                             <div className="flex items-center justify-center w-20 h-20 bg-[#738484] text-white rounded-lg rounded-r-none flex-col">
                                 <NotificationsNoneOutlinedIcon fontSize="large" />
                                 <p className="text-sm">{reminder.time}</p>
                             </div>
-                            {}
                             <div className="flex flex-col flex-grow pl-4">
                                 <p className="text-xl text-gray-800">{reminder.lecture.title}</p>
                                 <p className="text-sm text-gray-600">{reminder.lecture.startTime}</p>
                             </div>
-                            {}
                             <div className="relative">
                                 <MoreVertIcon
                                     className="text-gray-500 cursor-pointer"
                                     onClick={() => handlePopupToggle(index)}
                                 />
-                                {}
                                 {popupIndex === index && (
                                     <div className="absolute top-full right-0 mt-2 w-32 bg-white border border-gray-300 shadow-lg rounded-lg z-10">
                                         <button
@@ -169,53 +173,51 @@ const Reminders = () => {
                         </div>
                     ))}
                 </div>
-            </div>
-            {}
-            {showModal && (
-                <Modal
-                    title={modalType === 'edit' ? 'Edit Reminder' : 'Delete Reminder'}
-                    onClose={handleModalClose}
-                >
-                    {modalType === 'edit' && (
-                        <>
-                            <label className="block mb-2 text-sm font-medium text-gray-700">
-                                Time
-                            </label>
-                            <input
-                                type="datetime-local"
-                                className="w-full px-3 py-2 border rounded-md"
-                                value={modalData.time}
-                                onChange={(e) => setModalData({ ...modalData, time: e.target.value })}
-                            />
-                            <div className="flex justify-end mt-4">
-                                <button
-                                    className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                                    onClick={handleEditSave}
-                                >
-                                    Save
-                                </button>
-                            </div>
-                        </>
-                    )}
-                    {modalType === 'delete' && (
-                        <>
-                            <p className="text-sm text-gray-700 mb-4">
-                                Are you sure you want to delete this reminder?
-                            </p>
-                            <div className="flex justify-end">
-                                <button
-                                    onClick={handleDeleteConfirm}
-                                    className="px-4 py-2 bg-red-500 text-white rounded-md"
-                                >
-                                    Delete
-                                </button>
-                            </div>
-                        </>
-                    )}
-                </Modal>
             )}
         </div>
-    );
-};
-
+        {showModal && (
+            <Modal
+                title={modalType === 'edit' ? 'Edit Reminder' : 'Delete Reminder'}
+                onClose={handleModalClose}
+            >
+                {modalType === 'edit' && (
+                    <>
+                        <label className="block mb-2 text-sm font-medium text-gray-700">
+                            Time
+                        </label>
+                        <input
+                            type="datetime-local"
+                            className="w-full px-3 py-2 border rounded-md"
+                            value={modalData.time}
+                            onChange={(e) => setModalData({ ...modalData, time: e.target.value })}
+                        />
+                        <div className="flex justify-end mt-4">
+                            <button
+                                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                                onClick={handleEditSave}
+                            >
+                                Save
+                            </button>
+                        </div>
+                    </>
+                )}
+                {modalType === 'delete' && (
+                    <>
+                        <p className="text-sm text-gray-700 mb-4">
+                            Are you sure you want to delete this reminder?
+                        </p>
+                        <div className="flex justify-end">
+                            <button
+                                onClick={handleDeleteConfirm}
+                                className="px-4 py-2 bg-red-500 text-white rounded-md"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </>
+                )}
+            </Modal>
+        )}
+    </div>
+);}
 export default Reminders;
