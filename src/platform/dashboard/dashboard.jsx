@@ -58,7 +58,7 @@ const Dashboard = () => {
                     
                     const { joinedClasses, createdClasses } = response.data.user;
                     dispatch(setJoinedClasses(joinedClasses));
-                    dispatch(setJoinedClasses(createdClasses));
+                    dispatch(setCreatedClasses(createdClasses));
                     dispatch(setUserName(response.data.user.name)); 
                     dispatch(setUserMail(response.data.user.email));
                     dispatch(setNoOfJoinedClasses(response.data.user.noOfJoinedClasses));

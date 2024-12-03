@@ -41,6 +41,10 @@ const AssignmentDetails = () => {
         return <p>No assignment details available.</p>;
     }
 
+    const dueDate = new Date(assignment.dueDate);
+    const currentDate = new Date();
+    const status = dueDate < currentDate ? "Completed" : "Due";
+
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
         setUploadedFiles((prev) => [...prev, ...files]);
@@ -184,10 +188,9 @@ const AssignmentDetails = () => {
                                     <p>
                                         <span className="font-medium">Status: </span>
                                         <span
-                                            className={`${assignment.status === "Due" ? "text-red-600" : "text-green-600"
-                                                }`}
+                                            
                                         >
-                                            {assignment.status}
+                                            {status}
                                         </span>
                                     </p>
                                     <p>
@@ -204,71 +207,51 @@ const AssignmentDetails = () => {
                             <div className="p-4 rounded-lg">
                                 <h2 className="text-xl font-medium text-[#394141]">Description</h2>
                                 <p className="text-[#394141] mt-3 text-xl">{assignment.description}</p>
-                                <ul className="list-disc list-inside mt-6 text-[#394141]">
-                                    <li>
-                                        <span className="font-medium">Minimum Word Count: </span>
-                                        {assignment.minWordCount}
-                                    </li>
-                                    <li>
-                                        <span className="font-medium">Formatting: </span>
-                                        {assignment.formatting}
-                                    </li>
-                                    <li>
-                                        <span className="font-medium">Include: </span>
-                                        {assignment.include}
-                                    </li>
-                                    <li>
-                                        <span className="font-medium">Submission File Format: </span>
-                                        {assignment.fileFormat}
-                                    </li>
-                                </ul>
                             </div>
                             {/* Attachments Section */}
                             {assignment.media && assignment.media.length > 0 && (
                                 <div className="p-4 rounded-lg">
-    <h2 className="text-xl font-medium text-[#394141]">Attachments</h2>
-    <div className="mt-4 grid grid-cols-auto md:grid-cols-auto gap-4">
-        {assignment.media.map((media, mediaIndex) => (
-            <div key={mediaIndex} className="relative group h-auto w-auto">
-                {media && media.match(/\.(jpeg|jpg|gif|png)$/i) ? (
-                    // Image preview with zoom on click
-                    <div className="aspect-square overflow-hidden rounded-lg">
-                        <img 
-                            src={media} 
-                            alt={media.originalName || `Image ${mediaIndex + 1}`}
-                            className="w-20 h-20 object-cover cursor-zoom-in transition-transform group-hover:scale-105"
-                            onClick={() => window.open(media.url, '_blank')}
-                        />
-                    </div>
-                ) : (
-                    <a
-                        href={media}
-                        download
-                        onClick={(e) => {
-                            
-                            if (!media) {
-                                e.preventDefault();
-                                alert("File URL is missing or invalid.");
-                            }
-                        }}
-                        className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                        <AttachFileIcon className="mr-3 text-gray-500" />
-                        <div className="flex flex-col">
-                            <span className="text-sm font-medium text-gray-700 truncate max-w-[200px]">
-                                {media.originalName || `File ${mediaIndex + 1}`}
-                            </span>
-                            <span className="text-xs text-gray-500">
-                                Click to download
-                            </span>
-                        </div>
-                    </a>
-                )}
-            </div>
-        ))}
-    </div>
-</div>
-
+                                    <h2 className="text-xl font-medium text-[#394141]">Attachments</h2>
+                                    <div className="mt-4 grid grid-cols-auto md:grid-cols-auto gap-4">
+                                        {assignment.media.map((media, mediaIndex) => (
+                                            <div key={mediaIndex} className="relative group h-auto w-auto">
+                                                {media && media.match(/\.(jpeg|jpg|gif|png)$/i) ? (
+                                                    // Image preview with zoom on click
+                                                    <div className="aspect-square overflow-hidden rounded-lg">
+                                                        <img 
+                                                            src={media} 
+                                                            alt={media.originalName || `Image ${mediaIndex + 1}`}
+                                                            className="w-20 h-20 object-cover cursor-zoom-in transition-transform group-hover:scale-105"
+                                                            onClick={() => window.open(media.url, '_blank')}
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <a
+                                                        href={media}
+                                                        download
+                                                        onClick={(e) => {
+                                                            if (!media) {
+                                                                e.preventDefault();
+                                                                alert("File URL is missing or invalid.");
+                                                            }
+                                                        }}
+                                                        className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                                                    >
+                                                        <AttachFileIcon className="mr-3 text-gray-500" />
+                                                        <div className="flex flex-col">
+                                                            <span className="text-sm font-medium text-gray-700 truncate max-w-[200px]">
+                                                                {media.originalName || `File ${mediaIndex + 1}`}
+                                                            </span>
+                                                            <span className="text-xs text-gray-500">
+                                                                Click to download
+                                                            </span>
+                                                        </div>
+                                                    </a>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                             )}
                         </div>
                         {isEnrolled ? (
