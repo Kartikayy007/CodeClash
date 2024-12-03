@@ -227,7 +227,7 @@ const RevisionClassCard = ({ title }) => {
           >
             <div className="flex items-center h-full">
               <img src={pana2} alt="Class Illustration" className="h-full mr-4" />
-              <div className="flex flex-col gap-5 ml-[50px] h-full justify-around">
+              <div className="flex flex-col gap-5  h-full justify-around sm:ml-[50px]">
                 <h3 className="text-xl text-gray-800">{lecture.title}</h3>
                 <p className="text-sm text-gray-600">{lecture.description}</p>
                 <div className="flex flex-col text-sm text-gray-500 gap-2">
@@ -240,7 +240,7 @@ const RevisionClassCard = ({ title }) => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col justify-between items-end">
+            <div className="flex flex-col justify-between items-end h-full">
               <button
                 onClick={() => toggleMenu(lecture._id)}
                 className="p-2 text-gray-600 hover:bg-gray-100 rounded-full"

@@ -9,7 +9,7 @@ import Newassignment from "./newassignment";
 import axios from "axios";
 
 const AssignmentMain = () => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const sidebarWidth = useSelector((state) => state.sidebar.width);
   const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
   const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
@@ -22,7 +22,7 @@ const AssignmentMain = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 1024);
+      setIsMobile(window.innerWidth < 1024);
     };
 
     window.addEventListener('resize', handleResize);
@@ -46,15 +46,16 @@ const AssignmentMain = () => {
   };
 
   return (
-    <div className="h-[100vh] w-full relative">
+    <div className="h-[100%] w-full relative">
       <div className="top-0 fixed">
         <Sidebar />
         <Header />
       </div>
       <div
-        className="bg-[#E1EAE8] mt-[50px] h-full pt-[15px] transition-all duration-300"
+        className="bg-[#E1EAE8] mt-[50px]  pt-[15px] transition-all duration-300"
         style={{ 
           marginLeft: isMobile ? '0' : sidebarWidth,
+          height:isMobile ? '100%' : '100vh',
           transition: 'margin-left 0.3s ease'
         }}
       >

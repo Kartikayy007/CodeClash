@@ -6,6 +6,7 @@ import { Add } from '@mui/icons-material';
 import { setToggleState, setIsEnrolled  } from '../features/toggleSlice';
 import Reminderbox from '../reminder/reminderbox';
 import ScheduleLectureModal from '../schedule/scheduleModal';
+import './calender.css';
 
 
 
@@ -123,14 +124,19 @@ const Calendar = () => {
             </div>
 
 
-            <div className="border-t-[0.5px] h-[40vh] bg-white border-[#ADB8B8] p-2 overflow-y-auto">
+            <div className="border-t-[0.5px] h-[30vh] bg-white border-[#ADB8B8] p-2 overflow-y-auto custom-scrollbar" >
               {dayEvents.length > 0 ? (
                 dayEvents.map((eventType, index) => (
                   <div
                     key={index}
-                    className={`flex h-[60px] justify-between items-center p-2 mb-2 border-l-2   ${
+                    className={`flex h-[60px] w-max justify-between items-center p-2 mb-2 border-l-2   ${
                       eventType === 'due' ? 'border-[#E57373] bg-[#FBE5E5]' : 'border-[#FFB74D] bg-[#FFFAED]'
-                    }`}
+                      
+                    }`
+
+                  }
+                 
+
                   >
                     <span className="text-sm  text-gray-800">
                       {eventType === 'due' ? 'Due Assignment' : 'Scheduled Class'}

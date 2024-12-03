@@ -34,7 +34,7 @@ const assignments = [
 
 const YourAssignments = () => {
   return (
-    <div className="p-6  h-[60%]">
+    <div className="p-6  h-[60%] flex flex-col gap-[10px]">
       <h2 className="text-xl  h-[7%] flex w-full items-center">Your Assignments</h2>
       <div className="flex items-center gap-4 h-[13%]">
         <FilterListIcon fontSize="large"/>
@@ -60,12 +60,12 @@ const YourAssignments = () => {
           >
             <div className="flex flex-col h-full justify-between">
               <h3 className="text-2xl">{assignment.title}</h3>
-              <p className="text-xl text-gray-600">{assignment.subject}</p>
-              <p className="text-xl text-gray-600 flex items-center">
+              <p className="text-lg text-gray-600">{assignment.subject}</p>
+              <p className="text-lg text-gray-600 flex items-center">
                 <span className="w-4 h-4 bg-purple-500 rounded-full mr-2"></span>
                 Due Date: {assignment.dueDate}
               </p>
-              <div className="flex gap-2 ">
+              <div className="flex gap-2 mt-[10px]">
                 <button className="bg-[#145A5E] text-white px-4 py-2 text-lg rounded-md shadow-md">
                   View Assignment
                 </button>

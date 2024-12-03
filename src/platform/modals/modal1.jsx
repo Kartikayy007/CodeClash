@@ -44,7 +44,7 @@ const Modal = ({ onClose }) => {
     setIsLoading(true);
     
 
-    const token = sessionStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
 
     try {
       const headers = {

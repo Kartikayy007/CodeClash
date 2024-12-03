@@ -31,7 +31,7 @@ const DayNightToggle = () => {
     >
       <div
         className={`absolute w-8 h-8 bg-white rounded-full shadow-md transform transition-transform duration-300 ${
-          isDay ? "translate-x-1" : "translate-x-10"
+          isDay ? "translate-x-1" : "translate-x-8 md:translate-x-10"
         }`}
       ></div>
 
@@ -54,11 +54,13 @@ const DayNightToggle = () => {
   );
 };
 
-const ToggleSwitch = () => {
+const ToggleSwitch = ({onToggle}) => {
   const [isOn, setIsOn] = useState(false);
 
   const toggleSwitch = () => {
-    setIsOn(!isOn);
+    const newValue = !isOn;
+    setIsOn(newValue);
+    onToggle(newValue);
   };
 
   return (
@@ -70,7 +72,7 @@ const ToggleSwitch = () => {
     >
       <div
         className={`w-8 h-8 bg-white rounded-full shadow-md transform transition-transform ${
-          isOn ? "translate-x-10" : ""
+          isOn ? "translate-x-8 sm:translate-x-10" : ""
         }`}
       ></div>
     </div>
@@ -123,7 +125,7 @@ const SettingsPage = () => {
   const [isSignOutModalOpen, setSignOutModalOpen] = useState(false);
   const userName = useSelector((state) => state.user.name);  
   const userMail = useSelector((state) => state.user.email);  
-  console.log("mail",userMail)
+  // console.log("mail",userMail)
   const formattedUserName = userName.charAt(0).toUpperCase() + userName.slice(1).toLowerCase();
   const [isEditing, setIsEditing] = useState(false);
   const [newUsername, setNewUsername] = useState('');
@@ -204,6 +206,22 @@ const SettingsPage = () => {
     }
   }, [isEditing]);
 
+  const handleNotificationSetting = async (isOn) => {
+    try {
+      console.log(isOn)
+      // console.log("ASKASKJAKSAJ")
+      const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
+      const axiosConfig = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+      }
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/settings/change-is-notification-enabled`,{isNotification:isOn},axiosConfig);
+      console.log(response)
+    }catch (error) {
+        console.error("Error updating notification settings:", error);
+      }
+  }
   return (
     <div
       className="mt-[50px] mx-auto bg-[#E1EAE8] p-6 rounded-lg shadow-md h-[100vh] overflow-y-auto"
@@ -310,7 +328,7 @@ const SettingsPage = () => {
               </p>
             </div>
           </div>
-          <ToggleSwitch />
+          <ToggleSwitch onToggle={handleNotificationSetting}/>
         </div>
       </div>
 

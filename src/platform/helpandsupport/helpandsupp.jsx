@@ -96,7 +96,7 @@ const FeedbackForm = ({isMobile}) => {
           <div className="flex items-center">
             <button
               type="submit"
-              className="bg-[#066769] text-white py-4 px-8 rounded-lg"
+              className="bg-[#066769] text-white py-4 px-8 rounded-lg whitespace-nowrap overflow-x-auto"
             >
               Submit Feedback
             </button>
@@ -122,14 +122,11 @@ const ChatBox = () => {
   const chatContainerRef = useRef(null);
   const studentId = sessionStorage.getItem('userId');
   const [isImageEnlarged, setIsImageEnlarged] = useState(false);
-
-  const [enlargedImageSrc, setEnlargedImageSrc] = useState(''); 
+  const [enlargedImageSrc, setEnlargedImageSrc] = useState('');
   const [socket, setSocket] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [participants, setParticipants] = useState([]); 
-
+  const [participants, setParticipants] = useState([]);
   const [activeChatUserId, setActiveChatUserId] = useState(null);
-
   const token = sessionStorage.getItem("authToken") || localStorage.getItem('authToken');
 
   useEffect(() => {
@@ -147,7 +144,6 @@ const ChatBox = () => {
     socketConnection.on("devChats", (chats) => {
       setIsAdmin(true);
       const uniqueParticipants = chats.map((chat) => chat.participants);
-
       setParticipants(uniqueParticipants);
       console.log("Participants:", uniqueParticipants);
     });
@@ -165,8 +161,7 @@ const ChatBox = () => {
     socketConnection.on('chatHistory', (chatHistory) => {
       console.log('Chat History:', chatHistory);
       if (chatHistory.length > 0 && chatHistory[0].messages) {
-        setMessages(chatHistory[0].messages); 
-
+        setMessages(chatHistory[0].messages);
       }
     });
 
@@ -211,6 +206,9 @@ const ChatBox = () => {
       return;
     }
 
+    const trimmedMessage = message.trim();
+    if (!trimmedMessage && !file) return;
+
     const fileData = file
       ? {
           buffer: Array.from(new Uint8Array(await file.arrayBuffer())),
@@ -219,16 +217,16 @@ const ChatBox = () => {
           size: file.size,
         }
       : null;
-    if(!message && !fileData) return;
-    if(isAdmin){
+
+    if (isAdmin) {
       socket.emit("developerChatMessage", {
-        message,
+        message: trimmedMessage,
         userId: activeChatUserId,
         file: fileData,
       });
-    }else{
+    } else {
       socket.emit("developerChatMessage", {
-        message,
+        message: trimmedMessage,
         userId: studentId,
         file: fileData,
       });
@@ -243,7 +241,6 @@ const ChatBox = () => {
     if (socket) {
       socket.emit("joinDeveloperChat", { userId });
       setActiveChatUserId(userId);
-
     }
   };
 
@@ -262,12 +259,14 @@ const ChatBox = () => {
     if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / 1048576).toFixed(1)} MB`;
   };
+
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
   };
+
   const handleImageClick = (imageSrc) => {
     setIsImageEnlarged(true);
     setEnlargedImageSrc(imageSrc);
@@ -277,7 +276,6 @@ const ChatBox = () => {
     setIsImageEnlarged(false);
     setEnlargedImageSrc('');
   };
-
 
   return (
     <div className="bg-white m-6 p-4 rounded-lg h-full flex flex-col justify-end">
@@ -300,7 +298,6 @@ const ChatBox = () => {
                   }`}
               >
                 {participant[0].name}
-
               </li>
             ))}
           </ul>
@@ -334,7 +331,7 @@ const ChatBox = () => {
                         src={chat.file.url}
                         alt={chat.file.name}
                         className="w-[100px] h-auto rounded-md cursor-pointer"
-                        onClick={() => handleImageClick(chat.file.url)} 
+                        onClick={() => handleImageClick(chat.file.url)}
                       />
                     ) : (
                       <div>
@@ -363,7 +360,6 @@ const ChatBox = () => {
       </div>
 
       <div className="mt-4 flex items-center rounded-lg p-[12px] bg-white">
-
         <label
           htmlFor="fileInput"
           className="flex items-center justify-center w-[17.5%] h-[67.59px] bg-gray-200 rounded-lg cursor-pointer mr-2"
@@ -377,17 +373,15 @@ const ChatBox = () => {
           <AttachFileIcon />
         </label>
 
-
         <input
           type="text"
           className="flex-grow px-4 py-2 border-none outline-none text-gray-700 w-[65%]"
           placeholder="Type your message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          style={{ margin: '0px',width:'0' }}
-          onKeyDown={handleKeyPress} 
+          style={{ margin: '0px', width: '0' }}
+          onKeyDown={handleKeyPress}
         />
-
 
         <button
           className="flex items-center justify-center w-[17.5%] h-[67.59px] bg-[#066769] rounded-lg text-white ml-2"
@@ -396,7 +390,6 @@ const ChatBox = () => {
           <SendIcon />
         </button>
       </div>
-
 
       {filePreview && (
         <div className="mt-2 flex items-center px-[12px]">
@@ -418,18 +411,16 @@ const ChatBox = () => {
         </div>
       )}
 
-        {isImageEnlarged && (
+      {isImageEnlarged && (
         <div
           className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex justify-center items-center z-50"
-          onClick={handleCloseImage} 
-
+          onClick={handleCloseImage}
         >
           <img
             src={enlargedImageSrc}
             alt="Enlarged Image"
             className="max-w-[90%] max-h-[90%] object-contain"
-            onClick={(e) => e.stopPropagation()} 
-
+            onClick={(e) => e.stopPropagation()}
           />
         </div>
       )}

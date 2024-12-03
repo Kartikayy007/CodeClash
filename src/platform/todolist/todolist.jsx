@@ -7,6 +7,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from '@mui/icons-material/Edit';
 import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import NoDataIllustration from '../assets/todo.svg'; // Add an illustration for no tasks
 
 const TodoList = () => {
   const [tasks, setTasks] = useState([]);
@@ -235,7 +237,7 @@ const TodoList = () => {
           Enter at least 5 characters ({inputLength}/5)
         </div>
       </div>
-      <div className="space-y-2 flex flex-col gap-[5px] pb-[20px] max-w-[300px]">
+      <div className="space-y-2 flex flex-col gap-[5px] pb-[20px] min-w-[300px]">
         {isLoading ? (
           <div className="text-center py-4">Loading tasks...</div>
         ) : Array.isArray(sortedTasks) && sortedTasks.length > 0 ? (
@@ -304,15 +306,14 @@ const TodoList = () => {
                       disabled={isUpdating}
                       className="w-full px-4 py-2 text-left flex items-center gap-2 hover:bg-gray-100 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <EditIcon fontSize="small" />
                       {isUpdating && loadingTaskId === task._id ? 'Updating...' : 'Edit'}
                     </button>
                     <button 
                       onClick={() => handleDeleteTask(task._id)}
                       disabled={isDeleting}
-                      className="w-full px-4 py-2 text-left flex items-center gap-2 hover:bg-gray-100 text-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full px-4 py-2 text-left flex items-center gap-2 hover:bg-gray-100 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <DeleteIcon fontSize="small" />
+                     
                       {isDeleting && loadingTaskId === task._id ? 'Deleting...' : 'Delete'}
                     </button>
                   </div>
@@ -321,7 +322,15 @@ const TodoList = () => {
             </div>
           ))
         ) : (
-          <p>No tasks available</p>
+          <div className="flex flex-col items-center justify-center text-gray-500 mt-6">
+            <img
+              src={NoDataIllustration}
+              alt="No Tasks"
+              className="w-auto h-auto object-contain mb-4"
+            />
+            <p className="text-2xl font-semibold">Your to-do list is empty!</p>
+            <p className="text-lg">Add a task to stay organized.</p>
+          </div>
         )}
       </div>
       <ToastContainer/>

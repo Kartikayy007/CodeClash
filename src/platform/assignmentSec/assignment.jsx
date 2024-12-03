@@ -39,7 +39,7 @@ const AssignmentSection = () => {
                 axiosConfig
             );
             console.log(response)
-            setAssignments(response.data);
+            setAssignments(response.data.assignments);
         } catch (error) {
             console.error("Error fetching assignments:", error);
         }

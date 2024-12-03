@@ -16,7 +16,7 @@ import userReducer from '../platform/features/userSlice';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'user'], 
+  whitelist: ['auth', 'user','createdClasses','joinedClasses','toggleState'], 
 
 };
 

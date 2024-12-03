@@ -11,46 +11,20 @@ const StudentSubmissions = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const assignment = location.state?.assignment;
-
-    console.log()
-    const [questions, setQuestions] = useState([
-        {
-            id: 1,
-            name: "John Doe",
-            question: "Can we include personal anecdotes in the essay?",
-            answered: false,
-            reply: "",
-            timestamp: "Mon, 7:00 PM",
-        },
-        {
-            id: 2,
-            name: "Jane Smith",
-            question: "What is the word limit for the essay?",
-            answered: true,
-            reply: "The word limit is 1000 words.",
-            timestamp: "Mon, 7:30 PM",
-        },
-        {
-            id: 3,
-            name: "Jane Smith",
-            question: "What is the word limit for the essay?",
-            answered: false,
-            reply: "The word limit is 1000 words.",
-            timestamp: "Mon, 7:30 PM",
-        },
-    ]);
-
-
-    const totalQuestions = questions.length;
-    const completedQuestions = ((questions.filter((q) => q.answered).length / totalQuestions) * 100).toFixed(1); // Percentage with 1 decimal
-    const notCompletedQuestions = (100 - parseFloat(completedQuestions)).toFixed(1); 
-
-
-
+    // console.log(assignment)
+    const createdClasses = useSelector((state) => state.createdClasses.createdClasses);
+    // console.log(createdClasses)
+    const currentClass = createdClasses.find((cls) => cls._id === assignment.classroom);
+    const totalStudents = currentClass ? currentClass.noOfStudents : 0;
+    const totalSubmissions = assignment.submissions.length;
+    // console.log(currentClass)
+    const completedPercentage = ((totalSubmissions / totalStudents) * 100).toFixed(1);
+    const notCompletedPercentage = (100 - parseFloat(completedPercentage)).toFixed(1);
+    console.log(completedPercentage,notCompletedPercentage)
     const submissionData = [
-        { name: "Completed", value: parseFloat(completedQuestions) }, 
+        { name: "Completed", value: parseFloat(completedPercentage) }, 
 
-        { name: "Not Completed", value: parseFloat(notCompletedQuestions) }, 
+        { name: "Not Completed", value: parseFloat(notCompletedPercentage) }, 
 
     ];
 
@@ -58,16 +32,9 @@ const StudentSubmissions = () => {
 
 
 
-    const handleReply = (id, reply) => {
-        setQuestions((prev) =>
-            prev.map((q) =>
-                q.id === id ? { ...q, reply, answered: true } : q
-            )
-        );
-    };
 
     const handleViewSubmissions = () => {
-        navigate("/assignment-open");
+        navigate("/assignment-open", { state: { assignment } });
 
     };
 
@@ -331,7 +298,7 @@ export const ChatBox = ({ assignmentId }) => {
     };
 
     return (
-        <div className="bg-white p-6 rounded-lg h-auto flex flex-col justify-start">
+        <div className="bg-white p-6 rounded-lg h-full flex flex-col justify-start">
             {isAdmin && isParticipantView ? (
                 <>
                     <h2 className="text-3xl text-gray-800">Select a student to chat with</h2>
