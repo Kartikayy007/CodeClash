@@ -1,6 +1,9 @@
 import React from "react";
 import assignmentImg from "../assets/pana.svg"
 import FilterListIcon from '@mui/icons-material/FilterList';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
 const assignments = [
   {
     id: 1,
@@ -33,34 +36,50 @@ const assignments = [
 ];
 
 const YourAssignments = () => {
+  const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/assignment`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        console.log(response.data.user)
+        if(isEnrolled){
+          const assignments = response.data.user.joinedClassrooms.allAssignments;
+          const slicedAssignments = assignments.slice(0,4);
+          setData(slicedAssignments);
+        }else{
+          const assignments = response.data.user.createdClassrooms.allAssignments;
+          const slicedAssignments =assignments.slice(0,4);
+          setData(slicedAssignments);        }
+        
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [isEnrolled]);
   return (
     <div className="p-6  h-[60%] flex flex-col gap-[10px]">
       <h2 className="text-xl  h-[7%] flex w-full items-center">Your Assignments</h2>
-      <div className="flex items-center gap-4 h-[13%]">
-        <FilterListIcon fontSize="large"/>
-        <button className="flex items-center bg-[#D9DEDE] border border-gray-300 px-4 py-2 rounded-md text-lg shadow-sm">
-          <span className="mr-2">
-           
-          </span>
-          Filter by Class
-        </button>
-        <button className="flex items-center bg-[#D9DEDE] border border-gray-300 px-4 py-2 rounded-md text-lg shadow-sm">
-          <span>Sort by :</span>
-          <select className="ml-2 bg-transparent focus:outline-none text-lg">
-            <option>Due Soon</option>
-            <option>Completed</option>
-          </select>
-        </button>
-      </div>
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 h-[80%]">
-        {assignments.map((assignment) => (
+        {console.log(data)}
+        {data && data.map((assignment) => (
           <div
             key={assignment._id}
-            className="bg-white p-4 rounded-lg border border-[#BCE2DF] flex gap-4 items-center justify-between"
+            className="bg-white p-4 rounded-lg border border-[#BCE2DF] flex gap-4 items-center justify-between max-h-[150px]"
           >
             <div className="flex flex-col h-full justify-between">
               <h3 className="text-2xl">{assignment.title}</h3>
-              <p className="text-lg text-gray-600">{assignment.subject}</p>
+              <p className="text-lg text-gray-600">{assignment.classroomSubject}</p>
               <p className="text-lg text-gray-600 flex items-center">
                 <span className="w-4 h-4 bg-purple-500 rounded-full mr-2"></span>
                 Due Date: {assignment.dueDate}

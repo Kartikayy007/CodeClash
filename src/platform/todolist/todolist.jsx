@@ -8,7 +8,8 @@ import DeleteIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from '@mui/icons-material/Edit';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import NoDataIllustration from '../assets/todo.svg'; // Add an illustration for no tasks
+import NoDataIllustration from '../assets/todo.svg'; 
+
 
 const TodoList = () => {
   const [tasks, setTasks] = useState([]);

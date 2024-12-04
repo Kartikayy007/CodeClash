@@ -17,7 +17,7 @@ import LiveLec from './platform/liveLec/liveLec';
 import Card from './platform/cards/cards';
 import Newpass from './auth/components/newpass';
 
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate,useLocation ,useParams } from 'react-router-dom';
 import YourClasses from './platform/yourClasses/yourClasses';
 import Settingpage from './platform/header/settingpage';
 import Announcement from './platform/announcement/announcement';
@@ -51,7 +51,8 @@ const App = () => {
       <Route path="/dashsignup" element={<Dashsignup/>} />
 
 
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/dashboard/*" element={<Dashboard />} />
+
       <Route path="/calendar" element={<Calender />} />
       <Route path="/settings" element={<Settingpage />} />
       <Route path="/live" element={<LiveLec />} />
@@ -61,8 +62,7 @@ const App = () => {
       <Route path="/" element={<AssignmentSection />} />
       <Route path="/assignment-details" element={<AssignmentDetails />} />
       <Route path="/assignment-open" element={<AssignOpen />} />
-
-      
+      <Route path="/classroom/join/:joinToken"  element={<JoinClassroom />} />
       
 
  
@@ -78,3 +78,17 @@ const App = () => {
 };
 
 export default App;
+
+const JoinClassroom = () => {
+  const { joinToken } = useParams();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+
+  return (
+      <Navigate
+          to={`/dashboard/join${location.search}`}
+          state={{ joinToken, queryParams: Object.fromEntries(queryParams.entries()) }}
+      />
+  );
+};

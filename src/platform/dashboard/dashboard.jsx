@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import Sidebar from '../sidebar/sidebar';
 import Header from '../header/header';
 import Performance from '../performance/performance';
@@ -10,12 +10,23 @@ import { setJoinedClasses } from '../features/joinedClasses';
 import { setCreatedClasses } from '../features/createdClasses';
 import { setUserName,setUserMail, setNoOfJoinedClasses,setNoOfCreatedClasses } from '../features/userSlice';  
 import axios from 'axios';
+import { set } from 'date-fns';
+import Modal2 from '../modals/modal2';  
+
 
 const Dashboard = () => {
     const [isMobile, setIsMobile] = useState(window.innerWidth >= 1024);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation();
+    const { joinToken, queryParams } = location.state || {};
+    const [JoinclassModal, setJoinclassModal] = useState(false);
 
+    // console.log(token,queryParams)
+    
+       const closeJoinclassmodal =() =>{
+        setJoinclassModal(false);
+       }
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth >= 1024);
@@ -31,7 +42,15 @@ const Dashboard = () => {
             navigate('/login');
         }
     }, [navigate]);
-
+    useEffect(()=>{
+        // console.log(joinToken,queryParams)
+        if(joinToken && queryParams && queryParams.code){
+            // console.log("a")
+            setJoinclassModal(true);
+            console.log(JoinclassModal)
+            
+            }
+    },[])
     useEffect(() => {
         const controller = new AbortController();
         const { signal } = controller;
@@ -50,12 +69,16 @@ const Dashboard = () => {
                     { headers },
                     { signal }  
                 );
+                const response2 = await axios.get(
+                    `${process.env.REACT_APP_API_URL}/user/dashboard`,
+                    { headers },
+                    { signal }  
+                );
 
               
-                if (response.data.success) {
-                    console.log(response.data.user)
+                if (response.data.success && response2.data.success) {
                     sessionStorage.setItem('userId',response.data.user._id);
-                    
+                    console.log(response2)
                     const { joinedClasses, createdClasses } = response.data.user;
                     dispatch(setJoinedClasses(joinedClasses));
                     dispatch(setCreatedClasses(createdClasses));
@@ -64,7 +87,7 @@ const Dashboard = () => {
                     dispatch(setNoOfJoinedClasses(response.data.user.noOfJoinedClasses));
                     dispatch(setNoOfCreatedClasses(response.data.user.noOfCreatedClasses));
                     
-                    console.log(response)
+                    // console.log(response)
                     
 
                 }
@@ -94,6 +117,12 @@ const Dashboard = () => {
                 </div>
             </div>
         </div>
+        {JoinclassModal && (
+                <Modal2
+                joinToken={joinToken}
+                classCode={queryParams?.code}
+                onClose={closeJoinclassmodal}/>
+        )}
     </div>
     );
 };

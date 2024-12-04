@@ -208,7 +208,6 @@ const AssignmentDetails = () => {
                                 <h2 className="text-xl font-medium text-[#394141]">Description</h2>
                                 <p className="text-[#394141] mt-3 text-xl">{assignment.description}</p>
                             </div>
-                            {/* Attachments Section */}
                             {assignment.media && assignment.media.length > 0 && (
                                 <div className="p-4 rounded-lg">
                                     <h2 className="text-xl font-medium text-[#394141]">Attachments</h2>
@@ -216,7 +215,6 @@ const AssignmentDetails = () => {
                                         {assignment.media.map((media, mediaIndex) => (
                                             <div key={mediaIndex} className="relative group h-auto w-auto">
                                                 {media && media.match(/\.(jpeg|jpg|gif|png)$/i) ? (
-                                                    // Image preview with zoom on click
                                                     <div className="aspect-square overflow-hidden rounded-lg">
                                                         <img 
                                                             src={media} 
