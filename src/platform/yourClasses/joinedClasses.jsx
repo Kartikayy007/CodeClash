@@ -9,7 +9,8 @@ import { setCreatedClasses } from '../features/createdClasses';
 import { setIsEnrolled } from '../features/toggleSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import card from '../assets/cardImg.svg'
+import card from '../assets/cardImg.svg';
+import image from '../assets/noclass.svg';
 
 const JoinedClasses = () => {
   const navigate = useNavigate();
@@ -79,13 +80,10 @@ const JoinedClasses = () => {
           const { joinedClasses, createdClasses } = response.data.user;
           dispatch(setJoinedClasses(joinedClasses));
           dispatch(setCreatedClasses(createdClasses));
-          fetchData();
 
-          if (createdClasses.length === 0 && joinedClasses.length === 0) {
-            navigate('/dashsignup');
-          } else if (createdClasses.length > 0 && joinedClasses.length === 0) {
+          if (createdClasses.length > 0 && joinedClasses.length === 0) {
             dispatch(setIsEnrolled(false));
-          } else if(createdClasses.length === 0 && joinedClasses.length > 0){
+          } else if (createdClasses.length === 0 && joinedClasses.length > 0) {
             dispatch(setIsEnrolled(true));
           }
         }
@@ -112,6 +110,8 @@ const JoinedClasses = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const isEmpty = joinedClasses.length === 0 && createdClasses.length === 0;
+
   return (
     <div
       className="p-8 bg-[#E1EAE8] min-h-screen"
@@ -120,34 +120,45 @@ const JoinedClasses = () => {
         transition: 'margin-left 0.3s ease' 
       }}
     >
-      <h2 className="text-3xl font-semibold mb-4 mt-[50px]">
-        {isEnrolled ? 'Your Joined Classes' : 'Your Created Classes'}
-      </h2>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {isEnrolled
-          ? joinedClasses?.map((classInfo, index) => (
-              <ClassCard
-                key={index}
-                {...classInfo}
-                index={index}
-                activePopupIndex={activePopupIndex}
-                onPopupToggle={handlePopupToggle}
-                navigate={navigate}
-              />
-            ))
-          : createdClasses?.map((classInfo, index) => (
-              <ClassCard
-                key={index}
-                {...classInfo}
-                index={index}
-                activePopupIndex={activePopupIndex}
-                onPopupToggle={handlePopupToggle}
-                onDelete={() => handleDeleteClass(classInfo.code, index)}
-                isDeleting={deletedClassIndex === index}
-                navigate={navigate}
-              />
-            ))}
+        {isEmpty ? (
+          <div className="text-center text-gray-500 text-lg col-span-full flex flex-col items-center justify-center h-[100vh]">
+            <img src={image} alt="" />
+            <p className='font-semibold mt-5 text-xl'> You Haven't Joined or Created Any Classes Yet! </p>
+            <p>Start your learning journey by joining or creating a class. All your classes will appear here once added.</p>
+          </div>
+        ) : (
+          <>
+            <h2 className="text-3xl font-semibold mb-4 mt-[50px] col-span-full">
+              {isEnrolled ? 'Your Joined Classes' : 'Your Created Classes'}
+            </h2>
+            {isEnrolled ? (
+              joinedClasses.map((classInfo, index) => (
+                <ClassCard
+                  key={index}
+                  {...classInfo}
+                  index={index}
+                  activePopupIndex={activePopupIndex}
+                  onPopupToggle={handlePopupToggle}
+                  navigate={navigate}
+                />
+              ))
+            ) : (
+              createdClasses.map((classInfo, index) => (
+                <ClassCard
+                  key={index}
+                  {...classInfo}
+                  index={index}
+                  activePopupIndex={activePopupIndex}
+                  onPopupToggle={handlePopupToggle}
+                  onDelete={() => handleDeleteClass(classInfo.code, index)}
+                  isDeleting={deletedClassIndex === index}
+                  navigate={navigate}
+                />
+              ))
+            )}
+          </>
+        )}
       </div>
       <ToastContainer />
     </div>
@@ -197,10 +208,10 @@ const ClassCard = ({
       style={{ animationDelay: `${index * 0.2}s` }}
       onClick={handleCardClick}
     >
-<div className="w-full bg-gradient-to-l from-[#339999] via-[#339999] to-teal-700 text-white p-6 hover:shadow-lg transition-shadow duration-300">
-<div className="flex flex-col h-48">
-
+      <div className="w-full bg-gradient-to-l from-[#339999] via-[#339999] to-teal-700 text-white p-6 hover:shadow-lg transition-shadow duration-300">
+        <div className="flex flex-col h-48">
           <div className="absolute top-4 right-4 z-10">
+            {!isEnrolled?
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -208,8 +219,10 @@ const ClassCard = ({
               }}
               className="p-1 hover:bg-white/10 rounded-full transition-colors"
             >
+            
               <MoreHorizontal className="text-white" size={20} />
-            </button>
+            </button>  :<></>
+            }
             {activePopupIndex === index && !isEnrolled && (
               <PopupMenu
                 onClose={() => onPopupToggle(null)}
@@ -219,12 +232,10 @@ const ClassCard = ({
             )}
           </div>
 
-
           <div className="mb-4 mt-auto flex justify-between">
             <h2 className="text-3xl font-medium">{name}</h2>
             <img src={card} alt="" className='absolute bottom-[20px] right-[20px] w-[140px]'/>
           </div>
-
 
           <div className="">
             <div className="flex items-center gap-5">

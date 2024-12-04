@@ -450,7 +450,7 @@ const ClassenceLanding = () => {
                 >
                   <motion.div 
                     className="text-teal-600 mb-6"
-                    whileHover={{ rotate: 360 }}
+                   
                     transition={{ duration: 0.5 }}
                   >
                     {feature.icon}

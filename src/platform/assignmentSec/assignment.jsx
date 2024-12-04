@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import CreateAssignmentModal from "./createAssignModal";
 import axios from "axios";
+import image from "../assets/noAssignments.svg";
 
 const AssignmentSection = () => {
     const location = useLocation();
@@ -82,7 +83,12 @@ const AssignmentSection = () => {
                 }}
             >
                 {assignments.length === 0 ? (
-                    <p className="text-center text-gray-500">No assignments available.</p>
+                    
+                    
+                <div className="flex flex-col items-center justify-center h-[70vh]">
+                    <img src={image} alt="" />
+                    <p className="text-center text-gray-500 mt-5 text-xl font-semibold">No assignments available.</p>
+                    <p className="text-gray-500">You don’t have any assignments to work on right now.</p></div>
                 ) : (
                     assignments.map((assignment, index) => (
                         <div

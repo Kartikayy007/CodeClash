@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Sidebar from '../sidebar/sidebar';
-import Headersignup from '../header/headersignup';
+import Header from '../header/header';
 import dash1 from '../assets/dashGIF.gif';
 import Modal from '../modals/modal1';  
 import { useSelector } from 'react-redux';
@@ -31,9 +31,10 @@ const Dashsignup = () => {
 
   return (
     <div>
+      <Header />
       <Sidebar />
-      <Headersignup />
-      <div className="w-[100%] flex items-center flex-col pt-[15px]  h-[80vh] justify-center">
+      
+      <div className="w-[100%] bg-[#E1EAE8] h-[100vh] flex items-center flex-col   justify-center">
         <div className={`flex-col items-center ${isCollapsed?"":"ml-[80px]"}`} style={{transition:'margin-left 0.3s '}}>
           <div className="flex justify-center">
             <img src={dash1} alt="Dashboard" />

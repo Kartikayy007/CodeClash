@@ -5,6 +5,7 @@ import { FaEllipsisV } from "react-icons/fa";
 import ScheduleLectureModal from "./scheduleModal";
 import pana2 from "../assets/pana2.svg";
 import { useLocation, useNavigate } from "react-router-dom";
+import image from '../assets/noSchedule.svg'
 
 const ReminderModal = ({ isOpen, onClose, title, lectureId }) => {
   const [reminderTime, setReminderTime] = useState("");
@@ -281,7 +282,11 @@ const RevisionClassCard = ({ title }) => {
           </div>
         ))
       ) : (
-        <p>No lectures scheduled</p>
+        <div className="flex flex-col items-center justify-center h-[70vh]">
+<img src={image} alt="" />
+          <p className="text-xl font-semibold text-gray-500 mt-5">No Upcoming lectures scheduled</p>
+          <p className=" text-gray-500">You're all caught up! Stay tuned for new lecture schedules.</p>
+        </div>
       )}
 
       <ScheduleLectureModal

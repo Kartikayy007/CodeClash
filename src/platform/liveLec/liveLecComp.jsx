@@ -47,9 +47,11 @@ const LiveVideoCall = () => {
       socketRef.current.emit('join-room', `lecture-${lectureId}`);
     });
 
-    socketRef.current.on('session-started', () => setIsLive(true));
-    socketRef.current.on('session-ended', () => setIsLive(false));
-    socketRef.current.on('youtube-video-url', (url) => setYoutubeUrl(url));
+    
+    socketRef.current.on('youtube-video-url', (url) => {
+      setYoutubeUrl(url);
+      setIsLive(true);
+    });
   };
 
   const startLiveSession = async () => {
@@ -113,6 +115,7 @@ const LiveVideoCall = () => {
         body: JSON.stringify({ lectureId })
       });
 
+      setIsLive(false);
       socketRef.current.emit('stop-streaming', `lecture-${lectureId}`);
       cleanupConnection();
     } catch (err) {
