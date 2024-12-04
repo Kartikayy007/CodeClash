@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 import {
   LineChart,
   Line,
@@ -8,18 +8,29 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
-const data = [
-  { date: "06/11", attendance: 45 },
-  { date: "07/11", attendance: 50 },
-  { date: "08/11", attendance: 48 },
-  { date: "09/11", attendance: 49 },
-  { date: "10/11", attendance: 47 },
-  { date: "11/11", attendance: 52 },
-  { date: "12/11", attendance: 48 },
-];
-
-const AnimatedGraph = () => {
+import axios from "axios";
+const AnimatedGraph = ({classCode}) => {
+  const [data,setData]=useState([]);
+  useEffect(()=>{
+    const fetchData = async()=>{
+        const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
+        const headers = {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        };
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/classroom/attendance?classCode=${classCode}`, { headers });
+            if (response.data.success) {
+                setData(response.data.last7Lectures);
+            }
+        } catch (error) {
+            console.log('Error fetching attendance data:', error);
+        }
+    }
+    fetchData();
+},[])
+const minAttendance = Math.min(...data.map(item => item.attendance));
+  const maxAttendance = Math.max(...data.map(item => item.attendance));
   return (
     <div className=" p-6 bg-white rounded-lg  mx-auto">
       <h2 className="text-xl text-gray-800 mb-4">
@@ -38,7 +49,7 @@ const AnimatedGraph = () => {
               tick={{ fill: "#9CA3AF", fontSize: 12 }}
               tickLine={false}
               axisLine={false}
-              domain={[40, 60]}
+              domain={[minAttendance, maxAttendance]}
             />
             <Tooltip
               contentStyle={{

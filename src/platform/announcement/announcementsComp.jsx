@@ -516,7 +516,7 @@ const AnnouncementComponent = () => {
 
         {activeTab === 'Assignments' && <AssignmentSection />}
         {activeTab === 'Schedule' && <RevisionClassCard />}
-        {activeTab === 'Attendance' && <AttendanceSection />}
+        {activeTab === 'Attendance' && <AttendanceSection classCode={classCode} />}
         {activeTab === 'People' && <ClassDetails />}
       </motion.main>
     </div>

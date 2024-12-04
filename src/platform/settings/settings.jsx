@@ -340,8 +340,8 @@ const SettingsPage = () => {
         <div className="flex items-center">
           <img src={logout} alt="" className="mr-6" />
           <div>
-            <p className="font-medium text-xl">Log Out</p>
-            <p className="text-gray-600 text-lg">Sign out of your account.</p>
+            <p className="font-medium text-xl">Sign Out</p>
+            <p className="text-gray-600 text-lg">Sign out of all your accounts.</p>
           </div>
         </div>
       </div>

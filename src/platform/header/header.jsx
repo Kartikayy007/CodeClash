@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/AddOutlined';
-import NotificationsIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import AccountIcon from '@mui/icons-material/AccountCircleOutlined';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
 import { setToggleState, setIsEnrolled } from '../features/toggleSlice';
 import CreateClassModal from '../modals/modal1';
 import JoinClassModal from '../modals/modal2';
@@ -19,9 +17,9 @@ const Header = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
-  const name=useSelector(state=>state.user.name);
-const joinedClasses=useSelector(state=>state.user.noOfJoinedClasses);
-const createdClasses=useSelector(state=>state.user.noOfCreatedClasses);
+  const name = useSelector(state => state.user.name);
+  const joinedClasses = useSelector(state => state.user.noOfJoinedClasses);
+  const createdClasses = useSelector(state => state.user.noOfCreatedClasses);
 
   const popupRef = useRef(null);
   const addMenuRef = useRef(null);
@@ -39,7 +37,6 @@ const createdClasses=useSelector(state=>state.user.noOfCreatedClasses);
   };
 
   useEffect(() => {
-    
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         setIsPopupVisible(false);
@@ -85,16 +82,28 @@ const createdClasses=useSelector(state=>state.user.noOfCreatedClasses);
     setIsAddMenuVisible(false);
   };
 
+  const toggleAddMenu = () => {
+    setIsAddMenuVisible(!isAddMenuVisible);
+  };
+
   return (
     <>
       <div
         className={`z-10 h-[50px] flex items-center gap-[2%] fixed bg-[#E1EAE8] border-b border-[rgb(218,224,223)] `}
-        style={{     width: isMobile ? '100%' : `calc(100% - ${sidebarWidth})`, marginLeft: isMobile ? '0px' : `${sidebarWidth}`, transition: 'margin-left 0.3s ease' }}
+        style={{
+          width: isMobile ? '100%' : `calc(100% - ${sidebarWidth})`, 
+          marginLeft: isMobile ? '0px' : `${sidebarWidth}`, 
+          transition: 'margin-left 0.3s ease'
+        }}
       >
-        {location.pathname !== '/announcement'&&location.pathname !== '/assignment-details' && location.pathname !== '/assignment-open' && location.pathname !== '/live' && (joinedClasses > 0 && createdClasses > 0)&&(
+        {location.pathname !== '/announcement' && 
+         location.pathname !== '/assignment-details' && 
+         location.pathname !== '/assignment-open' && 
+         location.pathname !== '/live' && 
+         (joinedClasses > 0 && createdClasses > 0) && (
           <div
             onClick={toggleSwitch}
-            className={`relative flex items-center bg-[#D9DEDE] rounded-lg cursor-pointer  ${isMobile?'ml-auto mr-[50px]':'ml-[40px]'}`}
+            className={`relative flex items-center bg-[#D9DEDE] rounded-lg cursor-pointer ${isMobile ? 'ml-auto mr-[50px]' : 'ml-[40px]'}`}
             style={{ width: '150px', height: '38px' }}
           >
             <div
@@ -130,67 +139,83 @@ const createdClasses=useSelector(state=>state.user.noOfCreatedClasses);
         )}
 
         <div className="w-[150px] absolute right-[10px] flex justify-end items-center gap-[24px]">
-        
-        <div>
-  <div onClick={handleProfileClick}>
-    <AccountIcon style={{ fontSize: 30 }} />
-  </div>
-  {isPopupVisible && (
-    <div
-      ref={popupRef}
-      className="popup absolute top-[50px] right-0 bg-[#EEF0F0] border border-gray-300 rounded-lg shadow-lg p-4 w-[200px] flex flex-col items-center text-gray-700"
-    >
-      <div className="flex flex-col items-center mb-4">
-        <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center mb-2">
-          <AccountIcon style={{ fontSize: 40 }} />
-        </div>
-        <span className="font-medium text-lg">{name}</span>
-      </div>
+          <div>
+            <div onClick={handleProfileClick}>
+              <AccountIcon style={{ fontSize: 30 }} />
+            </div>
+            {isPopupVisible && (
+              <div
+                ref={popupRef}
+                className="popup absolute top-[50px] right-0 bg-[#EEF0F0] border border-gray-300 rounded-lg shadow-lg p-4 w-[200px] flex flex-col items-center text-gray-700"
+              >
+                <div className="flex flex-col items-center mb-4">
+                  <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center mb-2">
+                    <AccountIcon style={{ fontSize: 40 }} />
+                  </div>
+                  <span className="font-medium text-lg">{name}</span>
+                </div>
 
-      <div className="flex flex-col items-center w-full mb-4 text-sm">
-        <div className="flex justify-center items-center w-full mb-2">
-          <span className="material-icons text-gray-500 mr-2"><img src={joined} alt="" /></span>
-          <span>Joined Class: {joinedClasses}</span>
-        </div>
-        <div className="flex justify-center items-center w-full mb-2">
-          <span className="material-icons text-gray-500 mr-2"><img src={created} alt="" /></span>
-          <span>Created Class: {createdClasses}</span>
-        </div>
-      </div>
+                <div className="flex flex-col items-center w-full mb-4 text-sm">
+                  <div className="flex justify-center items-center w-full mb-2">
+                    <span className="material-icons text-gray-500 mr-2"><img src={joined} alt="" /></span>
+                    <span>Joined Class: {joinedClasses}</span>
+                  </div>
+                  <div className="flex justify-center items-center w-full mb-2">
+                    <span className="material-icons text-gray-500 mr-2"><img src={created} alt="" /></span>
+                    <span>Created Class: {createdClasses}</span>
+                  </div>
+                </div>
 
-
-      <button
-        onClick={handleLogout}
-        className="flex justify-center items-center w-full   text-gray-700  py-2 px-4 rounded-md hover:scale-105 transition-transform"
-      >
-        <img src={logout} alt="" />
-        Logout
-      </button>
-    </div>
-  )}
-</div>
-
+                <button
+                  onClick={handleLogout}
+                  className="flex justify-center items-center w-full text-gray-700 py-2 px-4 rounded-md hover:scale-105 transition-transform"
+                >
+                  <img src={logout} alt="" />
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
       <div className="fixed bottom-8 right-8 z-50">
-        <button
-          onClick={() => setIsAddMenuVisible(!isAddMenuVisible)}
-          className="bg-[#008080] hover:bg-[#005f5f] text-white rounded-full p-4 shadow-lg flex items-center justify-center"
-          style={{ width: '60px', height: '60px' }}
-        >
-          <AddIcon style={{ fontSize: 30 }} />
-        </button>
-        {isAddMenuVisible && (
-          <div ref={addMenuRef} className="popup absolute bottom-[80px] right-0 bg-white border border-gray-300 rounded-lg shadow-lg p-4 w-[150px]">
-            <button onClick={openCreateClassModal} className="w-full text-left hover:bg-gray-100 p-2 rounded-md">
-              Create Class
-            </button>
-            <button onClick={openJoinClassModal} className="w-full text-left hover:bg-gray-100 p-2 rounded-md mt-1">
-              Join Class
-            </button>
+        <div className="relative">
+          <button
+            onClick={toggleAddMenu}
+            className={`bg-[#008080] hover:bg-[#005f5f] text-white rounded-full p-4 shadow-lg flex items-center justify-center transition-transform duration-300 ${
+              isAddMenuVisible ? 'rotate-45' : ''
+            }`}
+            style={{ width: '60px', height: '60px', zIndex: 60 }}
+          >
+            <AddIcon style={{ fontSize: 30 }} />
+          </button>
+
+          <div 
+            ref={addMenuRef} 
+            className={`absolute bottom-[80px] right-0 origin-bottom-right transition-all duration-300 ease-in-out ${
+              isAddMenuVisible 
+                ? 'opacity-100 scale-100 pointer-events-auto' 
+                : 'opacity-0 scale-95 pointer-events-none'
+            }`}
+          >
+            <div className="    p-2 w-[180px] space-y-2">
+            <button 
+                onClick={openJoinClassModal} 
+                className="w-full text-left bg-[#066769] text-white p-4 rounded-md flex items-center transition-colors duration-200"
+              >
+                 Join Class
+              </button>
+              <button 
+                onClick={openCreateClassModal} 
+                className="w-full text-left bg-[#066769] text-white p-4 rounded-md flex items-center transition-colors duration-200"
+              >
+                 Create Class
+              </button>
+              
+            </div>
           </div>
-        )}
+        </div>
       </div>
 
       {isCreateModalOpen && <CreateClassModal onClose={() => setIsCreateModalOpen(false)} />}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useNavigate,useLocation, useFetcher } from 'react-router-dom';
 import Sidebar from '../sidebar/sidebar';
 import Header from '../header/header';
 import Performance from '../performance/performance';
@@ -8,6 +8,7 @@ import TodoList from '../todolist/todolist';
 import { useDispatch } from 'react-redux';
 import { setJoinedClasses } from '../features/joinedClasses';
 import { setCreatedClasses } from '../features/createdClasses';
+import { useSelector } from 'react-redux';
 import { setUserName,setUserMail, setNoOfJoinedClasses,setNoOfCreatedClasses } from '../features/userSlice';  
 import axios from 'axios';
 import { set } from 'date-fns';
@@ -21,41 +22,59 @@ const Dashboard = () => {
     const location = useLocation();
     const { joinToken, queryParams } = location.state || {};
     const [JoinclassModal, setJoinclassModal] = useState(false);
+    const createdClasses = useSelector((state) => state.createdClasses.createdClasses);
+    const joinedClasses = useSelector((state) => state.joinedClasses.joinedClasses);
 
-    // console.log(token,queryParams)
+    
     
        const closeJoinclassmodal =() =>{
         setJoinclassModal(false);
        }
+      
     useEffect(() => {
+
         const handleResize = () => {
             setIsMobile(window.innerWidth >= 1024);
         };
+       
 
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     useEffect(() => {
+        if(createdClasses.length===0&&joinedClasses.length===0){
+            navigate('/dashsignup');
+        }
         const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
+       
         if (!token) {
             navigate('/login');
         }
+       
+        
     }, [navigate]);
     useEffect(()=>{
         // console.log(joinToken,queryParams)
+       
         if(joinToken && queryParams && queryParams.code){
             // console.log("a")
             setJoinclassModal(true);
             console.log(JoinclassModal)
             
+            
             }
     },[])
+   
     useEffect(() => {
         const controller = new AbortController();
         const { signal } = controller;
+       
+
 
         const fetchData = async () => {
+            
+            
             const token = sessionStorage.getItem("authToken")|| localStorage.getItem("authToken");
            console.log(token)
             try {
@@ -78,7 +97,7 @@ const Dashboard = () => {
               
                 if (response.data.success && response2.data.success) {
                     sessionStorage.setItem('userId',response.data.user._id);
-                    console.log(response2)
+                    
                     const { joinedClasses, createdClasses } = response.data.user;
                     dispatch(setJoinedClasses(joinedClasses));
                     dispatch(setCreatedClasses(createdClasses));

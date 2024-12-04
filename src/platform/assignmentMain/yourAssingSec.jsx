@@ -1,39 +1,7 @@
-import React from "react";
-import assignmentImg from "../assets/pana.svg"
-import FilterListIcon from '@mui/icons-material/FilterList';
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import assignmentImg from "../assets/assignCard.svg";
 import axios from "axios";
 import { useSelector } from "react-redux";
-const assignments = [
-  {
-    id: 1,
-    title: "Mid-Term Essay",
-    subject: "English",
-    dueDate: "Nov 7, 11:59 PM",
-    status: "Due Soon",
-  },
-  {
-    id: 2,
-    title: "Mid-Term Essay",
-    subject: "English",
-    dueDate: "Nov 7, 11:59 PM",
-    status: "Due Soon",
-  },
-  {
-    id: 3,
-    title: "Mid-Term Essay",
-    subject: "English",
-    dueDate: "Nov 7, 11:59 PM",
-    status: "Due Soon",
-  },
-  {
-    id: 4,
-    title: "Mid-Term Essay",
-    subject: "English",
-    dueDate: "Nov 7, 11:59 PM",
-    status: "Due Soon",
-  },
-];
 
 const YourAssignments = () => {
   const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
@@ -49,16 +17,16 @@ const YourAssignments = () => {
             'Authorization': `Bearer ${token}`
           }
         });
-        console.log(response.data.user)
-        if(isEnrolled){
+        console.log(response.data.user);
+        if (isEnrolled) {
           const assignments = response.data.user.joinedClassrooms.allAssignments;
-          const slicedAssignments = assignments.slice(0,4);
+          const slicedAssignments = assignments.slice(0, 4);
           setData(slicedAssignments);
-        }else{
+        } else {
           const assignments = response.data.user.createdClassrooms.allAssignments;
-          const slicedAssignments =assignments.slice(0,4);
-          setData(slicedAssignments);        }
-        
+          const slicedAssignments = assignments.slice(0, 4);
+          setData(slicedAssignments);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -66,10 +34,10 @@ const YourAssignments = () => {
 
     fetchData();
   }, [isEnrolled]);
+
   return (
-    <div className="p-6  h-[60%] flex flex-col gap-[10px]">
-      <h2 className="text-xl  h-[7%] flex w-full items-center">Your Assignments</h2>
-      
+    <div className="p-6 h-[60%] flex flex-col gap-[10px]">
+      <h2 className="text-xl h-[7%] flex w-full items-center">Your Assignments</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 h-[80%]">
         {console.log(data)}
         {data && data.map((assignment) => (
@@ -77,7 +45,7 @@ const YourAssignments = () => {
             key={assignment._id}
             className="bg-white p-4 rounded-lg border border-[#BCE2DF] flex gap-4 items-center justify-between max-h-[150px]"
           >
-            <div className="flex flex-col h-full justify-between">
+            <div className="flex flex-col h-full justify-between w-2/3">
               <h3 className="text-2xl">{assignment.title}</h3>
               <p className="text-lg text-gray-600">{assignment.classroomSubject}</p>
               <p className="text-lg text-gray-600 flex items-center">
@@ -93,12 +61,11 @@ const YourAssignments = () => {
                 </button>
               </div>
             </div>
-            <div> 
+            <div className="w-1/3 h-full flex items-center justify-center">
               <img
                 src={assignmentImg}
                 alt="Assignment Illustration"
-                className=" object-contain"
-               
+                className="object-contain h-full"
               />
             </div>
           </div>

@@ -1,17 +1,32 @@
-import React, { useState } from "react";
-import profile from '../assets/profile.svg'
-const AttendanceTable = () => {
+import React, { useEffect, useState } from "react";
+import profile from '../assets/profile.svg';
+import axios from "axios";
+const AttendanceTable = ({classCode}) => {
   const [selectedLecture, setSelectedLecture] = useState(null); 
   const [isModalOpen, setIsModalOpen] = useState(false); 
-  const data = [
-    { title: "Revision Class", date: "2 Nov", time: "9:00 PM", attendance: "Present" },
-    { title: "Revision Class", date: "2 Nov", time: "9:00 PM", attendance: "Absent" },
-    { title: "Revision Class", date: "2 Nov", time: "9:00 PM", attendance: "Absent" },
-    { title: "Revision Class", date: "2 Nov", time: "9:00 PM", attendance: "Present" },
-    { title: "Revision Class", date: "2 Nov", time: "9:00 PM", attendance: "Absent" },
-    { title: "Revision Class", date: "2 Nov", time: "9:00 PM", attendance: "Present" },
-    { title: "Revision Class", date: "2 Nov", time: "9:00 PM", attendance: "Absent" },
-  ];
+  const [lectureData, setLectureData] = useState([]);
+  const [isTeacher, setIsTeacher] = useState(false);
+
+  useEffect(()=>{
+    const fetchData = async()=>{
+        const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
+        const headers = {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        };
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/classroom/attendance?classCode=${classCode}`, { headers });
+            if (response.data.success) {
+              // console.log(response.data.lectureData)
+                setLectureData(response.data.lectureData);
+                setIsTeacher(response.data.isTeacher);
+            }
+        } catch (error) {
+            console.log('Error fetching attendance data:', error);
+        }
+    }
+    fetchData();
+},[])
   const handleLectureClick = (lecture) => {
     setSelectedLecture(lecture);
     setIsModalOpen(true);
@@ -29,11 +44,11 @@ const AttendanceTable = () => {
             <th className="p-6 border border-[#5D6C6C] font-medium">Lecture Title</th>
             <th className="p-6 border border-[#5D6C6C] font-medium">Date</th>
             <th className="p-6 border border-[#5D6C6C] font-medium">Time</th>
-            <th className="p-6 border border-[#5D6C6C] font-medium">Attendance</th>
+            <th className="p-6 border border-[#5D6C6C] font-medium">{!isTeacher?"Attendance":"Total Present"}</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
+          {lectureData && lectureData.map((item, index) => (
             <tr
               key={index}
               onClick={() => handleLectureClick(item)}
@@ -45,7 +60,7 @@ const AttendanceTable = () => {
               <td className="p-6">{item.date}</td>
               <td className="p-6">{item.time}</td>
               <td className="p-6">
-                <span
+                {!isTeacher?<span
                   className={`px-4 py-2 rounded-lg text-xs ${
                     item.attendance === "Present"
                       ? "bg-[#9DD89F]"
@@ -53,7 +68,12 @@ const AttendanceTable = () => {
                   }`}
                 >
                   {item.attendance}
-                </span>
+                </span>:<span
+                  className={`px-4 py-2 rounded-lg text-xs 
+                  }`}
+                >
+                  {item.totalPresent}
+                </span>}
               </td>
             </tr>
           ))}
@@ -73,18 +93,18 @@ const AttendanceTable = () => {
               </button>
             </div>
             <div className="mt-4">
-            <p className="text-right mt-4 text-gray-600">{25} Students</p>
+            <p className="text-right mt-4 text-gray-600">{selectedLecture.totalPresent} Students</p>
               <h3 className="text-lg ">Students</h3>
               <ul className="mt-2 ">
                 {}
-                {Array.from({ length: 25 }).map((_, index) => (
+                {Array.from({ length: selectedLecture.totalPresent }).map((_, index) => (
                   <li key={index} className="flex items-center gap-4 py-2">
                     <img
                       src={profile}
                       alt={`Student ${index + 1}`}
                       className="w-10 h-10 rounded-full mt-2"
                     />
-                    <span className="text-gray-800 ">Student {index + 1}</span>
+                    <span className="text-gray-800 ">{selectedLecture.presentStudents[index].name}</span>
                   </li>
                 ))}
               </ul>
