@@ -1,24 +1,74 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale } from 'chart.js';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale);
 
 const AttendanceChart = () => {
-    const sidebarWidth = useSelector((state) => state.sidebar.width); 
+    const sidebarWidth = useSelector((state) => state.sidebar.width);
+    const isCollapsed = useSelector((state) => state.sidebar.isCollapsed);
 
-    const isCollapsed = useSelector((state) => state.sidebar.isCollapsed); 
+    const [subjects, setSubjects] = useState([]);
+    const [dataValues, setDataValues] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchAttendanceData = async () => {
+            try {
+                setLoading(true);
+                const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
+                const headers = {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                };
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/dashboard`, { headers });
+
+                if (response.data.success) {
+                    const averageAttendanceData = response.data.details.created.averageAttendance;
 
 
-    const subjects = ['English', 'Maths', 'Science'];
-    const dataValues = [25, 50, 75];
+                    const sortedData = averageAttendanceData.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+
+                    const lastThreeClasses = sortedData.slice(0, 3);
+
+                    const subjectsData = [];
+                    const attendanceRates = [];
+
+                    lastThreeClasses.forEach((classData) => {
+                        subjectsData.push(classData.className);
+                        if (classData.attendance === null) {
+                            classData.attendance = 0;
+                        }
+                        attendanceRates.push(Math.round(classData.attendance));
+                    });
+
+                    setSubjects(subjectsData);
+                    setDataValues(attendanceRates);
+                }
+            } catch (error) {
+                console.error('Error fetching attendance data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAttendanceData();
+    }, []);
+
     const data = {
         labels: subjects,
         datasets: [
             {
                 data: dataValues,
-                backgroundColor: ['#0A5757', '#00A8A5', '#71DBD3'],
+                backgroundColor: dataValues.map(value => {
+                    if (value > 80) return '#0A5757';
+                    if (value > 60) return '#00A8A5';
+                    if (value >= 0) return '#71DBD3';
+                    return '#BBE5E1';
+                }),
             },
         ],
     };
@@ -32,16 +82,12 @@ const AttendanceChart = () => {
                 display: true,
                 ticks: {
                     color: 'black',
-                    maxRotation: 0, 
-
-                    minRotation: 0, 
-
-                    autoSkip: false, 
-
+                    maxRotation: 0,
+                    minRotation: 0,
+                    autoSkip: false,
                 },
                 grid: {
-                    display: false, 
-
+                    display: false,
                 },
             },
             y: {
@@ -78,35 +124,36 @@ const AttendanceChart = () => {
             }}
         >
             <h2 className="text-[16px] ">Average Attendance</h2>
-            <div className="flex items-center ">
-                <div className="w-[50%] h-[200px] text-gray-500 ">
-                    <Bar data={data} options={options} />
+            {loading ? (
+                <div className="text-center text-gray-500">Loading...</div>
+            ) : subjects.length > 0 ? (
+                <div className="flex items-center gap-12">
+                    <div className="w-[50%] h-[200px] text-gray-500">
+                        <Bar data={data} options={options} />
+                    </div>
+                    <div className="flex flex-col  w-[50%]  pb-[50px]">
+                        <div className="flex flex-col gap-4 text-gray-600">
+                            <div className="flex items-center ">
+                                <span className="w-3 h-3 mr-2 rounded-sm" style={{ backgroundColor: '#0A5757' }}></span>
+                                Greater than 80%
+                            </div>
+                            <div className="flex items-center">
+                                <span className="w-3 h-3 mr-2 rounded-sm" style={{ backgroundColor: '#00A8A5' }}></span>
+                                Between 60 - 80%
+                            </div>
+                            <div className="flex items-center">
+                                <span className="w-3 h-3 mr-2 rounded-sm" style={{ backgroundColor: '#71DBD3' }}></span>
+                                Less than 60%
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="flex flex-col gap-10 w-[50%]">
-                    <ul
-                        className={`${
-                            isCollapsed ? 'items-center' : 'ml-5'
-                        } text-sm space-y-2 flex flex-col gap-2 text-gray-600`}
-                    >
-                        {subjects.map((subject, index) => (
-                            <li
-                                key={subject}
-                                className={`${
-                                    isCollapsed ? 'items-center' : 'ml-5'
-                                } flex items-center`}
-                            >
-                                <span
-                                    className="w-3 h-3 mr-2 rounded-sm ml-2"
-                                    style={{
-                                        backgroundColor: data.datasets[0].backgroundColor[index],
-                                    }}
-                                ></span>
-                                {`Greater than ${dataValues[index]}%`}
-                            </li>
-                        ))}
-                    </ul>
+            ) : (
+                <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                    <p className='text-xl font-semibold text-center'>No attendance data available.</p>
+                    <p className='text-center'>It'll show up once live classes are held.</p>
                 </div>
-            </div>
+            )}
         </div>
     );
 };

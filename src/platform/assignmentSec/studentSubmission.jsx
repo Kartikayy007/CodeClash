@@ -11,13 +11,10 @@ const StudentSubmissions = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const assignment = location.state?.assignment;
-    // console.log(assignment)
     const createdClasses = useSelector((state) => state.createdClasses.createdClasses);
-    // console.log(createdClasses)
     const currentClass = createdClasses.find((cls) => cls._id === assignment.classroom);
     const totalStudents = currentClass ? currentClass.noOfStudents : 0;
     const totalSubmissions = assignment.submissions.length;
-    // console.log(currentClass)
     const completedPercentage = ((totalSubmissions / totalStudents) * 100).toFixed(1);
     const notCompletedPercentage = (100 - parseFloat(completedPercentage)).toFixed(1);
     console.log(completedPercentage,notCompletedPercentage)

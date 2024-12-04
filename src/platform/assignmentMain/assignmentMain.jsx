@@ -13,10 +13,10 @@ const AssignmentMain = () => {
   const sidebarWidth = useSelector((state) => state.sidebar.width);
   const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
   const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
-
+  const [assignments,setAssignments] = useState([]);
   useEffect(() => {
     if (token) {
-      fetchAssignments();
+      // fetchAssignments();
     }
   }, [token]);
 
@@ -29,21 +29,24 @@ const AssignmentMain = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const fetchAssignments = async () => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/assignment`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
+  // const fetchAssignments = async () => {
+  //   try {
+  //     const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/assignment`, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${token}`
+  //       }
+  //     });
+  //     // setAssignments(response.data);
+  //     console.log(response.data)
 
-      console.log(response);
+  //     console.log(assignments);
+      
 
-    } catch (error) {
-      console.error('Failed to fetch assignments:', error);
-    }
-  };
+  //   } catch (error) {
+  //     console.error('Failed to fetch assignments:', error);
+  //   }
+  // };
 
   return (
     <div className="h-[100%] w-full relative">

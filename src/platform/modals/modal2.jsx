@@ -5,20 +5,66 @@ import { setIsEnrolled } from '../features/toggleSlice';
 import { useDispatch } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Navigate,useNavigate } from 'react-router-dom';
 
-const Modal2 = ({ onClose }) => {
+const Modal2 = ({ onClose,joinToken,classCode }) => {
   const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false); 
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setIsVisible(true); // Trigger fade-in when component mounts
-  }, []);
+    setIsVisible(true); 
 
+    if(joinToken && classCode){
+      setCode(classCode);
+      if(!isLoading && !hasSubmitted) handleAutoSubmit();
+    }
+  }, []);
+  const handleAutoSubmit = async () => {
+    setIsLoading(true);
+    setHasSubmitted(true); 
+
+    const token = sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
+
+    try {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      };
+     
+      const response = await axios.post( `${process.env.REACT_APP_API_URL}/classroom/join`, { code:classCode ,token:joinToken}, { headers });
+      if (response.data.success) {
+        dispatch(setIsEnrolled(true));
+        toast.dismiss();
+        toast.success("Class joined successfully!", {
+          className: "custom-toastS",
+          hideProgressBar: true,
+          autoClose: 3000,
+        });
+        handleClose();
+        navigate('/dashboard');
+      }
+    }catch(error){
+      toast.dismiss();
+      toast.error("Failed to join class.", {
+        className: "custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+      });
+      setIsLoading(false);
+      handleClose();
+      navigate('/dashboard');
+      console.error(error);
+    }
+  }
   const handleClose = () => {
-    setIsVisible(false); // Trigger fade-out animation
-    setTimeout(onClose, 300); // Wait for the animation to complete
+    setIsVisible(false); 
+
+    setTimeout(onClose, 300); 
+
   };
 
   const handleSubmit = async (e) => {

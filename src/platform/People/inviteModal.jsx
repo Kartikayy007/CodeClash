@@ -6,26 +6,32 @@ const InviteModal = ({ isOpen, onClose }) => {
     const location=useLocation();
     const classCode = location.state?.code;
 
-  const [email, setEmail] = useState(""); // State for email input
-  const [isLoading, setIsLoading] = useState(false); // State for loading
+  const [email, setEmail] = useState(""); 
 
-  if (!isOpen) return null; // Don't render if the modal is not open
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Function to handle form submission
+
+  if (!isOpen) return null; 
+
+
+
   const handleInvite = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault(); 
+
     if (!email) {
       alert("Please enter an email address.");
       return;
     }
 
-    setIsLoading(true); // Start loading
+    setIsLoading(true); 
+
     const token = sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
 
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/classroom/invite`,
-        { email, code:classCode }, // Request payload
+        { email, code:classCode }, 
+
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -34,22 +40,24 @@ const InviteModal = ({ isOpen, onClose }) => {
       );
       console.log(response)
 
-      // Success response
+
       alert(`Invitation sent successfully to ${email}`);
-      setEmail(""); // Clear the input field
+      setEmail(""); 
+
     } catch (error) {
-      // Error response
+
       console.error("Failed to send invite:", error);
       alert("Failed to send the invite. Please try again.");
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false); 
+
     }
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg w-[400px] p-6">
-        {/* Modal Header */}
+
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Invite People</h2>
           <button
@@ -60,7 +68,7 @@ const InviteModal = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {/* Invite Form */}
+
         <form onSubmit={handleInvite}>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">
             Email Address
@@ -71,12 +79,14 @@ const InviteModal = ({ isOpen, onClose }) => {
             placeholder="Enter email address"
             className="w-full mt-2 mb-4 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
             value={email}
-            onChange={(e) => setEmail(e.target.value)} // Update email state
+            onChange={(e) => setEmail(e.target.value)}
+
             required
           />
           <button
             type="submit"
-            disabled={isLoading} // Disable button during loading
+            disabled={isLoading} 
+
             className={`w-full py-2 px-4 rounded-lg ${
               isLoading
                 ? "bg-gray-400 cursor-not-allowed"

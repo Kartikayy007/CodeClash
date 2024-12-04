@@ -1,10 +1,7 @@
-import './flip.css'; 
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import AddIcon from '@mui/icons-material/Add';
 import InfoIcon from '@mui/icons-material/Info';
-
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -20,11 +17,11 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { Announcement } from '@mui/icons-material';
 import { toast } from 'react-toastify';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const tabs = ['Announcement', 'Assignments', 'Schedule', 'Attendance', 'People'];
 
 const AnnouncementComponent = () => {
-  
   const location = useLocation();
   const classCode = location.state?.code;
 
@@ -66,7 +63,6 @@ const AnnouncementComponent = () => {
   }, [classCode]);
 
   useEffect(() => {
-
     const activeTabElement = tabsContainerRef.current?.querySelector(
       `button[data-tab="${activeTab}"]`
     );
@@ -167,7 +163,8 @@ const AnnouncementComponent = () => {
       setAnnouncementTitle('');
       setAttachments([]);
       setIsEditable(false);
-      setShouldRefetch(true); // Trigger refetch
+      setShouldRefetch(true);
+
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to post announcement');
     } finally {
@@ -221,6 +218,11 @@ const AnnouncementComponent = () => {
     setActiveTab(tabName);
   };
 
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
+    toast.success('Link copied to clipboard!');
+  };
+
   return (
     <div
       className="font-sans p-4 bg-[#E1EAE8] mt-[50px] transition-all duration-300 h-[100vh] overflow-y-auto pb-[80px]"
@@ -256,7 +258,23 @@ const AnnouncementComponent = () => {
               <h2 className="text-4xl font-medium text-black">{className}</h2>
               <p className="text-xl text-black">Subject: {subjectName}</p>
               <p className="text-xl text-black">Class Code: {classCode}</p>
-              <p className="text-xl text-black">Link: Link</p>
+              <p className="text-xl text-black flex items-center">
+                Link:
+                <a
+                  href={`https://classence.me/classroom/join/${classCode}?code=${classCode}`}
+                  className="text-xl ml-3"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {`https://classence.me/classroom/join/${classCode}?code=${classCode}`}
+                </a>
+                <button
+                  onClick={() => copyToClipboard(`https://classence.me/classroom/join/${classCode}?code=${classCode}`)}
+                  className="ml-2 p-1 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
+                >
+                  <ContentCopyIcon fontSize="small" />
+                </button>
+              </p>
             </div>
           </div>
         </div>
@@ -341,7 +359,7 @@ const AnnouncementComponent = () => {
                     </div>
                   </label>
                   
-                  {/* Attachment Preview */}
+
                   {attachments.length > 0 && (
                     <div className="mt-2 space-y-2">
                       {attachments.map((file, index) => (
@@ -407,13 +425,13 @@ const AnnouncementComponent = () => {
                       
                       <p className="mt-2 text-gray-600">{announcement.description}</p>
                       
-                      {/* Media Display Section */}
+
                       {announcement.media && announcement.media.length > 0 && (
                         <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
                           {announcement.media.map((media, mediaIndex) => (
                             <div key={mediaIndex} className="relative group">
                               {media.url && media.url.match(/\.(jpeg|jpg|gif|png)$/i) ? (
-                                // Image preview with zoom on click
+
                                 <div className="aspect-square overflow-hidden rounded-lg">
                                   <img 
                                     src={media} 
@@ -423,7 +441,7 @@ const AnnouncementComponent = () => {
                                   />
                                 </div>
                               ) : (
-                                // Download link for other file types
+
                                 <a 
                                   href={media}
                                   download
