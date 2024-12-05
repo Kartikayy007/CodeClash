@@ -8,6 +8,7 @@ import YourAssignments from "./yourAssingSec";
 import Newassignment from "./newassignment";
 import axios from "axios";
 import noAssignmentsImage from "../assets/noAssign.svg";
+import { height } from "@mui/system";
 
 const AssignmentMain = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
@@ -72,7 +73,7 @@ const AssignmentMain = () => {
         }}
       >
         {isEmpty ? (
-          <div className="flex flex-col items-center justify-center h-full text-gray-500">
+          <div className={`flex flex-col items-center justify-center  text-gray-500 ${isMobile?'h-[100vh]':'h-full'}`} >
             <img src={noAssignmentsImage} alt="No Assignments" />
             {isEnrolled ? (
               <>

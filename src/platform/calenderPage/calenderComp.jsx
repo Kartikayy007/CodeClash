@@ -7,6 +7,7 @@ import Reminderbox from '../reminder/reminderbox';
 import ScheduleLectureModal from '../schedule/scheduleModal';
 import './calender.css';
 import axios from 'axios';
+import image from '../assets/calendar_day.svg'
 
 const Calendar = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -208,7 +209,7 @@ const Calendar = () => {
                     </div>
                   ))
                 ) : (
-                  <div className="text-center text-gray-500 text-sm">No events for this day.</div>
+                  <div className="text-center text-gray-500 text-sm"></div>
                 )}
               </div>
             </div>
@@ -231,7 +232,7 @@ const Calendar = () => {
           </h2>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 h-full">
           {dayEvents.length > 0 ? (
             dayEvents.map((eventType, index) => (
               <div
@@ -254,7 +255,11 @@ const Calendar = () => {
               </div>
             ))
           ) : (
-            <div className="text-center text-gray-500 text-lg">No details</div>
+            <div className="text-center text-gray-500 text-lg flex flex-col justify-center items-center h-full">
+              <img src={image} alt="" />
+              <p className='text-gray-500 font-semibold text-xl mt-5'>You're All Caught Up!</p>
+              <p className='text-gray-500 mt-2' > No classes or assignments are scheduled for today.</p>
+              </div>
           )}
         </div>
       </div>

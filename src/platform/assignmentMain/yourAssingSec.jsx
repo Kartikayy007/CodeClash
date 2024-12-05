@@ -49,7 +49,7 @@ const YourAssignments = () => {
               <h3 className="text-2xl">{assignment.title}</h3>
               <p className="text-lg text-gray-600">{assignment.classroomSubject}</p>
               <p className="text-lg text-gray-600 flex items-center">
-                <span className="w-4 h-4 bg-purple-500 rounded-full mr-2"></span>
+                <span className="w-4 h-4 bg-[#00A8A5] rounded-full mr-2"></span>
                 Due Date: {assignment.dueDate}
               </p>
               <div className="flex gap-2 mt-[10px]">

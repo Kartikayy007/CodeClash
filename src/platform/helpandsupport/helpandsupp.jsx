@@ -582,15 +582,7 @@ const HelpPage = () => {
             How Can We Help You?
           </h1>
 
-          <div className="relative w-[49%]">
-            <FaSearch className="absolute left-3 bottom-[47%] ml-2 transform -translate-y-1/2 text-gray-400 text-xl" />
-            <input
-              type="text"
-              placeholder="Type your question, e.g., 'How to create a class?'"
-              className="border  border-gray-300 rounded-lg py-2 w-full px-4"
-              style={{ paddingLeft: "40px", border: "none", backgroundColor: "#EEF0F0" }}
-            />
-          </div>
+          
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-5 mb-6">

@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { FaEllipsisV } from "react-icons/fa";
 import ScheduleLectureModal from "./scheduleModal";
 import pana2 from "../assets/pana2.svg";
 import { useLocation, useNavigate } from "react-router-dom";
-import image from '../assets/noSchedule.svg'
+import image from '../assets/noSchedule.svg';
 
 const ReminderModal = ({ isOpen, onClose, title, lectureId }) => {
   const [reminderTime, setReminderTime] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const popupRef = useRef(null);
 
   const handleSetReminder = async () => {
     if (!reminderTime) {
@@ -39,11 +40,11 @@ const ReminderModal = ({ isOpen, onClose, title, lectureId }) => {
         `${process.env.REACT_APP_API_URL}/reminder`,
         {
           lectureId,
-          scheduledTime:utcTime,
+          scheduledTime: utcTime,
         },
         axiosConfig
       );
-console.log(response)
+
       if (response.status === 200) {
         setSuccess("Reminder set successfully!");
         setTimeout(() => {
@@ -60,11 +61,24 @@ console.log(response)
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
-      <div className="flex flex-col justify-around bg-white w-1/3 p-6 h-[40%]">
+      <div ref={popupRef} className="flex flex-col justify-around bg-white w-1/3 p-6 h-[40%]">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-3xl">Set Reminder</h2>
           <button
@@ -117,6 +131,7 @@ const RevisionClassCard = ({ title }) => {
   const [lectures, setLectures] = useState([]);
   const [editingLecture, setEditingLecture] = useState(null);
   const [selectedLectureId, setSelectedLectureId] = useState(null); 
+  const popupRef = useRef(null);
 
   const classCode = location.state?.code;
 
@@ -209,6 +224,19 @@ const RevisionClassCard = ({ title }) => {
     });
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        setOpenMenuId(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div>
       {!isEnrolled && (
@@ -241,23 +269,24 @@ const RevisionClassCard = ({ title }) => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col justify-between items-end h-full">
+            <div className={`flex flex-col ${isEnrolled?'justify-end':'justify-between'} items-end h-full`}>
+              {!isEnrolled && (
               <button
                 onClick={() => toggleMenu(lecture._id)}
                 className="p-2 text-gray-600 hover:bg-gray-100 rounded-full"
               >
                 <FaEllipsisV />
-              </button>
+              </button>)}
               {openMenuId === lecture._id && (
-                <div className="absolute right-0 top-8 bg-white shadow-lg border rounded-lg w-40">
+                <div ref={popupRef} className="absolute right-0 top-8 bg-white shadow-lg border rounded-lg w-40">
                   <button
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-500 rounded-lg"
                     onClick={() => openModal(lecture)}
                   >
                     Edit Lecture
                   </button>
                   <button
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500"
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-500 rounded-lg"
                     onClick={() => handleDelete(lecture._id)}
                   >
                     Delete Lecture
@@ -275,7 +304,8 @@ const RevisionClassCard = ({ title }) => {
                   className="px-4 py-2 bg-[#066769] text-white rounded-lg"
                   onClick={() => handleJoinLecture(lecture._id,lecture)}
                 >
-                  Join Lecture
+                  {isEnrolled ? "Join Lecture" : "Start Lecture"}
+                  
                 </button>
               </div>
             </div>

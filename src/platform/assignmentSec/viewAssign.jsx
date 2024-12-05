@@ -24,6 +24,8 @@ const AssignmentDetails = () => {
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const classCode = location.state?.code;
+    console.log(classCode)
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
@@ -96,7 +98,14 @@ const AssignmentDetails = () => {
 
     const confirmDelete = async () => {
         try {
-            await axios.delete(`${process.env.REACT_APP_API_URL}/assignment/${assignment._id}`);
+            const token = sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
+
+            const response = await axios.delete(`${process.env.REACT_APP_API_URL}/assignment/delete?id=${assignment._id}&code=${classCode}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+              console.log(response)
             alert("Assignment deleted successfully!");
             setDeleteModalOpen(false);
         } catch (error) {
