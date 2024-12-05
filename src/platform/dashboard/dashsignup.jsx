@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 import Modal2 from '../modals/modal2';  
 
 const Dashsignup = () => {
-
   const [createclassModal, setCreateclassModal] = useState(false);
   const sidebarWidth = useSelector((state) => state.sidebar.width);
   const isCollapsed = useSelector((state) => state.sidebar.isCollapsed);
@@ -17,9 +16,9 @@ const Dashsignup = () => {
     setJoinclassModal(true);
   };
  
-   const closeJoinclassmodal =() =>{
+  const closeJoinclassmodal = () => {
     setJoinclassModal(false);
-   }
+  };
 
   const handleCreateClass = () => {
     setCreateclassModal(true);
@@ -34,20 +33,21 @@ const Dashsignup = () => {
       <Header />
       <Sidebar />
       
-      <div className="w-[100%] bg-[#E1EAE8] h-[100vh] flex items-center flex-col   justify-center">
-        <div className={`flex-col items-center ${isCollapsed?"":"ml-[80px]"}`} style={{transition:'margin-left 0.3s '}}>
+      <div className="w-full bg-[#E1EAE8] h-screen flex items-center justify-center">
+        <div className={`flex flex-col items-center ${isCollapsed ? "" : "md:ml-[80px]"} transition-all duration-300`}>
           <div className="flex justify-center">
-            <img src={dash1} alt="Dashboard" />
+            <img src={dash1} alt="Dashboard" className="w-full max-w-md" />
           </div>
-          <div className="flex mt-[3vh]">
+          <div className="flex flex-col md:flex-row mt-8 space-y-4 md:space-y-0 md:space-x-4">
             <button 
-            onClick={handleJoinClass} 
-           className="bg-[#008080] w-[250px] h-[40px] text-white rounded-md text-lg grid place-content-center font-semibold text-center mr-[2vw]">
+              onClick={handleJoinClass} 
+              className="bg-[#008080] w-[250px] h-[40px] text-white rounded-md text-lg grid place-content-center font-semibold text-center"
+            >
               Join Your first Class
             </button>
             <button 
               onClick={handleCreateClass} 
-              className="bg-[#008080] w-[250px] text-white rounded-md text-lg grid place-content-center font-semibold text-center"
+              className="bg-[#008080] w-[250px] h-[40px] text-white rounded-md text-lg grid place-content-center font-semibold text-center"
             >
               Create Your first Class
             </button>
@@ -56,12 +56,10 @@ const Dashsignup = () => {
       </div>
       
       {createclassModal && (
-        <Modal
-        onClose={closeCreateClassModal}/>
+        <Modal onClose={closeCreateClassModal} />
       )}
       {JoinclassModal && (
-        <Modal2
-        onClose={closeJoinclassmodal}/>
+        <Modal2 onClose={closeJoinclassmodal} />
       )}
     </div>
   );

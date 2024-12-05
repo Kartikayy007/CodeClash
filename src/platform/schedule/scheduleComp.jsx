@@ -78,7 +78,7 @@ const ReminderModal = ({ isOpen, onClose, title, lectureId }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
-      <div ref={popupRef} className="flex flex-col justify-around bg-white w-1/3 p-6 h-[40%]">
+      <div ref={popupRef} className="flex flex-col justify-around bg-white min-w-[300px] w-[90%] max-w-[400px] p-6 h-[40%]">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-3xl">Set Reminder</h2>
           <button

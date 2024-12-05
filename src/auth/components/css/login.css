@@ -679,3 +679,7 @@ input[type="checkbox"]{
 }
 
 
+/* Add this CSS to your stylesheet */
+.placeholder-black::placeholder {
+  color: black;
+}

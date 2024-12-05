@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import { X, Plus, Trash2, Loader } from "lucide-react";
 import card from "../assets/assign.svg";
 
 function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
   const [formData, setFormData] = useState({
-    class: className,
+    className: className,
     dueDate: "",
     title: "",
     description: "",
@@ -14,6 +14,7 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const fileInputRef = useRef(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -26,6 +27,8 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
       ...prev,
       attachments: [...prev.attachments, ...files],
     }));
+    // Reset the file input value
+    fileInputRef.current.value = null;
   };
 
   const handleRemoveFile = (index) => {
@@ -85,9 +88,9 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white w-[80%] h-[80%] p-8 relative">
+      <div className="bg-white w-[90%] md:w-[80%] h-[90%] md:h-[80%] p-4 md:p-8 relative overflow-y-auto rounded-lg">
         {/* Header */}
-        <div className="flex pl-[5%] justify-between items-end h-[5%]">
+        <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl">Create Assignment</h2>
           <button
             onClick={onClose}
@@ -98,22 +101,21 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
         </div>
 
         {/* Form */}
-        <div className="flex justify-center gap-[10%] h-[80%] items-center">
-          <div className="flex flex-col space-y-6 w-[40%]">
+        <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-[10%] h-[80%] items-stretch">
+          <div className="flex flex-col space-y-6 w-full md:w-[40%] justify-center">
             <div className="flex flex-col">
-              <label className="block text-lg">For</label>
+              <label className="block text-lg mt-10 md:mt-0">For</label>
               <input
                 type="text"
                 name="class"
-                
-                value={formData.class}
+                placeholder={`${formData.className} (${classCode})`}
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 rounded-lg border border-gray-200"
                 readOnly
               />
             </div>
 
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2 " style={{margin:'0'}}>
               <label className="block text-lg">Assignment Title</label>
               <input
                 type="text"
@@ -121,7 +123,7 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
                 placeholder="Enter assignment title"
                 value={formData.title}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500 "
               />
             </div>
 
@@ -133,24 +135,24 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
                 value={formData.description}
                 onChange={handleInputChange}
                 rows={4}
-                className="w-full px-4 py-3 rounded-lg border border-[#4C5858] focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
+                className="w-full px-4 py-3 rounded-lg border border-[#4C5858] focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none placeholder-black"
               />
             </div>
           </div>
 
-          <div className="flex flex-col space-y-6 w-[40%]">
-            <div className="flex flex-col flex-1 space-y-2">
+          <div className="flex flex-col space-y-6 w-full md:w-[40%] justify-center">
+            <div className="flex flex-col  space-y-2">
               <label className="block text-lg">Due Date</label>
               <input
                 type="date"
                 name="dueDate"
                 value={formData.dueDate}
                 onChange={handleInputChange}
-                className="w-full p-[20px] rounded-lg border border-[#4C5858] focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="w-full p-[20px] rounded-lg border border-[#4C5858] focus:outline-none focus:ring-2 focus:ring-teal-500 text-xl"
               />
             </div>
 
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2 ">
               <label className="block text-lg">Attachments</label>
               <div className="border border-[#4C5858] rounded-lg p-4 h-[180px] overflow-y-auto">
                 {formData.attachments.length === 0 && (
@@ -188,6 +190,7 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
                     multiple
                     onChange={handleFileChange}
                     className="hidden"
+                    ref={fileInputRef}
                   />
                 </label>
               </div>
@@ -196,7 +199,7 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
         </div>
 
         {/* Footer */}
-        <div className="h-[8%] flex flex-col items-center justify-center gap-2">
+        <div className="mt-4 flex flex-col items-center justify-center gap-2">
           {isUploading && (
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <div className="animate-spin">
@@ -215,7 +218,7 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
           <button
             onClick={handleSubmit}
             disabled={isUploading}
-            className={`px-[60px] py-[12px] bg-[#066769] text-white rounded-lg transition-colors
+            className={`px-[60px] py-[12px] bg-[#066769] text-white rounded-lg transition-colors mt-10 md:mt-0
               ${isUploading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-teal-700'}`}
           >
             {isUploading ? 'Creating Assignment...' : 'Create Assignment'}

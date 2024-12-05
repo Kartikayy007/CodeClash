@@ -12,6 +12,7 @@ const AssignmentSection = () => {
     const classId = location.state?._id;
     const className = location.state?.name;
     const classCode = location.state?.code;
+    console.log(classId, className, classCode);
 
     const navigate = useNavigate();
 
@@ -68,7 +69,7 @@ const AssignmentSection = () => {
                 <div>
                     <button
                         className="bg-[#066769] text-white font-medium mb-4 py-4 px-8 rounded-lg ml-6"
-                        onClick={openModal}
+                        onClick={()=>{openModal(className)}}
                     >
                         Create Assignment
                     </button>
