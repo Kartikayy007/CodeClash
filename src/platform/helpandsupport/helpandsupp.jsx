@@ -278,12 +278,13 @@ const ChatBox = () => {
   };
 
   return (
-    <div className="bg-white m-6 p-4 rounded-lg h-full flex flex-col justify-end">
-      <h2 className="text-3xl text-gray-800">Chat with us</h2>
+    <div className="bg-white m-6 p-4 rounded-lg h-full flex flex-col justify-between">
+      <div>
+      <h2 className="text-3xl text-gray-800 pt-5">Chat with us</h2>
       <p className="text-xl text-gray-600 mt-2 mb-[20px]">
         {isAdmin ? "Select a participant to chat with." : "Connect with our support team in real-time."}
       </p>
-
+      </div>
       {isAdmin && (
         <div className="mb-4">
           <h3 className="text-xl font-semibold text-gray-800 mb-2">

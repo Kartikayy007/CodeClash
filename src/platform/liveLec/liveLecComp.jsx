@@ -7,6 +7,7 @@ import axios from 'axios';
 const LiveVideoCall = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [isLive, setIsLive] = useState(false);
+  const [isGoingLive,setIsGoingLive] = useState(false);
   const [error, setError] = useState('');
   const location = useLocation();
   const {lectureId, classCode, teacherId} = location.state;
@@ -51,6 +52,7 @@ const LiveVideoCall = () => {
     socketRef.current.on('youtube-video-url', (url) => {
       setYoutubeUrl(url);
       setIsLive(true);
+      setIsGoingLive(false);
     });
   };
 
@@ -64,7 +66,7 @@ const LiveVideoCall = () => {
       });
       
       videoRef.current.srcObject = streamRef.current;
-
+      setIsGoingLive(true);
       const response = await fetch(`${process.env.REACT_APP_API_URL}/lecture/start-live-session`, {
         method: 'POST',
         headers: {
@@ -158,28 +160,37 @@ const LiveVideoCall = () => {
   };
 
   return (
-    <div className="p-8 mt-[60px]">
-      <div className="w-full mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-semibold mb-4">Live Session</h2>
+    <div className="p-8  bg-[#E1EAE8] h-[100vh] mt-[50px]">
+      <div className="w-full mx-auto bg-[#E1EAE8]">
+        <div className="bg-white rounded-lg shadow-lg p-6 ">
+          <h2 className="text-2xl font-semibold mb-4 ">Live Session</h2>
           
           <div className="mb-4">
-            Status: {isLive ? 'Live' : 'Not Started'}
+            Status: {isLive ? 'Live' : isGoingLive? 'Going Live' : 'Not Live'}
             {error && <p className="text-red-500 mt-2">{error}</p>}
           </div>
 
           {isTeacher ? (
             <>
-              <video
-                ref={videoRef}
-                autoPlay
-                muted
-                className="w-full h-[400px] bg-black rounded-lg mb-4"
-              />
+            
+            <div className="relative w-full h-[400px] bg-black rounded-lg mb-4">
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  muted
+                  className="w-full h-full object-cover rounded-lg"
+                />
+                {isGoingLive && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 rounded-lg">
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-teal-500"></div>
+                    <p className="mt-4 text-xl text-white">Going Live...</p>
+                  </div>
+                )}
+              </div>
               <div className="flex gap-4">
                 <button
                   onClick={startLiveSession}
-                  disabled={isLive}
+                  disabled={isLive || isGoingLive}
                   className="px-4 py-2 bg-teal-600 text-white rounded-lg disabled:bg-gray-400"
                 >
                   Start Session

@@ -11,6 +11,8 @@ const ScheduleLectureModal = ({ isOpen, onClose,initialData }) => {
   const [error, setError] = useState("");
   const location = useLocation();
   const classCode = location.state?.code;
+  const className = location.state?.name;
+  console.log(className)
   const isEditing=initialData?true:false;
   
 
@@ -142,7 +144,7 @@ console.log(isEditing)
           <div>
             <input
               type="text"
-              placeholder="English"
+              placeholder={className}
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-gray-500"
               readOnly
             />
@@ -168,7 +170,7 @@ console.log(isEditing)
           <div>
             <input
               type="datetime-local"
-              className="w-full p-[20px] border border-[#4C5858] mt-[20px] rounded-md focus:outline-none"
+              className="w-full p-[20px] border border-[#4C5858] mt-[20px] rounded-md focus:outline-none text-xl"
               value={time}
               onChange={(e) => setTime(e.target
                 .value)}
@@ -177,8 +179,9 @@ console.log(isEditing)
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
             type="submit"
-            className="w-full bg-[#066769] text-white py-2 rounded-md transition-all h-[50px]"
+            className="w-full bg-[#066769] text-white py-2 rounded-md transition-all h-[50px] "
             disabled={loading}
+            style={{marginTop:'40px'}}
           >
             {loading ? "Scheduling..." : "Schedule Lecture"}
           </button>

@@ -196,7 +196,7 @@ const ClassCard = ({
 
   const handleCardClick = () => {
     if (activePopupIndex !== index) {
-      navigate(`/announcement`, { state: { code, _id } });
+      navigate(`/announcement`, { state: { code, _id,name } });
     }
   };
 

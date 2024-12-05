@@ -295,7 +295,7 @@ export const ChatBox = ({ assignmentId }) => {
     };
 
     return (
-        <div className="bg-white p-6 rounded-lg h-full flex flex-col justify-start">
+        <div className="bg-white p-6 rounded-lg h-full flex flex-col justify-between">
             {isAdmin && isParticipantView ? (
                 <>
                     <h2 className="text-3xl text-gray-800">Select a student to chat with</h2>
@@ -330,7 +330,7 @@ export const ChatBox = ({ assignmentId }) => {
                             <ArrowBackIosIcon/>Back to Participants
                         </button>
                     )}
-                    
+                    <div>
                     <h2 className="text-3xl text-gray-800">
                         {isAdmin 
                             ? `Chatting with ${participants.find(p => p[0]._id === activeChatUserId)?.[0].name || 'Student'}` 
@@ -340,7 +340,7 @@ export const ChatBox = ({ assignmentId }) => {
                     <p className="text-xl text-gray-600 mt-2 mb-[20px]">
                         {isAdmin ? "Discuss the assignment" : "Ask your teacher"}
                     </p>
-
+                    </div>
                     <div
                         ref={chatContainerRef}
                         className="w-full rounded-lg p-4 mt-4 flex flex-col space-y-4 overflow-y-auto"
