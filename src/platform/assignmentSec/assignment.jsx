@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import card from "../assets/pana.svg";
+import card from "../assets/assignCard2.svg";
 import { useSelector } from "react-redux";
 
 import { useNavigate, useLocation } from "react-router-dom";
@@ -59,7 +59,7 @@ const AssignmentSection = () => {
     }, []);
 
     const handleAssignmentClick = (assignment) => {
-        navigate("/assignment-details", { state: { assignment } });
+        navigate("/assignment-details", { state: { assignment,code:classCode } });
     };
 
     return (

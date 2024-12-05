@@ -18,7 +18,7 @@ const AssignmentCard = ({ assignment }) => {
             <span>{assignment.classroomSubject}</span>
           </div>
           <div className="flex items-center text-gray-600 mt-2 text-lg">
-            <span className="h-4 w-4 bg-purple-600 rounded-full mr-2"></span>
+            <span className="h-4 w-4 bg-[#00A8A5] rounded-full mr-2"></span>
             Submitted On: {assignment.dueDate}
           </div>
           {!isEnrolled && <div>

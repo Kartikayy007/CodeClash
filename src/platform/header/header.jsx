@@ -28,7 +28,7 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
+  const isEnrolled = useSelector((state) => state?.toggleState.isEnrolled);
 
   const toggleSwitch = () => {
     const newEnrolledState = !isEnrolled;
@@ -202,14 +202,16 @@ const Header = () => {
             <div className="    p-2 w-[180px] space-y-2">
             <button 
                 onClick={openJoinClassModal} 
-                className="w-full text-left bg-[#066769] text-white p-4 rounded-md flex items-center transition-colors duration-200"
+                className="w-full text-left bg-[#066769]  text-white p-4 rounded-md flex items-center transition-colors duration-200"
               >
+                <img src={joined} alt="" className='white-image mr-4' />
                  Join Class
               </button>
               <button 
                 onClick={openCreateClassModal} 
                 className="w-full text-left bg-[#066769] text-white p-4 rounded-md flex items-center transition-colors duration-200"
               >
+                <img src={created} alt="" className='white-image mr-4' />
                  Create Class
               </button>
               

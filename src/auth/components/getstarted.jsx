@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion';
 import { BookOpen, Users, Calendar, Trophy, Clock, ChevronDown, Menu, X } from 'lucide-react';
-import heroImg from '../assets/landing.svg';
+import heroImg from '../assets/heroImg.svg';
 import logo from '../../auth/assets/Frame.svg'
 import { useNavigate } from 'react-router-dom';
 
@@ -415,7 +415,8 @@ const ClassenceLanding = () => {
                 hidden: { opacity: 0, y: 50 },
                 visible: { opacity: 1, y: 0 }
               }}
-              className="text-4xl font-bold mb-6"
+              className="text-4xl font-bold mb-6 text-left sm:text-center"
+              
             >
               Why Choose Classence?
             </motion.h2>
@@ -424,7 +425,7 @@ const ClassenceLanding = () => {
                 hidden: { opacity: 0, y: 50 },
                 visible: { opacity: 1, y: 0 }
               }}
-              className="text-xl text-gray-600 max-w-3xl mx-auto "
+              className="text-xl text-gray-600 max-w-3xl mx-auto text-left sm:text-center"
             >
               Classence is designed to provide a seamless teaching and learning experience, empowering both students and teachers.
             </motion.p>
