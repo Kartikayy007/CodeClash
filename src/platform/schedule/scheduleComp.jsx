@@ -132,35 +132,35 @@ const RevisionClassCard = ({ title }) => {
   const [lectures, setLectures] = useState([]);
   const [editingLecture, setEditingLecture] = useState(null);
   const [selectedLectureId, setSelectedLectureId] = useState(null); 
+  const [isTeacher, setIsTeacher] = useState(false);
   const popupRef = useRef(null);
 
   const classCode = location.state?.code;
 
-  useEffect(() => {
-    const fetchLectures = async () => {
-      try {
-        const token =
-          sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
-        const axiosConfig = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/lecture/?code=${classCode}`,
-          axiosConfig
-          
-        );
-        console.log(response.data)
-        if (response.status === 200) {
-          setLectures(response.data.futureLectures);
-         
-        }
-      } catch (error) {
-        console.error("Error fetching lectures:", error);
+  const fetchLectures = async () => {
+    try {
+      const token =
+        sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
+      const axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/lecture/?code=${classCode}`,
+        axiosConfig
+      );
+      console.log(response.data)
+      if (response.status === 200) {
+        setLectures(response.data.futureLectures);
+        setIsTeacher(response.data.futureLectures[0].teacher._id || false);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching lectures:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchLectures();
   }, [classCode]);
 
@@ -199,6 +199,7 @@ const RevisionClassCard = ({ title }) => {
   const closeModal = () => {
     setIsModalOpen(false);
     setEditingLecture(null);
+    fetchLectures(); // Fetch lectures when the modal is closed
   };
 
   const toggleMenu = (id) => {
@@ -215,12 +216,12 @@ const RevisionClassCard = ({ title }) => {
     setSelectedLectureId(null);
   };
 
-  const handleJoinLecture = (lectureId,lecture) => {
+  const handleJoinLecture = (lectureId, lecture) => {
     navigate('/live', { 
       state: { 
         lectureId,
-        classCode ,
-        teacherId:lecture.teacher._id
+        classCode,
+        teacherId: lecture.teacher._id
       }
     });
   };
@@ -301,6 +302,7 @@ const RevisionClassCard = ({ title }) => {
                 >
                   Set Reminder
                 </button>
+                {((isEnrolled && lecture.status === "InProgress")||!isEnrolled) &&
                 <button 
                   className="px-4 py-2 bg-[#066769] text-white rounded-lg"
                   onClick={() => handleJoinLecture(lecture._id,lecture)}
@@ -308,6 +310,7 @@ const RevisionClassCard = ({ title }) => {
                   {isEnrolled ? "Join Lecture" : "Start Lecture"}
                   
                 </button>
+                }
               </div>
             </div>
           </div>

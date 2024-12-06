@@ -53,9 +53,7 @@ const YourAssignments = () => {
                 Due Date: {assignment.dueDate}
               </p>
               <div className="flex gap-2 mt-[10px]">
-                <button className="bg-[#145A5E] text-white px-4 py-2 text-lg rounded-md shadow-md">
-                  View Assignment
-                </button>
+             
                 <button className="bg-[#EAF2F1] border border-[#145A5E] text-[#145A5E] px-4 py-2 text-lg rounded-md shadow-md">
                   Set Reminder
                 </button>

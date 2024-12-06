@@ -539,7 +539,7 @@ const navigate = useNavigate();
         {activeTab === 'Assignments' && <AssignmentSection classCode={classCode} className={className}/>}
         {activeTab === 'Schedule' && <RevisionClassCard />}
         {activeTab === 'Attendance' && <AttendanceSection classCode={classCode} />}
-        {activeTab === 'People' && <ClassDetails />}
+        {activeTab === 'People' && <ClassDetails classCode={classCode}/>}
       </motion.main>
     </div>
   );

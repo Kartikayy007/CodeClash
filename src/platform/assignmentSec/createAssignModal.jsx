@@ -4,7 +4,6 @@ import { X, Plus, Trash2, Loader } from "lucide-react";
 import card from "../assets/assign.svg";
 
 function CreateAssignmentModal({
-  
   isOpen,
   onClose,
   className,
@@ -23,11 +22,12 @@ function CreateAssignmentModal({
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
 
   // Populate formData when editing
   useEffect(() => {
     if (isEditing && assignment) {
-      console.log(assignment,className,classCode);
+      console.log(assignment, className, classCode);
       setFormData({
         className: className,
         dueDate: assignment.dueDate || "",
@@ -37,6 +37,15 @@ function CreateAssignmentModal({
       });
     }
   }, [isEditing, assignment, className]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -140,7 +149,7 @@ function CreateAssignmentModal({
         </div>
 
         {/* Form */}
-        <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-[10%] h-[80%] items-stretch">
+        <div className={`flex flex-col ${isMobile ? 'gap-4 overflow-y-auto pt-[100px]' : 'md:flex-row gap-[10%]'} justify-center h-[80%] items-stretch`}>
           <div className="flex flex-col space-y-6 w-full md:w-[40%] justify-center">
             <div className="flex flex-col">
               <label className="block text-lg mt-10 md:mt-0">For</label>

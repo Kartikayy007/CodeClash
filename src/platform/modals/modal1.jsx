@@ -19,12 +19,11 @@ const Modal = ({ onClose }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setIsVisible(true); 
-
+    setIsVisible(true);
   }, []);
 
   const handleClose = () => {
-    setIsVisible(false); 
+    setIsVisible(false);
     setTimeout(onClose, 300);
   };
 
@@ -41,8 +40,19 @@ const Modal = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    
+
+    if (!name || !subject || !privacy || isLoading) {
+      // Prevent submission if fields are incomplete or already loading
+      toast.dismiss();
+      toast.error("Please fill in all fields.", {
+        className: "custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    setIsLoading(true); // Disable further submissions immediately
 
     const token = sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
 
@@ -51,36 +61,42 @@ const Modal = ({ onClose }) => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       };
+
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/classroom/create`,
         { name, subject, privacy },
         { headers }
       );
 
+      toast.dismiss();
+
       if (response.data.success) {
         dispatch(setIsEnrolled(false));
-        
-        toast.dismiss();
-
-        toast.success("Class created successfully!", {
+        toast.success(response.data.message || "Class created successfully!", {
           className: "custom-toastS",
           hideProgressBar: true,
           autoClose: 3000,
         });
         handleClose();
+      } else {
+        toast.error(response.data.message || "Failed to create class.", {
+          className: "custom-toast",
+          hideProgressBar: true,
+          autoClose: 3000,
+        });
       }
     } catch (error) {
       toast.dismiss();
-
-      toast.error("Failed to create class.", {
+      toast.error(error.response?.data?.message || "Failed to create class.", {
         className: "custom-toast",
         hideProgressBar: true,
         autoClose: 3000,
       });
-      
       console.error(error);
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false); // Re-enable the button after 2 seconds
+      }, 2000);
     }
   };
 
@@ -153,13 +169,14 @@ const Modal = ({ onClose }) => {
             <button
               className="bg-[#008080] py-5 w-[100%] text-white rounded-md text-lg font-semibold text-center"
               onClick={handleSubmit}
-              disabled={isLoading}
+              disabled={isLoading || !name || !subject || !privacy}
             >
               {isLoading ? 'Creating...' : 'Create Class'}
             </button>
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

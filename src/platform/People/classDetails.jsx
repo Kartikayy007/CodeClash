@@ -8,9 +8,12 @@ import avatar from "../assets/man.png";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import frame from "../assets/Frame.svg";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ClassDetails = () => {
   const location = useLocation();
+  
   const [instructor, setInstructor] = useState(null);
   const [students, setStudents] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,6 +24,7 @@ const ClassDetails = () => {
 
   const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
   const classCode = location.state?.code;
+  console.log(classCode)
 
   const token = sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
   const axiosConfig = {
@@ -63,6 +67,25 @@ const ClassDetails = () => {
       console.error("Failed to remove student:", error);
       alert("Failed to remove the student. Please try again.");
     }
+  };
+
+  const handleCopyClassCode = () => {
+    navigator.clipboard.writeText(classCode).then(() => {
+      toast.dismiss();
+      toast.success("Class code copied to clipboard!", {
+        className: "custom-toastS",
+        hideProgressBar: true,
+        autoClose: 3000,
+      });
+    }).catch((error) => {
+      toast.dismiss();
+      toast.error("Failed to copy class code.", {
+        className: "custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+      });
+      console.error("Failed to copy class code:", error);
+    });
   };
 
   useEffect(() => {
@@ -177,7 +200,10 @@ const ClassDetails = () => {
               </div>
 
               <div className="flex space-x-4">
-                <button className="bg-[#066769] text-white px-6 py-3 rounded-lg font-medium hover:bg-teal-900 transition">
+                <button 
+                  className="bg-[#066769] text-white px-6 py-3 rounded-lg font-medium hover:bg-teal-900 transition"
+                  onClick={handleCopyClassCode}
+                >
                   Copy Class Code
                 </button>
                 <button className="bg-[#066769] text-white px-6 py-3 rounded-lg font-medium hover:bg-teal-900 transition" onClick={() => setIsModalOpen(true)}>
@@ -197,6 +223,7 @@ const ClassDetails = () => {
         onClose={() => setIsRemoveModalOpen(false)}
         onConfirm={handleRemoveStudent}
       />
+      <ToastContainer />
     </div>
   );
 };
