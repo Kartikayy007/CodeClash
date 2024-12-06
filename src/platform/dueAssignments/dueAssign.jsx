@@ -72,7 +72,8 @@ const DueAssignments = () => {
 
   return (
     <div className={`bg-white p-6 border border-[#BCE2DF] rounded-lg ${isMobile ? 'w-[100%] ml-0' : 'w-[55%] ml-[20px]'} mt-[20px] h-[100%]`}>
-      <h2 className="text-2xl mb-6 h-[10%]">Assignments Due Soon</h2>
+      {isEnrolled? <h2 className="text-2xl mb-6 h-[10%]">Assignments Due Soon</h2> : <h2 className="text-2xl mb-6 h-[10%]">Assignments To Review</h2>}
+      
       <div className="h-[90%] space-y-4">
         {dashboardData.length > 0 ? (
           dashboardData.map((assignment, index) => (

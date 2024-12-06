@@ -3,14 +3,16 @@ import io from 'socket.io-client';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
 const LiveVideoCall = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [isLive, setIsLive] = useState(false);
   const [isGoingLive,setIsGoingLive] = useState(false);
   const [error, setError] = useState('');
   const location = useLocation();
-  const {lectureId, classCode, teacherId} = location.state;
+  const lectureId = location.state?.lectureId;
+  const classCode = location.state?.classCode;
+  const teacherId = location.state?.teacherId;
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const videoRef = useRef(null);
   const socketRef = useRef(null);
@@ -19,9 +21,11 @@ const LiveVideoCall = () => {
   const userId = sessionStorage.getItem('userId');
   const isTeacher = userId === teacherId;
   const token = sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
-
+const navigate=useNavigate();
   useEffect(() => {
-    if (!token || !lectureId) return;
+    if (!token || !lectureId){
+      navigate("/dashboard")
+    }
 
 
     if (!isTeacher) {

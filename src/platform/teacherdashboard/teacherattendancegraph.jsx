@@ -58,8 +58,20 @@ const AttendanceChart = () => {
         fetchAttendanceData();
     }, []);
 
+    // Empty data for loading state (initial empty graph)
+    const emptyData = {
+        labels: [], // Empty labels for loading state
+        datasets: [
+            {
+                data: [0, 0, 0], // Empty values to show an empty graph
+                backgroundColor: ['#E5F7F6', '#BBE5E1', '#71DBD3'],
+            },
+        ],
+    };
+
+    // Actual data once loaded
     const data = {
-        labels: subjects,
+        labels: loading ? [] : subjects, // Show no labels while loading
         datasets: [
             {
                 data: dataValues,
@@ -124,31 +136,30 @@ const AttendanceChart = () => {
             }}
         >
             <h2 className="text-[16px] ">Average Attendance</h2>
-            {loading ? (
-                <div className="text-center text-gray-500">Loading...</div>
-            ) : subjects.length > 0 ? (
-                <div className="flex items-center gap-12">
-                    <div className="w-[50%] h-[200px] text-gray-500">
-                        <Bar data={data} options={options} />
-                    </div>
-                    <div className="flex flex-col  w-[50%]  pb-[50px]">
-                        <div className="flex flex-col gap-4 text-gray-600">
-                            <div className="flex items-center ">
-                                <span className="w-3 h-3 mr-2 rounded-sm" style={{ backgroundColor: '#0A5757' }}></span>
-                                Greater than 80%
-                            </div>
-                            <div className="flex items-center">
-                                <span className="w-3 h-3 mr-2 rounded-sm" style={{ backgroundColor: '#00A8A5' }}></span>
-                                Between 60 - 80%
-                            </div>
-                            <div className="flex items-center">
-                                <span className="w-3 h-3 mr-2 rounded-sm" style={{ backgroundColor: '#71DBD3' }}></span>
-                                Less than 60%
-                            </div>
+            
+            <div className="flex items-center gap-12">
+                <div className="w-[50%] h-[200px] text-gray-500">
+                    <Bar data={loading ? emptyData : data} options={options} />
+                </div>
+                <div className="flex flex-col w-[50%] pb-[50px]">
+                    <div className="flex flex-col gap-4 text-gray-600">
+                        <div className="flex items-center ">
+                            <span className="w-3 h-3 mr-2 rounded-sm" style={{ backgroundColor: '#0A5757' }}></span>
+                            Greater than 80%
+                        </div>
+                        <div className="flex items-center">
+                            <span className="w-3 h-3 mr-2 rounded-sm" style={{ backgroundColor: '#00A8A5' }}></span>
+                            Between 60 - 80%
+                        </div>
+                        <div className="flex items-center">
+                            <span className="w-3 h-3 mr-2 rounded-sm" style={{ backgroundColor: '#71DBD3' }}></span>
+                            Less than 60%
                         </div>
                     </div>
                 </div>
-            ) : (
+            </div>
+            
+            {subjects.length === 0 && !loading && (
                 <div className="flex flex-col items-center justify-center h-full text-gray-500">
                     <p className='text-xl font-semibold text-center'>No attendance data available.</p>
                     <p className='text-center'>It'll show up once live classes are held.</p>

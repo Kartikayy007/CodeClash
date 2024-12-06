@@ -2,6 +2,7 @@ import React from 'react';
 
 const Modal = ({ title, children, onClose }) => {
     return (
+        <div>
         <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center z-50">
             <div className="bg-white w-full h-full md:w-1/2 md:h-auto p-6 relative shadow-lg">
 
@@ -17,6 +18,7 @@ const Modal = ({ title, children, onClose }) => {
                     <div className="w-full h-full overflow-y-auto">{children}</div>
                 </div>
             </div>
+        </div>
         </div>
     );
 };

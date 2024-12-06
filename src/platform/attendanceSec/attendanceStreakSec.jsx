@@ -88,7 +88,7 @@ const AttendanceDashboard = ({ classCode }) => {
     },
   };
   return (
-    <div className={`${isMobile ? 'flex flex-col' : 'flex flex-row'} p-6 rounded-lg ${isMobile ? 'h-auto' : 'h-[300px]'} ${isMobile ? 'space-y-4' : 'space-x-4'}`}>
+    <div className={`${isMobile ? 'flex flex-col' : 'flex flex-row'} p-6 px-0 rounded-lg ${isMobile ? 'h-auto' : 'h-[300px]'} ${isMobile ? 'space-y-4' : 'space-x-4'}`}>
       <div className={`${isMobile ? 'w-full' : 'w-1/2'} bg-white p-6 rounded-lg`}>
         { }
         <div className="flex justify-between items-center mb-4">

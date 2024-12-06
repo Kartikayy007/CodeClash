@@ -13,23 +13,27 @@ import { ChatBox } from "./studentSubmission";
 import { motion, AnimatePresence } from "framer-motion";
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { useNavigate } from "react-router-dom";
 
 const AssignmentDetails = () => {
     const sidebarWidth = useSelector((state) => state.sidebar.width);
     const location = useLocation();
     const assignment = location.state?.assignment;
-    const assignmentId = assignment._id;
+    const assignmentId = assignment?._id;
     const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
-    const classCode = location.state?.code;
+    const classCode = location.state?.classCode;
+    const className = location.state?.className;
     console.log(classCode)
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
     const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+    const navigate = useNavigate();
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -39,11 +43,15 @@ const AssignmentDetails = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    if (!assignment) {
-        return <p>No assignment details available.</p>;
-    }
+    
+    useEffect(() => {
+        if (!assignment) {
+            navigate('/dashboard');
+        }
+        
+      }, [classCode]);
 
-    const dueDate = new Date(assignment.dueDate);
+    const dueDate = new Date(assignment?.dueDate);
     const currentDate = new Date();
     const status = dueDate < currentDate ? "Completed" : "Due";
 
@@ -64,7 +72,7 @@ const AssignmentDetails = () => {
             uploadedFiles.forEach((file) => {
                 formData.append("media", file);
             });
-            formData.append("assignmentId", assignment._id);
+            formData.append("assignmentId", assignment?._id);
             await axios.post(
                 `${process.env.REACT_APP_API_URL}/submission/create`,
                 formData,
@@ -87,7 +95,7 @@ const AssignmentDetails = () => {
     };
 
     const handleEdit = () => {
-        setEditModalOpen(true); 
+        setEditModalOpen(true);
         setMenuOpen(false); 
     };
 
@@ -108,6 +116,7 @@ const AssignmentDetails = () => {
               console.log(response)
             alert("Assignment deleted successfully!");
             setDeleteModalOpen(false);
+            navigate("/classes")
         } catch (error) {
             console.error("Error deleting assignment:", error);
             alert("Failed to delete assignment.");
@@ -192,7 +201,7 @@ const AssignmentDetails = () => {
                                 )}
                             </div>
                             <div className="p-4 rounded-lg mb-6">
-                                <h1 className="text-3xl font-bold text-[#394141] mb-4">{assignment.name}</h1>
+                                <h1 className="text-3xl font-bold text-[#394141] mb-4">{assignment?.name}</h1>
                                 <div className="flex flex-col gap-4 text-sm text-[#394141]">
                                     <p>
                                         <span className="font-medium">Status: </span>
@@ -204,20 +213,20 @@ const AssignmentDetails = () => {
                                     </p>
                                     <p>
                                         <span className="font-medium">Due Date: </span>
-                                        {assignment.dueDate}
+                                        {assignment?.dueDate}
                                     </p>
                                     <p>
                                         <span className="font-medium">Created On: </span>
-                                        {assignment.createdAt}
+                                        {assignment?.createdAt}
                                     </p>
                                     <hr />
                                 </div>
                             </div>
                             <div className="p-4 rounded-lg">
                                 <h2 className="text-xl font-medium text-[#394141]">Description</h2>
-                                <p className="text-[#394141] mt-3 text-xl">{assignment.description}</p>
+                                <p className="text-[#394141] mt-3 text-xl">{assignment?.description}</p>
                             </div>
-                            {assignment.media && assignment.media.length > 0 && (
+                            {assignment?.media && assignment?.media.length > 0 && (
                                 <div className="p-4 rounded-lg">
                                     <h2 className="text-xl font-medium text-[#394141]">Attachments</h2>
                                     <div className="mt-4 grid grid-cols-auto md:grid-cols-auto gap-4">
@@ -359,7 +368,10 @@ const AssignmentDetails = () => {
                 <CreateAssignmentModal
                     isOpen={editModalOpen}
                     onClose={() => setEditModalOpen(false)}
-                    assignment={assignment} 
+                    assignment={assignment}
+                    className={className}
+                    classCode={classCode}
+                    isEditing={true} 
                 />
             )}
         </div>

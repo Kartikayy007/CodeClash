@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import EditIcon from '@mui/icons-material/Edit';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
@@ -16,15 +16,20 @@ const AssignOpenComp = () => {
   const [editingGradeIndex, setEditingGradeIndex] = useState(null);
   const [currentGrade, setCurrentGrade] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
 
   const location = useLocation();
   const assignment = location.state?.assignment;
   const createdClasses = useSelector((state) => state.createdClasses.createdClasses);
-  const currentClass = createdClasses.find((cls) => cls._id === assignment.classroom);
+  const currentClass = createdClasses.find((cls) => cls._id === assignment?.classroom);
   const totalStudents = currentClass ? currentClass.noOfStudents : 0;
-  const totalSubmissions = assignment.submissions.length;
+  const totalSubmissions = assignment?.submissions.length;
   const submissions = assignment?.submissions || [];
-
+  useEffect(()=>{
+    if(!assignment){
+      navigate("/dashboard");
+    }
+  })
   const handleEditClick = (index, grade) => {
     setEditingGradeIndex(index);
     setCurrentGrade(grade === "Not Graded" ? "" : grade);
@@ -79,7 +84,7 @@ const AssignOpenComp = () => {
 
   return (
     <div className="p-8 mt-[50px] bg-[#E1EAE8] min-h-screen">
-      <h1 className="text-2xl mb-8">{assignment.name} Submissions</h1>
+      <h1 className="text-2xl mb-8">{assignment?.name} Submissions</h1>
 
       <div className="flex justify-between mb-8 text-center">
         <SummaryCard title="Total Students" value={totalStudents} bgColor="bg-[#FFF3D4]" />

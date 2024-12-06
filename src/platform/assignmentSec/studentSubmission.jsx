@@ -11,10 +11,15 @@ const StudentSubmissions = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const assignment = location.state?.assignment;
+    useEffect(()=>{
+        if(!assignment){
+            navigate("/dashboard");
+        }
+    })
     const createdClasses = useSelector((state) => state.createdClasses.createdClasses);
-    const currentClass = createdClasses.find((cls) => cls._id === assignment.classroom);
+    const currentClass = createdClasses.find((cls) => cls._id === assignment?.classroom);
     const totalStudents = currentClass ? currentClass.noOfStudents : 0;
-    const totalSubmissions = assignment.submissions.length;
+    const totalSubmissions = assignment?.submissions.length;
     const completedPercentage = ((totalSubmissions / totalStudents) * 100).toFixed(1);
     const notCompletedPercentage = (100 - parseFloat(completedPercentage)).toFixed(1);
     console.log(completedPercentage,notCompletedPercentage)
@@ -25,7 +30,7 @@ const StudentSubmissions = () => {
 
     ];
 
-    const COLORS = ["#6366F1", "#F87171"]; 
+    const COLORS = ["#BCE2DF", "#00A8A5"]; 
 
 
 
@@ -115,7 +120,7 @@ const StudentSubmissions = () => {
 
 
 
-            <ChatBox assignmentId={assignment._id} />
+            <ChatBox assignmentId={assignment?._id} />
         </div>
     );
 };
@@ -129,12 +134,9 @@ export const ChatBox = ({ assignmentId }) => {
     const studentId = sessionStorage.getItem('userId');
     const [socket, setSocket] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
-    const [participants, setParticipants] = useState([]); 
-
-    const [activeChatUserId, setActiveChatUserId] = useState(null); 
-
-    const [isParticipantView, setIsParticipantView] = useState(true); 
-
+    const [participants, setParticipants] = useState([]);
+    const [activeChatUserId, setActiveChatUserId] = useState(null);
+    const [isParticipantView, setIsParticipantView] = useState(true);
     const token = sessionStorage.getItem("authToken") || localStorage.getItem('authToken');
     const [enlargedImage, setEnlargedImage] = useState(null);
 
@@ -152,15 +154,12 @@ export const ChatBox = ({ assignmentId }) => {
         });
 
         socketConnection.on("AssignemntChats", (chats) => {
-
             console.log("Chats:", chats);
             const uniqueParticipants = chats.map((chat) => chat.participants);
             setParticipants(uniqueParticipants);
         });
 
-        socketConnection.on("notTeacher", () => {
-
-        });
+        socketConnection.on("notTeacher", () => {});
 
         socketConnection.on('disconnect', () => {
             console.log('Disconnected from socket server');
@@ -255,15 +254,13 @@ export const ChatBox = ({ assignmentId }) => {
                 socket.emit("joinAssignmentChat", { studentId, assignmentId });
             }
             setActiveChatUserId(userId);
-            setIsParticipantView(false); 
-
+            setIsParticipantView(false);
         }
     };
 
     const goBackToParticipants = () => {
         setActiveChatUserId(null);
-        setMessages([]); 
-
+        setMessages([]);
         setIsParticipantView(true);
     };
 
@@ -295,7 +292,7 @@ export const ChatBox = ({ assignmentId }) => {
     };
 
     return (
-        <div className="bg-white p-6 rounded-lg h-full flex flex-col justify-between">
+        <div className="bg-white p-6 rounded-lg  flex flex-col justify-between fit">
             {isAdmin && isParticipantView ? (
                 <>
                     <h2 className="text-3xl text-gray-800">Select a student to chat with</h2>
@@ -354,12 +351,9 @@ export const ChatBox = ({ assignmentId }) => {
                                     className={`flex ${isSentByCurrentUser ? "justify-start" : "justify-start"}`}
                                 >
                                     <div
-                                        className={`w-full p-4 rounded-lg shadow ${isSentByCurrentUser
-                                            ? "bg-blue-500 text-white"
-                                            : "bg-[#EEF0F0] text-gray-900"
-                                            }`}
+                                        className={`w-full p-4 rounded-lg border border-[#D9DEDE] `}
                                     >
-                                        <div className="text-2xl font-medium">{chat.sender.name}</div>
+                                        <div className="text-md font-semibold">{chat.sender.name}</div>
                                         <div className="text-xl mt-2">{chat.message}</div>
                                         {chat.file && chat.file.type.startsWith("image/") && (
                                             <img
@@ -369,33 +363,28 @@ export const ChatBox = ({ assignmentId }) => {
                                                 onClick={() => handleImageClick(chat.file.url)}
                                             />
                                         )}
-                                        {chat.file && (
+                                        {chat.file && !chat.file.type.startsWith("image/") && (
                                             <div className="mt-2">
-                                                {chat.file.type.startsWith("image/") ? (
-                                                    <img
-                                                        src={chat.file.url}
-                                                        alt={chat.file.name}
-                                                        className="w-[100px] h-auto rounded-md"
-                                                    />
-                                                ) : (
-                                                    <div>
-                                                        <a
-                                                            href={chat.file.url}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="text-blue-200 underline"
-                                                        >
-                                                            {chat.file.name}
-                                                        </a>
-                                                    </div>
-                                                )}
+                                                <a
+                                                    href={chat.file.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-blue-200 underline"
+                                                >
+                                                    {chat.file.name}
+                                                </a>
                                             </div>
                                         )}
                                         <div className="text-xs text-gray-400 mt-2 text-right">
-                                            {new Date(chat.timestamp).toLocaleTimeString([], {
-                                                hour: "2-digit",
-                                                minute: "2-digit",
-                                            })}
+                                        {new Date(chat.timestamp).toLocaleDateString('en-US', {
+                                            weekday: 'short', // 'Mon'
+                                        })} 
+                                        {` ${new Date(chat.timestamp).toLocaleTimeString('en-US', {
+                                            hour: '2-digit', 
+                                            minute: '2-digit', 
+                                            hour12: true, // AM/PM
+                                        })}`}
+
                                         </div>
                                     </div>
                                 </div>
@@ -478,7 +467,5 @@ export const ChatBox = ({ assignmentId }) => {
         </div>
     );
 };
-
-
 
 export default StudentSubmissions;

@@ -20,11 +20,12 @@ const Performance = () => {
     const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
     const [dashboardData, setDashboardData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [transitionApplied, setTransitionApplied] = useState(false); // To track transition state
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = sessionStorage.getItem("authToken")|| localStorage.getItem("authToken")   ;
+                const token = sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
                 const headers = {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -37,6 +38,7 @@ const Performance = () => {
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
+                setLoading(false);  // Ensure loading is set to false even if there's an error
             }
         };
 
@@ -52,8 +54,21 @@ const Performance = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // Set transition delay after 2 seconds
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setTransitionApplied(true);
+        }, 1000); // Apply transition after 2 seconds
+
+        return () => clearTimeout(timer); // Cleanup the timer on unmount
+    }, []);
+
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div className={`w-full h-screen flex justify-center items-center`}>
+                <p></p> {/* Placeholder or skeleton loader */}
+            </div>
+        );
     }
 
     const assignments = dashboardData?.details.joined.assignments || [];
@@ -121,17 +136,17 @@ const Performance = () => {
 
     return (
         <div 
-            className={`  ${isMobile?'w-[94%]':'w-[65%] pl-1'}`} 
+            className={` ${isMobile ? 'w-[94%]' : 'w-[65%] pl-1'}`} 
             style={{ 
                 marginLeft: isMobile ? '3%' : sidebarWidth,
-                transition: 'margin-left 0.3s ease'
+                transition: transitionApplied ? 'margin-left 0.3s ease' : 'none', // Apply transition after 2 seconds
             }}
         >
             <div className="w-full h-[10%] mt-[70px]">
                 <p className="text-[23px] pt-[15px] font-semibold">Hello, {formattedUserName}!</p>
             </div>
             
-            <div className={`flex h-[35%] overflow-x-auto ${isMobile?'max-h-[300px]':''}`}>
+            <div className={`flex h-[35%] overflow-x-auto ${isMobile ? 'max-h-[300px]' : ''}`}>
                 {isEnrolled ? (
                     assignments.length > 0 ? (
                         <div className='w-[55%] h-[100%] min-w-[360px]'>
@@ -167,21 +182,21 @@ const Performance = () => {
                         </div>
                     )
                 ) : (
-                    <div className='w-[45%] min-w-[360px] h-[100%] '><AssignmentChart/></div>
+                    <div className='w-[45%] min-w-[360px] h-[100%] '><AssignmentChart /></div>
                 )}
                 
                 {isEnrolled ? (
                     <div className="flex gap-4 ml-[20px] w-[45%] h-[100%] min-w-[360px]">
-                        <Attendance averageAttendance={dashboardData?.details.joined.averageAttendance}/>
+                        <Attendance averageAttendance={dashboardData?.details.joined.averageAttendance} />
                     </div>
                 ) : (
-                    <div className='flex gap-4 ml-[20px] w-[55%] h-[100%] min-w-[360px] '><AttendanceChart/></div>
+                    <div className='flex gap-4 ml-[20px] w-[55%] h-[100%] min-w-[360px] '><AttendanceChart /></div>
                 )}
             </div>
             
-            <div className={`flex h-[45%] ${isMobile?'flex-col':''}`}>
-                <RecentClasses recentClasses={dashboardData.user.recentClasses}/>
-                <DueAssignments/>
+            <div className={`flex h-[45%] ${isMobile ? 'flex-col' : ''}`}>
+                <RecentClasses recentClasses={dashboardData.user.recentClasses} />
+                <DueAssignments />
             </div>
         </div>
     );

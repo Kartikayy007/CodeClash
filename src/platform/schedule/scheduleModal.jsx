@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "axios";
 
-const ScheduleLectureModal = ({ isOpen, onClose,initialData }) => {
+const ScheduleLectureModal = ({ isOpen, onClose, initialData, fromCalendar }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [lectureTitle, setLectureTitle] = useState("");
   const [description, setDescription] = useState("");
   const [time, setTime] = useState("");
+  const [selectedClass, setSelectedClass] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const location = useLocation();
   const classCode = location.state?.code;
   const className = location.state?.name;
-  console.log(className)
-  const isEditing=initialData?true:false;
-  
+  const createdClasses = useSelector((state) => state.createdClasses.createdClasses);
+  const isEditing = initialData ? true : false;
 
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
-      
 
       if (initialData) {
         setLectureTitle(initialData.title || "");
@@ -28,12 +28,10 @@ const ScheduleLectureModal = ({ isOpen, onClose,initialData }) => {
         const formatDate = (dateString) => {
           if (!dateString) return "";
           const date = new Date(dateString);
-          return date.toISOString().slice(0, 16); 
-
+          return date.toISOString().slice(0, 16);
         };
         setTime(formatDate(initialData.startTime));
       } else {
-
         setLectureTitle("");
         setDescription("");
         setTime("");
@@ -51,20 +49,16 @@ const ScheduleLectureModal = ({ isOpen, onClose,initialData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!lectureTitle || !description || !time) {
+    if (!lectureTitle || !description || !time || (fromCalendar && !selectedClass)) {
       setError("All fields are required.");
       return;
     }
 
-
     setError("");
     setLoading(true);
-  
-console.log(isEditing)
+
     try {
-      const token =
-        sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
-        
+      const token = sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
 
       const axiosConfig = {
         headers: {
@@ -72,42 +66,34 @@ console.log(isEditing)
         },
       };
       let response;
-     if(isEditing){
-       response = await axios.patch(
-        `${process.env.REACT_APP_API_URL}/lecture/update?lectureId=${initialData._id}`, 
-        {
-          title: lectureTitle,
-          description,
-          startTime:time,
-          code:classCode,
- 
-          
-        },
-        axiosConfig
-      );
-     }
-     else{
-       response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/lecture/create`, 
-        {
-          title: lectureTitle,
-          description,
-          startTime:time,
-          code:classCode
-          
-        },
-        axiosConfig
-      );}
-
-      if (response.status === 201) {
+      if (isEditing) {
+        response = await axios.patch(
+          `${process.env.REACT_APP_API_URL}/lecture/update?lectureId=${initialData._id}`,
+          {
+            title: lectureTitle,
+            description,
+            startTime: time,
+            code: fromCalendar ? selectedClass : classCode,
+          },
+          axiosConfig
+        );
+      } else {
+        response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/lecture/create`,
+          {
+            title: lectureTitle,
+            description,
+            startTime: time,
+            code: fromCalendar ? selectedClass : classCode,
+          },
+          axiosConfig
+        );
+      }
+      if (response.status === 201 || response.status === 200) {
         console.log("Lecture scheduled successfully:", response.data);
-        handleClose();
-      }else if(response.status===200){
-        console.log("Lecture updated successfully:", response.data);
         handleClose();
       } else {
         setError("Failed to schedule the lecture.");
-        
       }
     } catch (error) {
       console.error("Error scheduling lecture:", error);
@@ -141,14 +127,34 @@ console.log(isEditing)
         </div>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
-          <div>
-            <input
-              type="text"
-              placeholder={className}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-gray-500"
-              readOnly
-            />
-          </div>
+          {fromCalendar ? (
+            <div className="flex flex-col">
+              <select
+                id="class-select"
+                value={selectedClass}
+                onChange={(e) => setSelectedClass(e.target.value)}
+                className="rounded-lg w-full  text-xl border border-[#4C5858] p-[20px] mb-6"
+              >
+                <option value="" disabled>
+                  Select Class
+                </option>
+                {createdClasses.map((classItem) => (
+                  <option key={classItem._id} value={classItem.code}>
+                    {classItem.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : (
+            <div>
+              <input
+                type="text"
+                placeholder={className}
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-gray-500"
+                readOnly
+              />
+            </div>
+          )}
           <div>
             <input
               type="text"
@@ -172,16 +178,15 @@ console.log(isEditing)
               type="datetime-local"
               className="w-full p-[20px] border border-[#4C5858] mt-[20px] rounded-md focus:outline-none text-xl"
               value={time}
-              onChange={(e) => setTime(e.target
-                .value)}
+              onChange={(e) => setTime(e.target.value)}
             />
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
             type="submit"
-            className="w-full bg-[#066769] text-white py-2 rounded-md transition-all h-[50px] "
+            className="w-full bg-[#066769] text-white py-2 rounded-md transition-all h-[50px]"
             disabled={loading}
-            style={{marginTop:'40px'}}
+            style={{ marginTop: '40px' }}
           >
             {loading ? "Scheduling..." : "Schedule Lecture"}
           </button>

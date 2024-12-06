@@ -1,9 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { X, Plus, Trash2, Loader } from "lucide-react";
 import card from "../assets/assign.svg";
 
-function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
+function CreateAssignmentModal({
+  
+  isOpen,
+  onClose,
+  className,
+  classCode,
+  assignment,
+  isEditing,
+}) {
   const [formData, setFormData] = useState({
     className: className,
     dueDate: "",
@@ -15,6 +23,20 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef(null);
+
+  // Populate formData when editing
+  useEffect(() => {
+    if (isEditing && assignment) {
+      console.log(assignment,className,classCode);
+      setFormData({
+        className: className,
+        dueDate: assignment.dueDate || "",
+        title: assignment.name || "",
+        description: assignment.description || "",
+        attachments: assignment.media || [],
+      });
+    }
+  }, [isEditing, assignment, className]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -39,7 +61,6 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
   };
 
   const handleSubmit = async () => {
-    console.log(className, classCode);
     setIsUploading(true);
     setUploadProgress(0);
 
@@ -51,33 +72,49 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
 
     if (formData.attachments) {
       for (let i = 0; i < formData.attachments.length; i++) {
-        data.append("media", formData.attachments[i]);
+        if (formData.attachments[i] instanceof File) {
+          // Only append new files to the form data
+          data.append("media", formData.attachments[i]);
+        }
       }
     }
 
-    const token = sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
+    const token =
+      sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
 
     const axiosConfig = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       onUploadProgress: (progressEvent) => {
-        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        const progress = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
         setUploadProgress(progress);
       },
     };
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/assignment/create`,
-        data,
-        axiosConfig
-      );
+      let response;
+      if (isEditing) {
+        response = await axios.put(
+          `${process.env.REACT_APP_API_URL}/assignment/edit/${assignment._id}`,
+          data,
+          axiosConfig
+        );
+        console.log("Assignment updated:", response.data);
+      } else {
+        response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/assignment/create`,
+          data,
+          axiosConfig
+        );
+        console.log("Assignment created:", response.data);
+      }
 
-      console.log("Assignment created:", response.data);
       onClose();
     } catch (error) {
-      console.error("Error creating assignment:", error);
+      console.error("Error submitting assignment:", error);
     } finally {
       setIsUploading(false);
       setUploadProgress(0);
@@ -91,7 +128,9 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
       <div className="bg-white w-[90%] md:w-[80%] h-[90%] md:h-[80%] p-4 md:p-8 relative overflow-y-auto rounded-lg">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl">Create Assignment</h2>
+          <h2 className="text-2xl">
+            {isEditing ? "Edit Assignment" : "Create Assignment"}
+          </h2>
           <button
             onClick={onClose}
             className="p-1 hover:bg-gray-100 rounded-full transition-colors"
@@ -109,13 +148,12 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
                 type="text"
                 name="class"
                 placeholder={`${formData.className} (${classCode})`}
-                onChange={handleInputChange}
                 className="w-full px-4 py-3 rounded-lg border border-gray-200"
                 readOnly
               />
             </div>
 
-            <div className="flex flex-col space-y-2 " style={{margin:'0'}}>
+            <div className="flex flex-col space-y-2">
               <label className="block text-lg">Assignment Title</label>
               <input
                 type="text"
@@ -123,7 +161,7 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
                 placeholder="Enter assignment title"
                 value={formData.title}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500 "
+                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500"
               />
             </div>
 
@@ -141,7 +179,7 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
           </div>
 
           <div className="flex flex-col space-y-6 w-full md:w-[40%] justify-center">
-            <div className="flex flex-col  space-y-2">
+            <div className="flex flex-col space-y-2">
               <label className="block text-lg">Due Date</label>
               <input
                 type="date"
@@ -152,7 +190,7 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
               />
             </div>
 
-            <div className="flex flex-col space-y-2 ">
+            <div className="flex flex-col space-y-2">
               <label className="block text-lg">Attachments</label>
               <div className="border border-[#4C5858] rounded-lg p-4 h-[180px] overflow-y-auto">
                 {formData.attachments.length === 0 && (
@@ -170,7 +208,9 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
                       key={index}
                       className="flex justify-between items-center border-b pb-2"
                     >
-                      <span className="text-sm text-gray-600">{file.name}</span>
+                      <span className="text-sm text-gray-600">
+                        {file instanceof File ? file.name : file}
+                      </span>
                       <button
                         onClick={() => handleRemoveFile(index)}
                         className="text-red-500 hover:text-red-700"
@@ -207,21 +247,27 @@ function CreateAssignmentModal({ isOpen, onClose, className, classCode }) {
               </div>
               <span>Uploading... {uploadProgress}%</span>
               <div className="w-48 h-2 bg-gray-200 rounded-full">
-                <div 
+                <div
                   className="h-full bg-teal-600 rounded-full transition-all duration-300"
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>
             </div>
           )}
-          
+
           <button
             onClick={handleSubmit}
             disabled={isUploading}
             className={`px-[60px] py-[12px] bg-[#066769] text-white rounded-lg transition-colors mt-10 md:mt-0
-              ${isUploading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-teal-700'}`}
+              ${isUploading ? "opacity-50 cursor-not-allowed" : "hover:bg-teal-700"}`}
           >
-            {isUploading ? 'Creating Assignment...' : 'Create Assignment'}
+            {isUploading
+              ? isEditing
+                ? "Updating Assignment..."
+                : "Creating Assignment..."
+              : isEditing
+              ? "Update Assignment"
+              : "Create Assignment"}
           </button>
         </div>
       </div>

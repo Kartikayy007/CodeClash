@@ -67,7 +67,7 @@ const AssignmentChart = () => {
     }, []);
 
     const data = {
-        labels: subjects.slice(0,3),
+        labels: subjects.slice(0, 3),
         datasets: [
             {
                 data: completionRates,
@@ -103,45 +103,50 @@ const AssignmentChart = () => {
         barThickness: 30,
     };
 
+    const emptyData = {
+        labels: ['Subject 1', 'Subject 2', 'Subject 3'],
+        datasets: [
+            {
+                data: [0, 0, 0], // Empty values to show an empty graph
+                backgroundColor: ['#E5F7F6', '#BBE5E1', '#71DBD3'],
+            },
+        ],
+    };
+
     return (
         <div className="flex flex-col h-[100%] p-6 border border-[#BCE2DF] rounded-lg bg-white">
             <h2 className="text-[16px]">% of Students completed Assignment</h2>
-            
-            {loading ? (
-                <div className="flex items-center justify-center h-full text-gray-500">Loading...</div>
-            ) : subjects.length > 0 ? (
-                <div className="flex items-center h-full pt-6">
-                    <div className="w-[50%] h-[100%] text-gray-500">
-                        <Bar data={data} options={options} />
-                    </div>
-                    <div className="flex flex-col gap-[40px] w-[60%] items-center">
-                        <ul
-                            className={`${
-                                isCollapsed ? 'items-start' : 'self-start'
-                            } text-sm space-y-2 flex flex-col gap-[10px] text-gray-600`}
-                        >
-                            {subjects.slice(0,3).map((subject, index) => (
-                                
-                                <li key={subject} className="flex items-center">
-                                    <span
-                                        className="w-3 h-3 mr-2 rounded-sm ml-5"
-                                        style={{
-                                            backgroundColor: data.datasets[0].backgroundColor[index % 5],
-                                        }}
-                                    ></span>
-                                    {`${subject}`}
-                                </li>
-                            ))}
-                        </ul>
-                        <button
-                            className={`mt-4 px-4 py-2 w-[90%] bg-teal-700 text-white rounded-md hover:bg-teal-800`}
-                            onClick={()=>{window.location.href='/assignments'}}
-                        >
-                            View Analysis
-                        </button>
-                    </div>
+            <div className="flex items-center h-full pt-6">
+                <div className="w-[50%] h-[100%] text-gray-500">
+                    <Bar data={loading ? emptyData : data} options={options} />
                 </div>
-            ) : (
+                <div className="flex flex-col gap-[40px] w-[60%] items-center">
+                    <ul
+                        className={`${
+                            isCollapsed ? 'items-start' : 'self-start'
+                        } text-sm space-y-2 flex flex-col gap-[10px] text-gray-600`}
+                    >
+                        {subjects.slice(0, 3).map((subject, index) => (
+                            <li key={subject} className="flex items-center">
+                                <span
+                                    className="w-3 h-3 mr-2 rounded-sm ml-5"
+                                    style={{
+                                        backgroundColor: data.datasets[0].backgroundColor[index % 5],
+                                    }}
+                                ></span>
+                                {`${subject}`}
+                            </li>
+                        ))}
+                    </ul>
+                    <button
+                        className={`mt-4 px-4 py-2 w-[90%] bg-teal-700 text-white rounded-md hover:bg-teal-800`}
+                        onClick={() => { window.location.href = '/assignments'; }}
+                    >
+                        View Analysis
+                    </button>
+                </div>
+            </div>
+            {subjects.length === 0 && !loading && (
                 <div className="flex flex-col items-center justify-center h-full text-gray-500">
                     <p className='font-semibold text-xl'>No data yet</p>
                     <p>No assignments available.</p>

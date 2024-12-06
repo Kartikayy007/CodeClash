@@ -83,8 +83,9 @@ const Header = () => {
   };
 
   const toggleAddMenu = () => {
-    setIsAddMenuVisible(!isAddMenuVisible);
+    setIsAddMenuVisible(prevState => !prevState);  // This toggles the visibility state
   };
+  
 
   return (
     <>
@@ -181,6 +182,10 @@ const Header = () => {
 
       <div className="fixed bottom-8 right-8 z-50">
         <div className="relative">
+        {location.pathname !== '/announcement' && 
+         location.pathname !== '/assignment-details' && 
+         location.pathname !== '/assignment-open' && 
+         location.pathname !== '/live' && 
           <button
             onClick={toggleAddMenu}
             className={`bg-[#008080] hover:bg-[#005f5f] text-white rounded-full p-4 shadow-lg flex items-center justify-center transition-transform duration-300 ${
@@ -190,7 +195,7 @@ const Header = () => {
           >
             <AddIcon style={{ fontSize: 30 }} />
           </button>
-
+}
           <div 
             ref={addMenuRef} 
             className={`absolute bottom-[80px] right-0 origin-bottom-right transition-all duration-300 ease-in-out ${
