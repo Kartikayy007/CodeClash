@@ -80,6 +80,8 @@ const JoinedClasses = () => {
           const { joinedClasses, createdClasses } = response.data.user;
           dispatch(setJoinedClasses(joinedClasses));
           dispatch(setCreatedClasses(createdClasses));
+          fetchData();
+
 
           if (createdClasses.length > 0 && joinedClasses.length === 0) {
             dispatch(setIsEnrolled(false));
@@ -109,6 +111,7 @@ const JoinedClasses = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+  
 
   const isEmpty = joinedClasses.length === 0 && createdClasses.length === 0;
 

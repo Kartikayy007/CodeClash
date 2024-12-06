@@ -4,7 +4,10 @@ import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+
 const LiveVideoCall = () => {
+  const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
+
   const [isConnected, setIsConnected] = useState(false);
   const [isLive, setIsLive] = useState(false);
   const [isGoingLive,setIsGoingLive] = useState(false);
@@ -12,6 +15,7 @@ const LiveVideoCall = () => {
   const location = useLocation();
   const lectureId = location.state?.lectureId;
   const classCode = location.state?.classCode;
+  
   const teacherId = location.state?.teacherId;
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const videoRef = useRef(null);
@@ -169,10 +173,12 @@ const navigate=useNavigate();
         <div className="bg-white rounded-lg shadow-lg p-6 ">
           <h2 className="text-2xl font-semibold mb-4 ">Live Session</h2>
           
-          <div className="mb-4">
+          
+          {!isEnrolled?<div className="mb-4">
             Status: {isLive ? 'Live' : isGoingLive? 'Going Live' : 'Not Live'}
             {error && <p className="text-red-500 mt-2">{error}</p>}
-          </div>
+          </div>:<></>}
+          
 
           {isTeacher ? (
             <>

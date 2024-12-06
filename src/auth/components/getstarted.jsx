@@ -492,7 +492,50 @@ const ClassenceLanding = () => {
         </div>
       </section>
 
-      
+      {/* Footer Section */}
+      <footer className="bg-gray-900 text-white py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div>
+              <img src={logo} alt="Classence Logo" className="h-10 mb-6" />
+              <p className="text-gray-400">
+                Revolutionizing education through innovative technology and seamless learning experiences.
+              </p>
+            </div>
+            <div>
+              <h4 className="font-bold mb-6">Quick Links</h4>
+              <nav className="space-y-4">
+                <a href="#features" className="block hover:text-teal-400 transition">Home</a>
+                <a href="#steps" className="block hover:text-teal-400 transition">Features</a>
+                <a href="#testimonials" className="block hover:text-teal-400 transition">About</a>
+                <a href="#contact" className="block hover:text-teal-400 transition">Contact</a>
+              </nav>
+            </div>
+            <div>
+              <h4 className="font-bold mb-6">Legal</h4>
+              <nav className="space-y-4">
+                <a href="/privacy" className="block hover:text-teal-400 transition">Privacy Policy</a>
+                <a href="/terms" className="block hover:text-teal-400 transition">Terms of Service</a>
+              </nav>
+            </div>
+            <div>
+              <h4 className="font-bold mb-6">Connect</h4>
+              <div className="flex space-x-4">
+                {/* Social media icons would go here */}
+                <a href="#" className="hover:text-teal-400">Twitter</a>
+                <a href="#" className="hover:text-teal-400">LinkedIn</a>
+                <a href="#" className="hover:text-teal-400">Facebook</a>
+              </div>
+            </div>
+          </div>
+          <div className="mt-12 pt-8 border-t border-gray-800 text-center">
+            <p className="text-gray-500">© 2024 Classence. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+   
+
+
     </div>
   );
 };

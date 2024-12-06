@@ -5,9 +5,9 @@ import { setIsEnrolled } from '../features/toggleSlice';
 import { useDispatch } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Navigate,useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const Modal2 = ({ onClose,joinToken,classCode }) => {
+const Modal2 = ({ onClose, joinToken, classCode }) => {
   const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false); 
@@ -18,11 +18,12 @@ const Modal2 = ({ onClose,joinToken,classCode }) => {
   useEffect(() => {
     setIsVisible(true); 
 
-    if(joinToken && classCode){
+    if (joinToken && classCode) {
       setCode(classCode);
-      if(!isLoading && !hasSubmitted) handleAutoSubmit();
+      if (!isLoading && !hasSubmitted) handleAutoSubmit();
     }
   }, []);
+
   const handleAutoSubmit = async () => {
     setIsLoading(true);
     setHasSubmitted(true); 
@@ -35,10 +36,10 @@ const Modal2 = ({ onClose,joinToken,classCode }) => {
         'Authorization': `Bearer ${token}`
       };
      
-      const response = await axios.post( `${process.env.REACT_APP_API_URL}/classroom/join`, { code:classCode ,token:joinToken}, { headers });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/classroom/join`, { code: classCode, token: joinToken }, { headers });
+      toast.dismiss();
       if (response.data.success) {
         dispatch(setIsEnrolled(true));
-        toast.dismiss();
         toast.success("Class joined successfully!", {
           className: "custom-toastS",
           hideProgressBar: true,
@@ -46,25 +47,31 @@ const Modal2 = ({ onClose,joinToken,classCode }) => {
         });
         handleClose();
         navigate('/dashboard');
+      } else {
+        toast.error(response.data.message || "Failed to join class.", {
+          className: "custom-toast",
+          hideProgressBar: true,
+          autoClose: 3000,
+        });
       }
-    }catch(error){
+    } catch (error) {
       toast.dismiss();
-      toast.error("Failed to join class.", {
+      toast.error(error.response?.data?.message || "Failed to join class.", {
         className: "custom-toast",
         hideProgressBar: true,
         autoClose: 3000,
       });
-      setIsLoading(false);
-      handleClose();
-      navigate('/dashboard');
       console.error(error);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false); // Re-enable the button after 2 seconds
+      }, 2000);
     }
-  }
+  };
+
   const handleClose = () => {
     setIsVisible(false); 
-
     setTimeout(onClose, 300); 
-
   };
 
   const handleSubmit = async (e) => {
@@ -85,28 +92,35 @@ const Modal2 = ({ onClose,joinToken,classCode }) => {
         { headers }
       );
 
+      toast.dismiss();
+
       if (response.data.success) {
         dispatch(setIsEnrolled(true));
-        toast.dismiss();
-
         toast.success("Class joined successfully!", {
           className: "custom-toastS",
           hideProgressBar: true,
           autoClose: 3000,
         });
         handleClose();
+      } else {
+        toast.error(response.data.message || "Failed to join class.", {
+          className: "custom-toast",
+          hideProgressBar: true,
+          autoClose: 3000,
+        });
       }
     } catch (error) {
       toast.dismiss();
-
-      toast.error("Failed to join class.", {
+      toast.error(error.response?.data?.message || "Failed to join class.", {
         className: "custom-toast",
         hideProgressBar: true,
         autoClose: 3000,
       });
       console.error(error);
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false); // Re-enable the button after 2 seconds
+      }, 2000);
     }
   };
 
@@ -139,17 +153,17 @@ const Modal2 = ({ onClose,joinToken,classCode }) => {
               placeholder="Class Code"
               className="w-full p-2 border border-gray-300 rounded-md"
             />
+            <button
+              type="submit"
+              className="bg-[#008080] py-5 w-full text-white rounded-md text-lg font-semibold text-center grid place-content-center mt-4"
+              disabled={isLoading}
+            >
+              {isLoading ? "Joining..." : "Join Class"}
+            </button>
           </form>
-          <button
-            type="submit"
-            className="bg-[#008080] py-5 w-full text-white rounded-md text-lg font-semibold text-center grid place-content-center "
-            disabled={isLoading}
-            onClick={handleSubmit}
-          >
-            {isLoading ? "Joining..." : "Join Class"}
-          </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

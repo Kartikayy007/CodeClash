@@ -4,12 +4,11 @@ import AlarmIcon from "@mui/icons-material/Alarm";
 import checked from "../assets/checked.svg";
 import unchecked from "../assets/unchecked.svg";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import DeleteIcon from "@mui/icons-material/DeleteOutline";
+import DeleteIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NoDataIllustration from '../assets/todo.svg'; 
-
 
 const TodoList = () => {
   const [tasks, setTasks] = useState([]);
@@ -161,6 +160,11 @@ const TodoList = () => {
   };
 
   const handleUpdateTask = async (taskId) => {
+    if (editedTitle.trim().length < 5) {
+      toast.error("Task title must be at least 5 characters long");
+      return;
+    }
+
     setIsUpdating(true);
     setLoadingTaskId(taskId);
     try {
@@ -262,7 +266,7 @@ const TodoList = () => {
                     value={editedTitle}
                     onChange={(e) => setEditedTitle(e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" && editedTitle.trim()) {
+                      if (e.key === "Enter" && editedTitle.trim().length >= 5) {
                         handleUpdateTask(task._id);
                       } else if (e.key === "Escape") {
                         setEditingTask(null);
@@ -274,7 +278,9 @@ const TodoList = () => {
                     style={{border:'none',background:'none',padding:'0',margin:'0'}}
                   />
                 ) : (
-                  <span className="w-[80%] break-words whitespace-normal overflow-wrap-break-word">{task.title}</span>
+                  <span className={`w-[80%] break-words whitespace-normal overflow-wrap-break-word ${task.isCompleted ? 'line-through text-gray-500' : ''}`}>
+                    {task.title}
+                  </span>
                 )}
               </div>
               <div className="flex items-center relative">

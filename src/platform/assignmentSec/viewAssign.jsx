@@ -177,12 +177,13 @@ const AssignmentDetails = () => {
                     <div className={`${isMobile ? 'flex-col' : 'flex'} gap-8 h-full`}>
                         <div className={`${isMobile?'w-full  h-auto min-h-[400px]':'w-2/3 h-[100%]'}  bg-white rounded-lg relative`}>
                             <div className="absolute top-4 right-4">
-                                <button
+                                {!isEnrolled? <button
                                     onClick={() => setMenuOpen((prev) => !prev)}
                                     className="p-2 rounded-full hover:bg-gray-100 text-gray-600"
                                 >
                                     <MoreHorizIcon />
-                                </button>
+                                </button>:<></>}
+                               
                                 {menuOpen && (
                                     <div className="absolute right-0 mt-2 w-40 bg-white shadow-md rounded-lg">
                                         <button
