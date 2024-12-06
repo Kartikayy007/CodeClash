@@ -25,7 +25,8 @@ const ReminderModal = ({ isOpen, onClose, title, lectureId }) => {
     setSuccess("");
 
     try {
-      const utcTime = new Date(reminderTime).toISOString();
+      const istTime = new Date(reminderTime).toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
+      const utcTime = new Date(istTime).toISOString();
 
       const token =
         sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
@@ -44,8 +45,8 @@ const ReminderModal = ({ isOpen, onClose, title, lectureId }) => {
         },
         axiosConfig
       );
-
-      if (response.status === 200) {
+      console.log(response)
+      if (response.data.success) {
         setSuccess("Reminder set successfully!");
         setTimeout(() => {
           onClose();
@@ -99,7 +100,7 @@ const ReminderModal = ({ isOpen, onClose, title, lectureId }) => {
             onChange={(e) => setReminderTime(e.target.value)}
           />
         </div>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+       
         {success && <p className="text-green-500 text-sm">{success}</p>}
         <div className="flex justify-between space-x-4">
           <button

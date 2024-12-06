@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleSidebar } from '../../platform/features/sidebarSlice';
@@ -12,7 +12,6 @@ import SettingsIcon from '@mui/icons-material/SettingsOutlined';
 import HelpIcon from '@mui/icons-material/HelpOutlineOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import ViewAgendaIcon from '@mui/icons-material/ViewAgenda';
 import sideBarImg from '../assets/sidebar.svg';
 import { CSSTransition } from 'react-transition-group';
 
@@ -21,16 +20,17 @@ const Sidebar = () => {
     const location = useLocation();
     const dispatch = useDispatch();
     const isCollapsed = useSelector((state) => state.sidebar.isCollapsed);
-    
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+    const sidebarRef = useRef(null);
+
     const handleClick = (path) => {
         navigate(path);
-
         setIsMobileMenuOpen(false);
     };
 
+    // Add check for announcement or assignment-details routes
     const menuItems = [
         { icon: <DashboardIcon fontSize="large" />, label: 'Dashboard', path: '/dashboard' },
         { icon: <ClassIcon fontSize="large" />, label: 'Your Classes', path: '/classes' },
@@ -39,7 +39,6 @@ const Sidebar = () => {
         { icon: <SettingsIcon fontSize="large" />, label: 'Settings', path: '/settings' },
         { icon: <HelpIcon fontSize="large" />, label: 'Help and Support', path: '/help' },
     ];
-
 
     const MobileMenuToggle = () => (
         <button 
@@ -50,9 +49,24 @@ const Sidebar = () => {
         </button>
     );
 
+    // Close the menu when clicking outside of the sidebar
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+                setIsMobileMenuOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const SidebarContent = ({ isMobile = false }) => (
         <div 
+            ref={sidebarRef} 
             className={`
                 bg-[#EEF0F0] 
                 ${!isMobile && 'max-lg:hidden'} 
@@ -84,28 +98,32 @@ const Sidebar = () => {
                     transition-opacity duration-300 ease-in-out
                 `}
             >
-                {menuItems.map((item) => (
-                    <div
-                        key={item.path}
-                        onClick={() => handleClick(item.path)}
-                        className={`flex items-center 
-                            ${isMobile ? 'w-[90%] px-6 py-4' : (isCollapsed ? 'justify-center w-[50px] h-[50px]' : 'justify-start pl-4 w-[90%] h-[48px]')}
-                            ml-[5%] rounded-full 
-                            ${location.pathname === item.path ? 'bg-[#008080] text-white' : ''}
-                            transition-transform duration-150 ease-in-out active:scale-95 hover:scale-105
-                            
-                        `}
-                    >
-                        <button
-                            className={`flex items-center gap-4 w-full h-full cursor-default 
-                                ${isMobile ? 'justify-start' : (isCollapsed ? 'justify-center' : '')}
+                {menuItems.map((item) => {
+                    const isHighlighted = location.pathname === item.path || 
+                        (location.pathname.includes('/announcement') || location.pathname.includes('/assignment-details') ||location.pathname.includes('/assignment-open')||location.pathname.includes('/live')) && item.path === '/classes';
+
+                    return (
+                        <div
+                            key={item.path}
+                            onClick={() => handleClick(item.path)}
+                            className={`flex items-center 
+                                ${isMobile ? 'w-[90%] px-6 py-4' : (isCollapsed ? 'justify-center w-[50px] h-[50px]' : 'justify-start pl-4 w-[90%] h-[48px]')}
+                                ml-[5%] rounded-full 
+                                ${isHighlighted ? 'bg-[#008080] text-white' : ''}
+                                transition-transform duration-150 ease-in-out active:scale-95 hover:scale-105
                             `}
                         >
-                            {item.icon}
-                            {(!isCollapsed || isMobile) && <p className="text-xl whitespace-nowrap text-clip">{item.label}</p>}
-                        </button>
-                    </div>
-                ))}
+                            <button
+                                className={`flex items-center gap-4 w-full h-full cursor-default 
+                                    ${isMobile ? 'justify-start' : (isCollapsed ? 'justify-center' : '')}
+                                `}
+                            >
+                                {item.icon}
+                                {(!isCollapsed || isMobile) && <p className="text-xl whitespace-nowrap text-clip">{item.label}</p>}
+                            </button>
+                        </div>
+                    );
+                })}
             </div>
 
             {!isMobile && (
@@ -125,12 +143,9 @@ const Sidebar = () => {
 
     return (
         <>
-
             <MobileMenuToggle />
 
-
             <SidebarContent />
-
 
             <CSSTransition
                 in={isMobileMenuOpen}
@@ -143,14 +158,12 @@ const Sidebar = () => {
                 </div>
             </CSSTransition>
 
-
             {isMobileMenuOpen && (
                 <div 
                     className="fixed inset-0 bg-black bg-opacity-50 z-30"
                     onClick={() => setIsMobileMenuOpen(false)}
                 />
             )}
-
 
             <style jsx>{`
                 .slide-enter {

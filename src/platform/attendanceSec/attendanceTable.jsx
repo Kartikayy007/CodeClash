@@ -36,7 +36,7 @@ const AttendanceTable = ({classCode}) => {
     setIsModalOpen(false);
   };
   return (
-    <div className="p-6 rounded-lg overflow-y-auto">
+    <div className="p-6 px-0 rounded-lg overflow-y-auto">
       {}
       <table className="w-full border-collapse border text-center border-[#5D6C6C] rounded-lg text-left text-sm text-[#394141]">
         <thead>

@@ -1,69 +1,82 @@
 import React, { useState } from 'react';
 import teachassign from "../assets/teachassign.svg";
+import { useSelector } from 'react-redux';
+import CreateAssignmentModal from '../assignmentSec/createAssignModal';
 
 const Newassignment = () => {
-  const [selectedClass, setSelectedClass] = useState('');
+  const [selectedClass, setSelectedClass] = useState(null);
+  const [assignmentTitle, setAssignmentTitle] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const createdClasses = useSelector((state) => state.createdClasses.createdClasses);
 
-  const handleChange = (event) => {
-    setSelectedClass(event.target.value);
+  const handleChangeClass = (event) => {
+    const selectedClassId = event.target.value;
+    const selectedClass = createdClasses.find(classItem => classItem._id === selectedClassId);
+    setSelectedClass(selectedClass);
+  };
+
+  const handleChangeTitle = (event) => {
+    setAssignmentTitle(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
-    <div className="flex flex-col gap-5 h-full ">
+    <div className="flex flex-col gap-5 h-full">
       <h2 className="text-xl w-[95%] mx-auto">Create New Assignment</h2>
-      <div className="bg-[#FAFAFA] border border-[#BCE2DF] p-6 rounded-md mx-auto w-[95%] h-[80%] ">
-        <div className="flex flex-wrap space-y-4">
-          
-          <div className="w-[70%]">
-            <form className="flex flex-col ">
-             
-              <div className="flex flex-col">
-                <input
-                  id="assignment-title"
-                  type="text"
-                  placeholder="Assignment Title"
-                  className="border border-gray-300 rounded-md p-2 w-full"
-                  style={{ borderColor: 'gray !important', borderWidth: '1px !important' }}
-                />
-              </div>
-
+      <div className="bg-[#FAFAFA] border border-[#BCE2DF] p-6 rounded-md mx-auto w-[95%] h-[80%]">
+        <div className="flex space-y-4 md:space-y-0 md:space-x-4">
+          <div className="w-full md:w-2/3 flex flex-col justify-center">
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
               
               <div className="flex flex-col">
                 <select
                   id="class-select"
-                  value={selectedClass}
-                  onChange={handleChange}
-                  className="rounded-lg w-full p-[20px] text-xl  border border-[#4C5858] "
-                  style={{
-                    
-                    outline: 'none',
-                  }}
+                  value={selectedClass ? selectedClass._id : ''}
+                  onChange={handleChangeClass}
+                  className="rounded-lg w-full p-4 text-xl border border-[#4C5858]"
                 >
                   <option value="" disabled>
-                    Class
+                    Select Class
                   </option>
-                  <option value="english">English</option>
-                  <option value="maths">Maths</option>
-                  <option value="science">Science</option>
+                  {createdClasses.map((classItem) => (
+                    <option key={classItem._id} value={classItem._id}>
+                      {classItem.name}
+                    </option>
+                  ))}
                 </select>
               </div>
-
-              
               <button
                 type="submit"
-                className="w-[70%] p-3 bg-[#066769] rounded-md text-white text-xl mt-8"
+                className="w-full md:w-[70%] p-3 bg-[#066769] rounded-md text-white text-xl mt-8"
               >
                 Create Assignment
               </button>
             </form>
           </div>
-
-          
-          <div className="w-[20%] ml-auto">
-            <img src={teachassign} alt="Teacher Assign Illustration" className="w-full h-auto" />
+          <div className="w-full md:w-1/3 flex items-center justify-center">
+            <img src={teachassign} alt="Teacher Assign Illustration" className="w-2/3 h-auto max-w-[200px]" />
           </div>
         </div>
       </div>
+
+      {/* Modal */}
+      {isModalOpen && selectedClass && (
+        <CreateAssignmentModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          className={selectedClass.name}
+          classCode={selectedClass.code}
+          title={assignmentTitle}
+        />
+      )}
     </div>
   );
 };

@@ -318,13 +318,10 @@ const ChatBox = () => {
               className={`flex ${isSentByCurrentUser ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`w-full p-4 rounded-lg shadow ${isSentByCurrentUser
-                  ? "bg-blue-500 text-white"
-                  : "bg-[#EEF0F0] text-gray-900"
-                  }`}
+                className={`w-full p-4 rounded-lg border border-[#D9DEDE] `}
               >
-                <div className="text-2xl font-medium">{chat.sender.name}</div>
-                <div className="text-xl mt-2">{chat.message}</div>
+                <div className="text-md font-semibold">{chat.sender.name}</div>
+                <div className="text-lg mt-2">{chat.message}</div>
                 {chat.file && (
                   <div className="mt-2">
                     {chat.file.type.startsWith("image/") ? (
@@ -349,10 +346,14 @@ const ChatBox = () => {
                   </div>
                 )}
                 <div className="text-xs text-gray-400 mt-2 text-right">
-                  {new Date(chat.timestamp).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                {new Date(chat.timestamp).toLocaleDateString('en-US', {
+                                            weekday: 'short', // 'Mon'
+                                        })} 
+                                        {` ${new Date(chat.timestamp).toLocaleTimeString('en-US', {
+                                            hour: '2-digit', 
+                                            minute: '2-digit', 
+                                            hour12: true, // AM/PM
+                                        })}`}
                 </div>
               </div>
             </div>

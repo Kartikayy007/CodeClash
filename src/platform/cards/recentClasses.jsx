@@ -34,7 +34,7 @@ const RecentClasses = ({ recentClasses }) => {
     };
 
     return (
-        <div className={`bg-[#FAFAFA] p-6 border border-[#BCE2DF] rounded-lg ${isMobile ? 'w-[100%]' : 'w-[45%]'} h-[100%] mt-[20px]`}>
+        <div className={`bg-white p-6 border border-[#BCE2DF] rounded-lg ${isMobile ? 'w-[100%]' : 'w-[45%]'} h-[100%] mt-[20px]`}>
             <h2 className="text-2xl mb-6 h-[10%]">Recent Classes</h2>
             <div className="space-y-4 h-[90%]">
                 {classesData.length > 0 ? (

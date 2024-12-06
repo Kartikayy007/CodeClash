@@ -7,11 +7,10 @@ import CreateAssignmentModal from "./createAssignModal";
 import axios from "axios";
 import image from "../assets/noAssignments.svg";
 
-const AssignmentSection = () => {
+const AssignmentSection = ({classCode,className}) => {
     const location = useLocation();
     const classId = location.state?._id;
-    const className = location.state?.name;
-    const classCode = location.state?.code;
+ 
     console.log(classId, className, classCode);
 
     const navigate = useNavigate();
@@ -60,7 +59,7 @@ const AssignmentSection = () => {
     }, []);
 
     const handleAssignmentClick = (assignment) => {
-        navigate("/assignment-details", { state: { assignment,code:classCode } });
+        navigate("/assignment-details", { state: { assignment,classCode,className } });
     };
 
     return (
@@ -68,7 +67,7 @@ const AssignmentSection = () => {
             {!isEnrolled ? (
                 <div>
                     <button
-                        className="bg-[#066769] text-white font-medium mb-4 py-4 px-8 rounded-lg ml-6"
+                        className="bg-[#066769] text-white font-medium mb-4 py-4 px-8 rounded-lg "
                         onClick={()=>{openModal(className)}}
                     >
                         Create Assignment
@@ -77,7 +76,7 @@ const AssignmentSection = () => {
             ) : null}
 
             <div
-                className="bg-[#E1EAE8] p-6 rounded-lg"
+                className="bg-[#E1EAE8] p-6 px-0 rounded-lg"
                 style={{
                     maxHeight: "75vh",
                     overflowY: "auto",

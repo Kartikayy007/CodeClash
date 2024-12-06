@@ -25,6 +25,7 @@ const Reminders = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 });
+                console.log(response.data);
                 setReminders(response.data.reminders);
             } catch (err) {
                 setError('Failed to fetch reminders');
@@ -121,6 +122,7 @@ const Reminders = () => {
     }
 
     return (
+        
     <div className={`${isMobile ? 'w-full mt-[80px] p-4' : 'w-[25%]'} py-4`}>
         <h2 className="text-xl pl-6 h-[7%] mb-4 flex items-center text-gray-800">Upcoming Reminders</h2>
         <div
@@ -146,7 +148,7 @@ const Reminders = () => {
                             </div>
                             <div className="flex flex-col flex-grow pl-4">
                                 <p className="text-xl text-gray-800">{reminder.lecture.title}</p>
-                                <p className="text-sm text-gray-600">{reminder.lecture.startTime}</p>
+                                <p className="text-sm text-gray-600">{reminder.scheduledTime}</p>
                             </div>
                             <div className="relative">
                                 <MoreVertIcon
@@ -176,6 +178,7 @@ const Reminders = () => {
             )}
         </div>
         {showModal && (
+            
             <Modal
                 title={modalType === 'edit' ? 'Edit Reminder' : 'Delete Reminder'}
                 onClose={handleModalClose}
@@ -219,5 +222,6 @@ const Reminders = () => {
             </Modal>
         )}
     </div>
+    
 );}
 export default Reminders;

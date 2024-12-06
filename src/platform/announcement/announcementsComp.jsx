@@ -18,13 +18,13 @@ import axios from 'axios';
 import { Announcement } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-
+import { useNavigate } from 'react-router-dom';
 const tabs = ['Announcement', 'Assignments', 'Schedule', 'Attendance', 'People'];
 
 const AnnouncementComponent = () => {
   const location = useLocation();
   const classCode = location.state?.code;
-
+const navigate = useNavigate();
   const [announcementsList, setAnnouncementsList] = useState([]);
   const [announcement, setAnnouncement] = useState('');
   const [announcementTitle, setAnnouncementTitle] = useState('');
@@ -35,6 +35,7 @@ const AnnouncementComponent = () => {
   const [underlineStyles, setUnderlineStyles] = useState({});
   const [subjectName, setSubjectName] = useState('');
   const [className, setClassName] = useState('');
+  const [annoucementId, setAnnoucementId] = useState('');
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
@@ -59,6 +60,9 @@ const AnnouncementComponent = () => {
   useEffect(() => {
     if (classCode) {
       fetchClassDetails();
+    }
+    else{
+      navigate('/dashboard');
     }
   }, [classCode]);
 
@@ -145,7 +149,23 @@ const AnnouncementComponent = () => {
       attachments.forEach(file => {
         formData.append('media', file);
       });
-  
+      // console.log(isEditable,annoucementId);
+      if(isEditable && annoucementId !== ''){ 
+        // console.log('edit announcement');
+        await axios.put(
+          `${process.env.REACT_APP_API_URL}/announcement/edit/${annoucementId}`,
+          formData,
+          {
+            ...axiosConfig,
+            headers: {
+              ...axiosConfig.headers,
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
+        setAnnoucementId('');
+      }
+      else{
       await axios.post(
         `${process.env.REACT_APP_API_URL}/announcement/create`,
         formData,
@@ -157,7 +177,7 @@ const AnnouncementComponent = () => {
           },
         }
       );
-  
+    }
       toast.success('Announcement posted successfully!');
       setAnnouncement('');
       setAnnouncementTitle('');
@@ -203,6 +223,7 @@ const AnnouncementComponent = () => {
   const handleMenuOpen = (event, announcement) => {
     setMenuAnchorEl(event.currentTarget);
     setSelectedAnnouncement(announcement);
+    console.log(announcement);
   };
 
   const handleMenuClose = () => {
@@ -489,6 +510,7 @@ const AnnouncementComponent = () => {
                 onClick={() => {
                   setAnnouncementTitle(selectedAnnouncement?.title || '');
                   setAnnouncement(selectedAnnouncement?.description || '');
+                  setAnnoucementId(selectedAnnouncement?._id);
                   setIsEditable(true);
                   handleMenuClose();
                 }}
@@ -514,7 +536,7 @@ const AnnouncementComponent = () => {
           </div>
         )}
 
-        {activeTab === 'Assignments' && <AssignmentSection />}
+        {activeTab === 'Assignments' && <AssignmentSection classCode={classCode} className={className}/>}
         {activeTab === 'Schedule' && <RevisionClassCard />}
         {activeTab === 'Attendance' && <AttendanceSection classCode={classCode} />}
         {activeTab === 'People' && <ClassDetails />}

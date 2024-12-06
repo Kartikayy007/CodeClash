@@ -3,11 +3,10 @@ import { format, startOfMonth, endOfMonth, addMonths, subMonths, startOfWeek, en
 import { useSelector } from 'react-redux';
 import Reminders from '../reminder/reminder';
 import { Add } from '@mui/icons-material'; 
-import Reminderbox from '../reminder/reminderbox';
 import ScheduleLectureModal from '../schedule/scheduleModal';
 import './calender.css';
 import axios from 'axios';
-import image from '../assets/calendar_day.svg'
+import image from '../assets/calendar_day.svg';
 
 const Calendar = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -24,6 +23,8 @@ const Calendar = () => {
   const [createdEvents, setCreatedEvents] = useState([]);
   const [joinedClasses, setJoinedClasses] = useState([]);
   const [createdClasses, setCreatedClasses] = useState([]);
+  const createdClassesRedux = useSelector((state) => state.createdClasses.createdClasses);
+
   const [events, setEvents] = useState({});
 
   useEffect(() => {
@@ -37,6 +38,7 @@ const Calendar = () => {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/calendar`, { headers });
         setJoinedClasses(response.data.details.joined);
         setCreatedClasses(response.data.details.created);
+        console.log(createdClasses, joinedClasses)
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -61,9 +63,6 @@ const Calendar = () => {
         });
 
         createdClasses.forEach((createClass) => {
-          // createClass.assignments.forEach((assignment) => {
-          //   tempCreatedEvents.push({ date: assignment.dueDate, type: 'due', title: assignment.title, formattedDate: assignment.formattedDueDate });
-          // });
           createClass.lectures.forEach((lecture) => {
             tempCreatedEvents.push({ date: lecture.startTime, type: 'class', title: lecture.title, formattedDate: lecture.formattedStartTime });
           });
@@ -280,6 +279,7 @@ const Calendar = () => {
   }, []);
 
   return (
+    <div>
     <div
       className={`h-[100vh] mt-[50px] pt-[15px] bg-[#E1EAE8] transition-all duration-500 ease-in-out ${
         isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
@@ -380,7 +380,8 @@ const Calendar = () => {
         </div>
         <Reminders />
       </div>
-      <ScheduleLectureModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+    </div>
+      <ScheduleLectureModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} fromCalendar={true} />
     </div>
   );
 };
