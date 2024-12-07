@@ -169,7 +169,7 @@ const AssignmentDetails = () => {
             <Sidebar />
             <div className="bg-[#E1EAE8] min-h-screen flex p-8 pb-[70px]">
                 <div
-                    className={`mt-[50px] rounded-lg transition-all duration-300 w-full `}
+                    className={`mt-[50px] rounded-lg transition-all duration-300 w-full overflow-auto`}
                     style={{ 
                         marginLeft: isMobile ? '0' : sidebarWidth,
                     }}
@@ -225,7 +225,8 @@ const AssignmentDetails = () => {
                             </div>
                             <div className="p-4 rounded-lg">
                                 <h2 className="text-xl font-medium text-[#394141]">Description</h2>
-                                <p className="text-[#394141] mt-3 text-xl">{assignment?.description}</p>
+    <p className="text-[#394141] mt-3 text-xl" style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}>
+                                    {assignment?.description}</p>
                             </div>
                             {assignment?.media && assignment?.media.length > 0 && (
                                 <div className="p-4 rounded-lg">
