@@ -256,7 +256,7 @@ const RevisionClassCard = ({ title }) => {
             key={lecture._id}
             className="flex justify-between mb-[10px] items-center bg-white rounded-lg px-6 py-4 h-[150px] border border-[#D9DEDE] relative"
           >
-            <div className="flex items-center h-full">
+            <div className="flex items-center h-full max-w-[60%] overflow-x-auto">
               <img src={pana2} alt="Class Illustration" className="h-full mr-4" />
               <div className="flex flex-col gap-5  h-full justify-around sm:ml-[50px]">
                 <h3 className="text-xl text-gray-800">{lecture.title}</h3>

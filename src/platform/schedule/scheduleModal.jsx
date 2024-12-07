@@ -19,6 +19,9 @@ const ScheduleLectureModal = ({ isOpen, onClose, initialData, fromCalendar }) =>
   const createdClasses = useSelector((state) => state.createdClasses.createdClasses);
   const isEditing = initialData ? true : false;
 
+  const TITLE_LIMIT = 20;
+  const DESCRIPTION_LIMIT = 50;
+
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
@@ -101,7 +104,7 @@ const ScheduleLectureModal = ({ isOpen, onClose, initialData, fromCalendar }) =>
         handleClose();
       } else {
         setError("Failed to schedule the lecture.");
-        toast.error(error?.response?.data?.error||"Failed to schedule the lecture.", {
+        toast.error("Failed to schedule the lecture.", {
           className: "custom-toast",
           hideProgressBar: true,
           autoClose: 3000,
@@ -111,7 +114,7 @@ const ScheduleLectureModal = ({ isOpen, onClose, initialData, fromCalendar }) =>
       console.error("Error scheduling lecture:", error);
       setError("An error occurred while scheduling the lecture.");
       toast.dismiss();
-      toast.error(error?.response?.data?.error||"An error occurred while scheduling the lecture.", {
+      toast.error("An error occurred while scheduling the lecture.", {
         className: "custom-toast",
         hideProgressBar: true,
         autoClose: 3000,
@@ -180,7 +183,9 @@ const ScheduleLectureModal = ({ isOpen, onClose, initialData, fromCalendar }) =>
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none"
               value={lectureTitle}
               onChange={(e) => setLectureTitle(e.target.value)}
+              maxLength={TITLE_LIMIT}
             />
+            <p className="text-sm text-gray-500">{lectureTitle.length}/{TITLE_LIMIT} characters</p>
           </div>
           <div>
             <textarea
@@ -189,7 +194,9 @@ const ScheduleLectureModal = ({ isOpen, onClose, initialData, fromCalendar }) =>
               rows="3"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              maxLength={DESCRIPTION_LIMIT}
             ></textarea>
+            <p className="text-sm text-gray-500">{description.length}/{DESCRIPTION_LIMIT} characters</p>
           </div>
           <div>
             <input
