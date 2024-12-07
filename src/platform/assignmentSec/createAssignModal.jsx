@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { X, Plus, Trash2, Loader } from "lucide-react";
 import card from "../assets/assign.svg";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function CreateAssignmentModal({
   isOpen,
@@ -121,8 +123,13 @@ function CreateAssignmentModal({
         console.log("Assignment created:", response.data);
       }
 
+      toast.dismiss();
+      toast.success(isEditing ? "Assignment updated successfully!" : "Assignment created successfully!");
+
       onClose();
     } catch (error) {
+      toast.dismiss();
+      toast.error(error.response?.data?.error || "Failed to submit assignment.");
       console.error("Error submitting assignment:", error);
     } finally {
       setIsUploading(false);
@@ -280,6 +287,7 @@ function CreateAssignmentModal({
           </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

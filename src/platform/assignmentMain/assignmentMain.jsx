@@ -77,13 +77,13 @@ const AssignmentMain = () => {
             <img src={noAssignmentsImage} alt="No Assignments" />
             {isEnrolled ? (
               <>
-                <p className="font-semibold mt-5 text-xl">No Assignments Assigned Yet</p>
-                <p className="mt-2">Your teachers hasn’t assigned any tasks yet. Once they do, you’ll see them here. Stay tuned!</p>
+                <p className="font-semibold mt-5 text-xl text-center">No Assignments Assigned Yet</p>
+                <p className="mt-2 text-center">Your teachers hasn’t assigned any tasks yet. Once they do, you’ll see them here. Stay tuned!</p>
               </>
             ) : (
               <>
-                <p className="font-semibold mt-5 text-xl">No Assignments Assigned Yet</p>
-                <p className="mt-2">Once you assign an assignment, it will appear here</p>
+                <p className="font-semibold mt-5 text-xl text-center">No Assignments Assigned Yet</p>
+                <p className="mt-2 text-center">Once you assign an assignment, it will appear here</p>
               </>
             )}
           </div>

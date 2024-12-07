@@ -9,7 +9,7 @@ const AssignmentCard = ({ assignment }) => {
   const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
 
   return (
-    <div className="h-[45%] flex justify-between border border-[#D9DEDE] items-center p-4 bg-white rounded-lg ">
+    <div className="h-[45%] min-h-[120px] flex justify-between border border-[#D9DEDE] items-center p-4 bg-white rounded-lg ">
       <div className='flex flex-col h-[95%] justify-between'>
         <h3 className="text-xl">{assignment.title}</h3>
         <div>
@@ -72,7 +72,7 @@ const DueAssignments = () => {
 
   return (
     <div className={`bg-white p-6 border border-[#BCE2DF] rounded-lg ${isMobile ? 'w-[100%] ml-0' : 'w-[55%] ml-[20px]'} mt-[20px] h-[100%]`}>
-      {isEnrolled? <h2 className="text-2xl mb-6 h-[10%]">Assignments Due Soon</h2> : <h2 className="text-2xl mb-6 h-[10%]">Assignments To Review</h2>}
+      {isEnrolled? <h2 className="text-2xl mb-6 h-[10%]">Assignments To Be Reviewed</h2> : <h2 className="text-2xl mb-6 h-[10%]">Assignments To Review</h2>}
       
       <div className="h-[90%] space-y-4">
         {dashboardData.length > 0 ? (

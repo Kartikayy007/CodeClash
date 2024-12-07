@@ -230,7 +230,7 @@ const AssignmentDetails = () => {
                             {assignment?.media && assignment?.media.length > 0 && (
                                 <div className="p-4 rounded-lg">
                                     <h2 className="text-xl font-medium text-[#394141]">Attachments</h2>
-                                    <div className="mt-4 grid grid-cols-auto md:grid-cols-auto gap-4">
+                                    <div className="mt-4 flex flex-wrap gap-4">
                                         {assignment.media.map((media, mediaIndex) => (
                                             <div key={mediaIndex} className="relative group h-auto w-auto">
                                                 {media && media.match(/\.(jpeg|jpg|gif|png)$/i) ? (
@@ -239,7 +239,7 @@ const AssignmentDetails = () => {
                                                             src={media} 
                                                             alt={media.originalName || `Image ${mediaIndex + 1}`}
                                                             className="w-20 h-20 object-cover cursor-zoom-in transition-transform group-hover:scale-105"
-                                                            onClick={() => window.open(media.url, '_blank')}
+                                                            onClick={() => window.open(media, '_blank')}
                                                         />
                                                     </div>
                                                 ) : (

@@ -87,7 +87,7 @@ const Modal = ({ onClose }) => {
       }
     } catch (error) {
       toast.dismiss();
-      toast.error(error.response?.data?.message || "Failed to create class.", {
+      toast.error(error.response?.data?.error || "Failed to create class.", {
         className: "custom-toast",
         hideProgressBar: true,
         autoClose: 3000,
@@ -95,7 +95,7 @@ const Modal = ({ onClose }) => {
       console.error(error);
     } finally {
       setTimeout(() => {
-        setIsLoading(false); // Re-enable the button after 2 seconds
+        setIsLoading(false); 
       }, 2000);
     }
   };

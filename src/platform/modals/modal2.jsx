@@ -56,7 +56,7 @@ const Modal2 = ({ onClose, joinToken, classCode }) => {
       }
     } catch (error) {
       toast.dismiss();
-      toast.error(error.response?.data?.message || "Failed to join class.", {
+      toast.error(error.response?.data?.error || "Failed to join class.", {
         className: "custom-toast",
         hideProgressBar: true,
         autoClose: 3000,
@@ -111,7 +111,7 @@ const Modal2 = ({ onClose, joinToken, classCode }) => {
       }
     } catch (error) {
       toast.dismiss();
-      toast.error(error.response?.data?.message || "Failed to join class.", {
+      toast.error(error.response?.data?.error || "Failed to join class.", {
         className: "custom-toast",
         hideProgressBar: true,
         autoClose: 3000,

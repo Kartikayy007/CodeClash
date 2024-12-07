@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Modal from './editModal'; 
@@ -14,6 +14,7 @@ const Reminders = () => {
     const [loading, setLoading] = useState(false); 
     const [error, setError] = useState(null); 
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
+    const popupRef = useRef(null);
 
     useEffect(() => {
         const fetchReminders = async () => {
@@ -113,6 +114,19 @@ const Reminders = () => {
         }
     };
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (popupRef.current && !popupRef.current.contains(event.target)) {
+                setPopupIndex(null);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     if (loading) {
         return <div>Loading reminders...</div>;
     }
@@ -123,7 +137,7 @@ const Reminders = () => {
 
     return (
         
-    <div className={`${isMobile ? 'w-full mt-[80px] p-4' : 'w-[25%]'} py-4`}>
+    <div className={`${isMobile ? 'w-full mt-[80px] p-4' : 'w-[25%]'} py-4 `}>
         <h2 className="text-xl pl-6 h-[7%] mb-4 flex items-center text-gray-800">Upcoming Reminders</h2>
         <div
             className={`bg-[#F7F8F8] p-6 rounded-lg ${isMobile ? 'mx-auto' : 'ml-[10px]'} w-[100%] overflow-y-auto`}
@@ -140,11 +154,11 @@ const Reminders = () => {
                     {reminders.map((reminder, index) => (
                         <div
                             key={index}
-                            className="h-20 flex items-center bg-[#D9DEDE] rounded-lg pr-2 shadow-sm relative"
+                            className="h-20 flex items-center bg-[#EEF0F0] rounded-lg pr-2 shadow-sm relative"
                         >
-                            <div className="flex items-center justify-center w-20 h-20 bg-[#738484] text-white rounded-lg rounded-r-none flex-col">
+                            <div className="flex items-center justify-center w-20 h-20 bg-[#D9DEDE] text-black rounded-lg rounded-r-none flex-col">
                                 <NotificationsNoneOutlinedIcon fontSize="large" />
-                                <p className="text-sm">{reminder.time}</p>
+                                {/* <p className="text-sm">{reminder.scheduledTime}</p> */}
                             </div>
                             <div className="flex flex-col flex-grow pl-4">
                                 <p className="text-xl text-gray-800">{reminder.lecture.title}</p>
@@ -156,7 +170,7 @@ const Reminders = () => {
                                     onClick={() => handlePopupToggle(index)}
                                 />
                                 {popupIndex === index && (
-                                    <div className="absolute top-full right-0 mt-2 w-32 bg-white border border-gray-300 shadow-lg rounded-lg z-10">
+                                    <div ref={popupRef} className="absolute top-full right-0 mt-2 w-32 bg-white border border-gray-300 shadow-lg rounded-lg z-10">
                                         <button
                                             onClick={() => handleModalOpen('edit', index)}
                                             className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 rounded-lg text-gray-700"

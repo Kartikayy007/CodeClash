@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import ChangePasswordModal from "./changePasswordModal";
 import ChangeNameModal from "./changeNameModal";
@@ -55,7 +57,7 @@ const DayNightToggle = () => {
   );
 };
 
-const ToggleSwitch = ({onToggle}) => {
+const ToggleSwitch = ({ onToggle }) => {
   const [isOn, setIsOn] = useState(false);
 
   const toggleSwitch = () => {
@@ -362,6 +364,16 @@ const SettingsPage = () => {
   const dispatch = useDispatch();
 
   const handleSave = async () => {
+    if (editedName.length < 3) {
+      toast.dismiss();
+      toast.error('At least 3 characters required', {
+        className: 'custom-toast',
+        hideProgressBar: true,
+        autoClose: 3000,
+      });
+      return;
+    }
+
     if (!editedName.trim() || editedName === formattedUserName) {
       setIsEditing(false);
       return;
@@ -581,6 +593,8 @@ const SettingsPage = () => {
         onClose={() => setSignOutModalOpen(false)}
         onConfirm={handleSignOut}
       />
+
+      <ToastContainer />
     </div>
   );
 };
