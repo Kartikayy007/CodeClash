@@ -22,6 +22,7 @@ const AttendanceDashboard = ({ classCode }) => {
         if (response.data.success) {
           setData(response.data);
         }
+        console.log(response)
       } catch (error) {
         console.log('Error fetching attendance data:', error);
       }
@@ -105,7 +106,7 @@ const AttendanceDashboard = ({ classCode }) => {
               <h2 className="text-xl pb-5  ">Attendance Streak</h2>
             </div>
             <div className="mb-4 mt-[15px]">
-              <p className="text-sm font-medium mb-2">Current Streak :</p>
+              <p className="text-sm font-medium mb-2">Current Streak : {data.currentStreak}</p>
               {data.currentStreak === 0 ? (
                 <p className="text-lg text-gray-700 mb-2">
                   Start your streak today!
@@ -123,7 +124,7 @@ const AttendanceDashboard = ({ classCode }) => {
                 </p>
               )}
 
-              <p className="text-sm font-medium mb-2">Longest Streak :</p>
+              <p className="text-sm font-medium mb-2">Longest Streak : {data.longestStreak}</p>
               <p className="text-lg  text-gray-700 mb-2">
                 <EmojiEventsIcon /> {data.longestStreak || 0} Classes Attended
               </p>
