@@ -42,7 +42,6 @@ const TodoList = () => {
         setTasks(response.data.todos);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to fetch tasks");
     } finally {
       setIsLoading(false);
     }
@@ -97,9 +96,7 @@ const TodoList = () => {
         )
       );
       
-      toast.success("Task status updated!");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to update task status");
     } finally {
       setLoadingTaskId(null);
     }
@@ -125,10 +122,8 @@ const TodoList = () => {
         const createdTask = response.data.todo;
         setTasks((prevTasks) => [...prevTasks, createdTask]);
         setNewTask("");
-        toast.success("Task created successfully!");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to create task");
     } finally {
       setIsCreating(false);
     }
@@ -150,9 +145,7 @@ const TodoList = () => {
       );
 
       setTasks((prevTasks) => prevTasks.filter((task) => task._id !== _id));
-      toast.success("Task deleted successfully!");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to delete task");
     } finally {
       setIsDeleting(false);
       setLoadingTaskId(null);
@@ -187,10 +180,8 @@ const TodoList = () => {
         );
         setEditingTask(null);
         setEditedTitle("");
-        toast.success("Task updated successfully!");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to update task");
     } finally {
       setIsUpdating(false);
       setLoadingTaskId(null);

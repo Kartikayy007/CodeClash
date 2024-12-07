@@ -146,12 +146,7 @@ const AssignmentChart = () => {
                     </button>
                 </div>
             </div>
-            {subjects.length === 0 && !loading && (
-                <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                    <p className='font-semibold text-xl'>No data yet</p>
-                    <p>No assignments available.</p>
-                </div>
-            )}
+            
         </div>
     );
 };

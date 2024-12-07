@@ -30,11 +30,7 @@ const Dashboard = () => {
        const closeJoinclassmodal =() =>{
         setJoinclassModal(false);
        }
-       useEffect(()=>{
-        if(createdClasses.length===0&&joinedClasses.length===0){
-            navigate('/dashsignup');
-        }
-       })
+       
       
     useEffect(() => {
 

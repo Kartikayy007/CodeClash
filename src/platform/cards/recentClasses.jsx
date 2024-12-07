@@ -41,7 +41,7 @@ const RecentClasses = ({ recentClasses }) => {
                     classesData.map((classItem, index) => (
                         <div
                             key={index}
-                            className="flex items-center bg-[#F7F8F8] p-[6px] border border-[#D9DEDE] rounded-lg shadow-sm h-[45%]"
+                            className="flex items-center min-h-[120px] bg-[#F7F8F8] p-[6px] border border-[#D9DEDE] rounded-lg shadow-sm h-[45%]"
                             onClick={() => handleCardClick(classItem._id)}
                         >
                             <div className="rounded-lg w-[50%] h-[100%] p-2 flex flex-col justify-center">

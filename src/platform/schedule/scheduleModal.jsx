@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ScheduleLectureModal = ({ isOpen, onClose, initialData, fromCalendar }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -89,15 +91,31 @@ const ScheduleLectureModal = ({ isOpen, onClose, initialData, fromCalendar }) =>
           axiosConfig
         );
       }
+      toast.dismiss();
       if (response.status === 201 || response.status === 200) {
-        console.log("Lecture scheduled successfully:", response.data);
+        toast.success("Lecture scheduled successfully!", {
+          className: "custom-toastS",
+          hideProgressBar: true,
+          autoClose: 3000,
+        });
         handleClose();
       } else {
         setError("Failed to schedule the lecture.");
+        toast.error(error?.response?.data?.error||"Failed to schedule the lecture.", {
+          className: "custom-toast",
+          hideProgressBar: true,
+          autoClose: 3000,
+        });
       }
     } catch (error) {
       console.error("Error scheduling lecture:", error);
       setError("An error occurred while scheduling the lecture.");
+      toast.dismiss();
+      toast.error(error?.response?.data?.error||"An error occurred while scheduling the lecture.", {
+        className: "custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+      });
     } finally {
       setLoading(false);
     }
@@ -181,7 +199,6 @@ const ScheduleLectureModal = ({ isOpen, onClose, initialData, fromCalendar }) =>
               onChange={(e) => setTime(e.target.value)}
             />
           </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
             type="submit"
             className="w-full bg-[#066769] text-white py-2 rounded-md transition-all h-[50px]"
@@ -192,6 +209,7 @@ const ScheduleLectureModal = ({ isOpen, onClose, initialData, fromCalendar }) =>
           </button>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };

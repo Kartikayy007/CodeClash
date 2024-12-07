@@ -36,7 +36,7 @@ const YourAssignments = () => {
   }, [isEnrolled]);
 
   return (
-    <div className="p-6 h-[60%] flex flex-col gap-[10px]">
+    <div className="p-6 h-[60%] flex flex-col gap-[10px] min-h-[50vh]">
       <h2 className="text-xl h-[7%] flex w-full items-center">Your Assignments</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 h-[80%]">
         {console.log(data)}
@@ -46,14 +46,13 @@ const YourAssignments = () => {
             className="bg-white p-4 rounded-lg border border-[#BCE2DF] flex gap-4 items-center justify-between max-h-[150px]"
           >
             <div className="flex flex-col h-full justify-between w-2/3">
-              <h3 className="text-2xl">{assignment.title}</h3>
-              <p className="text-lg text-gray-600">{assignment.classroomSubject}</p>
-              <p className="text-lg text-gray-600 flex items-center">
+              <h3 className="text-2xl truncate">{assignment.title}</h3>
+              <p className="text-lg text-gray-600 truncate">{assignment.classroomSubject}</p>
+              <p className="text-lg text-gray-600 flex items-center truncate">
                 <span className="w-4 h-4 bg-[#00A8A5] rounded-full mr-2"></span>
                 Due Date: {assignment.dueDate}
               </p>
               <div className="flex gap-2 mt-[10px]">
-             
                 <button className="bg-[#EAF2F1] border border-[#145A5E] text-[#145A5E] px-4 py-2 text-lg rounded-md shadow-md">
                   Set Reminder
                 </button>
