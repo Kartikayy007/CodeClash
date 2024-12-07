@@ -55,16 +55,19 @@ const Calendar = () => {
 
         joinedClasses.forEach((joinClass) => {
           joinClass.assignments.forEach((assignment) => {
-            tempJoinedEvents.push({ date: assignment.dueDate, type: 'due', title: assignment.title, formattedDate: assignment.formattedDueDate });
+            if(!assignment) return;
+            tempJoinedEvents.push({ date: assignment.dueDate, type: 'due', title: assignment?.title, formattedDate: assignment.formattedDueDate });
           });
           joinClass.lectures.forEach((lecture) => {
-            tempJoinedEvents.push({ date: lecture.startTime, type: 'class', title: lecture.title, formattedDate: lecture.formattedStartTime });
+            if(!lecture) return;
+            tempJoinedEvents.push({ date: lecture.startTime, type: 'class', title: lecture?.title, formattedDate: lecture.formattedStartTime });
           });
         });
 
         createdClasses.forEach((createClass) => {
           createClass.lectures.forEach((lecture) => {
-            tempCreatedEvents.push({ date: lecture.startTime, type: 'class', title: lecture.title, formattedDate: lecture.formattedStartTime });
+            if(!lecture) return;
+            tempCreatedEvents.push({ date: lecture.startTime, type: 'class', title: lecture?.title, formattedDate: lecture.formattedStartTime });
           });
         });
 

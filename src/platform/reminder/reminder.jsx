@@ -151,8 +151,9 @@ const Reminders = () => {
                 </div>
             ) : (
                 <div className="space-y-4">
-                    {reminders.map((reminder, index) => (
+                    {reminders.length && reminders.map((reminder, index) => (
                         <div
+
                             key={index}
                             className="h-20 flex items-center bg-[#EEF0F0] rounded-lg pr-2 shadow-sm relative"
                         >
@@ -161,7 +162,7 @@ const Reminders = () => {
                                 {/* <p className="text-sm">{reminder.scheduledTime}</p> */}
                             </div>
                             <div className="flex flex-col flex-grow pl-4">
-                                <p className="text-xl text-gray-800">{reminder.lecture.title}</p>
+                                <p className="text-xl text-gray-800">{reminder.lecture?.title}</p>
                                 <p className="text-sm text-gray-600">{reminder.scheduledTime}</p>
                             </div>
                             <div className="relative">
