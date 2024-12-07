@@ -96,7 +96,7 @@ const AssignmentSection = ({classCode,className}) => {
                             className="bg-white rounded-lg p-4 mb-4 flex items-start gap-4 border border-[#BCE2DF] cursor-pointer hover:shadow-md"
                             onClick={() => handleAssignmentClick(assignment)}
                         >
-                            <div className="flex-1">
+                            <div className="flex-1 overflow-x-auto">
                                 <h2 className="text-2xl text-black">{assignment.name}</h2>
                                 <div className="flex items-center gap-2 my-2">
                                     <span

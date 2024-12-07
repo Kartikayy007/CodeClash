@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import assignmentImg from "../assets/assignCard.svg";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const YourAssignments = () => {
   const isEnrolled = useSelector((state) => state.toggleState.isEnrolled);
   const [data, setData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,6 +37,10 @@ const YourAssignments = () => {
     fetchData();
   }, [isEnrolled]);
 
+  const handleSetReminder = () => {
+    navigate('/calendar');
+  };
+
   return (
     <div className="p-6 h-[60%] flex flex-col gap-[10px] min-h-[50vh]">
       <h2 className="text-xl h-[7%] flex w-full items-center">Your Assignments</h2>
@@ -53,7 +59,10 @@ const YourAssignments = () => {
                 Due Date: {assignment.dueDate}
               </p>
               <div className="flex gap-2 mt-[10px]">
-                <button className="bg-[#EAF2F1] border border-[#145A5E] text-[#145A5E] px-4 py-2 text-lg rounded-md shadow-md">
+                <button
+                  className="bg-[#EAF2F1] border border-[#145A5E] text-[#145A5E] px-4 py-2 text-lg rounded-md shadow-md"
+                  onClick={handleSetReminder}
+                >
                   Set Reminder
                 </button>
               </div>
