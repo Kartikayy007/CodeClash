@@ -30,7 +30,7 @@ const FeedbackForm = ({isMobile}) => {
   };
 
   return (
-    <div className="bg-[#E1EAE8] items-center justify-center mt-6 p-6">
+    <div className="bg-[#E1EAE8] items-center justify-center mt-6 p-6 px-0">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">
         Share Your Feedback
       </h2>
@@ -278,7 +278,7 @@ const ChatBox = () => {
   };
 
   return (
-    <div className="bg-white m-6 p-4 rounded-lg h-full flex flex-col justify-between">
+    <div className="bg-white m-6 mx-0 p-4 rounded-lg h-full flex flex-col justify-between">
       <div>
       <h2 className="text-3xl text-gray-800 pt-5">Chat with us</h2>
       <p className="text-xl text-gray-600 mt-2 mb-[20px]">
@@ -456,7 +456,7 @@ const GuidesSection = () => {
   };
 
   return (
-    <div className="bg-[#E1EAE8] p-6  w-full">
+    <div className="bg-[#E1EAE8] p-6 px-0  w-full">
       <h2 className="text-2xl font-medium">Explore Step-by-Step Guides</h2>
       <div className="mt-4 space-y-4">
         {guides.map((guide, index) => (
@@ -520,7 +520,7 @@ const FAQSection = () => {
   };
 
   return (
-    <div className="bg-[#E1EAE8] p-6 pb-0  w-full ">
+    <div className="bg-[#E1EAE8] p-6 pb-0 px-0 w-full ">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-medium">Frequently Asked Questions</h2>
         <a href="#" className="text-[#066769] text-xl">

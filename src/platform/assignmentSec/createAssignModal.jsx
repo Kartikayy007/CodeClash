@@ -26,6 +26,10 @@ function CreateAssignmentModal({
   const fileInputRef = useRef(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
 
+  const TITLE_LIMIT = 20;
+  const MAX_FILE_SIZE_MB = 5;
+  const MAX_FILES = 10;
+
   // Populate formData when editing
   useEffect(() => {
     if (isEditing && assignment) {
@@ -56,6 +60,28 @@ function CreateAssignmentModal({
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
+    const totalFiles = formData.attachments.length + files.length;
+
+    if (totalFiles > MAX_FILES) {
+      toast.error(`You can only upload up to ${MAX_FILES} files.`, {
+        className: "custom-toast",
+        hideProgressBar: true,
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    for (let file of files) {
+      if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+        toast.error(`Each file must be less than ${MAX_FILE_SIZE_MB} MB.`, {
+          className: "custom-toast",
+          hideProgressBar: true,
+          autoClose: 3000,
+        });
+        return;
+      }
+    }
+
     setFormData((prev) => ({
       ...prev,
       attachments: [...prev.attachments, ...files],
@@ -155,7 +181,6 @@ function CreateAssignmentModal({
           </button>
         </div>
 
-        {/* Form */}
         <div className={`flex flex-col ${isMobile ? 'gap-4 overflow-y-auto pt-[100px]' : 'md:flex-row gap-[10%]'} justify-center h-[80%] items-stretch`}>
           <div className="flex flex-col space-y-6 w-full md:w-[40%] justify-center">
             <div className="flex flex-col">
@@ -177,8 +202,10 @@ function CreateAssignmentModal({
                 placeholder="Enter assignment title"
                 value={formData.title}
                 onChange={handleInputChange}
+                maxLength={TITLE_LIMIT}
                 className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500"
               />
+              <p className="text-sm text-gray-500">{formData.title.length}/{TITLE_LIMIT} characters</p>
             </div>
 
             <div className="flex flex-col space-y-2">
@@ -254,7 +281,6 @@ function CreateAssignmentModal({
           </div>
         </div>
 
-        {/* Footer */}
         <div className="mt-4 flex flex-col items-center justify-center gap-2">
           {isUploading && (
             <div className="flex items-center gap-2 text-sm text-gray-600">

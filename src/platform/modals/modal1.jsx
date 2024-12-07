@@ -18,6 +18,9 @@ const Modal = ({ onClose }) => {
 
   const dispatch = useDispatch();
 
+  const TITLE_LIMIT = 10;
+  const SUBJECT_LIMIT = 10;
+
   useEffect(() => {
     setIsVisible(true);
   }, []);
@@ -122,20 +125,28 @@ const Modal = ({ onClose }) => {
           <div className="w-[80%] flex flex-col justify-around gap-[50px]">
             <h2 className="text-4xl font-medium">Create Class</h2>
             <form className="flex flex-col gap-3">
-              <input
-                type="text"
-                placeholder="Class Name"
-                className="border rounded-md p-2"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Subject"
-                className="border rounded-md p-2"
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-              />
+              <div className="flex flex-col">
+                <input
+                  type="text"
+                  placeholder="Class Name"
+                  className="border rounded-md p-2"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  maxLength={TITLE_LIMIT}
+                />
+                <p className="text-sm text-gray-500">{name.length}/{TITLE_LIMIT} characters</p>
+              </div>
+              <div className="flex flex-col">
+                <input
+                  type="text"
+                  placeholder="Subject"
+                  className="border rounded-md p-2"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  maxLength={SUBJECT_LIMIT}
+                />
+                <p className="text-sm text-gray-500">{subject.length}/{SUBJECT_LIMIT} characters</p>
+              </div>
               <div className="relative">
                 <button
                   type="button"
