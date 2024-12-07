@@ -24,6 +24,7 @@ const AttendanceChart = () => {
                     Authorization: `Bearer ${token}`,
                 };
                 const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/dashboard`, { headers });
+                
 
                 if (response.data.success) {
                     const averageAttendanceData = response.data.details.created.averageAttendance;
