@@ -1,13 +1,15 @@
 import React from 'react'
 
-export default function RegisterPage() {
+const page = () => {
   return (
     <div>
-      <form action="">
+      <form className="w-full max-w-md">
         <h1 className='text-2xl font-bold text-white'>
-          Login
+          login
         </h1>
       </form>
     </div>
-  );
+  )
 }
+
+export default page
