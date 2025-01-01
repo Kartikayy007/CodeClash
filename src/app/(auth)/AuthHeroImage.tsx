@@ -12,7 +12,7 @@ const routeImages: RouteImages = {
   '/login': {
     src: '/login.svg',
     alt: 'login',
-    width: 420,
+    width: 400,
     caption: 'Continue your journey of coding excellence and unlock new challenges with every round!',
   },
   '/register': {
@@ -33,6 +33,12 @@ const routeImages: RouteImages = {
     width: 250,
     caption: 'Continue your journey of coding excellence and unlock new challenges with every round!',
   },
+  '/get-started': {
+    src: '/get-started.svg',
+    alt: 'get-started',
+    width: 350,
+    caption: 'Embark on the thrilling journey of competitive coding with Code Clash and rise to the challenge!',
+  }
 }
 
 export function AuthHeroImage() {
