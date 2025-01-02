@@ -1,67 +1,76 @@
-"use client"
+'use client';
 
-import React from 'react'
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Form } from "@/components/ui/form"
-import LabelButton from './ui/LabelButton'
-import CustomInput from './CustomInput'
-import { AuthFormSchema } from '@/lib/utils'
-import toast from 'react-hot-toast';
+import React from 'react';
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form } from "@/components/ui/form";
+import LabelButton from './ui/LabelButton';
+import CustomInput from './CustomInput';
+import { AuthFormSchema } from '@/lib/utils';
+import { toast } from '@/providers/toast-config';
 
 const AuthForm = ({ type }: { type: string }) => {
-
-
-  // 1. Define your form.
   const form = useForm<z.infer<typeof AuthFormSchema>>({
     resolver: zodResolver(AuthFormSchema),
     defaultValues: {
-      email: "",
+      email: ""
     },
-  })
+    mode: "onSubmit"
+  });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof AuthFormSchema>) {
+  const onSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
     try {
-      const result = AuthFormSchema.parse(values);
-      toast.success('Email is valid!');
-      alert('ok')
-      console.log(result);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        // Show first validation error message
-        console.log(error)
-        toast.error(error.errors[0].message);
-      } else {
-        toast.error('An unexpected error occurred');
+      const result = AuthFormSchema.safeParse(values);
+      
+      if (!result.success) {
+        result.error.errors.forEach((error) => {
+          toast.error(error.message);
+        });
+        return;
       }
+
+      toast.success('Form submitted successfully!');
+      console.log(result.data);
+    } catch (error) {
+      toast.error('An unexpected error occurred');
+      console.error(error);
     }
-  }
+  };
+
+  const onError = (errors: any) => {
+    if (errors.email) {
+      toast.error(errors.email.message);
+    }
+    if (errors.password) {
+      toast.error(errors.password.message);
+    }
+  };
 
   return (
     <section>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-
+        <form 
+          onSubmit={form.handleSubmit(onSubmit, onError)} 
+          className="space-y-8"
+        >
           {type === 'get-started' && (
             <>
               <CustomInput
                 control={form.control}
                 name="email"
                 label="Email"
-                placeholder={''}
+                placeholder="Enter your email"
               />
               <LabelButton type="submit" variant="filled">
                 Get Started
               </LabelButton>
             </>
           )}
-
         </form>
       </Form>
     </section>
-  )
-}
+  );
+};
 
-export default AuthForm
+export default AuthForm;

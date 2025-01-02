@@ -1,9 +1,9 @@
 import { ReactElement } from "react";
 import { AuthHeroImage } from "./AuthHeroImage";
-import { Toaster } from 'react-hot-toast';
+import { ToastProvider } from "@/providers/ToastProvider";
 
 export type AuthChildProps = {
-  image: string;
+  image: string; 
   title: string;
   subtitle: string;
   children?: React.ReactNode;
@@ -18,8 +18,8 @@ export default function RootLayout({
     <main className="flex h-screen w-full">
       <AuthHeroImage />
       <div className="bg-[#10141D] flex w-1/2 items-center justify-center">
+        <ToastProvider />
         {children}
-        <Toaster position="top-center" />
       </div>
     </main>
   );
