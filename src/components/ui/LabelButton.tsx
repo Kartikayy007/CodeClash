@@ -30,7 +30,7 @@ const LabelButton = ({ children, className, variant = 'filled', ...props }: Prop
     <button
       className={`
         relative
-        w-[450px]
+        w-[500px]
         h-[55px]
         px-4 
         py-2 

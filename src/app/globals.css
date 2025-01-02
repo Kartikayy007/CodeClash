@@ -3,8 +3,6 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
   --shadow-drop: rgba(0, 0, 0, 0.25);
   --shadow-inner1: rgba(255, 255, 255, 0.15);
   --shadow-inner2: rgba(0, 0, 0, 0.15);
@@ -14,9 +12,8 @@
   --ShadowLightEffectsFilledEnabledLabelDrop: rgba(0, 0, 0, 0.25);
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --radius: 0.5rem;
   }
 }

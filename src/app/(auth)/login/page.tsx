@@ -1,3 +1,4 @@
+import AuthForm from '@/components/AuthForm'
 import React from 'react'
 
 const page = () => {
@@ -7,6 +8,7 @@ const page = () => {
         <h1 className='text-2xl font-bold text-white'>
           login
         </h1>
+        <AuthForm type='login' />
       </form>
     </div>
   )
