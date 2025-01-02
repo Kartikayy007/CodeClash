@@ -1,10 +1,21 @@
 import React from 'react'
 import { FormControl, FormField, FormLabel } from '@/components/ui/form'
 
-const CustomInput = ({ form, name, label, placeholder }) => {
+import { Control } from 'react-hook-form'
+import { z } from 'zod'
+import { AuthFormSchema } from '../lib/utils';
+
+interface CustomInput {
+  control: Control<z.infer<typeof AuthFormSchema>>,
+  name: keyof z.infer<typeof AuthFormSchema>,
+  label: 'Email' | 'Password' | 'New Password' | 'Confirm Password',
+  placeholder: string,
+}
+
+const CustomInput = ({ control, name, label, placeholder } : CustomInput) => {
   return (
     <FormField
-      control={form.control}
+      control={control}
       name={name}
       render={({ field }) => (
         <div className='form-item'>
@@ -16,6 +27,7 @@ const CustomInput = ({ form, name, label, placeholder }) => {
                   focus:outline-none focus:ring-2 focus:ring-[#C879EB] 
                   focus:border-[#C879EB] transition-all duration-300
                   text-white placeholder:text-gray-400'
+                placeholder={placeholder}
                 {...field} />
             </FormControl>
           </div>

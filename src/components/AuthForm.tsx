@@ -4,59 +4,60 @@ import React from 'react'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import { Form } from "@/components/ui/form"
 import LabelButton from './ui/LabelButton'
 import CustomInput from './CustomInput'
-
-const formSchema = z.object({
-  email: z.string().email(),
-})
+import { AuthFormSchema } from '@/lib/utils'
+import toast from 'react-hot-toast';
 
 const AuthForm = ({ type }: { type: string }) => {
 
-  console.log(type)
 
   // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof AuthFormSchema>>({
+    resolver: zodResolver(AuthFormSchema),
     defaultValues: {
       email: "",
     },
   })
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  function onSubmit(values: z.infer<typeof AuthFormSchema>) {
+    try {
+      const result = AuthFormSchema.parse(values);
+      toast.success('Email is valid!');
+      alert('ok')
+      console.log(result);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        // Show first validation error message
+        console.log(error)
+        toast.error(error.errors[0].message);
+      } else {
+        toast.error('An unexpected error occurred');
+      }
+    }
   }
-
 
   return (
     <section>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          
-        <CustomInput 
-          form={form}
-          name="email"
-          label="Email"
-          placeholder={type === 'get-started' ? 'Enter your email' : 'Enter your email address'}
-        />
 
-          <LabelButton type="submit" variant="filled">
-            Get Started
-          </LabelButton>
+          {type === 'get-started' && (
+            <>
+              <CustomInput
+                control={form.control}
+                name="email"
+                label="Email"
+                placeholder={''}
+              />
+              <LabelButton type="submit" variant="filled">
+                Get Started
+              </LabelButton>
+            </>
+          )}
+
         </form>
       </Form>
     </section>
