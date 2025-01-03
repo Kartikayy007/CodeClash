@@ -46,7 +46,7 @@ export function AuthHeroImage() {
   const Info = routeImages[pathname] || routeImages['/login'];
 
   return (
-    <div className="bg-[#282D37] w-1/2 flex flex-col">
+    <div className="bg-[#282D37] w-1/2 lg:flex flex-col hidden">
       <Image
         src='/logo.svg'
         alt="logo"
@@ -56,7 +56,7 @@ export function AuthHeroImage() {
         priority
       />
       <div className="flex-1 flex flex-col items-center justify-center gap-16">
-        <h1 className="text-3xl px-12 text-center font-[600] text-white">
+        <h1 className="xl:text-3xl text-xl px-12 text-center font-[600] text-white">
           {Info.caption}
         </h1>
         <Image

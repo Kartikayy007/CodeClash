@@ -1,4 +1,5 @@
 import { ToastContentProps } from 'react-toastify';
+import {X} from 'lucide-react'
 
 export const CustomToast = ({ 
   title, 
@@ -9,11 +10,16 @@ export const CustomToast = ({
   message: string; 
 }) => {
   return (
-    <div className="grid grid-cols-[1fr_1px_80px] w-full">
+    <div className='flex flex-row justify-between items-center w-[450px]'>
       <div className="flex flex-col p-4">
         <h3 className="text-white text-lg font-bold">{title}</h3>
         <p className="text-base text-white">{message}</p>
       </div>
-    </div>
+      <div>
+        <button onClick={closeToast}>
+          <X size={24} />
+        </button>
+      </div>
+    </div>  
   );
 };

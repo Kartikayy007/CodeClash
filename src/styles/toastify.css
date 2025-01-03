@@ -1,14 +1,12 @@
 :root {
   --toastify-color-dark: #282D37;
-  --toastify-text-color-dark: #fff;
-  --toastify-color-progress-dark: #EF4444;
+  --toastify-font-family: Quicksand;
   --toastify-toast-width: 500px;
   --toastify-toast-bd-radius: 0px;
-  /* --toastify-toast-width: 320px; */
-  --toastify-toast-offset: 16px;
-  --toastify-toast-top: 32px;
-  --toastify-toast-hieght: 14px;
-  --toastify-font-family: Quicksand;
-  --toastify-font-size: 96px;
-  --toastify-font-weight: 400;
+}
+
+.Toastify__toast-container--top-center {
+  position: relative;
+  top: -50px;
+  height: 90px;
 }

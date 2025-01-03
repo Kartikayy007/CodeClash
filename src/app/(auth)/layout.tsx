@@ -16,10 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <main className="flex h-screen w-full">
-      <AuthHeroImage />
-      <div className="bg-[#10141D] flex w-1/2 items-center justify-center">
-        <ToastProvider />
-        {children}
+        <AuthHeroImage />
+      <div className="bg-[#10141D] flex flex-col gap-12 w-full xl:w-1/2 items-center justify-center">
+        <div className="absolute top-32">
+          <ToastProvider />
+        </div> 
+          {children}
       </div>
     </main>
   );

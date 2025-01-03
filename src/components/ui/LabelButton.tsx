@@ -18,7 +18,7 @@ const LabelButton = ({ children, className, variant = 'filled', ...props }: Prop
       text-[#C879EB]
       text-[20px]
       font-[600]`,
-      light: `
+    light: `
       bg-transparent
       text-[#000000]
       text-[20px]
@@ -30,7 +30,10 @@ const LabelButton = ({ children, className, variant = 'filled', ...props }: Prop
     <button
       className={`
         relative
-        w-[500px]
+        w-[320px]
+        sm:w-[400px]
+        md:w-[450px]
+        lg:w-[500px]
         h-[55px]
         px-4 
         py-2 
@@ -47,7 +50,7 @@ const LabelButton = ({ children, className, variant = 'filled', ...props }: Prop
       }}
       {...props}
     >
-      <span 
+      <span
         className={variant === 'filled' ? 'text-black' : ''}
         style={{
           textShadow: variant === 'filled' ? '1px 1px 4px rgba(0, 0, 0, 0.35)' : 'none'

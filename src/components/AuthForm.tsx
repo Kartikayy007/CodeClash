@@ -11,6 +11,7 @@ import { AuthFormSchema } from '@/lib/utils';
 import { toast } from '@/providers/toast-config';
 
 const AuthForm = ({ type }: { type: string }) => {
+  
   const form = useForm<z.infer<typeof AuthFormSchema>>({
     resolver: zodResolver(AuthFormSchema),
     defaultValues: {
@@ -58,7 +59,7 @@ const AuthForm = ({ type }: { type: string }) => {
             <>
               <CustomInput
                 control={form.control}
-                name="email"
+                name="email" 
                 label="Email"
                 placeholder=""
               />
