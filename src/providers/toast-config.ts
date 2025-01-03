@@ -1,13 +1,15 @@
-import { toast as toastify, ToastOptions, Id } from 'react-toastify';
+import { toast as toastify } from 'react-toastify';
+import { ToastOptions } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import '@/styles/toastify.css'; 
+import { CustomToast } from '@/components/CustomToast';
 
 const TOAST_STYLES = {
   base: {
     color: '#fff',
-    borderRadius: '8px',
-    padding: '16px',
-    fontSize: '16px',
-    overflow: 'hidden',
-    textAlign: 'center' as const
+    paddingRight: '154px',
+    fontSize: '14px',
+    maxWidth: '90vw' as const,
   },
   variants: {
     success: {
@@ -32,16 +34,12 @@ export const toastConfig: ToastOptions = {
   theme: "dark",
 };
 
-let activeToastId: Id | null = null;
-
-const showToast = (type: 'success' | 'error', message: string) => {
-  if (activeToastId) {
-    toastify.dismiss(activeToastId);
-  }
-  activeToastId = toastify[type](message, toastConfig);
-};
-
 export const toast = {
-  error: (message: string) => showToast('error', message),
-  success: (message: string) => showToast('success', message),
-} as const;
+  error: (title: string, message: string) => 
+    toastify((props) => CustomToast({ ...props, title, message }), toastConfig),
+  success: (title: string, message: string) => 
+    toastify((props) => CustomToast({ ...props, title, message }), {
+      ...toastConfig,
+      className: `${toastConfig.className} border-[#10B981]`
+    }),
+};

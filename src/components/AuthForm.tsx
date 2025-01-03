@@ -25,25 +25,25 @@ const AuthForm = ({ type }: { type: string }) => {
       
       if (!result.success) {
         result.error.errors.forEach((error) => {
-          toast.error(error.message);
+          toast.error(
+            'Validation Error', 
+            'Please enter a valid email address'
+          );
         });
         return;
       }
-
-      toast.success('Form submitted successfully!');
       console.log(result.data);
     } catch (error) {
-      toast.error('An unexpected error occurred');
       console.error(error);
     }
   };
 
   const onError = (errors: any) => {
     if (errors.email) {
-      toast.error(errors.email.message);
-    }
-    if (errors.password) {
-      toast.error(errors.password.message);
+      toast.error(
+        'Invalid email', 
+        'Enter a valid email address.'
+      );
     }
   };
 
@@ -60,7 +60,7 @@ const AuthForm = ({ type }: { type: string }) => {
                 control={form.control}
                 name="email"
                 label="Email"
-                placeholder="Enter your email"
+                placeholder=""
               />
               <LabelButton type="submit" variant="filled">
                 Get Started
