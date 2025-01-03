@@ -1,8 +1,26 @@
 :root {
   --toastify-color-dark: #282D37;
   --toastify-font-family: Quicksand;
-  --toastify-toast-width: 500px;
+  --toastify-toast-width: 60vw;
   --toastify-toast-bd-radius: 0px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --toastify-toast-width: 400px; 
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --toastify-toast-width: 450px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --toastify-toast-width: 500px;
+  }
 }
 
 .Toastify__toast-container--top-center {

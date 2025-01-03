@@ -9,6 +9,7 @@ import LabelButton from './ui/LabelButton';
 import CustomInput from './CustomInput';
 import { AuthFormSchema } from '@/lib/utils';
 import { toast } from '@/providers/toast-config';
+import CustomCheckbox from '@/components/ui/CustomCheckbox';
 
 const AuthForm = ({ type }: { type: string }) => {
   
@@ -65,6 +66,39 @@ const AuthForm = ({ type }: { type: string }) => {
               />
               <LabelButton type="submit" variant="filled">
                 Get Started
+              </LabelButton>
+            </>
+          )}
+
+          {type === 'login' && (
+            <>
+              <CustomInput
+                name="email" 
+                label="Email"
+                control={form.control}
+                placeholder=""
+              />
+              <CustomInput
+                name="password" 
+                label="Password"
+                control={form.control}
+                placeholder=""
+              />
+
+            <div className='flex justify-between items-center text-[#D1D1D1]'>
+              <button className='text-lg'>
+                Forgot Password?
+              </button>
+
+              <CustomCheckbox 
+                name="rememberMe"
+                label="Remember me"
+                control={form.control}
+              />
+            </div>
+
+              <LabelButton type="submit" variant="filled">
+                Login
               </LabelButton>
             </>
           )}

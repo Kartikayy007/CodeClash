@@ -19,14 +19,15 @@ const CustomInput = ({ control, name, label, placeholder } : CustomInput) => {
       name={name}
       render={({ field }) => (
         <div className='form-item'>
-          <FormLabel className='text-white text-[14px]'>{label}</FormLabel>
+          <FormLabel className='text-[#D1D1D1] text-[14px]'>{label}</FormLabel>
           <div className='flex flex-col w-full mt-2'>
             <FormControl>
               <input className='w-full sm:w-[400px] md:w-[450px] lg:w-[500px] h-[55px] px-4 py-2 rounded-md 
-                  bg-transparent border-2 border-gray-300
+                  bg-transparent border-2 border-[#D1D1D1]
                   focus:outline-none focus:ring-2 focus:ring-[#C879EB] 
                   focus:border-[#C879EB] transition-all duration-300
                   text-white placeholder:text-gray-400'
+                type={name} 
                 placeholder={placeholder}
                 {...field} />
             </FormControl>
