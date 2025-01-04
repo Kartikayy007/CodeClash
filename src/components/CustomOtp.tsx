@@ -1,35 +1,145 @@
-import React from 'react';
+'use client'
+
+import React, { useState, useEffect } from 'react';
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { toast } from "@/providers/toast-config"
+import LabelButton from './ui/LabelButton';
+import {
+  Form,
+  FormField,
+} from "@/components/ui/form"
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
-} from "@/components/ui/input-otp";
+} from "@/components/ui/input-otp"
+import { REGEXP_ONLY_DIGITS } from 'input-otp';
+import { AuthFormSchema } from '@/lib/utils';
 
 const CustomOtp = () => {
-  return (
-    <div className="flex justify-center items-center w-full max-w-md mx-auto text-white">
+  const [timeLeft, setTimeLeft] = useState(3);
+  const [isDisabled, setIsDisabled] = useState(true);
 
-      <InputOTP maxLength={4} className="gap-32 border-[#D1D1D1]">
-        <InputOTPGroup>
-          <InputOTPSlot 
-            className="w-14 h-14 border-2 rounded-lg bg-transparent text-xl focus:border-purple-500 transition-colors"
-            index={0} 
-          />
-          <InputOTPSlot 
-            className="w-14 h-14 border-2 rounded-lg bg-transparent text-xl focus:border-purple-500 transition-colors"
-            index={1} 
-          />
-          <InputOTPSlot 
-            className="w-14 h-14 border-2 border-gray-600 rounded-lg bg-transparent text-xl focus:border-purple-500 transition-colors"
-            index={2} 
-          />
-          <InputOTPSlot 
-            className="w-14 h-14 border-2 border-gray-600 rounded-lg bg-transparent text-xl focus:border-purple-500 transition-colors"
-            index={3} 
-          />
-        </InputOTPGroup>
-      </InputOTP>
-    </div>
+  useEffect(() => {
+    if (timeLeft === 0) {
+      setIsDisabled(false);
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  const handleResend = () => {
+    setTimeLeft(30);
+    setIsDisabled(true);
+  };
+
+  const form = useForm<z.infer<typeof AuthFormSchema>>({
+    resolver: zodResolver(AuthFormSchema),
+    defaultValues: {
+      pin: "",
+    },
+  })
+
+  const onSubmit = (data: z.infer<typeof AuthFormSchema>) => {
+    try {
+      const result = AuthFormSchema.safeParse(data);
+      if (!result.success) {
+        result.error.errors.forEach((error) => {
+          toast.error(
+            'Invalid OTP',
+            error.message || 'Please enter a valid OTP'
+          );
+        });
+        return;
+      }
+      console.log(result.data);
+    } catch (error) {
+      toast.error(
+        'Error',
+        'Something went wrong, please try again'
+      );
+    }
+  }
+
+  const onError = (errors: any) => {
+    if (errors.pin) {
+      toast.error(
+        'Invalid OTP',
+        'Please enter a 4-digit OTP'
+      );
+    }
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="pin"
+          render={({ field }) => (
+            <div className="flex justify-center items-center w-full max-w-md mx-auto text-white">
+
+              <InputOTP maxLength={4} pattern={REGEXP_ONLY_DIGITS} {...field}>
+                <InputOTPGroup className='flex gap-4 sm:gap-12 focus:border-purple-500 border-[#D1D1D1]'>
+                  <InputOTPSlot
+                    className="w-12 h-12 sm:w-14 sm:h-14 border-2 rounded-lg bg-transparent text-2xl sm:text-3xl focus:border-purple-500 transition-colors"
+                    index={0}
+                  />
+                  <InputOTPSlot
+                    className="w-12 h-12 sm:w-14 sm:h-14 border-2 rounded-lg bg-transparent text-2xl sm:text-3xl focus:border-purple-500 transition-colors"
+                    index={1}
+                  />
+                  <InputOTPSlot
+                    className="w-12 h-12 sm:w-14 sm:h-14 border-2 rounded-lg bg-transparent text-2xl sm:text-3xl focus:border-purple-500 transition-colors"
+                    index={2}
+                  />
+                  <InputOTPSlot
+                    className="w-12 h-12 sm:w-14 sm:h-14 border-2 rounded-lg bg-transparent text-2xl sm:text-3xl focus:border-purple-500 transition-colors"
+                    index={3}
+                  />
+                </InputOTPGroup>
+              </InputOTP>
+            </div>
+          )}
+        />
+
+        <div className="flex flex-col items-center gap-4">
+          <LabelButton type="submit" variant="filled" className='mt-8'>
+            Verify OTP
+          </LabelButton>
+
+          <div className="flex items-center gap-2 text-[#D1D1D1] text-base">
+            
+            {isDisabled ? (
+              <span className="text-[#E7E7E7] ">
+                Resend OTP IN {timeLeft}s
+              </span>
+            ) : 
+            <>
+            <span>
+            Didn't receive the OTP?{' '}
+          </span>
+          <button
+            onClick={handleResend}
+            type="button"
+            className="text-[#C879EB] hover:opacity-80 transition-opacity"
+          >
+            Resend OTP
+          </button>
+          </>
+          }
+          </div>
+
+        </div>
+      </form>
+    </Form>
   );
 };
 
