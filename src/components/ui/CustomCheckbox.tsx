@@ -1,10 +1,12 @@
 import * as React from 'react'
 import { Control } from 'react-hook-form';
+import { z } from 'zod';
+import { AuthFormSchema } from '@/lib/utils';
 
 interface CustomCheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   name: string;
-  control: Control<any>;
+  control: Control<z.infer<typeof AuthFormSchema>>;
 }
 
 const CustomCheckbox = ({ label, ...props }: CustomCheckboxProps) => {

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import LabelButton from './ui/LabelButton';
@@ -12,7 +12,12 @@ import { toast } from '@/providers/toast-config';
 import CustomCheckbox from '@/components/ui/CustomCheckbox';
 import Link from 'next/link';
 
-const AuthForm = ({ type }: { type: string }) => {
+interface AuthError {
+  message: string;
+  code?: string;
+}
+
+const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'verify' }) => {
 
   const form = useForm<z.infer<typeof AuthFormSchema>>({
     resolver: zodResolver(AuthFormSchema),
@@ -28,7 +33,7 @@ const AuthForm = ({ type }: { type: string }) => {
       const result = AuthFormSchema.safeParse(values);
 
       if (!result.success) {
-        result.error.errors.forEach((error) => {
+        result.error.errors.forEach(() => {
           toast.error(
             'Validation Error',
             'Please enter a valid email address'
@@ -37,12 +42,17 @@ const AuthForm = ({ type }: { type: string }) => {
         return;
       }
       console.log(result.data);
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      const authError = error as AuthError;
+      console.error(authError.message);
+      toast.error(
+        'Error',
+        authError.message || 'Something went wrong'
+      );
     }
   };
 
-  const onError = (errors: any) => {
+  const onError = (errors: FieldErrors<z.infer<typeof AuthFormSchema>>) => {
     if (errors.email) {
       toast.error(
         'Invalid email',
