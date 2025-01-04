@@ -152,6 +152,20 @@ const AuthForm = ({ type }: { type: string }) => {
               </LabelButton>
             </>
           )}
+
+          {/* {type === 'verify' && (
+            <>
+              <CustomInput
+                name="otp"
+                label="OTP"
+                control={form.control}
+                placeholder=""
+              />
+              <LabelButton type="submit" variant="filled">
+                Verify OTP
+              </LabelButton>
+            </>
+          )} */}
         </form>
       </Form>
     </section>

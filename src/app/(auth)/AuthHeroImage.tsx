@@ -38,6 +38,12 @@ const routeImages: RouteImages = {
     alt: 'get-started',
     width: 350,
     caption: 'Embark on the thrilling journey of competitive coding with Code Clash and rise to the challenge!',
+  },
+  '/verify': {
+    src: '/register.svg',
+    alt: 'verify',
+    width: 400,
+    caption: 'Test your skills, challenge the best, and conquer new heights in the world of coding.',
   }
 }
 

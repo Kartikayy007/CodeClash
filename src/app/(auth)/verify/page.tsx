@@ -1,5 +1,5 @@
-import AuthForm from '@/components/AuthForm'
 import React from 'react'
+import CustomOtp from '@/components/CustomOtp'
 
 const page = () => {
   return (
@@ -7,7 +7,13 @@ const page = () => {
       <h1 className='lg:text-3xl text-2xl font-bold text-white text-left'>
         Verify OTP
       </h1>
-      <AuthForm type='verify' />
+
+      <p className='text-white text-base'>
+        Enter the OTP sent to your email address
+      </p>
+
+      <CustomOtp />
+
     </div>
   )
 }
