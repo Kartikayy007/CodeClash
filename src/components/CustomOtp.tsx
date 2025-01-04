@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, FieldErrors } from "react-hook-form"
 import { z } from "zod"
 import { toast } from "@/providers/toast-config"
 import { useDispatch, useSelector } from 'react-redux';
