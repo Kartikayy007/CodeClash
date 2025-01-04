@@ -31,15 +31,18 @@ const LabelButton = ({ children, className, variant = 'filled', ...props }: Prop
       className={`
         relative
         w-full
-        max-w-md
-        sm:w-[400px]
-        md:w-[450px]
+        min-w-[280px]
+        sm:w-[400px] 
+        md:w-[450px] 
         lg:w-[500px]
-        h-[50px]
+        h-[45px] 
         sm:h-[55px]
-        px-4 
+        px-3 
+        sm:px-4 
         py-2 
         rounded-md 
+        text-base
+        sm:text-lg
         ${variantStyles[variant]}
         ${className || ''}
       `}

@@ -64,6 +64,7 @@ export function AuthHeroImage() {
           alt={Info.alt}
           width={Info.width}
           height={100}
+          className="px-2"
           priority
         />
       </div>

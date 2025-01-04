@@ -62,11 +62,11 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
   };
 
   return (
-    <section>
+    <section className="w-full  mx-auto px-4 sm:px-0">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
-          className="space-y-8"
+          className="space-y-6 sm:space-y-8"
         >
           {type === 'get-started' && (
             <>
@@ -98,8 +98,8 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                 type="password"
               />
 
-              <div className='flex justify-between items-center text-[#D1D1D1]'>
-                <button className='text-lg'>
+              <div className='flex justify-between items-center sm:items-center text-[#D1D1D1] gap-4 sm:gap-0'>
+                <button className='text-base sm:text-lg'>
                   Forgot Password?
                 </button>
 
@@ -139,13 +139,13 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                 type="password"
               />
 
-              <div className='flex items-center gap-2'>
+              <div className='flex items-start sm:items-center gap-2'>
                 <CustomCheckbox
                   name="terms"
                   label=""
                   control={form.control}
                 />
-                <p className="text-white text-base">
+                <p className="text-white text-sm sm:text-base">
                   I agree to the{' '}
                   <Link href={''} className="text-[#C879EB] font-bold hover:opacity-80 transition-opacity">
                     Terms and Conditions
@@ -163,19 +163,6 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
             </>
           )}
 
-          {/* {type === 'verify' && (
-            <>
-              <CustomInput
-                name="otp"
-                label="OTP"
-                control={form.control}
-                placeholder=""
-              />
-              <LabelButton type="submit" variant="filled">
-                Verify OTP
-              </LabelButton>
-            </>
-          )} */}
         </form>
       </Form>
     </section>
