@@ -7,5 +7,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 export const AuthFormSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid Email address"),
-  password: z.string().min(8, "Password must be at least 8 characters")
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  pin: z.string().min(4, {
+    message: "Your one-time password must be 4 characters.",
+  }),
 })

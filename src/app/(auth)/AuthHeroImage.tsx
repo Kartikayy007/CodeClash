@@ -39,17 +39,11 @@ const routeImages: RouteImages = {
     width: 350,
     caption: 'Embark on the thrilling journey of competitive coding with Code Clash and rise to the challenge!',
   },
-  '/verify': {
-    src: '/register.svg',
-    alt: 'verify',
-    width: 400,
-    caption: 'Test your skills, challenge the best, and conquer new heights in the world of coding.',
-  }
 }
 
 export function AuthHeroImage() {
   const pathname = usePathname();
-  const Info = routeImages[pathname] || routeImages['/login'];
+  const Info = routeImages[pathname] || routeImages['/register'];
 
   return (
     <div className="bg-[#282D37] w-1/2 lg:flex flex-col hidden">
