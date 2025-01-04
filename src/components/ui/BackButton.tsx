@@ -5,7 +5,7 @@ export const BackButton = ({ href }: { href: string }) => {
   return (
     <Link 
       href={href}
-      className="inline-flex items-center gap-2 font-[600] text-[#C879EB] hover:opacity-80 transition-opacity ml-2 lg:absolute top-36"
+      className="inline-flex items-center gap-2 font-[600] text-[#C879EB] hover:opacity-80 transition-opacity ml-2"
       aria-label="Go back to previous page"
     >
       <svg

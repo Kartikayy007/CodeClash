@@ -23,7 +23,6 @@ const Page = () => {
 
       <AuthForm type='login' />
 
-
     </div>
   )
 }

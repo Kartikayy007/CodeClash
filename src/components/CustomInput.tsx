@@ -8,11 +8,18 @@ import { AuthFormSchema } from '../lib/utils';
 interface CustomInput {
   control: Control<z.infer<typeof AuthFormSchema>>,
   name: keyof z.infer<typeof AuthFormSchema>,
-  label: 'Email' | 'Password' | 'New Password' | 'Confirm Password',
+  label: string,
   placeholder: string,
+  type?: 'email' | 'password' | 'text'
 }
 
-const CustomInput = ({ control, name, label, placeholder } : CustomInput) => {
+const CustomInput = ({ 
+  control, 
+  name, 
+  label, 
+  placeholder, 
+  type = 'text' 
+}: CustomInput) => {
   return (
     <FormField
       control={control}
@@ -22,14 +29,16 @@ const CustomInput = ({ control, name, label, placeholder } : CustomInput) => {
           <FormLabel className='text-[#D1D1D1] text-[14px]'>{label}</FormLabel>
           <div className='flex flex-col w-full mt-2'>
             <FormControl>
-              <input className='w-full sm:w-[400px] md:w-[450px] lg:w-[500px] h-[55px] px-4 py-2 rounded-md 
+              <input 
+                className='w-full sm:w-[400px] md:w-[450px] lg:w-[500px] h-[55px] px-4 py-2 rounded-md 
                   bg-transparent border-2 border-[#D1D1D1]
                   focus:outline-none focus:ring-2 focus:ring-[#C879EB] 
                   focus:border-[#C879EB] transition-all duration-300
                   text-white placeholder:text-gray-400'
-                type={name} 
+                type={type}
                 placeholder={placeholder}
-                {...field} />
+                {...field} 
+              />
             </FormControl>
           </div>
         </div>

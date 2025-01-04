@@ -23,7 +23,7 @@ const CustomCheckbox = ({ label, ...props }: CustomCheckboxProps) => {
           peer-focus:ring-2 peer-focus:ring-[#D1D1D1]/20"
         />
         <svg
-          className="absolute top-[2px] left-[2px] h-4 w-4 text-white
+          className="absolute top-[2px] left-[2px] h-4 w-4
             pointer-events-none opacity-0 peer-checked:opacity-100
             transition-opacity duration-200 ease-in-out"
           fill="none"
@@ -38,7 +38,7 @@ const CustomCheckbox = ({ label, ...props }: CustomCheckboxProps) => {
           />
         </svg>
       </div>
-      <span className="text-white text-sm">{label}</span>
+      {label && <span className="text-white text-sm">{label}</span>}
     </label>
   )
 }
