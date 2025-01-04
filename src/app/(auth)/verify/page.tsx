@@ -26,7 +26,7 @@ const page = () => {
           </h1>
 
           <p className='text-sm sm:text-base text-white text-left'>
-            We've sent a 4-digit verification code to xxx@gmail.com
+            We&apos;ve sent a 4-digit verification code to xxx@gmail.com
           </p>
         </div>
       </div>

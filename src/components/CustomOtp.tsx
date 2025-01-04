@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, FieldErrors } from "react-hook-form"
 import { z } from "zod"
 import { toast } from "@/providers/toast-config"
 import LabelButton from './ui/LabelButton';
@@ -60,19 +60,20 @@ const CustomOtp = () => {
         return;
       }
       console.log(result.data);
-    } catch (error) {
+    } catch (err: unknown) {
+      const error = err as Error;
       toast.error(
         'Error',
-        'Something went wrong, please try again'
+        error.message || 'Something went wrong, please try again'
       );
     }
   }
 
-  const onError = (errors: any) => {
+  const onError = (errors: FieldErrors<z.infer<typeof AuthFormSchema>>) => {
     if (errors.pin) {
       toast.error(
         'Invalid OTP',
-        'Please enter a 4-digit OTP'
+        'Please enter a valid OTP'
       );
     }
   };
@@ -112,7 +113,7 @@ const CustomOtp = () => {
 
         <div className="flex flex-col items-center gap-4">
           <LabelButton type="submit" variant="filled" className='mt-8'>
-            Verify OTP
+            Verify
           </LabelButton>
 
           <div className="flex items-center gap-2 text-[#D1D1D1] text-base">
@@ -123,17 +124,17 @@ const CustomOtp = () => {
               </span>
             ) : 
             <>
-            <span>
-            Didn't receive the OTP?{' '}
-          </span>
-          <button
-            onClick={handleResend}
-            type="button"
-            className="text-[#C879EB] hover:opacity-80 transition-opacity"
-          >
-            Resend OTP
-          </button>
-          </>
+            <span className="text-[#D1D1D1] text-base">
+              Didn&apos;t receive the OTP?{' '}
+            </span>
+            <button
+              onClick={handleResend}
+              type="button"
+              className="text-[#C879EB] hover:opacity-80 transition-opacity"
+            >
+              Resend OTP
+            </button>
+            </>
           }
           </div>
 
