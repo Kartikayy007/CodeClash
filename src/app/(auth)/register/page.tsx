@@ -5,7 +5,15 @@ import AuthForm from '@/features/auth/components/AuthForm'
 
 const page = () => {
   return (
+<<<<<<< HEAD
     <div className="flex flex-col items-start justify-center gap-4 sm:gap-6 p-4 sm:p-8 min-w-[320px]">
+=======
+<<<<<<< HEAD
+    <div className="flex flex-col items-start justify-center gap-4 sm:gap-6 px-8 sm:p-8 min-w-[320px]">
+=======
+    <div className="flex flex-col items-start justify-center gap-4 sm:gap-6 p-4 sm:p-8 min-w-[320px]">
+>>>>>>> 740b64a (fix)
+>>>>>>> 3220631 (fix)
       <Image 
         src='/logo.svg'
         alt="logo"
