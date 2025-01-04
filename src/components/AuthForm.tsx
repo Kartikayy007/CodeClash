@@ -62,7 +62,7 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
   };
 
   return (
-    <section className="w-full  mx-auto px-4 sm:px-0">
+    <section className="w-full mx-auto">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
