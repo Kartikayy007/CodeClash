@@ -6,7 +6,7 @@ import AuthForm from '@/components/AuthForm'
 const page = () => {
   return (
     <div className="flex flex-col items-start justify-center gap-4 sm:gap-6 p-4 sm:p-8 min-w-[320px]">
-      <Image
+      <Image 
         src='/logo.svg'
         alt="logo"
         width={200}
