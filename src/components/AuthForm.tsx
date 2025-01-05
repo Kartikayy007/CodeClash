@@ -373,7 +373,7 @@ const AuthForm = ({
     if (errors.email) {
       toast.error(
         'Invalid email',
-        errors.email.message || 'Enter a valid email address.'
+        'Enter a valid email address.'
       );
       return;
     }
