@@ -7,13 +7,14 @@ import Image from 'next/image'
 
 const Page = () => {
   return (
-    <div className="flex flex-col items-start justify-center gap-4 sm:gap-6 p-4 sm:p-8 min-w-[320px] max-w-screen-xl mx-auto">
+    <div className="flex flex-col items-start justify-center gap-4 sm:gap-6 sm:p-8 min-w-[320px]">
+
       <Image
         src='/logo.svg'
         alt="logo"
-        width={200}
-        height={40}
-        className="mx-auto lg:hidden absolute top-[77px] left-1/2 transform -translate-x-1/2"
+        width={160}
+        height={32}
+        className="mx-auto lg:hidden absolute top-[60px] left-1/2 transform -translate-x-1/2"
         priority
       />
 

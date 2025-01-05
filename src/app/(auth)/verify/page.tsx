@@ -7,14 +7,16 @@ const page = () => {
   return (
     <div className="flex flex-col items-start justify-center gap-6 p-8">
 
-      <Image
-        src='/logo.svg'
-        alt="logo"
-        width={200}
-        height={40}
-        className="mx-auto lg:hidden absolute top-[77px] left-1/2 transform -translate-x-1/2" 
-        priority
-      />
+     
+     
+           <Image
+             src='/logo.svg'
+             alt="logo"
+             width={160}
+             height={32}
+             className="mx-auto lg:hidden absolute top-[60px] left-1/2 transform -translate-x-1/2"
+             priority
+           />
 
 
       <div className="w-full max-w-md sm:max-w-none">

@@ -9,9 +9,9 @@ const page = () => {
       <Image 
         src='/logo.svg'
         alt="logo"
-        width={200}
-        height={40}
-        className="mx-auto lg:hidden absolute top-8 sm:top-[77px] left-1/2 transform -translate-x-1/2"
+        width={160}
+        height={32}
+        className="mx-auto lg:hidden absolute top-[30px] left-1/2 transform -translate-x-1/2"
         priority
       />
 
