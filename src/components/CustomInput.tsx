@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormControl, FormField, FormLabel, FormMessage } from '@/components/ui/form';
 import { Control } from 'react-hook-form';
 import PasswordStrengthChecker from './PasswordStrengthChecker';
 import Image from 'next/image';
+import { z } from 'zod'
+import { AuthFormSchema } from '../lib/utils';
 
 interface CustomInput {
-  name: string;
-  label: string;
-  control: Control<any>;
-  placeholder: string;
+  control: Control<z.infer<typeof AuthFormSchema>>,
+  name: keyof z.infer<typeof AuthFormSchema>,
+  label: string,
+  placeholder: string,
   type?: string;
   showStrengthChecker?: boolean;
 }
@@ -21,14 +23,14 @@ const CustomInput = ({
   type = 'text',
   showStrengthChecker
 }: CustomInput) => {
-  const [isFocused, setIsFocused] = React.useState(false);
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <FormField
       control={control}
       name={name}
-      render={({ field, fieldState: { invalid, error } }) => (
+      render={({ field, fieldState: { error } }) => (
         <div className='form-item'>
           <FormLabel className='text-[#D1D1D1] text-[14px]'>{label}</FormLabel>
           <div className='flex flex-col w-full mt-2'>

@@ -18,7 +18,7 @@ interface AuthError {
   code?: string;
 }
 
-const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'verify' }) => {
+const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'verify' | 'forgot-password' | 'reset-password' }) => {
 
   const form = useForm<z.infer<typeof AuthFormSchema>>({
     resolver: zodResolver(AuthFormSchema),
