@@ -21,7 +21,7 @@ const Page = () => {
       />
 
       <div className="w-full max-w-md sm:max-w-none">
-        <BackButton href="/get-started" />
+        <BackButton href="/login" />
 
         <div className='space-y-2 mt-4'>
           <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold text-white text-left'>
