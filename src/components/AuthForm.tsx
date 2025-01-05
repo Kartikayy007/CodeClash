@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import LabelButton from './ui/LabelButton';
@@ -11,6 +11,7 @@ import { AuthFormSchema } from '@/lib/utils';
 import { toast } from '@/providers/toast-config';
 import CustomCheckbox from '@/components/ui/CustomCheckbox';
 import Link from 'next/link';
+import PasswordStrengthChecker from './PasswordStrengthChecker';
 
 const AuthForm = ({ type }: { type: string }) => {
 
@@ -19,8 +20,10 @@ const AuthForm = ({ type }: { type: string }) => {
     defaultValues: {
       email: "",
       password: "",
+      Newpassword: "",
+      confirmPassword: "",
     },
-    mode: "onSubmit"
+    mode: "onChange"
   });
 
   const onSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
@@ -42,11 +45,17 @@ const AuthForm = ({ type }: { type: string }) => {
     }
   };
 
-  const onError = (errors: any) => {
+  const onError = (errors: FieldErrors<z.infer<typeof AuthFormSchema>>) => {
     if (errors.email) {
       toast.error(
         'Invalid email',
         'Enter a valid email address.'
+      );
+    }
+    if (errors.confirmPassword?.message === "Passwords don't match") {
+      toast.error(
+        'Password Mismatch',
+        'Passwords do not match. Please try again.'
       );
     }
   };
@@ -113,21 +122,30 @@ const AuthForm = ({ type }: { type: string }) => {
                 label="Email"
                 control={form.control}
                 placeholder=""
+                type="email"
               />
-              <CustomInput
-                name="password"
-                label="New Password"
-                control={form.control}
-                placeholder=""
-                type="password"
-              />
-              <CustomInput
-                name="password"
-                label="Confirm Password"
-                control={form.control}
-                placeholder=""
-                type="password"
-              />
+              <div className="relative">
+                <CustomInput
+                  name="Newpassword"
+                  label="New Password"
+                  control={form.control}
+                  placeholder=""
+                  type="password"
+                  showStrengthChecker={true}
+                />
+              </div>
+              <div className="relative">
+                <CustomInput
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  control={form.control}
+                  placeholder=""
+                  type="password"
+                  showStrengthChecker={true}
+                />
+                <PasswordStrengthChecker
+                  password={form.watch('password')} isFocused={false} />
+              </div>
 
               <div className='flex items-start sm:items-center gap-2'>
                 <CustomCheckbox
