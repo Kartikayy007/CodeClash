@@ -12,8 +12,13 @@ import { toast } from '@/providers/toast-config';
 import CustomCheckbox from '@/components/ui/CustomCheckbox';
 import Link from 'next/link';
 import PasswordStrengthChecker from './PasswordStrengthChecker';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store/store';
+import { register } from '@/features/auth/thunks/registerThunk';
 
 const AuthForm = ({ type }: { type: string }) => {
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const dispatch = useDispatch<AppDispatch>();
 
   const form = useForm<z.infer<typeof AuthFormSchema>>({
     resolver: zodResolver(AuthFormSchema),
@@ -22,40 +27,130 @@ const AuthForm = ({ type }: { type: string }) => {
       password: "",
       Newpassword: "",
       confirmPassword: "",
+      terms: false
     },
     mode: "onChange"
   });
 
   const onSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
+    console.log('Form values:', values);
     try {
-      const result = AuthFormSchema.safeParse(values);
-
-      if (!result.success) {
-        result.error.errors.forEach((error) => {
-          toast.error(
-            'Validation Error',
-            'Please enter a valid email address'
-          );
-        });
-        return;
+      // Check terms acceptance for registration
+      if (type === 'register' && !values.terms) {
+        toast.error(
+          'Terms & Conditions Required',
+          'Please accept the Terms and Conditions to continue'
+        );
+        return; // Stop form submission if terms not accepted
       }
-      console.log(result.data);
-    } catch (error) {
-      console.error(error);
+
+      setIsSubmitting(true);
+      console.log('Form submitted', { type, values });
+      
+      if (type === 'register') {
+        const registrationPayload = {
+          email: values.email,
+          password: values.Newpassword,
+        };
+        
+        console.log('Registration payload:', registrationPayload);
+        const result = await dispatch(register(registrationPayload)).unwrap();
+        console.log('Registration result:', result);
+        
+        toast.success(
+          'Registration Successful',
+          'Please verify your email'
+        );
+      } else if (type === 'login') {
+        // Handle login logic here
+        console.log('Login payload:', {
+          email: values.email,
+          password: values.password
+        });
+      } else if (type === 'reset-password') {
+        // Handle password reset logic here
+        console.log('Reset password payload:', {
+          password: values.Newpassword,
+          confirmPassword: values.confirmPassword
+        });
+      } else if (type === 'forgot-password') {
+        // Handle forgot password logic here
+        console.log('Forgot password payload:', {
+          email: values.email
+        });
+      }
+    } catch (error: any) {
+      console.error('Submission error:', error);
+      toast.error(
+        'Submission Failed',
+        error.message || 'Something went wrong'
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const onError = (errors: FieldErrors<z.infer<typeof AuthFormSchema>>) => {
+    console.log('Form validation errors:', errors);
+
+    // Check for empty fields first
+    if (type === 'login' && (!form.getValues('email') || !form.getValues('password'))) {
+      toast.error(
+        'Fields Cant be Empty',
+        'Please fill in all required fields'
+      );
+      return;
+    }
+
+    if (type === 'register' && (!form.getValues('email') || !form.getValues('Newpassword') || !form.getValues('confirmPassword'))) {
+      toast.error(
+        'Fields Cant be Empty',
+        'Please fill in all required fields'
+      );
+      return;
+    }
+
+    if (type === 'reset-password' && (!form.getValues('Newpassword') || !form.getValues('confirmPassword'))) {
+      toast.error(
+        'Fields Cant be Empty',
+        'Please fill in all required fields'
+      );
+      return;
+    }
+
+    if (type === 'forgot-password' && !form.getValues('email')) {
+      toast.error(
+        'Fields Cant be Empty',
+        'Please fill in all required fields'
+      );
+      return;
+    }
+    
+    // Original validation errors
     if (errors.email) {
       toast.error(
         'Invalid email',
-        'Enter a valid email address.'
+        errors.email.message || 'Enter a valid email address.'
       );
+      return;
     }
-    if (errors.confirmPassword?.message === "Passwords don't match") {
+    if (errors.Newpassword) {
+      toast.error(
+        'Invalid Password',
+        'Password must be at least 8 characters, include uppercase, number, and special character'
+      );
+      return;
+    }
+    if (errors.confirmPassword) {
       toast.error(
         'Password Mismatch',
-        'Passwords do not match. Please try again.'
+        errors.confirmPassword.message || 'Passwords do not match. Please try again.'
+      );
+    }
+    if (errors.terms) {
+      toast.error(
+        'Terms & Conditions Required',
+        'Please accept the Terms and Conditions to continue'
       );
     }
   };
@@ -75,8 +170,12 @@ const AuthForm = ({ type }: { type: string }) => {
                 control={form.control}
                 placeholder=""
               />
-              <LabelButton type="submit" variant="filled">
-                Get Started
+              <LabelButton 
+                type="submit" 
+                variant="filled"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Processing...' : 'Get Started'}
               </LabelButton>
             </>
           )}
@@ -109,8 +208,12 @@ const AuthForm = ({ type }: { type: string }) => {
                 />
               </div>
 
-              <LabelButton type="submit" variant="filled">
-                Login
+              <LabelButton 
+                type="submit" 
+                variant="filled"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Processing...' : 'Login'}
               </LabelButton>
             </>
           )}
@@ -144,7 +247,9 @@ const AuthForm = ({ type }: { type: string }) => {
                   showStrengthChecker={true}
                 />
                 <PasswordStrengthChecker
-                  password={form.watch('password')} isFocused={false} />
+                  password={form.watch('Newpassword')}
+                  isFocused={false} 
+                />
               </div>
 
               <div className='flex items-start sm:items-center gap-2'>
@@ -165,8 +270,12 @@ const AuthForm = ({ type }: { type: string }) => {
                 </p>
               </div>
 
-              <LabelButton type="submit" variant="filled">
-                Sign Up
+              <LabelButton 
+                type="submit"
+                variant="filled"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Processing...' : 'Sign Up'}
               </LabelButton>
             </>
           )}
@@ -193,11 +302,17 @@ const AuthForm = ({ type }: { type: string }) => {
                   showStrengthChecker={true}
                 />
                 <PasswordStrengthChecker
-                  password={form.watch('password')} isFocused={false} />
+                  password={form.watch('Newpassword')}
+                  isFocused={false} 
+                />
               </div>
 
-              <LabelButton type="submit" variant="filled">
-                Sent Reset Link
+              <LabelButton 
+                type="submit" 
+                variant="filled"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Processing...' : 'Reset Password'}
               </LabelButton>
             </>
           )}
@@ -210,12 +325,15 @@ const AuthForm = ({ type }: { type: string }) => {
                 control={form.control}
                 placeholder=""
               />
-              <LabelButton type="submit" variant="filled">
-                Sent Reset Link
+              <LabelButton 
+                type="submit" 
+                variant="filled"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Processing...' : 'Send Reset Link'}
               </LabelButton>
             </>
           )}
-
         </form>
       </Form>
     </section>

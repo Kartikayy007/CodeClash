@@ -3,12 +3,14 @@ import { FormControl, FormField, FormLabel, FormMessage } from '@/components/ui/
 import { Control } from 'react-hook-form';
 import PasswordStrengthChecker from './PasswordStrengthChecker';
 import Image from 'next/image';
+import { z } from 'zod';
+import { AuthFormSchema } from '@/lib/utils';
 
 interface CustomInput {
-  name: string;
-  label: string;
-  control: Control<any>;
-  placeholder: string;
+  control: Control<z.infer<typeof AuthFormSchema>>,
+  name: keyof z.infer<typeof AuthFormSchema>,
+  label: string,
+  placeholder: string,
   type?: string;
   showStrengthChecker?: boolean;
 }
@@ -28,11 +30,11 @@ const CustomInput = ({
     <FormField
       control={control}
       name={name}
-      render={({ field, fieldState: { invalid, error } }) => (
+      render={({ field, fieldState: { error } }) => (
         <div className='form-item'>
           <FormLabel className='text-[#D1D1D1] text-[14px]'>{label}</FormLabel>
           <div className='flex flex-col w-full mt-2'>
-            <div className="relative">
+            <div className="relative w-full">
               <FormControl>
                 <input
                   {...field}
@@ -55,30 +57,34 @@ const CustomInput = ({
                     duration-500
                     text-sm sm:text-base
                     text-white
-                    placeholder:text-gray-400`}
+                    placeholder:text-gray-400
+                    pr-10`}
                   placeholder={placeholder}
                 />
               </FormControl>
               {type === 'password' && (
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2"
-                >
-                  <Image
-                    src={showPassword ? '/eyeclosed.svg' : '/eye.svg'}
-                    alt={showPassword ? 'Hide password' : 'Show password'}
-                    width={20}
-                    height={20}
-                  />
-                </button>
+                <div className="absolute right-0 top-0 h-full flex items-center pr-3 sm:pr-4">
+                    <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="flex items-center justify-center w-6 h-6"
+                    >
+                    <Image
+                      src={showPassword ? '/eyeclosed.svg' : '/eye.svg'}
+                      alt={showPassword ? 'Hide password' : 'Show password'}
+                      width={20}
+                      height={20}
+                      className="w-5 h-5 sm:mr-5 md:mr-0"
+                    />
+                    </button>
+                </div>
               )}
             </div>
             {(name === 'Newpassword' || name === 'confirmPassword') && error && (
               <FormMessage className="text-[#EF4444] text-sm mt-1 ml-1" />
             )}
-            {showStrengthChecker && (name === 'Newpassword' || name === 'confirmPassword') && (
-              <PasswordStrengthChecker 
+            {showStrengthChecker && (name === 'Newpassword') && (
+              <PasswordStrengthChecker
                 password={field.value}
                 isFocused={isFocused}
               />
