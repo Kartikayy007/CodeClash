@@ -181,6 +181,51 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
             </>
           )}
 
+          {type === 'reset-password' && (
+            <>
+              <div className="relative">
+                <CustomInput
+                  name="Newpassword"
+                  label="New Password"
+                  control={form.control}
+                  placeholder=""
+                  type="password"
+                  showStrengthChecker={true}
+                />
+              </div>
+              <div className="relative">
+                <CustomInput
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  control={form.control}
+                  placeholder=""
+                  type="password"
+                  showStrengthChecker={true}
+                />
+                <PasswordStrengthChecker
+                  password={form.watch('password')} isFocused={false} />
+              </div>
+
+              <LabelButton type="submit" variant="filled">
+                Sent Reset Link
+              </LabelButton>
+            </>
+          )}
+
+          {type === 'forgot-password' && (
+            <>
+              <CustomInput
+                name="email"
+                label="Email"
+                control={form.control}
+                placeholder=""
+              />
+              <LabelButton type="submit" variant="filled">
+                Sent Reset Link
+              </LabelButton>
+            </>
+          )}
+
         </form>
       </Form>
     </section>
