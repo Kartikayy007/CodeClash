@@ -12,6 +12,9 @@ import { toast } from '@/providers/toast-config';
 import CustomCheckbox from '@/components/ui/CustomCheckbox';
 import Link from 'next/link';
 import PasswordStrengthChecker from './PasswordStrengthChecker';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store/store';
+import { register } from '@/features/auth/thunks/registerThunk';
 
 interface AuthError {
   message: string;
@@ -27,6 +30,7 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
       password: "",
       Newpassword: "",
       confirmPassword: "",
+      terms: false
     },
     mode: "onChange"
   });
@@ -56,16 +60,66 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
   };
 
   const onError = (errors: FieldErrors<z.infer<typeof AuthFormSchema>>) => {
+    console.log('Form validation errors:', errors);
+
+    // Check for empty fields first
+    if (type === 'login' && (!form.getValues('email') || !form.getValues('password'))) {
+      toast.error(
+        'Fields Cant be Empty',
+        'Please fill in all required fields'
+      );
+      return;
+    }
+
+    if (type === 'register' && (!form.getValues('email') || !form.getValues('Newpassword') || !form.getValues('confirmPassword'))) {
+      toast.error(
+        'Fields Cant be Empty',
+        'Please fill in all required fields'
+      );
+      return;
+    }
+
+    if (type === 'reset-password' && (!form.getValues('Newpassword') || !form.getValues('confirmPassword'))) {
+      toast.error(
+        'Fields Cant be Empty',
+        'Please fill in all required fields'
+      );
+      return;
+    }
+
+    if (type === 'forgot-password' && !form.getValues('email')) {
+      toast.error(
+        'Fields Cant be Empty',
+        'Please fill in all required fields'
+      );
+      return;
+    }
+    
+    // Original validation errors
     if (errors.email) {
       toast.error(
         'Invalid email',
-        'Enter a valid email address.'
+        errors.email.message || 'Enter a valid email address.'
       );
+      return;
     }
-    if (errors.confirmPassword?.message === "Passwords don't match") {
+    if (errors.Newpassword) {
+      toast.error(
+        'Invalid Password',
+        'Password must be at least 8 characters, include uppercase, number, and special character'
+      );
+      return;
+    }
+    if (errors.confirmPassword) {
       toast.error(
         'Password Mismatch',
-        'Passwords do not match. Please try again.'
+        errors.confirmPassword.message || 'Passwords do not match. Please try again.'
+      );
+    }
+    if (errors.terms) {
+      toast.error(
+        'Terms & Conditions Required',
+        'Please accept the Terms and Conditions to continue'
       );
     }
   };
@@ -85,8 +139,12 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                 control={form.control}
                 placeholder=""
               />
-              <LabelButton type="submit" variant="filled">
-                Get Started
+              <LabelButton 
+                type="submit" 
+                variant="filled"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Processing...' : 'Get Started'}
               </LabelButton>
             </>
           )}
@@ -119,8 +177,12 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                 />
               </div>
 
-              <LabelButton type="submit" variant="filled">
-                Login
+              <LabelButton 
+                type="submit" 
+                variant="filled"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Processing...' : 'Login'}
               </LabelButton>
             </>
           )}
@@ -154,7 +216,9 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                   showStrengthChecker={true}
                 />
                 <PasswordStrengthChecker
-                  password={form.watch('password')} isFocused={false} />
+                  password={form.watch('Newpassword')}
+                  isFocused={false} 
+                />
               </div>
 
               <div className='flex items-start sm:items-center gap-2'>
@@ -175,8 +239,12 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                 </p>
               </div>
 
-              <LabelButton type="submit" variant="filled">
-                Sign Up
+              <LabelButton 
+                type="submit"
+                variant="filled"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Processing...' : 'Sign Up'}
               </LabelButton>
             </>
           )}
@@ -203,11 +271,17 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                   showStrengthChecker={true}
                 />
                 <PasswordStrengthChecker
-                  password={form.watch('password')} isFocused={false} />
+                  password={form.watch('Newpassword')}
+                  isFocused={false} 
+                />
               </div>
 
-              <LabelButton type="submit" variant="filled">
-                Sent Reset Link
+              <LabelButton 
+                type="submit" 
+                variant="filled"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Processing...' : 'Reset Password'}
               </LabelButton>
             </>
           )}
@@ -220,12 +294,15 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                 control={form.control}
                 placeholder=""
               />
-              <LabelButton type="submit" variant="filled">
-                Sent Reset Link
+              <LabelButton 
+                type="submit" 
+                variant="filled"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Processing...' : 'Send Reset Link'}
               </LabelButton>
             </>
           )}
-
         </form>
       </Form>
     </section>
