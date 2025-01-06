@@ -18,14 +18,19 @@ import { register } from '@/features/auth/thunks/registerThunk';
 import { useRouter } from 'next/navigation';
 import { login } from '@/features/auth/thunks/loginThunk';
 import { resetPassword } from '@/features/auth/thunks/resetPasswordThunk';
+import { resetPasswordWithToken } from '@/features/auth/thunks/resetPasswordWithTokenThunk';
+
+interface AuthFormProps {
+  type: string;
+  token?: string;
+  onResetLinkSent?: (email: string) => void;
+}
 
 const AuthForm = ({ 
   type, 
+  token,
   onResetLinkSent 
-}: { 
-  type: string;
-  onResetLinkSent?: (email: string) => void;
-}) => {
+}: AuthFormProps) => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
@@ -58,11 +63,31 @@ const AuthForm = ({
 
   const onSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
     try {
+      if (type === 'reset-password') {
+        if (!token) {
+          toast.error('Invalid Token', 'Password reset link is invalid');
+          return;
+        }
 
+        setIsSubmitting(true);
+        if (!values.Newpassword) {
+          toast.error('Password Required', 'Please enter a new password');
+          return;
+        }
 
-
-
-      if (type === 'login') {
+        const result = await dispatch(resetPasswordWithToken({
+          token,
+          password: values.Newpassword
+        })).unwrap();
+  
+        if (result.success) {
+          toast.success(
+            'Password Reset Successful',
+            'You can now login with your new password'
+          );
+          router.push('/login');
+        }
+      } else if (type === 'login') {
         if (!values.email || !values.password) {
           toast.error(
             'Required Fields',
@@ -383,7 +408,7 @@ const AuthForm = ({
                 label="Email"
                 control={form.control}
                 placeholder=""
-                type='email'
+                type='text'
               />
               <CustomInput
                 name="password"
@@ -518,15 +543,22 @@ const AuthForm = ({
 
           {type === 'forgot-password' && (
             <div className="w-full space-y-4 sm:space-y-6">
-              {!resetLinkSent && (
+              <div className='text-center'>
+                
+              </div>
+              {!resetLinkSent ? (
                 <CustomInput
                   name="email"
                   label="Email"
                   control={form.control}
                   placeholder=""
                   type="text"
-                />
-              )}
+                /> ) : (
+                  <span className="text-[#E7E7E7]">
+                  You can request a resend after {timeLeft}s
+                </span>
+                )
+              }
               <LabelButton
                 type='submit'
                 variant="filled"
@@ -539,11 +571,7 @@ const AuthForm = ({
                     ? 'Resend Link'
                     : 'Send Reset Link'}
               </LabelButton>
-              <div className='text-center'>
-                <span className="text-[#E7E7E7]">
-                  Resend IN {timeLeft}s
-                </span>
-              </div>
+              
             </div>
           )}
         </form>
