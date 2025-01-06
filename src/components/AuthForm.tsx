@@ -64,6 +64,7 @@ const AuthForm = ({ type }: { type: string }) => {
         
         const result = await dispatch(register(registrationPayload)).unwrap();
         if (result.success) {
+          localStorage.setItem('registrationEmail', values.email);
           toast.success(
             'Registration Successful',
             'Please verify your email'
