@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { register } from '@/features/auth/thunks/registerThunk';
 import { useRouter } from 'next/navigation';
+import { login } from '@/features/auth/thunks/loginThunk';
 
 const AuthForm = ({ type }: { type: string }) => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -37,7 +38,31 @@ const AuthForm = ({ type }: { type: string }) => {
 
   const onSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
     try {
-      if (type === 'register') {
+      if (type === 'login') {
+        if (!values.email || !values.password) {
+          toast.error(
+            'Required Fields',
+            'Please fill in all required fields'
+          );
+          return;
+        }
+
+        setIsSubmitting(true);
+        const loginPayload = {
+          email: values.email,
+          password: values.password,
+        };
+
+        const result = await dispatch(login(loginPayload)).unwrap();
+
+        if (result.success) {
+          toast.success(
+            'Login Successful',
+            'Welcome back!'
+          );
+          router.push('/dashboard');
+        }
+      } else if (type === 'register') {
         // if (!values.email || !values.username || !values.password) {
         //   toast.error(
         //     'Required Fields',
@@ -55,13 +80,18 @@ const AuthForm = ({ type }: { type: string }) => {
         // }
 
         setIsSubmitting(true);
-        
+
+        if (!values.username) {
+          toast.error('Username Required', 'Please enter a username');
+          return;
+        }
+
         const registrationPayload = {
           email: values.email,
           username: values.username,
           password: values.password,
         };
-        
+
         const result = await dispatch(register(registrationPayload)).unwrap();
         if (result.success) {
           localStorage.setItem('registrationEmail', values.email);
@@ -90,17 +120,67 @@ const AuthForm = ({ type }: { type: string }) => {
         }
       }
     } catch (error: any) {
-      console.error('Submission error:', error);
-      toast.error(
-        'Submission Failed',
-        error.message || 'Something went wrong'
-      );
+      const errorMessage = error?.response?.data?.message || error.message;
+
+      if (errorMessage.includes('Invalid password')) {
+        toast.error(
+          'Login Failed',
+          'Incorrect password. Retry or reset your password.'
+        );
+      } else if (errorMessage.includes('User not found')) {
+        toast.error(
+          'Login Failed',
+          'No account found with this email.'
+        );
+      } else {
+        toast.error(
+          'Login Failed',
+          errorMessage || 'Something went wrong'
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const onError = (errors: FieldErrors<z.infer<typeof AuthFormSchema>>) => {
+    
+    
+    if (type === 'login') {
+
+      if (errors.password) {
+        toast.error(
+          'Invalid Password',
+          'Password must meet all requirements'
+        );
+        return;
+      }
+      if (!form.getValues('email') && !form.getValues('password')) {
+        toast.error(
+          'Required Fields',
+          'Please fill in all required fields'
+        );
+        return;
+      }
+      if (!form.getValues('password')) {
+        toast.error(
+          'Required Fields',
+          'Please fill in all required fields'
+        );
+        return;
+      }
+      if (errors.username) {
+        toast.error(
+          'Invalid Username',
+          'Username must be at least 3 characters'
+        );
+        return;
+      }
+
+      
+    }
+
+
     if (type === 'register') {
 
       if (!form.getValues('email') && !form.getValues('username') && !form.getValues('password')) {
@@ -126,7 +206,7 @@ const AuthForm = ({ type }: { type: string }) => {
         );
         return;
       }
-  
+
       if (errors.username) {
         toast.error(
           'Invalid Username',
@@ -134,7 +214,7 @@ const AuthForm = ({ type }: { type: string }) => {
         );
         return;
       }
-  
+
       if (errors.password) {
         toast.error(
           'Invalid Password',
@@ -214,8 +294,8 @@ const AuthForm = ({ type }: { type: string }) => {
                 control={form.control}
                 placeholder=""
               />
-              <LabelButton 
-                type="submit" 
+              <LabelButton
+                type="submit"
                 variant="filled"
                 disabled={isSubmitting}
               >
@@ -231,6 +311,7 @@ const AuthForm = ({ type }: { type: string }) => {
                 label="Email"
                 control={form.control}
                 placeholder=""
+                type='email'
               />
               <CustomInput
                 name="password"
@@ -252,8 +333,8 @@ const AuthForm = ({ type }: { type: string }) => {
                 />
               </div>
 
-              <LabelButton 
-                type="submit" 
+              <LabelButton
+                type="submit"
                 variant="filled"
                 disabled={isSubmitting}
               >
@@ -289,7 +370,7 @@ const AuthForm = ({ type }: { type: string }) => {
                 />
                 <PasswordStrengthChecker
                   password={form.watch('password')}
-                  isFocused={true} 
+                  isFocused={true}
                 />
               </div>
 
@@ -311,7 +392,7 @@ const AuthForm = ({ type }: { type: string }) => {
                 </p>
               </div>
 
-              <LabelButton 
+              <LabelButton
                 type="submit"
                 variant="filled"
                 disabled={isSubmitting}
@@ -344,12 +425,12 @@ const AuthForm = ({ type }: { type: string }) => {
                 />
                 <PasswordStrengthChecker
                   password={form.watch('password')}
-                  isFocused={false} 
+                  isFocused={false}
                 />
               </div>
 
-              <LabelButton 
-                type="submit" 
+              <LabelButton
+                type="submit"
                 variant="filled"
                 disabled={isSubmitting}
               >
@@ -366,8 +447,8 @@ const AuthForm = ({ type }: { type: string }) => {
                 control={form.control}
                 placeholder=""
               />
-              <LabelButton 
-                type="submit" 
+              <LabelButton
+                type="submit"
                 variant="filled"
                 disabled={isSubmitting}
               >
