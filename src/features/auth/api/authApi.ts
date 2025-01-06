@@ -1,5 +1,5 @@
 import { api } from '@/utils/api';
-import { RegisterPayload, RegisterResponse, ResendOtpPayload, ResendOtpResponse, VerifyOtpPayload, VerifyOtpResponse, LoginPayload, LoginResponse, ResetPasswordPayload, ResetPasswordResponse, ResetPasswordWithTokenPayload } from '../types/auth.types';
+import { RegisterPayload, RegisterResponse, ResendOtpPayload, ResendOtpResponse, VerifyOtpPayload, VerifyOtpResponse, LoginPayload, LoginResponse, ResetPasswordPayload, ResetPasswordResponse, ResetPasswordWithTokenPayload, CheckEmailPayload, CheckEmailResponse, TempTokenPayload, GoogleOAuthResponse } from '../types/auth.types';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -40,6 +40,30 @@ export const authApi = {
     const response = await api.post<ResetPasswordResponse>(
       `${BASE_URL}/api/v1/auth/reset-password/${data.token}`,
       { password: data.password }
+    );
+    return response.data;
+  },
+  checkEmail: async (data: CheckEmailPayload): Promise<CheckEmailResponse> => {
+    const response = await api.post<CheckEmailResponse>(
+      `${BASE_URL}/api/v1/auth/email`,
+      data
+    );
+    return response.data;
+  },
+  googleAuth: {
+    initiate: () => `${BASE_URL}/api/v1/auth/google`,
+    exchangeToken: async (data: TempTokenPayload): Promise<GoogleOAuthResponse> => {
+      const response = await api.post<GoogleOAuthResponse>(
+        `${BASE_URL}/api/v1/auth/google/tokens`,
+        data
+      );
+      return response.data;
+    }
+  },
+  exchangeGoogleToken: async (data: TempTokenPayload): Promise<GoogleOAuthResponse> => {
+    const response = await api.post<GoogleOAuthResponse>(
+      `${BASE_URL}/api/v1/auth/google/tokens`,
+      data
     );
     return response.data;
   },

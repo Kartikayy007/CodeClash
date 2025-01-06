@@ -1,11 +1,22 @@
-import React from 'react'
-import LabelButton from '@/components/ui/LabelButton'
-import { FcGoogle } from 'react-icons/fc'
-import AuthForm from '@/components/AuthForm'
-import Image from 'next/image'
+'use client';
 
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store/store';
+import LabelButton from '@/components/ui/LabelButton';
+import { FcGoogle } from 'react-icons/fc';
+import AuthForm from '@/components/AuthForm';
+import Image from 'next/image';
 
 const Page = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGoogleLogin = () => {
+    setIsLoading(true);
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/google`;
+  };
+
   return (
     <div className="flex flex-col items-start justify-center gap-4 sm:gap-6 sm:p-8 min-w-[320px]">
 
@@ -33,13 +44,20 @@ const Page = () => {
           <div className='flex-1 h-[1px] bg-white'></div>
         </div>
 
-        <LabelButton variant="outlined" className="w-full sm:w-auto">
+        <LabelButton 
+          variant="outlined" 
+          className="w-full sm:w-auto"
+          onClick={handleGoogleLogin}
+          disabled={isLoading}
+        >
           <FcGoogle className="inline-block mr-2 text-2xl sm:text-3xl" />
-          <span className="text-sm sm:text-base">Continue with Google</span>
+          <span className="text-sm sm:text-base">
+            Continue with Google
+          </span>
         </LabelButton>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
