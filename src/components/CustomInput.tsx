@@ -38,6 +38,7 @@ const CustomInput = ({
               <FormControl>
                 <input
                   {...field}
+                  value={String(field.value)}
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => setIsFocused(false)}
                   type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
@@ -49,10 +50,10 @@ const CustomInput = ({
                     rounded-md
                     bg-transparent
                     border-2
-                    ${(name === 'Newpassword' || name === 'confirmPassword') && error ? 'border-[#EF4444]' : 'border-[#D1D1D1]'}
+                    ${(name === 'Newpassword' || name === 'confirmPassword' || name == 'password') && error ? 'border-[#EF4444]' : 'border-[#D1D1D1]'}
                     focus:outline-none
                     focus:ring-2
-                    ${(name === 'Newpassword' || name === 'confirmPassword') && error ? 'focus:ring-[#EF4444] focus:border-[#EF4444]' : 'focus:ring-[#C879EB] focus:border-[#C879EB]'}
+                    ${(name === 'Newpassword' || name === 'confirmPassword' || name == 'password') && error ? 'focus:ring-[#EF4444] focus:border-[#EF4444]' : 'focus:ring-[#C879EB] focus:border-[#C879EB]'}
                     transition-all
                     duration-500
                     text-sm sm:text-base
@@ -80,6 +81,9 @@ const CustomInput = ({
                 </div>
               )}
             </div>
+            {name === 'password'&& error && (
+              <FormMessage className="text-[#EF4444] text-sm mt-1 ml-1" />
+            )}
             {(name === 'Newpassword' || name === 'confirmPassword') && error && (
               <FormMessage className="text-[#EF4444] text-sm mt-1 ml-1" />
             )}

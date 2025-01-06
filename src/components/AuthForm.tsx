@@ -15,6 +15,7 @@ import PasswordStrengthChecker from './PasswordStrengthChecker';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { register } from '@/features/auth/thunks/registerThunk';
+import { useRouter } from 'next/navigation';
 
 interface AuthError {
   message: string;
@@ -28,9 +29,10 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
     defaultValues: {
       email: "",
       password: "",
+      username: "",
       Newpassword: "",
       confirmPassword: "",
-      terms: false
+      terms: false,
     },
     mode: "onChange"
   });
@@ -60,9 +62,49 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
   };
 
   const onError = (errors: FieldErrors<z.infer<typeof AuthFormSchema>>) => {
-    console.log('Form validation errors:', errors);
+    if (type === 'register') {
 
-    // Check for empty fields first
+      if (!form.getValues('email') && !form.getValues('username') && !form.getValues('password')) {
+        toast.error(
+          'Required Fields',
+          'Please fill in all required fields'
+        );
+        return;
+      }
+
+      if (errors.email) {
+        toast.error(
+          'Invalid Email',
+          errors.email.message || 'Please enter a valid email address'
+        );
+        return;
+      }
+
+      if (!form.getValues('terms')) {
+        toast.error(
+          'Terms Required',
+          'Please accept the Terms and Conditions to continue'
+        );
+        return;
+      }
+  
+      if (errors.username) {
+        toast.error(
+          'Invalid Username',
+          'Username must be at least 3 characters'
+        );
+        return;
+      }
+  
+      if (errors.password) {
+        toast.error(
+          'Invalid Password',
+          'Password must meet all requirements'
+        );
+        return;
+      }
+    }
+
     if (type === 'login' && (!form.getValues('email') || !form.getValues('password'))) {
       toast.error(
         'Fields Cant be Empty',
@@ -71,7 +113,7 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
       return;
     }
 
-    if (type === 'register' && (!form.getValues('email') || !form.getValues('Newpassword') || !form.getValues('confirmPassword'))) {
+    if (type === 'register' && (!form.getValues('email') || !form.getValues('username') || !form.getValues('password'))) {
       toast.error(
         'Fields Cant be Empty',
         'Please fill in all required fields'
@@ -94,8 +136,7 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
       );
       return;
     }
-    
-    // Original validation errors
+
     if (errors.email) {
       toast.error(
         'Invalid email',
@@ -103,24 +144,19 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
       );
       return;
     }
-    if (errors.Newpassword) {
+    if (errors.username) {
+      toast.error(
+        'Invalid Username',
+        errors.username.message || 'Username is required.'
+      );
+      return;
+    }
+    if (errors.password) {
       toast.error(
         'Invalid Password',
         'Password must be at least 8 characters, include uppercase, number, and special character'
       );
       return;
-    }
-    if (errors.confirmPassword) {
-      toast.error(
-        'Password Mismatch',
-        errors.confirmPassword.message || 'Passwords do not match. Please try again.'
-      );
-    }
-    if (errors.terms) {
-      toast.error(
-        'Terms & Conditions Required',
-        'Please accept the Terms and Conditions to continue'
-      );
     }
   };
 
@@ -194,30 +230,27 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                 label="Email"
                 control={form.control}
                 placeholder=""
-                type="email"
+                type="text"
+              />
+              <CustomInput
+                name="username"
+                label="Username"
+                control={form.control}
+                placeholder=""
+                type="text"
               />
               <div className="relative">
                 <CustomInput
-                  name="Newpassword"
-                  label="New Password"
-                  control={form.control}
-                  placeholder=""
-                  type="password"
-                  showStrengthChecker={true}
-                />
-              </div>
-              <div className="relative">
-                <CustomInput
-                  name="confirmPassword"
-                  label="Confirm Password"
+                  name="password"
+                  label="Password"
                   control={form.control}
                   placeholder=""
                   type="password"
                   showStrengthChecker={true}
                 />
                 <PasswordStrengthChecker
-                  password={form.watch('Newpassword')}
-                  isFocused={false} 
+                  password={form.watch('password')}
+                  isFocused={true} 
                 />
               </div>
 
@@ -271,7 +304,7 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                   showStrengthChecker={true}
                 />
                 <PasswordStrengthChecker
-                  password={form.watch('Newpassword')}
+                  password={form.watch('password')}
                   isFocused={false} 
                 />
               </div>
