@@ -19,7 +19,6 @@ const LabelButton = ({ children, className, variant = 'filled', ...props }: Prop
       text-[20px]
       font-[600]`,
     light: `
-      bg-transparent
       text-[#000000]
       text-[20px]
       font-[550]

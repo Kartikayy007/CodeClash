@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { z } from "zod";
 import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,19 +17,18 @@ import { AppDispatch } from '@/store/store';
 import { register } from '@/features/auth/thunks/registerThunk';
 import { useRouter } from 'next/navigation';
 import { login } from '@/features/auth/thunks/loginThunk';
+import { resetPassword } from '@/features/auth/thunks/resetPasswordThunk';
 
-interface AuthError {
-  message: string;
-  code?: string;
-}
-
-const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'verify' | 'forgot-password' | 'reset-password' }) => {
+const AuthForm = ({ type }: { type: string }) => {
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof AuthFormSchema>>({
     resolver: zodResolver(AuthFormSchema),
     defaultValues: {
       email: "",
-      password: "",
+      password: type === 'forgot-password' ? undefined : "",
       username: "",
       Newpassword: "",
       confirmPassword: "",
@@ -40,17 +39,97 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
 
   const onSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
     try {
-      const result = AuthFormSchema.safeParse(values);
-
-      if (!result.success) {
-        result.error.errors.forEach(() => {
+      if (type === 'login') {
+        if (!values.email || !values.password) {
           toast.error(
-            'Validation Error',
-            'Please enter a valid email address'
+            'Required Fields',
+            'Please fill in all required fields'
+          );
+          return;
+        }
+
+        setIsSubmitting(true);
+        const loginPayload = {
+          email: values.email,
+          password: values.password,
+        };
+
+        const result = await dispatch(login(loginPayload)).unwrap();
+
+        if (result.success) {
+          toast.success(
+            'Login Successful',
+            'Welcome back!'
+          );
+          router.push('/dashboard');
+        }
+      } else if (type === 'register') {
+        // if (!values.email || !values.username || !values.password) {
+        //   toast.error(
+        //     'Required Fields',
+        //     'Please fill in all required fields'
+        //   );
+        //   return;
+        // }
+
+        // if (!values.terms) {
+        //   toast.error(
+        //     'Terms Required',
+        //     'Please accept the Terms and Conditions to continue'
+        //   );
+        //   return;
+        // }
+
+        setIsSubmitting(true);
+
+        if (!values.username) {
+          toast.error('Username Required', 'Please enter a username');
+          return;
+        }
+
+        const registrationPayload = {
+          email: values.email,
+          username: values.username,
+          password: values.password,
+        };
+
+        const result = await dispatch(register(registrationPayload)).unwrap();
+        if (result.success) {
+          localStorage.setItem('registrationEmail', values.email);
+          toast.success(
+            'Registration Successful',
+            'Please verify your email'
           );
           router.push('/verify');
         }
-      } else {
+      }
+
+
+      else if (type === 'forgot-password') {
+        if (!values.email) {
+          toast.error('Required Field', 'Please enter your email address');
+          return;
+        }
+
+        setIsSubmitting(true);
+        console.log('Sending reset password request for:', values.email);
+
+        const result = await dispatch(resetPassword({ email: values.email })).unwrap();
+
+        console.log('Reset password response:', result);
+
+        if (result.success) {
+          toast.success(
+            'Reset Link Sent',
+            'Please check your email for the password reset link'
+          );
+          setResetLinkSent(true);
+          setTimeLeft(30); // Start 30 sec countdown
+          onResetLinkSent?.(values.email);
+        }
+      }
+
+      else {
         setIsSubmitting(true);
         if (type === 'login') {
           console.log('Login payload:', {
@@ -68,20 +147,35 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
           });
         }
       }
+
+
     } catch (error: any) {
-      console.error('Submission error:', error);
-      toast.error(
-        'Submission Failed',
-        error.message || 'Something went wrong'
-      );
+      const errorMessage = error?.response?.data?.message || error.message;
+
+      if (errorMessage.includes('Invalid password')) {
+        toast.error(
+          'Login Failed',
+          'Incorrect password. Retry or reset your password.'
+        );
+      } else if (errorMessage.includes('User not found')) {
+        toast.error(
+          'Login Failed',
+          'No account found with this email.'
+        );
+      } else {
+        toast.error(
+          'Login Failed',
+          errorMessage || 'Something went wrong'
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const onError = (errors: FieldErrors<z.infer<typeof AuthFormSchema>>) => {
-    
-    
+
+
     if (type === 'login') {
 
       if (errors.password) {
@@ -113,7 +207,7 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
         return;
       }
 
-      
+
     }
 
 
@@ -257,16 +351,21 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                 type="password"
               />
 
-              <div className='flex justify-between items-center sm:items-center text-[#D1D1D1] gap-4 sm:gap-0'>
-                <button className='text-base sm:text-lg'>
+              <div className="flex justify-between items-center">
+                <Link
+                  href="/forgot-password"
+                  className="text-base sm:text-lg text-[#D1D1D1] hover:opacity-80 transition-opacity"
+                >
                   Forgot Password?
-                </button>
+                </Link>
+                <div className="flex items-center gap-2">
+                  <CustomCheckbox
+                    name="rememberMe"
+                    label="Remember me"
+                    control={form.control}
+                  />
+                </div>
 
-                <CustomCheckbox
-                  name="rememberMe"
-                  label="Remember me"
-                  control={form.control}
-                />
               </div>
 
               <LabelButton
@@ -305,7 +404,7 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                   showStrengthChecker={true}
                 />
                 <PasswordStrengthChecker
-                  password={form.watch('password')}
+                  password={form.watch('password') ?? ''}
                   isFocused={true}
                 />
               </div>
@@ -360,8 +459,8 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                   showStrengthChecker={true}
                 />
                 <PasswordStrengthChecker
-                  password={form.watch('password')}
-                  isFocused={false}
+                  password={form.watch('password') ?? ''}
+                  isFocused={true}
                 />
               </div>
 
@@ -376,21 +475,34 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
           )}
 
           {type === 'forgot-password' && (
-            <>
-              <CustomInput
-                name="email"
-                label="Email"
-                control={form.control}
-                placeholder=""
-              />
+            <div className="w-full space-y-4 sm:space-y-6">
+              {!resetLinkSent && (
+                <CustomInput
+                  name="email"
+                  label="Email"
+                  control={form.control}
+                  placeholder=""
+                  type="text"
+                />
+              )}
               <LabelButton
-                type="submit"
+                type='submit'
                 variant="filled"
-                disabled={isSubmitting}
+                disabled={isSubmitting || timeLeft > 0}
+                onClick={resetLinkSent ? () => form.handleSubmit(onSubmit)() : undefined}
               >
-                {isSubmitting ? 'Processing...' : 'Send Reset Link'}
+                {isSubmitting 
+                  ? 'Processing...' 
+                  : resetLinkSent 
+                    ? 'Resend Link'
+                    : 'Send Reset Link'}
               </LabelButton>
-            </>
+              <div className='text-center'>
+                <span className="text-[#E7E7E7]">
+                  Resend IN {timeLeft}s
+                </span>
+              </div>
+            </div>
           )}
         </form>
       </Form>

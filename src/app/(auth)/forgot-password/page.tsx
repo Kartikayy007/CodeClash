@@ -1,9 +1,14 @@
-import React from 'react'
+'use client';
+
+import React, { useState } from 'react'
 import Image from 'next/image'
 import { BackButton } from '@/components/ui/BackButton'
 import AuthForm from '@/components/AuthForm'
 
-const page = () => {
+const Page = () => {
+  const [isResetLinkSent, setIsResetLinkSent] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+
   return (
     <div className="flex flex-col items-start justify-center gap-4 sm:gap-6 p-4 sm:p-8 min-w-[320px]">
       <Image
@@ -16,22 +21,30 @@ const page = () => {
       />
 
       <div className="w-full max-w-md sm:max-w-none">
-        <BackButton href="/login" />
+        <BackButton href="/get-started" />
 
         <div className='space-y-2 mt-4'>
-          <h1 className='text-lg sm:text-2xl lg:text-3xl font-bold text-white text-left'>
-            Reset Your Password
+          <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold text-white text-left'>
+          Reset Your Password
           </h1>
 
-          <p className='text-sm sm:text-base text-white w-full sm:w-96 text-left'>
-            Enter the email associated with your account, and we&apos;ll send you a link to reset your password.
+          <p className='text-sm sm:text-base text-white w-96 text-left'>
+          Enter the email associated with your account, and we'll send you a link to reset your password.
           </p>
         </div>
       </div>
 
-      <AuthForm type='forgot-password' />
+      <div className="w-full max-w-[90%] sm:max-w-md mx-auto">
+        <AuthForm
+          type='forgot-password'
+          onResetLinkSent={(email: string) => {
+            setIsResetLinkSent(true);
+            setUserEmail(email);
+          }}
+        />
+      </div>
     </div>
   )
 }
 
-export default page
+export default Page
