@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import { login } from '@/features/auth/thunks/loginThunk';
 import { resetPassword } from '@/features/auth/thunks/resetPasswordThunk';
 import { resetPasswordWithToken } from '@/features/auth/thunks/resetPasswordWithTokenThunk';
+import { checkEmail } from '@/features/auth/thunks/checkEmailThunk';
 
 interface AuthFormProps {
   type: string;
@@ -31,7 +32,7 @@ const AuthForm = ({
   token,
   onResetLinkSent 
 }: AuthFormProps) => {
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const [resetLinkSent, setResetLinkSent] = useState(false);
@@ -60,6 +61,16 @@ const AuthForm = ({
     },
     mode: "onChange"
   });
+
+  useEffect(() => {
+    if ((type === 'login' || type === 'register')) {
+      const savedEmail = localStorage.getItem('enteredEmail');
+      if (savedEmail) {
+        form.setValue('email', savedEmail);
+        localStorage.removeItem('enteredEmail'); // Clear after using
+      }
+    }
+  }, [type, form]);
 
   const onSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
     try {
@@ -160,10 +171,7 @@ const AuthForm = ({
           );
           router.push('/verify');
         }
-      }
-
-
-      else if (type === 'forgot-password') {
+      } else if (type === 'forgot-password') {
         if (!values.email) {
           toast.error('Required Field', 'Please enter your email address');
           return;
@@ -182,12 +190,33 @@ const AuthForm = ({
             'Please check your email for the password reset link'
           );
           setResetLinkSent(true);
-          setTimeLeft(30); // Start 30 sec countdown
+          setTimeLeft(30); 
           onResetLinkSent?.(values.email);
         }
-      }
+      } else if (type === 'get-started') {
+        if (!values.email) {
+          toast.error('Required Field', 'Please enter your email address');
+          return;
+        }
 
-      else {
+        setIsSubmitting(true);
+        const result = await dispatch(checkEmail({ email: values.email })).unwrap();
+
+        if (result.success) {
+          localStorage.setItem('enteredEmail', values.email); 
+          switch(result.data?.flow) {
+            case 1: 
+              router.push('/register');
+              break;
+            case 2:
+              router.push('/register');
+              break;
+            case 3:
+              router.push('/login');
+              break;
+          }
+        }
+      } else {
         setIsSubmitting(true);
         if (type === 'login') {
           console.log('Login payload:', {
@@ -205,36 +234,11 @@ const AuthForm = ({
           });
         }
       }
-
-
     } catch (error: any) {
-      console.error('Reset password error:', error);
-      const errorMessage = error?.response?.data?.message || error.message;
-
-      if (errorMessage.includes('Invalid password')) {
-        toast.error(
-          'Login Failed',
-          'Incorrect password. Retry or reset your password.'
-        );
-      } else if (errorMessage.includes('User not found')) {
-        toast.error(
-          'Login Failed',
-          'No account found with this email.'
-        );
-      } else {
-        toast.error(
-          'Login Failed',
-          errorMessage || 'Something went wrong'
-        );
-      }
-
-      if (errorMessage.includes('User not found')) {
-        toast.error('Reset Failed', 'No account found with this email');
-      } else if (errorMessage.includes('30 sec')) {
-        toast.error('Too Many Requests', 'Please wait before requesting another reset');
-      } else {
-        toast.error('Reset Failed', errorMessage || 'Something went wrong');
-      }
+      toast.error(
+        'Error',
+        error.message || 'Something went wrong'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -396,7 +400,7 @@ const AuthForm = ({
                 variant="filled"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Processing...' : 'Get Started'}
+                Get Started
               </LabelButton>
             </>
           )}
@@ -440,7 +444,7 @@ const AuthForm = ({
                 variant="filled"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Processing...' : 'Login'}
+                Login
               </LabelButton>
             </>
           )}
@@ -499,7 +503,7 @@ const AuthForm = ({
                 variant="filled"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Processing...' : 'Sign Up'}
+                Sign Up
               </LabelButton>
             </>
           )}
@@ -536,7 +540,7 @@ const AuthForm = ({
                 variant="filled"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Processing...' : 'Reset Password'}
+                Reset Password
               </LabelButton>
             </>
           )}
@@ -565,9 +569,7 @@ const AuthForm = ({
                 disabled={isSubmitting || timeLeft > 0}
                 onClick={resetLinkSent ? () => form.handleSubmit(onSubmit)() : undefined}
               >
-                {isSubmitting 
-                  ? 'Processing...' 
-                  : resetLinkSent 
+                {resetLinkSent 
                     ? 'Resend Link'
                     : 'Send Reset Link'}
               </LabelButton>
