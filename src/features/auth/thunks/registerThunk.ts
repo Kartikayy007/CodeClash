@@ -6,14 +6,14 @@ export const register = createAsyncThunk<RegisterResponse, RegisterPayload>(
   'auth/register',
   async (credentials, { rejectWithValue }) => {
     try {
-      console.log('Register thunk called with:', credentials);
       const response = await authApi.register(credentials);
-      console.log('Register API response:', response);
-      localStorage.setItem('token', response.token);
+      if (!response.success) {
+        return rejectWithValue(response.message);
+      }
       return response;
     } catch (error: any) {
-      console.error('Register error:', error);
-      return rejectWithValue(error.response?.data?.message || 'Registration failed');
+      const message = error.response?.data?.message || 'Registration failed';
+      return rejectWithValue(message);
     }
   }
 );
