@@ -1,5 +1,5 @@
 import { api } from '@/utils/api';
-import { RegisterPayload, RegisterResponse, ResendOtpPayload, ResendOtpResponse, VerifyOtpPayload, VerifyOtpResponse } from '../types/auth.types';
+import { RegisterPayload, RegisterResponse, ResendOtpPayload, ResendOtpResponse, VerifyOtpPayload, VerifyOtpResponse, LoginPayload, LoginResponse } from '../types/auth.types';
 
 const BASE_URL = 'https://goyalshivansh.me';
 
@@ -18,6 +18,13 @@ export const authApi = {
   resendOtp: async (data: ResendOtpPayload): Promise<ResendOtpResponse> => {
     const response = await api.post<ResendOtpResponse>(
       `${BASE_URL}/api/v1/auth/resend-otp`,
+      data
+    );
+    return response.data;
+  },
+  login: async (data: LoginPayload): Promise<LoginResponse> => {
+    const response = await api.post<LoginResponse>(
+      `${BASE_URL}/api/v1/auth/login`,
       data
     );
     return response.data;

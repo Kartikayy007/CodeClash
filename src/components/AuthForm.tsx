@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { register } from '@/features/auth/thunks/registerThunk';
 import { useRouter } from 'next/navigation';
+import { login } from '@/features/auth/thunks/loginThunk';
 
 interface AuthError {
   message: string;
@@ -47,21 +48,75 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
             'Validation Error',
             'Please enter a valid email address'
           );
-        });
-        return;
+          router.push('/verify');
+        }
+      } else {
+        setIsSubmitting(true);
+        if (type === 'login') {
+          console.log('Login payload:', {
+            email: values.email,
+            password: values.password
+          });
+        } else if (type === 'reset-password') {
+          console.log('Reset password payload:', {
+            password: values.Newpassword,
+            confirmPassword: values.confirmPassword
+          });
+        } else if (type === 'forgot-password') {
+          console.log('Forgot password payload:', {
+            email: values.email
+          });
+        }
       }
-      console.log(result.data);
-    } catch (error: unknown) {
-      const authError = error as AuthError;
-      console.error(authError.message);
+    } catch (error: any) {
+      console.error('Submission error:', error);
       toast.error(
-        'Error',
-        authError.message || 'Something went wrong'
+        'Submission Failed',
+        error.message || 'Something went wrong'
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const onError = (errors: FieldErrors<z.infer<typeof AuthFormSchema>>) => {
+    
+    
+    if (type === 'login') {
+
+      if (errors.password) {
+        toast.error(
+          'Invalid Password',
+          'Password must meet all requirements'
+        );
+        return;
+      }
+      if (!form.getValues('email') && !form.getValues('password')) {
+        toast.error(
+          'Required Fields',
+          'Please fill in all required fields'
+        );
+        return;
+      }
+      if (!form.getValues('password')) {
+        toast.error(
+          'Required Fields',
+          'Please fill in all required fields'
+        );
+        return;
+      }
+      if (errors.username) {
+        toast.error(
+          'Invalid Username',
+          'Username must be at least 3 characters'
+        );
+        return;
+      }
+
+      
+    }
+
+
     if (type === 'register') {
 
       if (!form.getValues('email') && !form.getValues('username') && !form.getValues('password')) {
@@ -87,7 +142,7 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
         );
         return;
       }
-  
+
       if (errors.username) {
         toast.error(
           'Invalid Username',
@@ -95,7 +150,7 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
         );
         return;
       }
-  
+
       if (errors.password) {
         toast.error(
           'Invalid Password',
@@ -175,8 +230,8 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                 control={form.control}
                 placeholder=""
               />
-              <LabelButton 
-                type="submit" 
+              <LabelButton
+                type="submit"
                 variant="filled"
                 disabled={isSubmitting}
               >
@@ -192,6 +247,7 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                 label="Email"
                 control={form.control}
                 placeholder=""
+                type='email'
               />
               <CustomInput
                 name="password"
@@ -213,8 +269,8 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                 />
               </div>
 
-              <LabelButton 
-                type="submit" 
+              <LabelButton
+                type="submit"
                 variant="filled"
                 disabled={isSubmitting}
               >
@@ -250,7 +306,7 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                 />
                 <PasswordStrengthChecker
                   password={form.watch('password')}
-                  isFocused={true} 
+                  isFocused={true}
                 />
               </div>
 
@@ -272,7 +328,7 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                 </p>
               </div>
 
-              <LabelButton 
+              <LabelButton
                 type="submit"
                 variant="filled"
                 disabled={isSubmitting}
@@ -305,12 +361,12 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                 />
                 <PasswordStrengthChecker
                   password={form.watch('password')}
-                  isFocused={false} 
+                  isFocused={false}
                 />
               </div>
 
-              <LabelButton 
-                type="submit" 
+              <LabelButton
+                type="submit"
                 variant="filled"
                 disabled={isSubmitting}
               >
@@ -327,8 +383,8 @@ const AuthForm = ({ type }: { type: 'login' | 'register' | 'get-started' | 'veri
                 control={form.control}
                 placeholder=""
               />
-              <LabelButton 
-                type="submit" 
+              <LabelButton
+                type="submit"
                 variant="filled"
                 disabled={isSubmitting}
               >
