@@ -1,9 +1,14 @@
-import React from 'react'
+'use client';
+
+import React, { useState } from 'react'
 import Image from 'next/image'
 import { BackButton } from '@/components/ui/BackButton'
 import AuthForm from '@/components/AuthForm'
 
-const page = () => {
+const Page = () => {
+  const [isResetLinkSent, setIsResetLinkSent] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+
   return (
     <div className="flex flex-col items-start justify-center gap-4 sm:gap-6  sm:p-8 min-w-[320px]">
 
@@ -16,23 +21,43 @@ const page = () => {
         priority
       />
 
-      <div className="w-full max-w-md sm:max-w-none">
+      <div className="w-full max-w-[90%] sm:max-w-md mx-auto">
         <BackButton href="/get-started" />
 
-        <div className='space-y-2 mt-4'>
-          <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold text-white text-left'>
-          Reset Your Password
+        <div className='space-y-4 mt-4 sm:mt-6'>
+          <h1 className='text-lg sm:text-xl lg:text-2xl font-bold text-white text-left'>
+            Reset Your Password
           </h1>
 
-          <p className='text-sm sm:text-base text-white w-96 text-left'>
-          Enter the email associated with your account, and we'll send you a link to reset your password.
-          </p>
+          {isResetLinkSent ? (
+            <div className='space-y-11 sm:space-y-8'>
+              <p className='text-sm sm:text-base text-white text-left'>
+                We've sent a password reset link to xxx@gmail.com. Click the link to reset your password.
+                If you don't see it in your inbox, check your spam folder.
+              </p>
+              <p className='text-xs sm:text-sm text-[#D1D1D1] text-left'>
+                Didn't Receive Email?
+              </p>
+            </div>
+          ) : (
+            <p className='text-xs sm:text-sm text-[#D1D1D1] text-left'>
+              Enter the email associated with your account, and we'll send you a link to reset your password.
+            </p>
+          )}
         </div>
       </div>
 
-      <AuthForm type='forgot-password' />
+      <div className="w-full max-w-[90%] sm:max-w-md mx-auto">
+        <AuthForm
+          type='forgot-password'
+          onResetLinkSent={(email: string) => {
+            setIsResetLinkSent(true);
+            setUserEmail(email);
+          }}
+        />
+      </div>
     </div>
   )
 }
 
-export default page
+export default Page
