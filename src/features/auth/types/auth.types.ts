@@ -78,3 +78,30 @@ export interface ResetPasswordWithTokenPayload {
   token: string;
   password: string;
 }
+
+export interface CheckEmailPayload {
+  email: string;
+}
+
+export interface CheckEmailResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    flow: 1 | 2 | 3;
+  }
+}
+
+export interface GoogleOAuthResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    tokens: {
+      accessToken: string;
+      refreshToken: string;
+    }
+  }
+}
+
+export interface TempTokenPayload {
+  token: string;
+}
