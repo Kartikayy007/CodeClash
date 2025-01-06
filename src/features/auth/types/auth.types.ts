@@ -48,3 +48,19 @@ export interface ResendOtpResponse {
   success: boolean;
   message: string;
 }
+
+export interface LoginPayload {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    tokens: {
+      accessToken: string;
+      refreshToken: string;
+    }
+  }
+}
