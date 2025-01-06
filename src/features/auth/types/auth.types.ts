@@ -73,3 +73,8 @@ export interface ResetPasswordResponse {
   success: boolean;
   message: string;
 }
+
+export interface ResetPasswordWithTokenPayload {
+  token: string;
+  password: string;
+}
