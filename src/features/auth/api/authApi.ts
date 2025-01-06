@@ -1,7 +1,7 @@
 import { api } from '@/utils/api';
-import { RegisterPayload, RegisterResponse, ResendOtpPayload, ResendOtpResponse, VerifyOtpPayload, VerifyOtpResponse, LoginPayload, LoginResponse, ResetPasswordPayload, ResetPasswordResponse } from '../types/auth.types';
+import { RegisterPayload, RegisterResponse, ResendOtpPayload, ResendOtpResponse, VerifyOtpPayload, VerifyOtpResponse, LoginPayload, LoginResponse, ResetPasswordPayload, ResetPasswordResponse, ResetPasswordWithTokenPayload } from '../types/auth.types';
 
-const BASE_URL = 'https://goyalshivansh.me';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const authApi = {
   register: async (data: RegisterPayload): Promise<RegisterResponse> => {
@@ -33,6 +33,13 @@ export const authApi = {
     const response = await api.post<ResetPasswordResponse>(
       `${BASE_URL}/api/v1/auth/reset-password`,
       data
+    );
+    return response.data;
+  },
+  resetPasswordWithToken: async (data: ResetPasswordWithTokenPayload): Promise<ResetPasswordResponse> => {
+    const response = await api.post<ResetPasswordResponse>(
+      `${BASE_URL}/api/v1/auth/reset-password/${data.token}`,
+      { password: data.password }
     );
     return response.data;
   },

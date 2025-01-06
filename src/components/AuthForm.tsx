@@ -18,8 +18,21 @@ import { register } from '@/features/auth/thunks/registerThunk';
 import { useRouter } from 'next/navigation';
 import { login } from '@/features/auth/thunks/loginThunk';
 import { resetPassword } from '@/features/auth/thunks/resetPasswordThunk';
+import { resetPasswordWithToken } from '@/features/auth/thunks/resetPasswordWithTokenThunk';
 
-const AuthForm = ({ type }: { type: string }) => {
+interface AuthFormProps {
+  type: string;
+  token?: string;
+  onResetLinkSent?: (email: string) => void;
+}
+
+const AuthForm = ({ 
+  type, 
+  onResetLinkSent 
+}: { 
+  type: string;
+  onResetLinkSent?: (email: string) => void;
+}) => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
@@ -39,6 +52,10 @@ const AuthForm = ({ type }: { type: string }) => {
 
   const onSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
     try {
+
+
+
+
       if (type === 'login') {
         if (!values.email || !values.password) {
           toast.error(
@@ -341,7 +358,7 @@ const AuthForm = ({ type }: { type: string }) => {
                 label="Email"
                 control={form.control}
                 placeholder=""
-                type='email'
+                type='text'
               />
               <CustomInput
                 name="password"
@@ -476,15 +493,22 @@ const AuthForm = ({ type }: { type: string }) => {
 
           {type === 'forgot-password' && (
             <div className="w-full space-y-4 sm:space-y-6">
-              {!resetLinkSent && (
+              <div className='text-center'>
+                
+              </div>
+              {!resetLinkSent ? (
                 <CustomInput
                   name="email"
                   label="Email"
                   control={form.control}
                   placeholder=""
                   type="text"
-                />
-              )}
+                /> ) : (
+                  <span className="text-[#E7E7E7]">
+                  You can request a resend after {timeLeft}s
+                </span>
+                )
+              }
               <LabelButton
                 type='submit'
                 variant="filled"
@@ -497,11 +521,7 @@ const AuthForm = ({ type }: { type: string }) => {
                     ? 'Resend Link'
                     : 'Send Reset Link'}
               </LabelButton>
-              <div className='text-center'>
-                <span className="text-[#E7E7E7]">
-                  Resend IN {timeLeft}s
-                </span>
-              </div>
+              
             </div>
           )}
         </form>

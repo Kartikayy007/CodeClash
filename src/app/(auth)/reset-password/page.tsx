@@ -1,9 +1,23 @@
-import React from 'react'
-import Image from 'next/image'
-import { BackButton } from '@/components/ui/BackButton'
-import AuthForm from '@/components/AuthForm'
+'use client';
 
-const page = () => {
+import React, { useEffect } from 'react';
+import Image from 'next/image';
+import { BackButton } from '@/components/ui/BackButton';
+import AuthForm from '@/components/AuthForm';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+
+const Page = () => {
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!token) {
+      router.push('/login');
+    }
+  }, [token, router]);
+
   return (
     <div className="flex flex-col items-start justify-center gap-4 sm:gap-6 p-4 sm:p-8 min-w-[320px]">
       <Image
@@ -29,9 +43,9 @@ const page = () => {
         </div>
       </div>
 
-      <AuthForm type='reset-password' />
+      <AuthForm type='reset-password' token={token || ''} />
     </div>
   )
 }
 
-export default page
+export default Page;
