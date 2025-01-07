@@ -7,10 +7,10 @@ import AuthForm from '@/components/AuthForm'
 
 const Page = () => {
   const [isResetLinkSent, setIsResetLinkSent] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
 
   return (
-    <div className="flex flex-col items-start justify-center gap-4 sm:gap-6 p-4 sm:p-8 min-w-[320px]">
+    <div className="flex flex-col items-start justify-center gap-4 sm:gap-6  sm:p-8 min-w-[320px]">
+
       <Image
         src='/logo.svg'
         alt="logo"
@@ -28,23 +28,32 @@ const Page = () => {
           Reset Your Password
           </h1>
 
-          <p className='text-sm sm:text-base text-white w-96 text-left'>
-          Enter the email associated with your account, and we'll send you a link to reset your password.
-          </p>
+          {isResetLinkSent ? (
+            <div className='space-y-11 sm:space-y-8'>
+              <p className='text-sm sm:text-base text-white text-left'>
+                We've sent a password reset link to xxx@gmail.com. Click the link to reset your password.
+                If you don't see it in your inbox, check your spam folder.
+              </p>
+              <p className='text-xs sm:text-sm text-[#D1D1D1] text-left'>
+                Didn't Receive Email?
+              </p>
+            </div>
+          ) : (
+            <p className='text-xs sm:text-sm text-[#D1D1D1] text-left'>
+              Enter the email associated with your account, and we'll send you a link to reset your password.
+            </p>
+          )}
         </div>
       </div>
 
       <div className="w-full max-w-[90%] sm:max-w-md mx-auto">
         <AuthForm
           type='forgot-password'
-          onResetLinkSent={(email: string) => {
-            setIsResetLinkSent(true);
-            setUserEmail(email);
-          }}
+          onResetLinkSent={() => setIsResetLinkSent(true)}
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

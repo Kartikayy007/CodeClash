@@ -1,15 +1,16 @@
 import * as React from 'react'
 import { Control } from 'react-hook-form';
-import { z } from 'zod';
-import { AuthFormSchema } from '@/lib/utils';
 
-interface CustomCheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface CustomCheckboxProps<T extends FieldValues> extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   name: string;
-  control: Control<z.infer<typeof AuthFormSchema>>;
+  control: Control<any>;
 }
 
-const CustomCheckbox = ({ label, ...props }: CustomCheckboxProps) => {
+const CustomCheckbox = <T extends FieldValues>({ 
+  label, 
+  ...props 
+}: CustomCheckboxProps<T>) => {
   return (
     <label className="flex items-center space-x-2 cursor-pointer">
       <div className="relative">
@@ -42,7 +43,7 @@ const CustomCheckbox = ({ label, ...props }: CustomCheckboxProps) => {
       </div>
       {label && <span className="text-white text-sm">{label}</span>}
     </label>
-  )
-}
+  );
+};
 
-export default CustomCheckbox
+export default CustomCheckbox;

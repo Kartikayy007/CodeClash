@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { LoginPayload, LoginResponse } from '../types/auth.types';
 import { authApi } from '../api/authApi';
+import { AuthApiError } from '@/types/error.types';
 
 export const login = createAsyncThunk<LoginResponse, LoginPayload>(
   'auth/login',
@@ -12,8 +13,9 @@ export const login = createAsyncThunk<LoginResponse, LoginPayload>(
         localStorage.setItem('refreshToken', response.data.tokens.refreshToken);
       }
       return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Login failed');
+    } catch (error: unknown) {
+      const apiError = error as AuthApiError;
+      return rejectWithValue(apiError.response?.data?.message || 'Login failed');
     }
   }
 );

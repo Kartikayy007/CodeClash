@@ -1,16 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { exchangeGoogleToken } from '@/features/auth/thunks/googleAuthThunk';
 import Image from 'next/image';
+import { AuthApiError } from '@/types/error.types';
 
-const OAuthCallback = () => {
+const TokenExchange = () => {
+  const searchParams = useSearchParams();
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -30,9 +31,10 @@ const OAuthCallback = () => {
           localStorage.setItem('refreshToken', result.data.tokens.refreshToken);
           router.push('/dashboard');
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('Token exchange error:', error);
-        setError(error.message || 'Authentication failed');
+        const authError = error as AuthApiError;
+        setError(authError.message || 'Authentication failed');
         setTimeout(() => router.push('/login'), 3000);
       }
     };
@@ -41,7 +43,7 @@ const OAuthCallback = () => {
   }, [searchParams, dispatch, router]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-900">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <Image
         src='/logo.svg'
         alt="logo"
@@ -63,6 +65,20 @@ const OAuthCallback = () => {
         )}
       </div>
     </div>
+  );
+};
+
+const OAuthCallback = () => {
+  return (
+    <Suspense 
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white" />
+        </div>
+      }
+    >
+      <TokenExchange />
+    </Suspense>
   );
 };
 

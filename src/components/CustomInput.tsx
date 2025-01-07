@@ -89,7 +89,7 @@ const CustomInput = ({
             )}
             {showStrengthChecker && (name === 'Newpassword') && (
               <PasswordStrengthChecker
-                password={field.value}
+                password={String(field.value || '')}
                 isFocused={isFocused}
               />
             )}

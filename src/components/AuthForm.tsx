@@ -20,6 +20,7 @@ import { login } from '@/features/auth/thunks/loginThunk';
 import { resetPassword } from '@/features/auth/thunks/resetPasswordThunk';
 import { resetPasswordWithToken } from '@/features/auth/thunks/resetPasswordWithTokenThunk';
 import { checkEmail } from '@/features/auth/thunks/checkEmailThunk';
+import { ApiError } from '@/types/error.types';
 
 interface AuthFormProps {
   type: string;
@@ -34,6 +35,19 @@ const AuthForm = ({
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
+  const [resetLinkSent, setResetLinkSent] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+  const [timeLeft, setTimeLeft] = useState(0);
+
+  useEffect(() => {
+    if (timeLeft === 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
 
   const form = useForm<z.infer<typeof AuthFormSchema>>({
     resolver: zodResolver(AuthFormSchema),
@@ -191,33 +205,10 @@ const AuthForm = ({
         }
       }
     } catch (error: any) {
-      console.error('Reset password error:', error);
-      const errorMessage = error?.response?.data?.message || error.message;
-
-      if (errorMessage.includes('Invalid password')) {
-        toast.error(
-          'Login Failed',
-          'Incorrect password. Retry or reset your password.'
-        );
-      } else if (errorMessage.includes('User not found')) {
-        toast.error(
-          'Login Failed',
-          'No account found with this email.'
-        );
-      } else {
-        toast.error(
-          'Login Failed',
-          errorMessage || 'Something went wrong'
-        );
-      }
-
-      if (errorMessage.includes('User not found')) {
-        toast.error('Reset Failed', 'No account found with this email');
-      } else if (errorMessage.includes('30 sec')) {
-        toast.error('Too Many Requests', 'Please wait before requesting another reset');
-      } else {
-        toast.error('Reset Failed', errorMessage || 'Something went wrong');
-      }
+      toast.error(
+        'Error',
+        error.message || 'Something went wrong'
+      );
     } finally {
       setIsSubmitting(false);
     }
