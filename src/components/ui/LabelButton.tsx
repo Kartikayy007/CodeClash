@@ -5,15 +5,23 @@ interface LabelButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
   variant?: 'filled' | 'outlined' | 'light';
 }
 
-const LabelButton = ({ children, className, variant = 'filled', disabled, ...props }: PropsWithChildren<LabelButtonProps>) => {
+const LabelButton = ({ 
+  children, 
+  className, 
+  variant = 'filled', 
+  disabled,
+  ...props 
+}: PropsWithChildren<LabelButtonProps>) => {
   const variantStyles = {
     filled: `
       bg-[#C879EB]
       text-[20px]
       font-[550]
-      disabled:opacity-50
-      disabled:bg-[#8B8B8B]
-      disabled:cursor-not-allowed`,
+      hover:opacity-90
+      transition-all
+      duration-200
+      ${disabled ? 'opacity-50 bg-[#8B8B8B] cursor-not-allowed' : ''}
+    `,
     outlined: `
       border-2
       border-[#C879EB]
@@ -21,18 +29,21 @@ const LabelButton = ({ children, className, variant = 'filled', disabled, ...pro
       text-[#C879EB]
       text-[20px]
       font-[600]
-      disabled:opacity-50
-      disabled:border-[#8B8B8B]
-      disabled:text-[#8B8B8B]
-      disabled:cursor-not-allowed`,
+      hover:opacity-90
+      transition-all
+      duration-200
+      ${disabled ? 'opacity-50 border-[#8B8B8B] text-[#8B8B8B] cursor-not-allowed' : ''}
+    `,
     light: `
       text-[#000000]
       text-[20px]
       font-[550]
       bg-[#E3BBF7]
-      disabled:opacity-50
-      disabled:bg-[#8B8B8B]
-      disabled:cursor-not-allowed`
+      hover:opacity-90
+      transition-all
+      duration-200
+      ${disabled ? 'opacity-50 bg-[#8B8B8B] cursor-not-allowed' : ''}
+    `
   };
 
   return (
@@ -62,6 +73,7 @@ const LabelButton = ({ children, className, variant = 'filled', disabled, ...pro
           0px 4px 8px 0px rgba(255, 255, 255, 0.1) inset
         ` : 'none'
       }}
+      disabled={disabled}
       {...props}
     >
       <span
