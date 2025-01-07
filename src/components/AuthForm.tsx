@@ -67,7 +67,7 @@ const AuthForm = ({
       const savedEmail = localStorage.getItem('enteredEmail');
       if (savedEmail) {
         form.setValue('email', savedEmail);
-        localStorage.removeItem('enteredEmail'); // Clear after using
+        localStorage.removeItem('enteredEmail');
       }
     }
   }, [type, form]);
@@ -86,6 +86,11 @@ const AuthForm = ({
           return;
         }
 
+        if (values.Newpassword !== values.confirmPassword) {
+          toast.error('Password Mismatch', 'Passwords do not match');
+          return;
+        }
+
         const result = await dispatch(resetPasswordWithToken({
           token,
           password: values.Newpassword
@@ -98,7 +103,9 @@ const AuthForm = ({
           );
           router.push('/login');
         }
-      } else if (type === 'login') {
+      }
+      // Rest of the existing onSubmit logic remains the same
+      else if (type === 'login') {
         if (!values.email || !values.password) {
           toast.error(
             'Required Fields',
@@ -145,14 +152,6 @@ const AuthForm = ({
           toast.error('Password Required', 'Please enter a password');
           return;
         }
-
-        // if (!values.terms) {
-        //   toast.error(
-        //     'Terms Required',
-        //     'Please accept the Terms and Conditions to continue'
-        //   );
-        //   return;
-        // }
 
         setIsSubmitting(true);
 
@@ -216,23 +215,6 @@ const AuthForm = ({
               break;
           }
         }
-      } else {
-        setIsSubmitting(true);
-        if (type === 'login') {
-          console.log('Login payload:', {
-            email: values.email,
-            password: values.password
-          });
-        } else if (type === 'reset-password') {
-          console.log('Reset password payload:', {
-            password: values.Newpassword,
-            confirmPassword: values.confirmPassword
-          });
-        } else if (type === 'forgot-password') {
-          console.log('Forgot password payload:', {
-            email: values.email
-          });
-        }
       }
     } catch (error: unknown) {
       const apiError = error as ApiError;
@@ -246,10 +228,34 @@ const AuthForm = ({
   };
 
   const onError = (errors: FieldErrors<z.infer<typeof AuthFormSchema>>) => {
+    if (type === 'reset-password') {
+      if (!form.getValues('Newpassword') || !form.getValues('confirmPassword')) {
+        toast.error(
+          'Required Fields',
+          'Please fill in both password fields'
+        );
+        return;
+      }
 
+      if (form.getValues('Newpassword') !== form.getValues('confirmPassword')) {
+        toast.error(
+          'Password Mismatch',
+          'Passwords do not match'
+        );
+        return;
+      }
 
+      if (errors.Newpassword) {
+        toast.error(
+          'Invalid Password',
+          'Password must meet all requirements'
+        );
+        return;
+      }
+    }
+
+    // Rest of the existing onError logic remains the same
     if (type === 'login') {
-
       if (errors.password) {
         toast.error(
           'Invalid Password',
@@ -278,13 +284,9 @@ const AuthForm = ({
         );
         return;
       }
-
-
     }
 
-
     if (type === 'register') {
-
       if (!form.getValues('email') && !form.getValues('username') && !form.getValues('password')) {
         toast.error(
           'Required Fields',
@@ -342,14 +344,6 @@ const AuthForm = ({
       return;
     }
 
-    if (type === 'reset-password' && (!form.getValues('Newpassword') || !form.getValues('confirmPassword'))) {
-      toast.error(
-        'Fields Cant be Empty',
-        'Please fill in all required fields'
-      );
-      return;
-    }
-
     if (type === 'forgot-password' && !form.getValues('email')) {
       toast.error(
         'Fields Cant be Empty',
@@ -388,6 +382,7 @@ const AuthForm = ({
           onSubmit={form.handleSubmit(onSubmit, onError)}
           className="space-y-6 sm:space-y-8"
         >
+          {/* Existing form sections remain the same */}
           {type === 'get-started' && (
             <>
               <CustomInput
@@ -437,7 +432,6 @@ const AuthForm = ({
                     control={form.control}
                   />
                 </div>
-
               </div>
 
               <LabelButton
@@ -520,6 +514,10 @@ const AuthForm = ({
                   type="password"
                   showStrengthChecker={true}
                 />
+                <PasswordStrengthChecker
+                  password={form.watch('Newpassword') ?? ''}
+                  isFocused={true}
+                />
               </div>
               <div className="relative">
                 <CustomInput
@@ -528,14 +526,8 @@ const AuthForm = ({
                   control={form.control}
                   placeholder=""
                   type="password"
-                  showStrengthChecker={true}
-                />
-                <PasswordStrengthChecker
-                  password={form.watch('password') ?? ''}
-                  isFocused={true}
                 />
               </div>
-
               <LabelButton
                 type="submit"
                 variant="filled"
@@ -560,8 +552,8 @@ const AuthForm = ({
                   type="text"
                 /> ) : (
                   <span className="text-[#E7E7E7]">
-                  You can request a resend after {timeLeft}s
-                </span>
+                    You can request a resend after {timeLeft}s
+                  </span>
                 )
               }
               <LabelButton
@@ -574,7 +566,6 @@ const AuthForm = ({
                     ? 'Resend Link'
                     : 'Send Reset Link'}
               </LabelButton>
-              
             </div>
           )}
         </form>
