@@ -146,7 +146,7 @@ const AuthForm = ({
           }
 
           toast.success('Login Successful', 'Welcome back!');
-          router.push('/dashboard');
+          router.push('/home');
         }
       } else if (type === 'register') {
         if (!values.email && !values.username && !values.password) {
