@@ -36,10 +36,10 @@ export const authApi = {
     );
     return response.data;
   },
-  resetPasswordWithToken: async (data: ResetPasswordWithTokenPayload): Promise<ResetPasswordResponse> => {
-    const response = await api.post<ResetPasswordResponse>(
-      `${BASE_URL}/api/v1/auth/reset-password/${data.token}`,
-      { password: data.password }
+  resetPasswordWithToken: async ({ token, password }: ResetPasswordWithTokenPayload): Promise<ResetPasswordResponse> => {
+    const response = await api.patch<ResetPasswordResponse>(
+      `${BASE_URL}/api/v1/auth/reset-password/${token}`,
+      { password }
     );
     return response.data;
   },
