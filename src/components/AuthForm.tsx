@@ -80,23 +80,37 @@ const AuthForm = ({
           return;
         }
 
-        setIsSubmitting(true);
-        if (!values.Newpassword) {
-          toast.error('Password Required', 'Please enter a new password');
+        if (!values.Newpassword || !values.confirmPassword) {
+          toast.error('Required Fields', 'Please fill in all required fields');
           return;
         }
 
-        const result = await dispatch(resetPasswordWithToken({
-          token,
-          password: values.Newpassword
-        })).unwrap();
-  
-        if (result.success) {
-          toast.success(
-            'Password Reset Successful',
-            'You can now login with your new password'
+        if (values.Newpassword !== values.confirmPassword) {
+          toast.error('Password Mismatch', 'Passwords do not match');
+          return;
+        }
+
+        setIsSubmitting(true);
+        
+        try {
+          const result = await dispatch(resetPasswordWithToken({
+            token,
+            password: values.Newpassword
+          })).unwrap();
+      
+          if (result.success) {
+            toast.success(
+              'Password Reset Successful',
+              'You can now login with your new password'
+            );
+            router.push('/login');
+          }
+        } catch (error) {
+          const apiError = error as ApiError;
+          toast.error(
+            'Password Reset Failed',
+            apiError.response?.data?.message || apiError.message || 'Please try again'
           );
-          router.push('/login');
         }
       } else if (type === 'login') {
         if (!values.email || !values.password) {
@@ -165,9 +179,8 @@ const AuthForm = ({
         const result = await dispatch(register(registrationPayload)).unwrap();
         if (result.success) {
           localStorage.setItem('registrationEmail', values.email);
-          
-          document.cookie = `registrationEmail=${values.email}; path=/;`;
-          document.cookie = `isRegistering=true; path=/;`;
+          document.cookie = `registrationEmail=${values.email}; path=/`;
+          document.cookie = `isRegistering=true; path=/`;
           
           toast.success(
             'Registration Successful',
