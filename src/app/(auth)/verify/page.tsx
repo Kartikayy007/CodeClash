@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { BackButton } from '@/components/ui/BackButton';
@@ -8,11 +8,14 @@ import CustomOtp from '@/components/CustomOtp';
 
 const VerifyPage = () => {
   const router = useRouter();
+  const [userEmail, setUserEmail] = useState<string>('');
   
   useEffect(() => {
     const registrationEmail = localStorage.getItem('registrationEmail');
     if (!registrationEmail) {
       router.push('/register');
+    } else {
+      setUserEmail(registrationEmail);
     }
   }, [router]);
 
@@ -33,7 +36,7 @@ const VerifyPage = () => {
             Verify Your Email
           </h1>
           <p className='text-sm sm:text-base text-white text-left'>
-            We&apos;ve sent a 4-digit verification code to xxx@gmail.com
+            We&apos;ve sent a 4-digit verification code to {userEmail}
           </p>
         </div>
       </div>
