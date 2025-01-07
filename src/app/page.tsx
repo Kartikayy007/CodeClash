@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import LabelButton from "@/components/ui/LabelButton";
-import Link from "next/link";
 
 const Page = () => {
   const router = useRouter();
@@ -13,17 +12,13 @@ const Page = () => {
         <h1 className='text-lg xs:text-xl sm:text-2xl lg:text-3xl font-bold text-white text-left mt-2'>
           Welcome to CodeClash!
         </h1>
-        <LabelButton variant="outlined" className="w-full sm:w-auto">
-          <Link href={"/get-started"}>
-            Get Started
-          </Link>  
-        </LabelButton>
-        <button 
+        <LabelButton 
+          variant="outlined"
           onClick={() => router.push('/get-started')}
           className="text-base sm:text-lg text-[#D1D1D1] hover:opacity-80 transition-opacity"
         >
           Get Started
-        </button>
+        </LabelButton>
       </h1>
     </div>
   );
