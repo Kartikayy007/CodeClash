@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm, FieldErrors } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { toast } from "@/providers/toast-config"
 import { useDispatch, useSelector } from 'react-redux';
@@ -92,9 +92,6 @@ const CustomOtp = () => {
         toast.error('Error', 'Email not found. Please register again.');
         return;
       }
-      console.log(result.data);
-    } catch (err: unknown) {
-      const error = err as Error;
 
       const otpData = {
         email,
@@ -127,8 +124,8 @@ const CustomOtp = () => {
     } catch (error: unknown) {
       const apiError = error as OtpError;
       toast.error(
-        'Error',
-        error instanceof Error ? error.message : 'Something went wrong, please try again'
+        'OTP Verification Failed',
+        apiError.response?.data?.message || apiError.message || 'Please try again'
       );
     }
   };
@@ -178,8 +175,13 @@ const CustomOtp = () => {
         />
 
         <div className="flex flex-col items-center gap-4">
-          <LabelButton type="submit" variant="filled" className='mt-8'>
-            Verify
+          <LabelButton 
+            type="submit" 
+            variant="filled" 
+            className='mt-8'
+            disabled={loading || !form.formState.isValid}
+          >
+            {loading ? 'Verifying...' : 'Verify OTP'}
           </LabelButton>
 
           <div className="flex items-center gap-2 text-[#D1D1D1] text-base">
@@ -190,7 +192,7 @@ const CustomOtp = () => {
             ) : (
               <>
                 <span>
-                  Didn't receive the OTP?{' '}
+                  Didnt receive the OTP?{' '}
                 </span>
                 <button
                   onClick={handleResend}

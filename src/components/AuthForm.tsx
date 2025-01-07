@@ -30,13 +30,13 @@ interface AuthFormProps {
 
 const AuthForm = ({ 
   type, 
+  token,
   onResetLinkSent 
 }: AuthFormProps) => {
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const [resetLinkSent, setResetLinkSent] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
   const [timeLeft, setTimeLeft] = useState(0);
 
   useEffect(() => {
@@ -74,11 +74,31 @@ const AuthForm = ({
 
   const onSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
     try {
+      if (type === 'reset-password') {
+        if (!token) {
+          toast.error('Invalid Token', 'Password reset link is invalid');
+          return;
+        }
 
+        setIsSubmitting(true);
+        if (!values.Newpassword) {
+          toast.error('Password Required', 'Please enter a new password');
+          return;
+        }
 
-
-
-      if (type === 'login') {
+        const result = await dispatch(resetPasswordWithToken({
+          token,
+          password: values.Newpassword
+        })).unwrap();
+  
+        if (result.success) {
+          toast.success(
+            'Password Reset Successful',
+            'You can now login with your new password'
+          );
+          router.push('/login');
+        }
+      } else if (type === 'login') {
         if (!values.email || !values.password) {
           toast.error(
             'Required Fields',
@@ -103,13 +123,28 @@ const AuthForm = ({
           router.push('/dashboard');
         }
       } else if (type === 'register') {
-        // if (!values.email || !values.username || !values.password) {
-        //   toast.error(
-        //     'Required Fields',
-        //     'Please fill in all required fields'
-        //   );
-        //   return;
-        // }
+        if (!values.email && !values.username && !values.password) {
+          toast.error(
+            'Required Fields',
+            'Please fill in all required fields'
+          );
+          return;
+        }
+
+        if (!values.username) {
+          toast.error('Username Required', 'Please enter a username');
+          return;
+        }
+
+        if (!values.email) {
+          toast.error('Email Required', 'Please enter an email address');
+          return;
+        }
+
+        if (!values.password) {
+          toast.error('Password Required', 'Please enter a password');
+          return;
+        }
 
         // if (!values.terms) {
         //   toast.error(
@@ -120,11 +155,6 @@ const AuthForm = ({
         // }
 
         setIsSubmitting(true);
-
-        if (!values.username) {
-          toast.error('Username Required', 'Please enter a username');
-          return;
-        }
 
         const registrationPayload = {
           email: values.email,
@@ -204,10 +234,11 @@ const AuthForm = ({
           });
         }
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
       toast.error(
         'Error',
-        error.message || 'Something went wrong'
+        apiError.response?.data?.message || apiError.message || 'Something went wrong'
       );
     } finally {
       setIsSubmitting(false);

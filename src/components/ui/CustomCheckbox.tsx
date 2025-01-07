@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { Control } from 'react-hook-form';
+import { Control, FieldValues } from 'react-hook-form';
 
 interface CustomCheckboxProps<T extends FieldValues> extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   name: string;
-  control: Control<any>;
+  control: Control<T>;
 }
 
 const CustomCheckbox = <T extends FieldValues>({ 
