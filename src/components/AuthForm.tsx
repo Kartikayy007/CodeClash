@@ -185,10 +185,6 @@ const AuthForm = ({
         console.log('Reset password response:', result);
 
         if (result.success) {
-          toast.success(
-            'Reset Link Sent',
-            'Please check your email for the password reset link'
-          );
           setResetLinkSent(true);
           setTimeLeft(30); 
           onResetLinkSent?.(values.email);
