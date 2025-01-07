@@ -5,24 +5,34 @@ interface LabelButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
   variant?: 'filled' | 'outlined' | 'light';
 }
 
-const LabelButton = ({ children, className, variant = 'filled', ...props }: PropsWithChildren<LabelButtonProps>) => {
+const LabelButton = ({ children, className, variant = 'filled', disabled, ...props }: PropsWithChildren<LabelButtonProps>) => {
   const variantStyles = {
     filled: `
       bg-[#C879EB]
       text-[20px]
-      font-[550]`,
+      font-[550]
+      disabled:opacity-50
+      disabled:bg-[#8B8B8B]
+      disabled:cursor-not-allowed`,
     outlined: `
       border-2
       border-[#C879EB]
       bg-transparent
       text-[#C879EB]
       text-[20px]
-      font-[600]`,
+      font-[600]
+      disabled:opacity-50
+      disabled:border-[#8B8B8B]
+      disabled:text-[#8B8B8B]
+      disabled:cursor-not-allowed`,
     light: `
       text-[#000000]
       text-[20px]
       font-[550]
-      bg-[#E3BBF7]`
+      bg-[#E3BBF7]
+      disabled:opacity-50
+      disabled:bg-[#8B8B8B]
+      disabled:cursor-not-allowed`
   };
 
   return (

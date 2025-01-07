@@ -164,10 +164,8 @@ const AuthForm = ({
 
         const result = await dispatch(register(registrationPayload)).unwrap();
         if (result.success) {
-          // Set localStorage
           localStorage.setItem('registrationEmail', values.email);
           
-          // Set cookies with proper options
           document.cookie = `registrationEmail=${values.email}; path=/;`;
           document.cookie = `isRegistering=true; path=/;`;
           
