@@ -28,10 +28,10 @@ interface AuthFormProps {
   onResetLinkSent?: (email: string) => void;
 }
 
-const AuthForm = ({ 
-  type, 
+const AuthForm = ({
+  type,
   token,
-  onResetLinkSent 
+  onResetLinkSent
 }: AuthFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -52,14 +52,15 @@ const AuthForm = ({
   const form = useForm<z.infer<typeof AuthFormSchema>>({
     resolver: zodResolver(AuthFormSchema),
     defaultValues: {
-      email: "",
+      email: type === 'reset-password' ? 'test@example.com' : '',
       password: type === 'forgot-password' ? undefined : "",
       username: "",
       Newpassword: "",
       confirmPassword: "",
       terms: false,
     },
-    mode: "onChange"
+    mode: "onChange",
+    context: type,
   });
 
   useEffect(() => {
@@ -72,9 +73,22 @@ const AuthForm = ({
     }
   }, [type, form]);
 
+  useEffect(() => {
+    if (type === 'login') {
+      const rememberedEmail = sessionStorage.getItem('userEmail');
+      const rememberMe = sessionStorage.getItem('rememberMe');
+
+      if (rememberedEmail && rememberMe) {
+        form.setValue('email', rememberedEmail);
+        form.setValue('rememberMe', true);
+      }
+    }
+  }, [type, form]);
+
   const onSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
     try {
       if (type === 'reset-password') {
+        console.log('Resetting password with token:', token);
         if (!token) {
           toast.error('Invalid Token', 'Password reset link is invalid');
           return;
@@ -95,7 +109,7 @@ const AuthForm = ({
           token,
           password: values.Newpassword
         })).unwrap();
-  
+
         if (result.success) {
           toast.success(
             'Password Reset Successful',
@@ -104,7 +118,6 @@ const AuthForm = ({
           router.push('/login');
         }
       }
-      // Rest of the existing onSubmit logic remains the same
       else if (type === 'login') {
         if (!values.email || !values.password) {
           toast.error(
@@ -123,10 +136,16 @@ const AuthForm = ({
         const result = await dispatch(login(loginPayload)).unwrap();
 
         if (result.success) {
-          toast.success(
-            'Login Successful',
-            'Welcome back!'
-          );
+          const rememberMe = form.getValues('rememberMe');
+          if (rememberMe) {
+            sessionStorage.setItem('rememberMe', 'true');
+            sessionStorage.setItem('userEmail', values.email);
+          } else {
+            sessionStorage.removeItem('rememberMe');
+            sessionStorage.removeItem('userEmail');
+          }
+
+          toast.success('Login Successful', 'Welcome back!');
           router.push('/dashboard');
         }
       } else if (type === 'register') {
@@ -164,10 +183,10 @@ const AuthForm = ({
         const result = await dispatch(register(registrationPayload)).unwrap();
         if (result.success) {
           localStorage.setItem('registrationEmail', values.email);
-          
+
           document.cookie = `registrationEmail=${values.email}; path=/;`;
           document.cookie = `isRegistering=true; path=/;`;
-          
+
           toast.success(
             'Registration Successful',
             'Please verify your email'
@@ -189,7 +208,7 @@ const AuthForm = ({
 
         if (result.success) {
           setResetLinkSent(true);
-          setTimeLeft(30); 
+          setTimeLeft(30);
           onResetLinkSent?.(values.email);
         }
       } else if (type === 'get-started') {
@@ -202,9 +221,9 @@ const AuthForm = ({
         const result = await dispatch(checkEmail({ email: values.email })).unwrap();
 
         if (result.success) {
-          localStorage.setItem('enteredEmail', values.email); 
-          switch(result.data?.flow) {
-            case 1: 
+          localStorage.setItem('enteredEmail', values.email);
+          switch (result.data?.flow) {
+            case 1:
               router.push('/register');
               break;
             case 2:
@@ -254,7 +273,6 @@ const AuthForm = ({
       }
     }
 
-    // Rest of the existing onError logic remains the same
     if (type === 'login') {
       if (errors.password) {
         toast.error(
@@ -382,7 +400,6 @@ const AuthForm = ({
           onSubmit={form.handleSubmit(onSubmit, onError)}
           className="space-y-6 sm:space-y-8"
         >
-          {/* Existing form sections remain the same */}
           {type === 'get-started' && (
             <>
               <CustomInput
@@ -505,7 +522,16 @@ const AuthForm = ({
 
           {type === 'reset-password' && (
             <>
-              <div className="relative">
+              <div className="relative ">
+                <div className='hidden'>
+                <CustomInput
+                  name="email"
+                  label="Email"
+                  control={form.control}
+                  placeholder=""
+                  type="text"
+                />
+                </div>
                 <CustomInput
                   name="Newpassword"
                   label="New Password"
@@ -541,7 +567,7 @@ const AuthForm = ({
           {type === 'forgot-password' && (
             <div className="w-full space-y-4 sm:space-y-6">
               <div className='text-center'>
-                
+
               </div>
               {!resetLinkSent ? (
                 <CustomInput
@@ -550,11 +576,11 @@ const AuthForm = ({
                   control={form.control}
                   placeholder=""
                   type="text"
-                /> ) : (
-                  <span className="text-[#E7E7E7]">
-                    You can request a resend after {timeLeft}s
-                  </span>
-                )
+                />) : (
+                <span className="text-[#E7E7E7]">
+                  You can request a resend after {timeLeft}s
+                </span>
+              )
               }
               <LabelButton
                 type='submit'
@@ -562,9 +588,9 @@ const AuthForm = ({
                 disabled={isSubmitting || timeLeft > 0}
                 onClick={resetLinkSent ? () => form.handleSubmit(onSubmit)() : undefined}
               >
-                {resetLinkSent 
-                    ? 'Resend Link'
-                    : 'Send Reset Link'}
+                {resetLinkSent
+                  ? 'Resend Link'
+                  : 'Send Reset Link'}
               </LabelButton>
             </div>
           )}

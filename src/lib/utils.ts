@@ -24,27 +24,42 @@ export const AuthFormSchema = z.object({
       });
     }
   }
-  
+
   if (ctx.path[0] === 'reset-password') {
-    if (data.Newpassword) {
-      if (data.Newpassword.length < 8) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Password must be at least 8 characters",
-          path: ["Newpassword"],
-        });
-      }
-      
-      if (data.Newpassword !== data.confirmPassword) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Passwords do not match",
-          path: ["confirmPassword"],
-        });
-      }
+    if (!data.Newpassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "New password is required",
+        path: ["Newpassword"],
+      });
+      return;
+    }
+
+    if (!data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Confirm password is required",
+        path: ["confirmPassword"],
+      });
+      return;
+    }
+
+    if (data.Newpassword.length < 8) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Password must be at least 8 characters",
+        path: ["Newpassword"],
+      });
+    }
+
+    if (data.Newpassword !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Passwords do not match",
+        path: ["confirmPassword"],
+      });
     }
   }
-  
+
   return true;
 });
-
