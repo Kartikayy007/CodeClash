@@ -1,9 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/store/store';
 import LabelButton from '@/components/ui/LabelButton';
 import { FcGoogle } from 'react-icons/fc';
 import AuthForm from '@/components/AuthForm';

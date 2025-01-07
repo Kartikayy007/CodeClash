@@ -2,7 +2,6 @@ import React from 'react'
 import Image from 'next/image'
 import { BackButton } from '@/components/ui/BackButton'
 import AuthForm from '@/components/AuthForm'
-import CustomCheckbox from '@/components/ui/CustomCheckbox'
 
 const page = () => {
   return (

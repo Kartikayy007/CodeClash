@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ResetPasswordWithTokenPayload, ResetPasswordResponse } from '../types/auth.types';
 import { authApi } from '../api/authApi';
+import { AuthApiError } from '@/types/error.types';
 
 export const resetPasswordWithToken = createAsyncThunk<ResetPasswordResponse, ResetPasswordWithTokenPayload>(
   'auth/resetPasswordWithToken',
@@ -8,8 +9,9 @@ export const resetPasswordWithToken = createAsyncThunk<ResetPasswordResponse, Re
     try {
       const response = await authApi.resetPasswordWithToken(data);
       return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to reset password');
+    } catch (error: unknown) {
+      const apiError = error as AuthApiError;
+      return rejectWithValue(apiError.response?.data?.message || 'Password reset failed');
     }
   }
 );

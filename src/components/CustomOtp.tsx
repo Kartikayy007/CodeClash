@@ -22,6 +22,7 @@ import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { cn } from "@/lib/utils";
 import { resendOtp } from '@/features/auth/thunks/resendOtpThunk';
 import { useRouter } from 'next/navigation';
+import { OtpError } from '@/types/error.types';
 
 const OTPFormSchema = z.object({
   pin: z.string().min(4, "Please enter a valid 4-digit OTP").max(4)
@@ -32,7 +33,7 @@ type OTPFormValues = z.infer<typeof OTPFormSchema>;
 const CustomOtp = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const { loading, error } = useSelector((state: RootState) => state.auth);
+  const { loading } = useSelector((state: RootState) => state.auth); 
   const [timeLeft, setTimeLeft] = useState(30);
   const [isDisabled, setIsDisabled] = useState(true);
 
@@ -71,10 +72,11 @@ const CustomOtp = () => {
         setIsDisabled(true);
         toast.success('Success', 'OTP sent to your email');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const otpError = error as OtpError;
       toast.error(
         'Failed to resend OTP',
-        error.message || 'Please try again later'
+        otpError.response?.data?.message || otpError.message || 'Please try again later'
       );
     }
   };
@@ -119,11 +121,11 @@ const CustomOtp = () => {
           resultAction.payload as string || 'Invalid OTP'
         );
       }
-    } catch (error) {
-      console.error('Error during verification:', error);
+    } catch (error: unknown) {
+      const apiError = error as OtpError;
       toast.error(
-        'Error',
-        error instanceof Error ? error.message : 'Something went wrong, please try again'
+        'OTP Verification Failed',
+        apiError.response?.data?.message || apiError.message || 'Please try again'
       );
     }
   };
@@ -190,7 +192,7 @@ const CustomOtp = () => {
             ) : (
               <>
                 <span>
-                  Didn't receive the OTP?{' '}
+                  Didnt receive the OTP?{' '}
                 </span>
                 <button
                   onClick={handleResend}

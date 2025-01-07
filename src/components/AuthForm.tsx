@@ -20,6 +20,7 @@ import { login } from '@/features/auth/thunks/loginThunk';
 import { resetPassword } from '@/features/auth/thunks/resetPasswordThunk';
 import { resetPasswordWithToken } from '@/features/auth/thunks/resetPasswordWithTokenThunk';
 import { checkEmail } from '@/features/auth/thunks/checkEmailThunk';
+import { ApiError } from '@/types/error.types';
 
 interface AuthFormProps {
   type: string;
@@ -36,7 +37,6 @@ const AuthForm = ({
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const [resetLinkSent, setResetLinkSent] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
   const [timeLeft, setTimeLeft] = useState(0);
 
   useEffect(() => {
@@ -234,10 +234,11 @@ const AuthForm = ({
           });
         }
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
       toast.error(
         'Error',
-        error.message || 'Something went wrong'
+        apiError.response?.data?.message || apiError.message || 'Something went wrong'
       );
     } finally {
       setIsSubmitting(false);
