@@ -10,15 +10,24 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    if (!accessToken) {
-      router.push('/login');
-    } else {
+    const checkAuth = () => {
+      const accessToken = localStorage.getItem('accessToken');
+      const cookieToken = document.cookie.includes('accessToken=');
+      
+      if (!accessToken && !cookieToken) {
+        router.replace('/login');
+        return;
+      }
+      
+      setIsAuthenticated(true);
       setIsLoading(false);
-    }
-  }, [accessToken, router]);
+    };
+
+    checkAuth();
+  }, [router]);
 
   if (isLoading) {
     return (
@@ -28,7 +37,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     );
   }
 
-  return <>{children}</>;
+  return isAuthenticated ? children : null;
 };
 
 export default ProtectedRoute;

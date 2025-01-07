@@ -5,24 +5,27 @@ export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const accessToken = request.cookies.get('accessToken');
 
-  // Verify page protection
-  if (pathname === '/verify') {
-    const isRegistering = request.cookies.get('isRegistering');
-    const registrationEmail = request.cookies.get('registrationEmail');
-    
-    if (!isRegistering || !registrationEmail) {
-      return NextResponse.redirect(new URL('/register', request.url));
+  const protectedRoutes = ['/dashboard', '/settings', '/profile'];
+  
+  if (protectedRoutes.some(route => pathname.startsWith(route))) {
+    if (!accessToken) {
+      return NextResponse.redirect(new URL('/login', request.url));
     }
-    return NextResponse.next();
   }
 
-  // Public routes
+  if (pathname === '/verify') {
+    const isRegistering = request.cookies.get('isRegistering');
+    if (!isRegistering) {
+      return NextResponse.redirect(new URL('/register', request.url));
+    }
+  }
+
   const publicRoutes = [
     '/login', 
     '/register', 
     '/forgot-password', 
     '/get-started',
-    '/oauth',
+    '/google',
     '/reset-password'
   ];
 
@@ -49,6 +52,6 @@ export const config = {
     '/forgot-password',
     '/reset-password',
     '/get-started',
-    '/oauth'
+    '/google'
   ],
 };
