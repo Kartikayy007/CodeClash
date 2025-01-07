@@ -1,26 +1,26 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { exchangeGoogleToken } from '@/features/auth/thunks/googleAuthThunk';
-import Image from 'next/image';
 import { toast } from '@/providers/toast-config';
+import { AuthApiError } from '@/types/error.types';
+import Image from 'next/image';
 
 const Page = () => {
   const searchParams = useSearchParams();
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const token = searchParams.get('token');
     
     const handleTokenExchange = async () => {
-
       if (!token) {
-        setError('Authentication Failed');
+        toast.error('Invalid Token', 'Authentication failed');
+        router.replace('/login');
         return;
       }
 
@@ -28,7 +28,7 @@ const Page = () => {
         const result = await dispatch(exchangeGoogleToken({ 
           tempOAuthToken: token 
         })).unwrap();
-        console.log(result);
+        
         if (result.success && result.data?.tokens) {
           localStorage.setItem('accessToken', result.data.tokens.accessToken);
           localStorage.setItem('refreshToken', result.data.tokens.refreshToken);
@@ -36,13 +36,15 @@ const Page = () => {
           document.cookie = `accessToken=${result.data.tokens.accessToken}; path=/`;
           document.cookie = `refreshToken=${result.data.tokens.refreshToken}; path=/`;
 
-          console.log('Login successful:', result);
-
           toast.success('Login Successful', 'Welcome back!');
-          router.replace('/dashboard'); 
+          router.replace('/dashboard');
         }
-      } catch (error) {
-        toast.error('Authentication Failed', 'Please try again');
+      } catch (error: unknown) {
+        const authError = error as AuthApiError;
+        toast.error(
+          'Authentication Failed', 
+          authError.message || 'Please try again'
+        );
         router.replace('/login');
       }
     };
@@ -59,16 +61,7 @@ const Page = () => {
         height={32}
         priority
       />
-      <div className="mt-8 text-center">
-        {error ? (
-          <p className="text-red-500">{error}</p>
-        ) : (
-          <>
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4" />
-            <p className="text-white">Authenticating...</p>
-          </>
-        )}
-      </div>
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mt-8" />
     </div>
   );
 };
