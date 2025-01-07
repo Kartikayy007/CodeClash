@@ -3,10 +3,11 @@ import { GoogleOAuthResponse } from '../types/auth.types';
 import { authApi } from '../api/authApi';
 import { GoogleAuthError } from '@/types/error.types';
 
-export const exchangeGoogleToken = createAsyncThunk<GoogleOAuthResponse, { token: string }>(
+export const exchangeGoogleToken = createAsyncThunk<GoogleOAuthResponse, { tempOAuthToken: string }>(
   'auth/googleToken',
   async (data, { rejectWithValue }) => {
     try {
+      console.log(data);
       const response = await authApi.exchangeGoogleToken(data);
       return response;
     } catch (error: unknown) {

@@ -103,5 +103,5 @@ export interface GoogleOAuthResponse {
 }
 
 export interface TempTokenPayload {
-  token: string;
+  tempOAuthToken: string;
 }
