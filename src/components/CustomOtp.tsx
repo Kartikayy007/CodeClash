@@ -81,6 +81,14 @@ const CustomOtp = () => {
     }
   };
 
+  const onVerificationSuccess = () => {
+    localStorage.removeItem('registrationEmail');
+    document.cookie = 'registrationEmail=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    document.cookie = 'isRegistering=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    
+    router.push('/dashboard');
+  };
+
   const onSubmit = async (data: OTPFormValues) => {
     console.log('Form submitted with data:', data);
 
@@ -112,7 +120,7 @@ const CustomOtp = () => {
             localStorage.removeItem('registrationEmail');
           }
           toast.success('Success', 'OTP verified successfully');
-          router.push('/dashboard');
+          onVerificationSuccess();
         }
       } else if (verifyOtp.rejected.match(resultAction)) {
         console.error('Error response:', resultAction.payload);
