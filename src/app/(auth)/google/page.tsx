@@ -22,10 +22,10 @@ const TokenExchange = () => {
         setError('Invalid token');
         setTimeout(() => router.push('/login'), 3000);
         return;
-      }
+      } 
 
       try {
-        const result = await dispatch(exchangeGoogleToken({ token: tempToken })).unwrap();
+        const result = await dispatch(exchangeGoogleToken({ tempOAuthToken: tempToken })).unwrap();
         if (result.success && result.data) {
           localStorage.setItem('accessToken', result.data.tokens.accessToken);
           localStorage.setItem('refreshToken', result.data.tokens.refreshToken);
