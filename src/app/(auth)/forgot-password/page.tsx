@@ -19,7 +19,7 @@ const Page = () => {
         priority
       />
 
-      <div className="w-full max-w-md sm:max-w-none">
+      <div className="w-full max-w-[90%] sm:max-w-md mx-auto">
         <BackButton href="/login" />
 
         <div className='space-y-4 mt-4 sm:mt-6'>
@@ -28,7 +28,7 @@ const Page = () => {
           </h1>
 
           {isResetLinkSent ? (
-            <div className='space-y-11 sm:space-y-8'>
+            <div className='space-y-4 sm:space-y-8'>
               <p className='text-sm sm:text-base text-white text-left'>
                 We&apos;ve sent a password reset link to your email. Click the link to reset your password.
                 If you don&apos;t see it in your inbox, check your spam folder.
@@ -43,9 +43,7 @@ const Page = () => {
             </p>
           )}
         </div>
-      </div>
 
-      <div className="w-full max-w-[90%] sm:max-w-md mx-auto">
         <AuthForm
           type='forgot-password'
           onResetLinkSent={() => setIsResetLinkSent(true)}
