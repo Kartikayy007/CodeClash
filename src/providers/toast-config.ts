@@ -17,10 +17,19 @@ export const toastConfig: ToastOptions = {
 
 export const toast = {
   error: (title: string, message: string) =>
-    toastify.error((props) => CustomToast({ ...props, title, message }), toastConfig),
+    toastify.error(
+      (props) => CustomToast({ ...props, title, message}), 
+      {
+        ...toastConfig,
+        progressClassName: 'toast-progress-error'
+      }
+    ),
   success: (title: string, message: string) =>
-    toastify((props) => CustomToast({ ...props, title, message }), {
-      ...toastConfig,
-      className: `${toastConfig.className} border-[#10B981]`
-    }),
+    toastify.success(
+      (props) => CustomToast({ ...props, title, message }), 
+      {
+        ...toastConfig,
+        progressClassName: 'toast-progress-success'
+      }
+    ),
 };
