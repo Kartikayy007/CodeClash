@@ -5,9 +5,9 @@ import { z } from "zod";
 import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
-import LabelButton from './ui/LabelButton';
-import CustomInput from './CustomInput';
-import { AuthFormSchema } from '@/lib/utils';
+import LabelButton from '../../../components/ui/LabelButton';
+import CustomInput from '../../../components/CustomInput';
+import { AuthFormSchema } from '@/lib/schemas/authSchema';
 import { toast } from '@/providers/toast-config';
 import CustomCheckbox from '@/components/ui/CustomCheckbox';
 import Link from 'next/link';
@@ -21,6 +21,11 @@ import { resetPassword } from '@/features/auth/thunks/resetPasswordThunk';
 import { resetPasswordWithToken } from '@/features/auth/thunks/resetPasswordWithTokenThunk';
 import { checkEmail } from '@/features/auth/thunks/checkEmailThunk';
 import { ApiError } from '@/types/error.types';
+import GetStartedForm from './forms/GetStartedForm';
+import LoginForm from './forms/LoginForm';
+import RegisterForm from './forms/RegisterForm';
+import ResetPasswordForm from './forms/ResetPasswordForm';
+import ForgotPasswordForm from './forms/ForgotPasswordForm';
 
 interface AuthFormProps {
   type: string;
@@ -401,198 +406,42 @@ const AuthForm = ({
           className="space-y-6 sm:space-y-8"
         >
           {type === 'get-started' && (
-            <>
-              <CustomInput
-                name="email"
-                label="Email"
-                control={form.control}
-                placeholder=""
-              />
-              <LabelButton
-                type="submit"
-                variant="filled"
-                disabled={isSubmitting}
-              >
-                Get Started
-              </LabelButton>
-            </>
+            <GetStartedForm
+              control={form.control}
+              isSubmitting={isSubmitting}
+            />
           )}
 
           {type === 'login' && (
-            <>
-              <CustomInput
-                name="email"
-                label="Email"
-                control={form.control}
-                placeholder=""
-                type='text'
-              />
-              <CustomInput
-                name="password"
-                label="Password"
-                control={form.control}
-                placeholder=""
-                type="password"
-              />
-
-              <div className="flex justify-between items-center">
-                <Link
-                  href="/forgot-password"
-                  className="text-base sm:text-lg text-[#D1D1D1] hover:opacity-80 transition-opacity"
-                >
-                  Forgot Password?
-                </Link>
-                <div className="flex items-center gap-2">
-                  <CustomCheckbox
-                    name="rememberMe"
-                    label="Remember me"
-                    control={form.control}
-                  />
-                </div>
-              </div>
-
-              <LabelButton
-                type="submit"
-                variant="filled"
-                disabled={isSubmitting}
-              >
-                Login
-              </LabelButton>
-            </>
+            <LoginForm
+              control={form.control}
+              isSubmitting={isSubmitting}
+            />
           )}
 
           {type === 'register' && (
-            <>
-              <CustomInput
-                name="email"
-                label="Email"
-                control={form.control}
-                placeholder=""
-                type="text"
+            <RegisterForm
+              control={form.control}
+              isSubmitting={isSubmitting} 
+              password={''} 
               />
-              <CustomInput
-                name="username"
-                label="Username"
-                control={form.control}
-                placeholder=""
-                type="text"
-              />
-              <div className="relative">
-                <CustomInput
-                  name="password"
-                  label="Password"
-                  control={form.control}
-                  placeholder=""
-                  type="password"
-                  showStrengthChecker={true}
-                />
-                <PasswordStrengthChecker
-                  password={form.watch('password') ?? ''}
-                  isFocused={true}
-                />
-              </div>
-
-              <div className='flex items-start sm:items-center gap-2'>
-                <CustomCheckbox
-                  name="terms"
-                  label=""
-                  control={form.control}
-                />
-                <p className="text-white text-sm sm:text-base">
-                  I agree to the{' '}
-                  <Link href={''} className="text-[#C879EB] font-bold hover:opacity-80 transition-opacity">
-                    Terms and Conditions
-                  </Link>
-                  {' '}and{' '}
-                  <Link href={''} className="text-[#C879EB] font-bold hover:opacity-80 transition-opacity">
-                    Privacy Policy
-                  </Link>
-                </p>
-              </div>
-
-              <LabelButton
-                type="submit"
-                variant="filled"
-                disabled={isSubmitting}
-              >
-                Sign Up
-              </LabelButton>
-            </>
           )}
 
           {type === 'reset-password' && (
-            <>
-              <div className="relative ">
-                <div className='hidden'>
-                <CustomInput
-                  name="email"
-                  label="Email"
-                  control={form.control}
-                  placeholder=""
-                  type="text"
-                />
-                </div>
-                <CustomInput
-                  name="Newpassword"
-                  label="New Password"
-                  control={form.control}
-                  placeholder=""
-                  type="password"
-                  showStrengthChecker={true}
-                />
-                <PasswordStrengthChecker
-                  password={form.watch('Newpassword') ?? ''}
-                  isFocused={true}
-                />
-              </div>
-              <div className="relative">
-                <CustomInput
-                  name="confirmPassword"
-                  label="Confirm Password"
-                  control={form.control}
-                  placeholder=""
-                  type="password"
-                />
-              </div>
-              <LabelButton
-                type="submit"
-                variant="filled"
-                disabled={isSubmitting}
-              >
-                Reset Password
-              </LabelButton>
-            </>
+            <ResetPasswordForm
+              control={form.control}
+              isSubmitting={isSubmitting} 
+              newPassword={''}            
+              />
           )}
 
           {type === 'forgot-password' && (
-            <div className="w-full space-y-4 sm:space-y-6">
-              <div className='text-center'>
-
-              </div>
-              {!resetLinkSent ? (
-                <CustomInput
-                  name="email"
-                  label="Email"
-                  control={form.control}
-                  placeholder=""
-                  type="text"
-                />) : (
-                <span className="text-[#E7E7E7]">
-                  You can request a resend after {timeLeft}s
-                </span>
-              )
-              }
-              <LabelButton
-                type='submit'
-                variant="filled"
-                disabled={isSubmitting || timeLeft > 0}
-                onClick={resetLinkSent ? () => form.handleSubmit(onSubmit)() : undefined}
-              >
-                {resetLinkSent
-                  ? 'Resend Link'
-                  : 'Send Reset Link'}
-              </LabelButton>
-            </div>
+            <ForgotPasswordForm
+              control={form.control}
+              isSubmitting={isSubmitting}
+              resetLinkSent={resetLinkSent}
+              timeLeft={timeLeft}
+            />
           )}
         </form>
       </Form>

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import LabelButton from '@/components/ui/LabelButton';
 import { FcGoogle } from 'react-icons/fc';
-import AuthForm from '@/components/AuthForm';
+import AuthForm from '@/features/auth/components/AuthForm';
 import Image from 'next/image';
 
 const Page = () => {
