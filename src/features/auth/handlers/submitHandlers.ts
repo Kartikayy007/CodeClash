@@ -12,7 +12,11 @@ import {
   RegisterHandlerProps,
   ForgotPasswordHandlerProps,
   GetStartedHandlerProps
+<<<<<<< HEAD
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
 } from '../types/auth.types'
 import { toast } from '@/providers/toast-config'
 import { login } from '@/features/auth/thunks/loginThunk'
@@ -25,7 +29,11 @@ import router from 'next/router'
 =======
 
 
+<<<<<<< HEAD
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
 
 export const handleResetPassword = async ({
   values,
@@ -43,8 +51,11 @@ export const handleResetPassword = async ({
   router,
   setIsSubmitting,
   form
+<<<<<<< HEAD
 =======
 >>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
+=======
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
 }: ResetPasswordHandlerProps) => {
   if (!token) {
     toast.error('Invalid Token', 'Password reset link is invalid')
@@ -57,7 +68,11 @@ export const handleResetPassword = async ({
     return false
   }
 
+<<<<<<< HEAD
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
   if (values.Newpassword !== values.confirmPassword) {
     toast.error('Password Mismatch', 'Passwords do not match')
     return false
@@ -71,7 +86,11 @@ export const handleResetPassword = async ({
   setIsSubmitting(true)
 
 =======
+<<<<<<< HEAD
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
 
   const result = await dispatch(resetPasswordWithToken({
     token,
@@ -107,7 +126,11 @@ export const handleLogin = async ({
 <<<<<<< HEAD
 
 =======
+<<<<<<< HEAD
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
   if (result.success) {
     const rememberMe = form.getValues('rememberMe')
     if (rememberMe) {
@@ -125,7 +148,11 @@ export const handleLogin = async ({
     
     toast.success('Login Successful', 'Welcome back!')
     router.push('/home')
+<<<<<<< HEAD
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
     return true
   }
   return false
@@ -145,7 +172,11 @@ export const handleRegister = async ({
   router,
   setIsSubmitting
 }: RegisterHandlerProps) => {
+<<<<<<< HEAD
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
   if (!values.email || !values.username || !values.password) {
     toast.error('Required Fields', 'Please fill in all required fields')
     return false
@@ -159,7 +190,11 @@ export const handleRegister = async ({
 
   
 =======
+<<<<<<< HEAD
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
 
   setIsSubmitting(true)
   const result = await dispatch(register({
@@ -171,7 +206,11 @@ export const handleRegister = async ({
 <<<<<<< HEAD
 
 =======
+<<<<<<< HEAD
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
   if (result.success) {
     localStorage.setItem('registrationEmail', values.email)
     document.cookie = `registrationEmail=${values.email}; path=/;`
@@ -180,7 +219,11 @@ export const handleRegister = async ({
 
 =======
     
+<<<<<<< HEAD
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
     toast.success('Registration Successful', 'Please verify your email')
     router.push('/verify')
     return true
@@ -207,12 +250,18 @@ export const handleForgotPassword = async ({
   if (result.success) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     toast.success('Reset Link Sent', 'Please check your email for the reset link')
 =======
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
 =======
     toast.success('Reset Link Sent', 'Please check your email for the reset link')
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+    toast.success('Reset Link Sent', 'Please check your email for the reset link')
+=======
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
     setResetLinkSent?.(true)
     setTimeLeft?.(30)
     onResetLinkSent?.(values.email)
@@ -230,7 +279,11 @@ export const handleGetStarted = async ({
 <<<<<<< HEAD
   console.log(values.email)
 =======
+<<<<<<< HEAD
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
   if (!values.email) {
     toast.error('Required Field', 'Please enter your email address')
     return false

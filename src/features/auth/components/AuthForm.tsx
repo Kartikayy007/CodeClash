@@ -51,10 +51,13 @@ import ForgotPasswordForm from './forms/ForgotPasswordForm';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
 import {
   handleResetPasswordError,
   handleLoginError,
@@ -72,7 +75,11 @@ import {
   handleCommonErrors 
 } from '../handlers/errorHandlers'
 import { 
+<<<<<<< HEAD
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
   handleResetPassword,
   handleLogin,
   handleRegister,
@@ -88,6 +95,7 @@ interface AuthFormProps {
   type: AuthFormType;
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
 
@@ -100,6 +108,10 @@ interface AuthFormProps {
   type: AuthFormType;
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
+=======
+=======
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+>>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
 
 interface AuthFormProps {
   type: string;
@@ -410,288 +422,63 @@ const AuthForm = ({
   const onSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
     try {
       if (type === 'reset-password') {
-        console.log('Resetting password with token:', token);
-        if (!token) {
-          toast.error('Invalid Token', 'Password reset link is invalid');
-          return;
-        }
-
-        setIsSubmitting(true);
-        if (!values.Newpassword) {
-          toast.error('Password Required', 'Please enter a new password');
-          return;
-        }
-
-        if (values.Newpassword !== values.confirmPassword) {
-          toast.error('Password Mismatch', 'Passwords do not match');
-          return;
-        }
-
-        const result = await dispatch(resetPasswordWithToken({
-          token,
-          password: values.Newpassword
-        })).unwrap();
-
-        if (result.success) {
-          toast.success(
-            'Password Reset Successful',
-            'You can now login with your new password'
-          );
-          router.push('/login');
-        }
-      }
-      else if (type === 'login') {
-        if (!values.email || !values.password) {
-          toast.error(
-            'Required Fields',
-            'Please fill in all required fields'
-          );
-          return;
-        }
-
-        setIsSubmitting(true);
-        const loginPayload = {
-          email: values.email,
-          password: values.password,
-        };
-
-        const result = await dispatch(login(loginPayload)).unwrap();
-
-        if (result.success) {
-          const rememberMe = form.getValues('rememberMe');
-          if (rememberMe) {
-            sessionStorage.setItem('rememberMe', 'true');
-            sessionStorage.setItem('userEmail', values.email);
-          } else {
-            sessionStorage.removeItem('rememberMe');
-            sessionStorage.removeItem('userEmail');
-          }
-
-          toast.success('Login Successful', 'Welcome back!');
-          router.push('/home');
-        }
+        await handleResetPassword({ values, token, dispatch, router, setIsSubmitting, form })
+      } else if (type === 'login') {
+        await handleLogin({ values, dispatch, router, form, setIsSubmitting })
       } else if (type === 'register') {
-        if (!values.email && !values.username && !values.password) {
-          toast.error(
-            'Required Fields',
-            'Please fill in all required fields'
-          );
-          return;
-        }
-
-        if (!values.username) {
-          toast.error('Username Required', 'Please enter a username');
-          return;
-        }
-
-        if (!values.email) {
-          toast.error('Email Required', 'Please enter an email address');
-          return;
-        }
-
-        if (!values.password) {
-          toast.error('Password Required', 'Please enter a password');
-          return;
-        }
-
-        setIsSubmitting(true);
-
-        const registrationPayload = {
-          email: values.email,
-          username: values.username,
-          password: values.password,
-        };
-
-        const result = await dispatch(register(registrationPayload)).unwrap();
-        if (result.success) {
-          localStorage.setItem('registrationEmail', values.email);
-
-          document.cookie = `registrationEmail=${values.email}; path=/;`;
-          document.cookie = `isRegistering=true; path=/;`;
-
-          toast.success(
-            'Registration Successful',
-            'Please verify your email'
-          );
-          router.push('/verify');
-        }
+        await handleRegister({ values, dispatch, router, setIsSubmitting })
       } else if (type === 'forgot-password') {
-        if (!values.email) {
-          toast.error('Required Field', 'Please enter your email address');
-          return;
-        }
-
-        setIsSubmitting(true);
-        console.log('Sending reset password request for:', values.email);
-
-        const result = await dispatch(resetPassword({ email: values.email })).unwrap();
-
-        console.log('Reset password response:', result);
-
-        if (result.success) {
-          setResetLinkSent(true);
-          setTimeLeft(30);
-          onResetLinkSent?.(values.email);
-        }
+        await handleForgotPassword({ 
+          values, 
+          dispatch, 
+          setIsSubmitting, 
+          setResetLinkSent, 
+          setTimeLeft, 
+          onResetLinkSent 
+        })
       } else if (type === 'get-started') {
-        if (!values.email) {
-          toast.error('Required Field', 'Please enter your email address');
-          return;
-        }
-
-        setIsSubmitting(true);
-        const result = await dispatch(checkEmail({ email: values.email })).unwrap();
-
-        if (result.success) {
-          localStorage.setItem('enteredEmail', values.email);
-          switch (result.data?.flow) {
-            case 1:
-              router.push('/register');
-              break;
-            case 2:
-              router.push('/login');
-              break;
-            case 3:
-              router.push('/login');
-              break;
-          }
-        }
+        await handleGetStarted({ values, dispatch, router, setIsSubmitting })
       }
     } catch (error: unknown) {
-      const apiError = error as ApiError;
+      const apiError = error as ApiError
       toast.error(
         'Error',
         apiError.response?.data?.message || apiError.message || 'Something went wrong'
-      );
+      )
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   const onError = (errors: FieldErrors<z.infer<typeof AuthFormSchema>>) => {
-    if (type === 'reset-password') {
-      if (!form.getValues('Newpassword') || !form.getValues('confirmPassword')) {
-        toast.error(
-          'Required Fields',
-          'Please fill in both password fields'
-        );
-        return;
-      }
-
-      if (form.getValues('Newpassword') !== form.getValues('confirmPassword')) {
-        toast.error(
-          'Password Mismatch',
-          'Passwords do not match'
-        );
-        return;
-      }
-
-      if (errors.Newpassword) {
-        toast.error(
-          'Invalid Password',
-          'Password must meet all requirements'
-        );
-        return;
-      }
+    if (type === 'reset-password' && handleResetPasswordError({ errors, form })) {
+      return
     }
 
-    if (type === 'login') {
-      if (errors.password) {
-        toast.error(
-          'Invalid Password',
-          'Password must meet all requirements'
-        );
-        return;
-      }
-      if (!form.getValues('email') && !form.getValues('password')) {
-        toast.error(
-          'Required Fields',
-          'Please fill in all required fields'
-        );
-        return;
-      }
-      if (!form.getValues('password')) {
-        toast.error(
-          'Required Fields',
-          'Please fill in all required fields'
-        );
-        return;
-      }
-      if (errors.username) {
-        toast.error(
-          'Invalid Username',
-          'Username must be at least 3 characters'
-        );
-        return;
-      }
+    if (type === 'login' && handleLoginError({ errors, form })) {
+      return
     }
 
-    if (type === 'register') {
-      if (!form.getValues('email') && !form.getValues('username') && !form.getValues('password')) {
-        toast.error(
-          'Required Fields',
-          'Please fill in all required fields'
-        );
-        return;
-      }
-
-      if (errors.email) {
-        toast.error(
-          'Invalid Email',
-          errors.email.message || 'Please enter a valid email address'
-        );
-        return;
-      }
-
-      if (!form.getValues('terms')) {
-        toast.error(
-          'Terms Required',
-          'Please accept the Terms and Conditions to continue'
-        );
-        return;
-      }
-
-      if (errors.username) {
-        toast.error(
-          'Invalid Username',
-          'Username must be at least 3 characters'
-        );
-        return;
-      }
-
-      if (errors.password) {
-        toast.error(
-          'Invalid Password',
-          'Password must meet all requirements'
-        );
-        return;
-      }
+    if (type === 'register' && handleRegisterError({ errors, form })) {
+      return
     }
 
     if (type === 'login' && (!form.getValues('email') || !form.getValues('password'))) {
-      toast.error(
-        'Fields Cant be Empty',
-        'Please fill in all required fields'
-      );
-      return;
+      toast.error('Fields Cant be Empty', 'Please fill in all required fields')
+      return
     }
 
     if (type === 'register' && (!form.getValues('email') || !form.getValues('username') || !form.getValues('password'))) {
-      toast.error(
-        'Fields Cant be Empty',
-        'Please fill in all required fields'
-      );
-      return;
+      toast.error('Fields Cant be Empty', 'Please fill in all required fields')
+      return
     }
 
     if (type === 'forgot-password' && !form.getValues('email')) {
-      toast.error(
-        'Fields Cant be Empty',
-        'Please fill in all required fields'
-      );
-      return;
+      toast.error('Fields Cant be Empty', 'Please fill in all required fields')
+      return
     }
 
+<<<<<<< HEAD
     if (errors.email) {
       toast.error(
         'Invalid email',
@@ -714,7 +501,14 @@ const AuthForm = ({
       return;
     }
   };
+<<<<<<< HEAD
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+    handleCommonErrors({ errors, form })
+  }
+>>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
 
   const onError = (errors: FieldErrors<z.infer<typeof AuthFormSchema>>) => {
     if (type === 'reset-password' && handleResetPasswordError({ errors, form })) {
