@@ -4,6 +4,9 @@ import LabelButton from '@/components/ui/LabelButton'
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
 // import { ForgotPasswordFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
 import { FormData } from '@/types/form.types'
@@ -18,6 +21,7 @@ interface ForgotPasswordFormProps {
   timeLeft: number;
   onResendClick?: () => void;
 =======
+<<<<<<< HEAD
 =======
 import { AuthFormSchema } from '@/lib/schemas/authSchema'
 =======
@@ -32,10 +36,16 @@ type ForgotPasswordFormData = z.infer<typeof ForgotPasswordFormSchema>;
 interface ForgotPasswordFormProps {
 <<<<<<< HEAD
   control: Control<ForgotPasswordFormData>
+=======
+
+interface ForgotPasswordFormProps {
+  control: Control<any>
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
   isSubmitting: boolean
   resetLinkSent: boolean
   timeLeft: number
   onResendClick?: () => void
+<<<<<<< HEAD
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 =======
   control: Control<ForgotPasswordFormData>;
@@ -44,6 +54,9 @@ interface ForgotPasswordFormProps {
   timeLeft: number;
   onResendClick?: () => void;
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
 }
 
 export default function ForgotPasswordForm({ 
@@ -52,14 +65,21 @@ export default function ForgotPasswordForm({
   resetLinkSent,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
   timeLeft
 =======
   timeLeft,
   onResendClick 
+<<<<<<< HEAD
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 =======
   timeLeft
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
 }: ForgotPasswordFormProps) {
   return (
     <div className="w-full space-y-4 sm:space-y-6">
@@ -83,18 +103,26 @@ export default function ForgotPasswordForm({
         variant="filled"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
         disabled={isSubmitting}
 =======
         disabled={isSubmitting || timeLeft > 0}
         onClick={resetLinkSent ? onResendClick : undefined}
+<<<<<<< HEAD
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 =======
         disabled={isSubmitting}
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
       >
         {resetLinkSent ? 'Resend Link' : 'Send Reset Link'}
       </LabelButton>
     </div>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   );
@@ -104,4 +132,10 @@ export default function ForgotPasswordForm({
 =======
   );
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+  );
+=======
+  )
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
 }

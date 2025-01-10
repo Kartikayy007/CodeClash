@@ -21,12 +21,18 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
       <div className="relative">
 =======
 import PasswordStrengthChecker from '../PasswordStrengthChecker'
+<<<<<<< HEAD
 import { AuthFormSchema } from '@/lib/schemas/authSchema'
 import { z } from 'zod'
 
 type ResetPasswordFormData = z.infer<typeof AuthFormSchema>
 interface ResetPasswordFormProps {
   control: Control<ResetPasswordFormData>
+=======
+
+interface ResetPasswordFormProps {
+  control: Control<any>
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
   isSubmitting: boolean
   newPassword: string
 }
@@ -44,6 +50,7 @@ export default function ResetPasswordForm({ control, isSubmitting, newPassword }
             type="text"
           />
         </div>
+<<<<<<< HEAD
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 =======
 import { Control, useWatch } from 'react-hook-form'
@@ -73,6 +80,9 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
     <div className='w-full space-y-4 sm:space-y-6'>
       <div className="relative">
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
         <CustomInput
           name="Newpassword"
           label="New Password"
@@ -82,6 +92,9 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
           showStrengthChecker={true}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
         />
@@ -95,6 +108,7 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
           password={newPassword ?? ''}
           isFocused={true}
         />
+<<<<<<< HEAD
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 =======
           onFocus={() => setIsFocused(true)}
@@ -105,6 +119,9 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
           isFocused={isFocused}
         />
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
       </div>
       <div className="relative">
         <CustomInput
@@ -124,6 +141,7 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
       </LabelButton>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     </div>
 =======
     </>
@@ -131,5 +149,11 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
 =======
     </div>
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+    </div>
+=======
+    </>
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
   )
 }

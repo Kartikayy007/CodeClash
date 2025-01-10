@@ -5,7 +5,11 @@ import { Control } from 'react-hook-form';
 // import PasswordStrengthChecker from '../features/auth/components/PasswordStrengthChecker';
 =======
 import PasswordStrengthChecker from '../features/auth/components/PasswordStrengthChecker';
+<<<<<<< HEAD
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
 import Image from 'next/image';
 <<<<<<< HEAD
 // import { z } from 'zod'

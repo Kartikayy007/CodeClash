@@ -23,6 +23,7 @@ export default function RegisterForm({ control, isSubmitting }: RegisterFormProp
 import PasswordStrengthChecker from '../PasswordStrengthChecker'
 import CustomCheckbox from '@/components/ui/CustomCheckbox'
 import LabelButton from '@/components/ui/LabelButton'
+<<<<<<< HEAD
 import { RegisterFormSchema } from '@/lib/schemas/authSchema'
 import { z } from 'zod'
 
@@ -30,6 +31,11 @@ type RegisterFormData = z.infer<typeof RegisterFormSchema>
 
 interface RegisterFormProps {
   control: Control<RegisterFormData>
+=======
+
+interface RegisterFormProps {
+  control: Control<any>
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
   isSubmitting: boolean
   password: string
 }
@@ -37,7 +43,11 @@ interface RegisterFormProps {
 export default function RegisterForm({ control, isSubmitting, password }: RegisterFormProps) {
   return (
     <>
+<<<<<<< HEAD
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
       <CustomInput
         name="email"
         label="Email"
@@ -67,7 +77,11 @@ export default function RegisterForm({ control, isSubmitting, password }: Regist
           password={password ?? ''}
           isFocused={true}
         />
+<<<<<<< HEAD
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
       </div>
 
       <div className='flex items-start sm:items-center gap-2'>
@@ -99,6 +113,10 @@ export default function RegisterForm({ control, isSubmitting, password }: Regist
     </div>
 =======
     </>
+<<<<<<< HEAD
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
   )
 }

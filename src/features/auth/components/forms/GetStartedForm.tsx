@@ -4,6 +4,9 @@ import { Control } from 'react-hook-form'
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
 // import { GetStartedFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
 import { FormData } from '@/types/form.types';
@@ -14,6 +17,7 @@ interface GetStartedFormProps {
   control: Control<FormData>;
   isSubmitting: boolean;
 =======
+<<<<<<< HEAD
 =======
 import { AuthFormSchema } from '@/lib/schemas/authSchema'
 import { z } from 'zod'
@@ -35,6 +39,13 @@ interface GetStartedFormProps {
   control: Control<z.infer<typeof GetStartedFormSchema>>;
   isSubmitting: boolean;
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+
+interface GetStartedFormProps {
+  control: Control<any>
+  isSubmitting: boolean
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
 }
 
 export default function GetStartedForm({ control, isSubmitting }: GetStartedFormProps) {
@@ -43,7 +54,11 @@ export default function GetStartedForm({ control, isSubmitting }: GetStartedForm
     <div className='w-full space-y-4 sm:space-y-6'>
 =======
     <>
+<<<<<<< HEAD
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
       <CustomInput
         name="email"
         label="Email"
@@ -61,6 +76,10 @@ export default function GetStartedForm({ control, isSubmitting }: GetStartedForm
     </div>
 =======
     </>
+<<<<<<< HEAD
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
   )
 }

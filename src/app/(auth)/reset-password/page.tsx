@@ -8,7 +8,11 @@ import AuthForm from '@/features/auth/components/AuthForm';
 import { useRouter, useSearchParams } from 'next/navigation';
 =======
 import { useSearchParams, useRouter } from 'next/navigation';
+<<<<<<< HEAD
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+>>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
 
 const TokenHandler = () => {
   const searchParams = useSearchParams();
