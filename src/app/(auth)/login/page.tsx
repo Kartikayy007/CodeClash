@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { BackButton } from '@/components/ui/BackButton'
-import AuthForm from '@/components/AuthForm'
+import AuthForm from '@/features/auth/components/AuthForm'
 
 const Page = () => {
   return (

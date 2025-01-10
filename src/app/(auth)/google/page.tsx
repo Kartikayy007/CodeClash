@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense } from 'react';
-import TokenExchange from '@/components/TokenExchange';
+import TokenExchange from '@/features/auth/components/TokenExchange';
 import Image from 'next/image';
 
 const LoadingFallback = () => (

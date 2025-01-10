@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FormControl, FormField, FormLabel, FormMessage } from '@/components/ui/form';
 import { Control } from 'react-hook-form';
-import PasswordStrengthChecker from './PasswordStrengthChecker';
+import PasswordStrengthChecker from '../features/auth/components/PasswordStrengthChecker';
 import Image from 'next/image';
 import { z } from 'zod'
 import { AuthFormSchema } from '../lib/utils';
