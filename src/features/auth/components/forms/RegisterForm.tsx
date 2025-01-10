@@ -1,6 +1,7 @@
 import { Control } from 'react-hook-form'
 import CustomInput from '@/components/CustomInput'
 import Link from 'next/link'
+<<<<<<< HEAD
 import CustomCheckbox from '@/components/ui/CustomCheckbox'
 import LabelButton from '@/components/ui/LabelButton'
 // import { RegisterFormSchema } from '@/lib/schemas/authSchema'
@@ -18,6 +19,21 @@ interface RegisterFormProps {
 export default function RegisterForm({ control, isSubmitting }: RegisterFormProps) {
   return (
     <div className='w-full space-y-4 sm:space-y-6'>
+=======
+import PasswordStrengthChecker from '../PasswordStrengthChecker'
+import CustomCheckbox from '@/components/ui/CustomCheckbox'
+import LabelButton from '@/components/ui/LabelButton'
+
+interface RegisterFormProps {
+  control: Control<any>
+  isSubmitting: boolean
+  password: string
+}
+
+export default function RegisterForm({ control, isSubmitting, password }: RegisterFormProps) {
+  return (
+    <>
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
       <CustomInput
         name="email"
         label="Email"
@@ -41,6 +57,13 @@ export default function RegisterForm({ control, isSubmitting }: RegisterFormProp
           type="password"
           showStrengthChecker={true}
         />
+<<<<<<< HEAD
+=======
+        <PasswordStrengthChecker
+          password={password ?? ''}
+          isFocused={true}
+        />
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
       </div>
 
       <div className='flex items-start sm:items-center gap-2'>
@@ -68,6 +91,10 @@ export default function RegisterForm({ control, isSubmitting }: RegisterFormProp
       >
         Sign Up
       </LabelButton>
+<<<<<<< HEAD
     </div>
+=======
+    </>
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
   )
 }

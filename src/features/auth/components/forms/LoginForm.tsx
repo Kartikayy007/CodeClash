@@ -3,6 +3,7 @@ import CustomInput from '@/components/CustomInput'
 import LabelButton from '@/components/ui/LabelButton'
 import Link from 'next/link'
 import CustomCheckbox from '@/components/ui/CustomCheckbox'
+<<<<<<< HEAD
 // import { LoginFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
 import { FormData } from '@/types/form.types';
@@ -13,18 +14,31 @@ interface LoginFormProps {
   control: Control<FormData>;
   isSubmitting: boolean;
   password: string;
+=======
+
+interface LoginFormProps {
+  control: Control<any>
+  isSubmitting: boolean
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 }
 
 export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
   return (
+<<<<<<< HEAD
     <div className='w-full space-y-4 sm:space-y-6'>
+=======
+    <>
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
       <CustomInput
         name="email" 
         label="Email"
         control={control}
         placeholder=""
         type="text"
+<<<<<<< HEAD
         isLoginForm={true}
+=======
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
       />
       <CustomInput
         name="password"
@@ -32,7 +46,10 @@ export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
         control={control}
         placeholder=""
         type="password"
+<<<<<<< HEAD
         isLoginForm={true}
+=======
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
       />
 
       <div className="flex justify-between items-center">
@@ -58,6 +75,10 @@ export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
       >
         Login
       </LabelButton>
+<<<<<<< HEAD
     </div>
+=======
+    </>
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
   )
 }

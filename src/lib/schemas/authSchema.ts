@@ -2,12 +2,17 @@ import { z } from "zod"
 
 export const AuthFormSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),
+<<<<<<< HEAD
   password: z.string()
   .min(8, "Password must be at least 8 characters")
   .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
   .regex(/[0-9]/, "Password must contain at least one number")
   .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character"),
   username: z.string().min(3, 'Username must be at least 3 characters'),
+=======
+  password: z.string().optional(),
+  username: z.string().optional(),
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
   Newpassword: z.string().optional(),
   confirmPassword: z.string().optional(),
   terms: z.boolean().optional(),
@@ -60,6 +65,7 @@ export const AuthFormSchema = z.object({
   }
 
   return true;
+<<<<<<< HEAD
 });
 
 export const OTPFormSchema = z.object({
@@ -133,4 +139,6 @@ export const ResetPasswordFormSchema = z.object({
 
 export const ForgotPasswordFormSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),
+=======
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 });

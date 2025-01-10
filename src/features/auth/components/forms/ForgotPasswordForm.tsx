@@ -1,6 +1,7 @@
 import { Control } from 'react-hook-form'
 import CustomInput from '@/components/CustomInput'
 import LabelButton from '@/components/ui/LabelButton'
+<<<<<<< HEAD
 // import { ForgotPasswordFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
 import { FormData } from '@/types/form.types'
@@ -14,13 +15,27 @@ interface ForgotPasswordFormProps {
   resetLinkSent: boolean;
   timeLeft: number;
   onResendClick?: () => void;
+=======
+
+interface ForgotPasswordFormProps {
+  control: Control<any>
+  isSubmitting: boolean
+  resetLinkSent: boolean
+  timeLeft: number
+  onResendClick?: () => void
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 }
 
 export default function ForgotPasswordForm({ 
   control, 
   isSubmitting, 
   resetLinkSent,
+<<<<<<< HEAD
   timeLeft
+=======
+  timeLeft,
+  onResendClick 
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 }: ForgotPasswordFormProps) {
   return (
     <div className="w-full space-y-4 sm:space-y-6">
@@ -42,10 +57,19 @@ export default function ForgotPasswordForm({
       <LabelButton
         type='submit'
         variant="filled"
+<<<<<<< HEAD
         disabled={isSubmitting}
+=======
+        disabled={isSubmitting || timeLeft > 0}
+        onClick={resetLinkSent ? onResendClick : undefined}
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
       >
         {resetLinkSent ? 'Resend Link' : 'Send Reset Link'}
       </LabelButton>
     </div>
+<<<<<<< HEAD
   );
+=======
+  )
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 }

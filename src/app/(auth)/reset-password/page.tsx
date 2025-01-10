@@ -4,7 +4,11 @@ import React, { Suspense } from 'react';
 import Image from 'next/image';
 import { BackButton } from '@/components/ui/BackButton';
 import AuthForm from '@/features/auth/components/AuthForm';
+<<<<<<< HEAD
 import { useRouter, useSearchParams } from 'next/navigation';
+=======
+import { useSearchParams, useRouter } from 'next/navigation';
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 
 const TokenHandler = () => {
   const searchParams = useSearchParams();

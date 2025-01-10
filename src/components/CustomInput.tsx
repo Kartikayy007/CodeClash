@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { FormControl, FormField, FormLabel, FormMessage } from '@/components/ui/form';
 import { Control } from 'react-hook-form';
+<<<<<<< HEAD
 // import PasswordStrengthChecker from '../features/auth/components/PasswordStrengthChecker';
+=======
+import PasswordStrengthChecker from '../features/auth/components/PasswordStrengthChecker';
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 import Image from 'next/image';
 // import { z } from 'zod'
 // import { AuthFormSchema, ForgotPasswordFormSchema, GetStartedFormSchema, LoginFormSchema, RegisterFormSchema, ResetPasswordFormSchema } from '@/lib/schemas/authSchema';

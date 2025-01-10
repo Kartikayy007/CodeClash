@@ -1,6 +1,7 @@
 import { Control } from 'react-hook-form'
 import CustomInput from '@/components/CustomInput'
 import LabelButton from '@/components/ui/LabelButton'
+<<<<<<< HEAD
 import { useState } from 'react'
 // import PasswordStrengthChecker from '../PasswordStrengthChecker'
 // import { ResetPasswordFormData } from '@/types/form.types'
@@ -17,6 +18,29 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
   return (
     <div className='w-full space-y-4 sm:space-y-6'>
       <div className="relative">
+=======
+import PasswordStrengthChecker from '../PasswordStrengthChecker'
+
+interface ResetPasswordFormProps {
+  control: Control<any>
+  isSubmitting: boolean
+  newPassword: string
+}
+
+export default function ResetPasswordForm({ control, isSubmitting, newPassword }: ResetPasswordFormProps) {
+  return (
+    <>
+      <div className="relative">
+        <div className='hidden'>
+          <CustomInput
+            name="email"
+            label="Email"
+            control={control}
+            placeholder=""
+            type="text"
+          />
+        </div>
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
         <CustomInput
           name="Newpassword"
           label="New Password"
@@ -24,6 +48,7 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
           placeholder=""
           type="password"
           showStrengthChecker={true}
+<<<<<<< HEAD
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
         />
@@ -31,6 +56,13 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
           password={password} 
           isFocused={isFocused}
         /> */}
+=======
+        />
+        <PasswordStrengthChecker
+          password={newPassword ?? ''}
+          isFocused={true}
+        />
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
       </div>
       <div className="relative">
         <CustomInput
@@ -48,6 +80,10 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
       >
         Reset Password
       </LabelButton>
+<<<<<<< HEAD
     </div>
+=======
+    </>
+>>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
   )
 }
