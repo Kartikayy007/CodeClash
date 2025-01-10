@@ -1,3 +1,9 @@
+import { AppDispatch } from '@/store/store'
+import { NextRouter } from 'next/router'
+import { UseFormReturn } from 'react-hook-form'
+import { AuthFormSchema } from '@/lib/schemas/authSchema'
+import { z } from 'zod'
+
 export interface User {
   id: string;
   email: string;
@@ -105,3 +111,36 @@ export interface GoogleOAuthResponse {
 export interface TempTokenPayload {
   tempOAuthToken: string;
 }
+
+export interface BaseAuthHandlerProps {
+  values: z.infer<typeof AuthFormSchema>;
+  dispatch: AppDispatch;
+  setIsSubmitting: (value: boolean) => void;
+}
+
+export interface ResetPasswordHandlerProps extends BaseAuthHandlerProps {
+  token: string | undefined;
+  router: NextRouter;
+  form: UseFormReturn<z.infer<typeof AuthFormSchema>>;
+}
+
+export interface LoginHandlerProps extends BaseAuthHandlerProps {
+  router: NextRouter;
+  form: UseFormReturn<z.infer<typeof AuthFormSchema>>;
+}
+
+export interface RegisterHandlerProps extends BaseAuthHandlerProps {
+  router: NextRouter;
+}
+
+export interface ForgotPasswordHandlerProps extends BaseAuthHandlerProps {
+  setResetLinkSent: (value: boolean) => void;
+  setTimeLeft: (value: number) => void;
+  onResetLinkSent?: (email: string) => void;
+}
+
+export interface GetStartedHandlerProps extends BaseAuthHandlerProps {
+  router: NextRouter;
+}
+
+export type AuthFormType = 'login' | 'register' | 'forgot-password' | 'reset-password' | 'get-started';
