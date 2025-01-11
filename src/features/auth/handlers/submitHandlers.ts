@@ -1,9 +1,9 @@
-import { 
+import {
   ResetPasswordHandlerProps,
   LoginHandlerProps,
-  RegisterHandlerProps,
   ForgotPasswordHandlerProps,
-  GetStartedHandlerProps
+  GetStartedHandlerProps,
+  RegisterHandlerProps
 } from '../types/auth.types'
 import { toast } from '@/providers/toast-config'
 import { login } from '@/features/auth/thunks/loginThunk'
@@ -12,8 +12,6 @@ import { resetPassword } from '@/features/auth/thunks/resetPasswordThunk'
 import { resetPasswordWithToken } from '@/features/auth/thunks/resetPasswordWithTokenThunk'
 import { checkEmail } from '@/features/auth/thunks/checkEmailThunk'
 import router from 'next/router'
-
-
 
 export const handleResetPassword = async ({
   values,
@@ -54,6 +52,7 @@ export const handleResetPassword = async ({
 export const handleLogin = async ({
   values,
   dispatch,
+  router,
   form,
   setIsSubmitting
 }: LoginHandlerProps) => {
@@ -67,7 +66,7 @@ export const handleLogin = async ({
     email: values.email,
     password: values.password
   })).unwrap()
-  
+
 
   if (result.success) {
     const rememberMe = form.getValues('rememberMe')
@@ -78,7 +77,7 @@ export const handleLogin = async ({
       sessionStorage.removeItem('rememberMe')
       sessionStorage.removeItem('userEmail')
     }
-    
+
     toast.success('Login Successful', 'Welcome back!')
     router.push('/home')
     return true
@@ -89,7 +88,8 @@ export const handleLogin = async ({
 export const handleRegister = async ({
   values,
   dispatch,
-  setIsSubmitting
+  setIsSubmitting,
+  router
 }: RegisterHandlerProps) => {
   if (!values.email || !values.username || !values.password) {
     toast.error('Required Fields', 'Please fill in all required fields')
@@ -108,7 +108,7 @@ export const handleRegister = async ({
     localStorage.setItem('registrationEmail', values.email)
     document.cookie = `registrationEmail=${values.email}; path=/;`
     document.cookie = `isRegistering=true; path=/;`
-    
+
     toast.success('Registration Successful', 'Please verify your email')
     router.push('/verify')
     return true

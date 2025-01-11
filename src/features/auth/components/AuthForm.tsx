@@ -5,21 +5,10 @@ import { z } from "zod";
 import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
-import LabelButton from '../../../components/ui/LabelButton';
-import CustomInput from '../../../components/CustomInput';
 import { AuthFormSchema } from '@/lib/schemas/authSchema';
 import { toast } from '@/providers/toast-config';
-import CustomCheckbox from '@/components/ui/CustomCheckbox';
-import Link from 'next/link';
-import PasswordStrengthChecker from './PasswordStrengthChecker';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
-import { register } from '@/features/auth/thunks/registerThunk';
-// import { useRouter } from 'next/router';
-import { login } from '@/features/auth/thunks/loginThunk';
-import { resetPassword } from '@/features/auth/thunks/resetPasswordThunk';
-import { resetPasswordWithToken } from '@/features/auth/thunks/resetPasswordWithTokenThunk';
-import { checkEmail } from '@/features/auth/thunks/checkEmailThunk';
 import { ApiError } from '@/types/error.types';
 import GetStartedForm from './forms/GetStartedForm';
 import LoginForm from './forms/LoginForm';
@@ -108,11 +97,11 @@ const AuthForm = ({
   const onSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
     try {
       if (type === 'reset-password') {
-        await handleResetPassword({ values, token, dispatch, setIsSubmitting, form, router })
+        await handleResetPassword({ values, token, dispatch, setIsSubmitting, form })
       } else if (type === 'login') {
         await handleLogin({ values, dispatch, form, setIsSubmitting, router })
       } else if (type === 'register') {
-        await handleRegister({ values, dispatch, setIsSubmitting , router })
+        await handleRegister({ values, dispatch, setIsSubmitting, router })
       } else if (type === 'forgot-password') {
         await handleForgotPassword({ 
           values, 
@@ -127,7 +116,7 @@ const AuthForm = ({
       }
     } catch (error: unknown) {
       const apiError = error as ApiError;
-      handleApiError(apiError, type, router);
+      handleApiError(apiError, type, router); 
     } finally {
       setIsSubmitting(false);
     }

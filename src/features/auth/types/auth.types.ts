@@ -1,4 +1,5 @@
 import { AppDispatch } from '@/store/store'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { NextRouter } from 'next/router'
 import { UseFormReturn } from 'react-hook-form'
 import { AuthFormSchema } from '@/lib/schemas/authSchema'
@@ -130,12 +131,12 @@ export interface ResetPasswordHandlerProps extends BaseAuthHandlerProps {
 }
 
 export interface LoginHandlerProps extends BaseAuthHandlerProps {
-  router: NextRouter;
+  router: AppRouterInstance | NextRouter;
   form: UseFormReturn<z.infer<typeof AuthFormSchema>>;
 }
 
 export interface RegisterHandlerProps extends BaseAuthHandlerProps {
-  router: NextRouter;
+  router: AppRouterInstance | NextRouter;
 }
 
 export interface ForgotPasswordHandlerProps extends BaseAuthHandlerProps {
@@ -145,7 +146,7 @@ export interface ForgotPasswordHandlerProps extends BaseAuthHandlerProps {
 }
 
 export interface GetStartedHandlerProps extends BaseAuthHandlerProps {
-  router: NextRouter;
+  router: AppRouterInstance | NextRouter;
 }
 
 export type AuthFormType = 'login' | 'register' | 'forgot-password' | 'reset-password' | 'get-started';
