@@ -20,8 +20,13 @@ type FieldNames = 'password' | 'email' | 'username' | 'Newpassword' | 'confirmPa
 =======
 import { z } from 'zod'
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { AuthFormSchema } from '@/lib/schemas/authSchema';
 >>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
+=======
+import { AuthFormSchema } from '@/lib/schemas/authSchema';
+>>>>>>> e488d9d (implemented handeling for otp, removed unused import, fixed types)
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
 
 interface CustomInput {
   control: Control<FormData>;

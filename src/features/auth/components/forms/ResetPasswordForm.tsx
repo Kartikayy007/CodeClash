@@ -22,6 +22,7 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
 =======
 import PasswordStrengthChecker from '../PasswordStrengthChecker'
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { AuthFormSchema } from '@/lib/schemas/authSchema'
 import { z } from 'zod'
 
@@ -29,10 +30,19 @@ type ResetPasswordFormData = z.infer<typeof AuthFormSchema>
 interface ResetPasswordFormProps {
   control: Control<ResetPasswordFormData>
 =======
+=======
+import { AuthFormSchema } from '@/lib/schemas/authSchema'
+import { z } from 'zod'
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
 
+type ResetPasswordFormData = z.infer<typeof AuthFormSchema>
 interface ResetPasswordFormProps {
+<<<<<<< HEAD
   control: Control<any>
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+  control: Control<ResetPasswordFormData>
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
   isSubmitting: boolean
   newPassword: string
 }

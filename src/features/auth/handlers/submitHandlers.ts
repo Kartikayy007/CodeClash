@@ -52,10 +52,15 @@ export const handleResetPassword = async ({
   setIsSubmitting,
   form
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
 =======
 >>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
+=======
+=======
+>>>>>>> e488d9d (implemented handeling for otp, removed unused import, fixed types)
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
 }: ResetPasswordHandlerProps) => {
   if (!token) {
     toast.error('Invalid Token', 'Password reset link is invalid')

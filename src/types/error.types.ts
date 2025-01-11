@@ -35,7 +35,11 @@ export interface AuthApiError {
       message: string;
 =======
       message: any;
+<<<<<<< HEAD
 >>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
+=======
+>>>>>>> e488d9d (implemented handeling for otp, removed unused import, fixed types)
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
       error: string;
       success: boolean;
     };

@@ -84,10 +84,15 @@ export const AuthFormSchema = z.object({
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+>>>>>>> e488d9d (implemented handeling for otp, removed unused import, fixed types)
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
 });
 
 export const OTPFormSchema = z.object({
@@ -173,5 +178,10 @@ export const ForgotPasswordFormSchema = z.object({
 =======
 =======
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+<<<<<<< HEAD
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+>>>>>>> e488d9d (implemented handeling for otp, removed unused import, fixed types)
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
 });

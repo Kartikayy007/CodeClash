@@ -141,7 +141,11 @@ const CustomOtp = () => {
 =======
       
       if (!data.pin || data.pin.length === 0) {
+<<<<<<< HEAD
 >>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
+=======
+>>>>>>> e488d9d (implemented handeling for otp, removed unused import, fixed types)
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
         toast.error(
           'Fields Cannot be Empty',
           'Please fill in all required fields'
@@ -149,7 +153,11 @@ const CustomOtp = () => {
 <<<<<<< HEAD
 =======
         setValidationState('error');
+<<<<<<< HEAD
 >>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
+=======
+>>>>>>> e488d9d (implemented handeling for otp, removed unused import, fixed types)
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
         return;
       }
 

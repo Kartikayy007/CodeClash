@@ -1,8 +1,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
 import { FieldErrors, UseFormReturn, FieldValues } from "react-hook-form"
 import { z } from "zod"
 import { 
@@ -87,14 +90,22 @@ import { z } from "zod"
 import { AuthFormSchema } from "@/lib/schemas/authSchema"
 import { toast } from "@/providers/toast-config"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import { FieldErrors, UseFormReturn } from "react-hook-form"
 import { z } from "zod"
 import { LoginFormSchema, RegisterFormSchema, ResetPasswordFormSchema, ForgotPasswordFormSchema, GetStartedFormSchema } from "@/lib/schemas/authSchema"
+=======
+=======
+import { FieldErrors, UseFormReturn } from "react-hook-form"
+import { z } from "zod"
+import { AuthFormSchema } from "@/lib/schemas/authSchema"
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
 import { toast } from "@/providers/toast-config"
 import { ApiError } from "@/types/error.types"
 import { isAxiosError } from "axios"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
+<<<<<<< HEAD
 >>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
 
 interface BaseErrorHandlerProps<T> {
@@ -115,10 +126,13 @@ type GetStartedErrorHandlerProps = BaseErrorHandlerProps<z.infer<typeof GetStart
 export const handleLoginError = ({ errors, form }: LoginErrorHandlerProps) => {
   if (!form.getValues('email') || !form.getValues('password')) {
 =======
+=======
+>>>>>>> e488d9d (implemented handeling for otp, removed unused import, fixed types)
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
 
 interface ErrorHandlerProps {
   errors: FieldErrors<z.infer<typeof AuthFormSchema>>
-  form: any
+  form: UseFormReturn<z.infer<typeof AuthFormSchema>>
 }
 
 export const handleResetPasswordError = ({ errors, form }: ErrorHandlerProps) => {
@@ -388,7 +402,7 @@ export const handleForgotPasswordError = ({ errors, form }: ForgotPasswordErrorH
 <<<<<<< HEAD
 }
 
-export const handleCommonErrors = ({ errors, form }: ErrorHandlerProps) => {
+export const handleCommonErrors = ({ errors }: ErrorHandlerProps) => {
   if (errors.email) {
     toast.error('Invalid email', errors.email.message || 'Enter a valid email address.')
     return true

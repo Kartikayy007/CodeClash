@@ -7,8 +7,11 @@ import CustomCheckbox from '@/components/ui/CustomCheckbox'
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
 // import { LoginFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
 import { FormData } from '@/types/form.types';
@@ -20,6 +23,7 @@ interface LoginFormProps {
   isSubmitting: boolean;
   password: string;
 =======
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 import { AuthFormSchema } from '@/lib/schemas/authSchema'
@@ -36,9 +40,16 @@ interface LoginFormProps {
   isSubmitting: boolean
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 =======
+=======
+=======
+import { AuthFormSchema } from '@/lib/schemas/authSchema'
+import { z } from 'zod'
+>>>>>>> e488d9d (implemented handeling for otp, removed unused import, fixed types)
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
 
+type LoginFormData = z.infer<typeof AuthFormSchema>
 interface LoginFormProps {
-  control: Control<any>
+  control: Control<LoginFormData>
   isSubmitting: boolean
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)

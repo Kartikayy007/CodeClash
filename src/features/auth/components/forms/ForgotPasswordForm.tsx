@@ -5,8 +5,11 @@ import LabelButton from '@/components/ui/LabelButton'
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
 // import { ForgotPasswordFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
 import { FormData } from '@/types/form.types'
@@ -21,6 +24,7 @@ interface ForgotPasswordFormProps {
   timeLeft: number;
   onResendClick?: () => void;
 =======
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 import { AuthFormSchema } from '@/lib/schemas/authSchema'
@@ -37,10 +41,21 @@ interface ForgotPasswordFormProps {
 <<<<<<< HEAD
   control: Control<ForgotPasswordFormData>
 =======
+=======
+=======
+import { AuthFormSchema } from '@/lib/schemas/authSchema'
+import { z } from 'zod'
+>>>>>>> e488d9d (implemented handeling for otp, removed unused import, fixed types)
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
 
+type ForgotPasswordFormData = z.infer<typeof AuthFormSchema>
 interface ForgotPasswordFormProps {
+<<<<<<< HEAD
   control: Control<any>
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+  control: Control<ForgotPasswordFormData>
+>>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
   isSubmitting: boolean
   resetLinkSent: boolean
   timeLeft: number
