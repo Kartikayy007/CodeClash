@@ -4,6 +4,7 @@ import LabelButton from '@/components/ui/LabelButton'
 import Link from 'next/link'
 import CustomCheckbox from '@/components/ui/CustomCheckbox'
 <<<<<<< HEAD
+<<<<<<< HEAD
 // import { LoginFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
 import { FormData } from '@/types/form.types';
@@ -15,9 +16,14 @@ interface LoginFormProps {
   isSubmitting: boolean;
   password: string;
 =======
+=======
+import { AuthFormSchema } from '@/lib/schemas/authSchema'
+import { z } from 'zod'
+>>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
 
+type LoginFormData = z.infer<typeof AuthFormSchema>
 interface LoginFormProps {
-  control: Control<any>
+  control: Control<LoginFormData>
   isSubmitting: boolean
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 }

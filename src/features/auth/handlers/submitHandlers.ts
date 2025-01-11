@@ -33,6 +33,7 @@ export const handleResetPassword = async ({
   dispatch,
 <<<<<<< HEAD
   setIsSubmitting,
+<<<<<<< HEAD
 }: ResetPasswordHandlerProps) => {
   if (!values.Newpassword || !values.confirmPassword) {
     toast.error('Password Required', 'Please enter a new password')
@@ -42,6 +43,8 @@ export const handleResetPassword = async ({
   router,
   setIsSubmitting,
   form
+=======
+>>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
 }: ResetPasswordHandlerProps) => {
   if (!token) {
     toast.error('Invalid Token', 'Password reset link is invalid')

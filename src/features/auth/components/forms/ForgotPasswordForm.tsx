@@ -2,6 +2,7 @@ import { Control } from 'react-hook-form'
 import CustomInput from '@/components/CustomInput'
 import LabelButton from '@/components/ui/LabelButton'
 <<<<<<< HEAD
+<<<<<<< HEAD
 // import { ForgotPasswordFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
 import { FormData } from '@/types/form.types'
@@ -16,9 +17,14 @@ interface ForgotPasswordFormProps {
   timeLeft: number;
   onResendClick?: () => void;
 =======
+=======
+import { AuthFormSchema } from '@/lib/schemas/authSchema'
+import { z } from 'zod'
+>>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
 
+type ForgotPasswordFormData = z.infer<typeof AuthFormSchema>
 interface ForgotPasswordFormProps {
-  control: Control<any>
+  control: Control<ForgotPasswordFormData>
   isSubmitting: boolean
   resetLinkSent: boolean
   timeLeft: number

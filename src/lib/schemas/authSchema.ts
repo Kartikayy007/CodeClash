@@ -66,10 +66,14 @@ export const AuthFormSchema = z.object({
 
   return true;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
 });
 
 export const OTPFormSchema = z.object({
   pin: z.string().min(4, "Please enter a valid 4-digit OTP").max(4)
+<<<<<<< HEAD
 });
 
 export const startingShema = z.object({
@@ -141,4 +145,6 @@ export const ForgotPasswordFormSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),
 =======
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
 });

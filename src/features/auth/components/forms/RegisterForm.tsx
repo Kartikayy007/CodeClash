@@ -23,9 +23,13 @@ export default function RegisterForm({ control, isSubmitting }: RegisterFormProp
 import PasswordStrengthChecker from '../PasswordStrengthChecker'
 import CustomCheckbox from '@/components/ui/CustomCheckbox'
 import LabelButton from '@/components/ui/LabelButton'
+import { AuthFormSchema } from '@/lib/schemas/authSchema'
+import { z } from 'zod'
+
+type RegisterFormData = z.infer<typeof AuthFormSchema>
 
 interface RegisterFormProps {
-  control: Control<any>
+  control: Control<RegisterFormData>
   isSubmitting: boolean
   password: string
 }

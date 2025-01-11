@@ -20,9 +20,12 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
       <div className="relative">
 =======
 import PasswordStrengthChecker from '../PasswordStrengthChecker'
+import { AuthFormSchema } from '@/lib/schemas/authSchema'
+import { z } from 'zod'
 
+type ResetPasswordFormData = z.infer<typeof AuthFormSchema>
 interface ResetPasswordFormProps {
-  control: Control<any>
+  control: Control<ResetPasswordFormData>
   isSubmitting: boolean
   newPassword: string
 }

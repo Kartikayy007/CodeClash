@@ -134,13 +134,22 @@ const CustomOtp = () => {
   const onSubmit = async (data: OTPFormValues) => {
     try {
       setValidationState('idle');
+<<<<<<< HEAD
       console.log(data.pin.length)
       
       if (data.pin.length < 4) {
+=======
+      
+      if (!data.pin || data.pin.length === 0) {
+>>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
         toast.error(
           'Fields Cannot be Empty',
           'Please fill in all required fields'
         );
+<<<<<<< HEAD
+=======
+        setValidationState('error');
+>>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
         return;
       }
 

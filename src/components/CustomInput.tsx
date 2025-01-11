@@ -7,11 +7,16 @@ import { Control } from 'react-hook-form';
 import PasswordStrengthChecker from '../features/auth/components/PasswordStrengthChecker';
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 import Image from 'next/image';
+<<<<<<< HEAD
 // import { z } from 'zod'
 // import { AuthFormSchema, ForgotPasswordFormSchema, GetStartedFormSchema, LoginFormSchema, RegisterFormSchema, ResetPasswordFormSchema } from '@/lib/schemas/authSchema';
 import { FormData } from '@/types/form.types';
 
 type FieldNames = 'password' | 'email' | 'username' | 'Newpassword' | 'confirmPassword' | 'terms' | 'rememberMe';
+=======
+import { z } from 'zod'
+import { AuthFormSchema } from '@/lib/schemas/authSchema';
+>>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
 
 interface CustomInput {
   control: Control<FormData>;

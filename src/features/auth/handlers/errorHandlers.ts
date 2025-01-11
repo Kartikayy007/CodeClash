@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { FieldErrors, UseFormReturn, FieldValues } from "react-hook-form"
 import { z } from "zod"
 import { 
@@ -82,10 +83,19 @@ import { FieldErrors } from "react-hook-form"
 import { z } from "zod"
 import { AuthFormSchema } from "@/lib/schemas/authSchema"
 import { toast } from "@/providers/toast-config"
+=======
+import { FieldErrors, UseFormReturn } from "react-hook-form"
+import { z } from "zod"
+import { AuthFormSchema } from "@/lib/schemas/authSchema"
+import { toast } from "@/providers/toast-config"
+import { ApiError } from "@/types/error.types"
+import { isAxiosError } from "axios"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
+>>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
 
 interface ErrorHandlerProps {
   errors: FieldErrors<z.infer<typeof AuthFormSchema>>
-  form: any
+  form: UseFormReturn<z.infer<typeof AuthFormSchema>>
 }
 
 export const handleResetPasswordError = ({ errors, form }: ErrorHandlerProps) => {
@@ -194,7 +204,7 @@ export const handleForgotPasswordError = ({ errors, form }: ForgotPasswordErrorH
   return false
 }
 
-export const handleCommonErrors = ({ errors, form }: ErrorHandlerProps) => {
+export const handleCommonErrors = ({ errors }: ErrorHandlerProps) => {
   if (errors.email) {
     toast.error('Invalid email', errors.email.message || 'Enter a valid email address.')
     return true
