@@ -31,7 +31,7 @@ export interface GoogleAuthError {
 export interface AuthApiError {
   response?: {
     data: {
-      message: any;
+      message: string;
       error: string;
       success: boolean;
     };
