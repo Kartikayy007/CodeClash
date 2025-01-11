@@ -1,9 +1,11 @@
 export interface ApiError {
   response?: {
-    data?: {
-      message?: string;
+    data: {
+      success: boolean;
     };
+    status: number;
   };
+  error: string; 
   message: string;
 }
 
@@ -27,11 +29,16 @@ export interface GoogleAuthError {
 }
 
 export interface AuthApiError {
+  success: boolean;
+  code?: string;
+  status?: number;
   message: string;
   response?: {
-    data?: {
-      message?: string;
-      status?: number;
+    data: {
+      error: string;    
+      message?: string; 
     };
+    status: number;   
+    statusText: string;
   };
 }

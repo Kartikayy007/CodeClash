@@ -112,6 +112,12 @@ export interface TempTokenPayload {
   tempOAuthToken: string;
 }
 
+export interface AuthError {
+  success: boolean;
+  message: string;
+  status?: number;
+}
+
 export interface BaseAuthHandlerProps {
   values: z.infer<typeof AuthFormSchema>;
   dispatch: AppDispatch;
@@ -120,7 +126,6 @@ export interface BaseAuthHandlerProps {
 
 export interface ResetPasswordHandlerProps extends BaseAuthHandlerProps {
   token: string | undefined;
-  router: NextRouter;
   form: UseFormReturn<z.infer<typeof AuthFormSchema>>;
 }
 

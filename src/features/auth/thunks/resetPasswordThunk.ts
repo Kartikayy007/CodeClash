@@ -11,7 +11,7 @@ export const resetPassword = createAsyncThunk<ResetPasswordResponse, ResetPasswo
       return response;
     } catch (error: unknown) {
       const apiError = error as AuthApiError;
-      return rejectWithValue(apiError.response?.data?.message || 'Password reset failed');
+      return rejectWithValue(apiError.response?.data);
     }
   }
 );

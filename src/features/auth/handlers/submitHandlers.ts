@@ -11,6 +11,7 @@ import { register } from '@/features/auth/thunks/registerThunk'
 import { resetPassword } from '@/features/auth/thunks/resetPasswordThunk'
 import { resetPasswordWithToken } from '@/features/auth/thunks/resetPasswordWithTokenThunk'
 import { checkEmail } from '@/features/auth/thunks/checkEmailThunk'
+import router from 'next/router'
 
 
 
@@ -18,9 +19,8 @@ export const handleResetPassword = async ({
   values,
   token,
   dispatch,
-  router,
   setIsSubmitting,
-  form
+  form,
 }: ResetPasswordHandlerProps) => {
   if (!token) {
     toast.error('Invalid Token', 'Password reset link is invalid')
@@ -54,7 +54,6 @@ export const handleResetPassword = async ({
 export const handleLogin = async ({
   values,
   dispatch,
-  router,
   form,
   setIsSubmitting
 }: LoginHandlerProps) => {
@@ -68,6 +67,7 @@ export const handleLogin = async ({
     email: values.email,
     password: values.password
   })).unwrap()
+  
 
   if (result.success) {
     const rememberMe = form.getValues('rememberMe')
@@ -89,7 +89,6 @@ export const handleLogin = async ({
 export const handleRegister = async ({
   values,
   dispatch,
-  router,
   setIsSubmitting
 }: RegisterHandlerProps) => {
   if (!values.email || !values.username || !values.password) {
@@ -103,6 +102,7 @@ export const handleRegister = async ({
     username: values.username,
     password: values.password
   })).unwrap()
+
 
   if (result.success) {
     localStorage.setItem('registrationEmail', values.email)

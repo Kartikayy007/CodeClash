@@ -8,13 +8,13 @@ export const register = createAsyncThunk<RegisterResponse, RegisterPayload>(
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await authApi.register(credentials);
-      if (!response.success) {
-        return rejectWithValue(response.message);
-      }
       return response;
     } catch (error: unknown) {
-      const apiError = error as AuthApiError;
-      return rejectWithValue(apiError.response?.data?.message || 'Registration failed');
+      const apiError = error as any;
+      return rejectWithValue({
+        success: false,
+        message: apiError.response?.data?.error || apiError.message
+      });
     }
   }
 );

@@ -10,8 +10,11 @@ export const checkEmail = createAsyncThunk<CheckEmailResponse, CheckEmailPayload
       const response = await authApi.checkEmail(data);
       return response;
     } catch (error: unknown) {
-      const apiError = error as ApiError;
-      return rejectWithValue(apiError.response?.data?.message || 'Failed to check email');
+      const apiError = error as any;
+      return rejectWithValue({
+        success: false,
+        message: apiError.response?.data?.error || apiError.message
+      });
     }
   }
 );

@@ -2,6 +2,8 @@ import { FieldErrors } from "react-hook-form"
 import { z } from "zod"
 import { AuthFormSchema } from "@/lib/schemas/authSchema"
 import { toast } from "@/providers/toast-config"
+import { ApiError } from "@/types/error.types"
+import { isAxiosError } from "axios"
 
 interface ErrorHandlerProps {
   errors: FieldErrors<z.infer<typeof AuthFormSchema>>
@@ -97,4 +99,92 @@ export const handleCommonErrors = ({ errors, form }: ErrorHandlerProps) => {
   }
 
   return false
+}
+
+
+const handleNetworkError = () => {
+  if (!navigator.onLine) {
+    toast.error(
+      'No Internet Connection',
+      'Please check your internet'
+    )
+    return true
+  }
+  return false
+}
+
+export const handleApiError = (error: ApiError, type: string, router: any) => {
+  if (!navigator.onLine || (isAxiosError(error) && !error.response)) {
+    handleNetworkError()
+    return
+  }
+
+  switch (type) {
+    case 'login': {
+      const message = error.message
+      switch (message) {
+        case 'User not found':
+          toast.error('Account Not Found', 'No account exists with this email')
+          router.push('/register')
+          break
+        case 'Invalid password':
+          toast.error('Incorrect Password', 'Retry or reset your password.')
+          break
+        case 'Password not set':
+          toast.error('Password Required', 'Please set your password first')
+          break
+        default:
+          toast.error('Login Failed', message || 'Unable to login')
+      }
+      break
+    }
+
+    case 'register': {
+      const message = error.message;
+      switch (message) {
+        case 'Email already exists':
+          toast.error('Email already registered', 'Kindly log in or use another email.')
+          break
+        case 'Validation failed':
+          toast.error('Invalid Details', 'Please check your information')
+          break
+        default:
+          toast.error('Registration Failed', message || 'Unable to register')
+      }
+      break
+    }
+
+    case 'reset-password': {
+      const message = error.message;
+      switch (message) {
+        case 'Invalid token':
+          toast.error('Invalid Link', 'Reset link is expired or invalid')
+          break
+        case 'Token expired':
+          toast.error('Link Expired', 'Please request a new reset link')
+          break
+        default:
+          toast.error('Reset Failed', message || 'Unable to reset password')
+      }
+      break
+    }
+
+    case 'forgot-password': {
+      const message = error.error;      
+      switch (message) {
+        case 'User not found':
+          toast.error('Account Not Found', 'No account with this email')
+          break
+        case 'Too many requests':
+          toast.error('Too Many Attempts', 'Please wait before trying again')
+          break
+        default:
+          toast.error('Request Failed', message || 'Unable to process request')
+      }
+      break
+    }
+
+    default:
+        toast.error('Error', error.message)
+  }
 }

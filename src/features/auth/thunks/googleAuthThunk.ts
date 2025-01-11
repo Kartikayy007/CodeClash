@@ -7,12 +7,14 @@ export const exchangeGoogleToken = createAsyncThunk<GoogleOAuthResponse, { tempO
   'auth/googleToken',
   async (data, { rejectWithValue }) => {
     try {
-      console.log(data);
       const response = await authApi.exchangeGoogleToken(data);
       return response;
     } catch (error: unknown) {
-      const authError = error as GoogleAuthError;
-      return rejectWithValue(authError.response?.data?.message || 'Failed to authenticate with Google');
+      const apiError = error as any;
+      return rejectWithValue({
+        success: false,
+        message: apiError.response?.data?.error || apiError.message
+      });
     }
   }
 );

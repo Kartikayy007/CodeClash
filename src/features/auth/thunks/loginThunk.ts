@@ -14,8 +14,11 @@ export const login = createAsyncThunk<LoginResponse, LoginPayload>(
       }
       return response;
     } catch (error: unknown) {
-      const apiError = error as AuthApiError;
-      return rejectWithValue(apiError.response?.data?.message || 'Login failed');
+      const apiError = error as any;
+      return rejectWithValue({
+        success: false,
+        message: apiError.response?.data?.error || apiError.message
+      });
     }
   }
 );
