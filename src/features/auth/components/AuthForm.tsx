@@ -15,7 +15,7 @@ import PasswordStrengthChecker from './PasswordStrengthChecker';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { register } from '@/features/auth/thunks/registerThunk';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/router';
 import { login } from '@/features/auth/thunks/loginThunk';
 import { resetPassword } from '@/features/auth/thunks/resetPasswordThunk';
 import { resetPasswordWithToken } from '@/features/auth/thunks/resetPasswordWithTokenThunk';
@@ -30,7 +30,8 @@ import {
   handleResetPasswordError, 
   handleLoginError, 
   handleRegisterError,
-  handleCommonErrors 
+  handleCommonErrors, 
+  handleApiError
 } from '../handlers/errorHandlers'
 import { 
   handleResetPassword,
@@ -39,6 +40,7 @@ import {
   handleForgotPassword,
   handleGetStarted
 } from '../handlers/submitHandlers'
+import { useRouter } from 'next/navigation';
 
 interface AuthFormProps {
   type: string;
@@ -106,31 +108,28 @@ const AuthForm = ({
   const onSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
     try {
       if (type === 'reset-password') {
-        await handleResetPassword({ values, token, dispatch, router, setIsSubmitting, form })
+        await handleResetPassword({ values, token, dispatch, setIsSubmitting, form, router })
       } else if (type === 'login') {
-        await handleLogin({ values, dispatch, router, form, setIsSubmitting })
+        await handleLogin({ values, dispatch, form, setIsSubmitting, router })
       } else if (type === 'register') {
-        await handleRegister({ values, dispatch, router, setIsSubmitting })
+        await handleRegister({ values, dispatch, setIsSubmitting , router })
       } else if (type === 'forgot-password') {
         await handleForgotPassword({ 
           values, 
           dispatch, 
           setIsSubmitting, 
-          setResetLinkSent, 
+          setResetLinkSent,  
           setTimeLeft, 
           onResetLinkSent 
         })
       } else if (type === 'get-started') {
-        await handleGetStarted({ values, dispatch, router, setIsSubmitting })
+        await handleGetStarted({ values, dispatch, setIsSubmitting, router })
       }
     } catch (error: unknown) {
-      const apiError = error as ApiError
-      toast.error(
-        'Error',
-        apiError.response?.data?.message || apiError.message || 'Something went wrong'
-      )
+      const apiError = error as ApiError;
+      handleApiError(apiError, type, router);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   }
 
