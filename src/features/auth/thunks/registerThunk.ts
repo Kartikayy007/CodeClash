@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { authApi } from '../api/authApi';
 import { RegisterPayload, RegisterResponse } from '../types/auth.types';
+import { authApi } from '../api/authApi';
 import { AuthApiError } from '@/types/error.types';
 
 export const register = createAsyncThunk<RegisterResponse, RegisterPayload>(
@@ -10,7 +10,7 @@ export const register = createAsyncThunk<RegisterResponse, RegisterPayload>(
       const response = await authApi.register(credentials);
       return response;
     } catch (error: unknown) {
-      const apiError = error as any;
+      const apiError = error as AuthApiError;
       return rejectWithValue({
         success: false,
         message: apiError.response?.data?.error || apiError.message

@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { GoogleOAuthResponse } from '../types/auth.types';
+import { GoogleAuthError, GoogleOAuthResponse } from '../types/auth.types';
 import { authApi } from '../api/authApi';
-import { GoogleAuthError } from '@/types/error.types';
 
 export const exchangeGoogleToken = createAsyncThunk<GoogleOAuthResponse, { tempOAuthToken: string }>(
   'auth/googleToken',
@@ -10,7 +9,7 @@ export const exchangeGoogleToken = createAsyncThunk<GoogleOAuthResponse, { tempO
       const response = await authApi.exchangeGoogleToken(data);
       return response;
     } catch (error: unknown) {
-      const apiError = error as any;
+      const apiError = error as GoogleAuthError;;
       return rejectWithValue({
         success: false,
         message: apiError.response?.data?.error || apiError.message

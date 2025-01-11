@@ -1,6 +1,4 @@
-'use client'
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -23,19 +21,20 @@ import { cn } from "@/lib/utils";
 import { resendOtp } from '@/features/auth/thunks/resendOtpThunk';
 import { useRouter } from 'next/navigation';
 import { OtpError } from '@/types/error.types';
-
-const OTPFormSchema = z.object({
-  pin: z.string().min(4, "Please enter a valid 4-digit OTP").max(4)
-});
+import axios from 'axios';
+import { OTPFormSchema } from '@/lib/schemas/authSchema';
 
 type OTPFormValues = z.infer<typeof OTPFormSchema>;
 
 const CustomOtp = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const { loading } = useSelector((state: RootState) => state.auth); 
+  const { loading } = useSelector((state: RootState) => state.auth);
   const [timeLeft, setTimeLeft] = useState(30);
   const [isDisabled, setIsDisabled] = useState(true);
+  const [validationState, setValidationState] = useState<'idle' | 'validating' | 'success' | 'error'>('idle');
+  const [currentAnimationIndex, setCurrentAnimationIndex] = useState(-1);
+  const submitTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const form = useForm<OTPFormValues>({
     resolver: zodResolver(OTPFormSchema),
@@ -56,6 +55,56 @@ const CustomOtp = () => {
 
     return () => clearInterval(timer);
   }, [timeLeft]);
+
+  useEffect(() => {
+    if (validationState === 'error') {
+      let index = 0;
+      const animationInterval = setInterval(() => {
+        if (index < 4) {
+          setCurrentAnimationIndex(index);
+          index++;
+        } else {
+          setCurrentAnimationIndex(-1);
+          setValidationState('idle');
+          form.reset();
+          clearInterval(animationInterval);
+        }
+      }, 250);
+
+      return () => clearInterval(animationInterval);
+    } else if (validationState === 'success') {
+      let index = 0;
+      const animationInterval = setInterval(() => {
+        if (index < 4) {
+          setCurrentAnimationIndex(index);
+          index++;
+        } else {
+          clearInterval(animationInterval);
+        }
+      }, 200);
+
+      return () => clearInterval(animationInterval);
+    }
+  }, [validationState, form]);
+
+  useEffect(() => {
+    return () => {
+      if (submitTimeoutRef.current) {
+        clearTimeout(submitTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleNetworkError = () => {
+    if (!navigator.onLine) {
+      toast.error(
+        'No Internet Connection',
+        'Please check your internet connection'
+      );
+      return true;
+    }
+    return false;
+  };
 
   const handleResend = async () => {
     try {
@@ -82,14 +131,24 @@ const CustomOtp = () => {
   };
 
   const onSubmit = async (data: OTPFormValues) => {
-    console.log('Form submitted with data:', data);
-
     try {
-      const email = localStorage.getItem('registrationEmail');
-      console.log('Retrieved email:', email);
+      setValidationState('idle');
+      
+      if (!data.pin || data.pin.length === 0) {
+        toast.error(
+          'Fields Cannot be Empty',
+          'Please fill in all required fields'
+        );
+        setValidationState('error');
+        return;
+      }
 
+      setValidationState('validating');
+      
+      const email = localStorage.getItem('registrationEmail');
       if (!email) {
         toast.error('Error', 'Email not found. Please register again.');
+        router.push('/register');
         return;
       }
 
@@ -97,45 +156,75 @@ const CustomOtp = () => {
         email,
         otp: data.pin
       };
-      console.log('Sending OTP data:', otpData);
-
+      
       const resultAction = await dispatch(verifyOtp(otpData));
+      if (!navigator.onLine || (axios.isAxiosError(resultAction) && !resultAction.response)) {
+        handleNetworkError();
+        return;
+      }
       
       if (verifyOtp.fulfilled.match(resultAction)) {
         const response = resultAction.payload;
-        console.log('Success response:', response);
 
         if (response.success) {
+          setValidationState('success');
           if (response.data?.tokens) {
             localStorage.setItem('token', response.data.tokens.accessToken);
             localStorage.setItem('refreshToken', response.data.tokens.refreshToken);
+            document.cookie = `accessToken=${response.data.tokens.accessToken}; path=/`;
+            document.cookie = `refreshToken=${response.data.tokens.refreshToken}; path=/`;
             localStorage.removeItem('registrationEmail');
           }
           toast.success('Success', 'OTP verified successfully');
-          router.push('/dashboard');
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 200);
         }
       } else if (verifyOtp.rejected.match(resultAction)) {
-        console.error('Error response:', resultAction.payload);
-        toast.error(
-          'Verification Failed',
-          resultAction.payload as string || 'Invalid OTP'
-        );
+        setValidationState('error');
+        setTimeout(() => {
+          toast.error(
+            'Invalid OTP',
+            'Please check and try again later'
+          );
+        }, 800);
       }
     } catch (error: unknown) {
+      setValidationState('error');
       const apiError = error as OtpError;
-      toast.error(
-        'OTP Verification Failed',
-        apiError.response?.data?.message || apiError.message || 'Please try again'
-      );
+      console.error(apiError.response?.data?.message);
+      setTimeout(() => {
+        toast.error(
+          'Invalid OTP',
+          'Please check and try again.'
+        );
+      }, 800);
     }
+  };
+
+  const handleChange = (value: string) => {
+    form.setValue("pin", value, { shouldValidate: true });
+
+    if (submitTimeoutRef.current) {
+      clearTimeout(submitTimeoutRef.current);
+    }
+
+    if (value.length === 4) {
+      submitTimeoutRef.current = setTimeout(() => {
+        form.handleSubmit(onSubmit)();
+      }, 500);
+    }
+  };
+
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const formValues = form.getValues();
+    onSubmit(formValues);
   };
 
   return (
     <Form {...form}>
-      <form 
-        onSubmit={form.handleSubmit(onSubmit)} 
-        className="space-y-8"
-      >
+      <form className="space-y-8">
         <FormField
           control={form.control}
           name="pin"
@@ -146,14 +235,7 @@ const CustomOtp = () => {
                 pattern={REGEXP_ONLY_DIGITS} 
                 {...field}
                 value={field.value}
-                onChange={(value) => {
-                  console.log('OTP value changed:', value);
-                  field.onChange(value);
-                  
-                  if (value.length === 4) {
-                    form.handleSubmit(onSubmit)();
-                  }
-                }}
+                onChange={handleChange}
               >
                 <InputOTPGroup className='flex gap-4 sm:gap-12 focus:border-purple-500 border-[#D1D1D1]'>
                   {[0, 1, 2, 3].map((index) => (
@@ -163,7 +245,10 @@ const CustomOtp = () => {
                       className={cn(
                         "w-12 h-12 sm:w-14 sm:h-14 border-2 rounded-lg",
                         "bg-transparent text-2xl sm:text-3xl",
-                        "focus:border-purple-500 transition-colors"
+                        "transition-all duration-200",
+                        validationState === 'error' && currentAnimationIndex >= index && "border-red-500",
+                        validationState === 'success' && currentAnimationIndex >= index && "border-green-500",
+                        "focus:border-purple-500"
                       )}
                     />
                   ))}
@@ -175,12 +260,13 @@ const CustomOtp = () => {
 
         <div className="flex flex-col items-center gap-4">
           <LabelButton 
-            type="submit" 
+            type="button"
             variant="filled" 
             className='mt-8'
-            disabled={loading || !form.formState.isValid}
+            disabled={loading || validationState === 'validating'}
+            onClick={handleButtonClick}
           >
-            {loading ? 'Verifying...' : 'Verify OTP'}
+            Verify OTP
           </LabelButton>
 
           <div className="flex items-center gap-2 text-[#D1D1D1] text-base">

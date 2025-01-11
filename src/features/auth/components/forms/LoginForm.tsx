@@ -3,9 +3,12 @@ import CustomInput from '@/components/CustomInput'
 import LabelButton from '@/components/ui/LabelButton'
 import Link from 'next/link'
 import CustomCheckbox from '@/components/ui/CustomCheckbox'
+import { AuthFormSchema } from '@/lib/schemas/authSchema'
+import { z } from 'zod'
 
+type LoginFormData = z.infer<typeof AuthFormSchema>
 interface LoginFormProps {
-  control: Control<any>
+  control: Control<LoginFormData>
   isSubmitting: boolean
 }
 

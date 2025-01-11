@@ -18,7 +18,6 @@ export const handleResetPassword = async ({
   token,
   dispatch,
   setIsSubmitting,
-  form,
 }: ResetPasswordHandlerProps) => {
   if (!token) {
     toast.error('Invalid Token', 'Password reset link is invalid')

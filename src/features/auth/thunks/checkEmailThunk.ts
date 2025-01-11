@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { CheckEmailPayload, CheckEmailResponse } from '../types/auth.types';
+import { CheckEmailError, CheckEmailPayload, CheckEmailResponse } from '../types/auth.types';
 import { authApi } from '../api/authApi';
-import { ApiError } from '@/types/error.types';
 
 export const checkEmail = createAsyncThunk<CheckEmailResponse, CheckEmailPayload>(
   'auth/checkEmail',
@@ -10,7 +9,7 @@ export const checkEmail = createAsyncThunk<CheckEmailResponse, CheckEmailPayload
       const response = await authApi.checkEmail(data);
       return response;
     } catch (error: unknown) {
-      const apiError = error as any;
+      const apiError = error as CheckEmailError;
       return rejectWithValue({
         success: false,
         message: apiError.response?.data?.error || apiError.message

@@ -98,6 +98,17 @@ export interface CheckEmailResponse {
   }
 }
 
+export interface CheckEmailError {
+  success: boolean;
+  message: string;
+  response?: {
+    data: {
+      error: string;
+    };
+    status: number;
+  };
+}
+
 export interface GoogleOAuthResponse {
   success: boolean;
   message: string;
@@ -107,6 +118,17 @@ export interface GoogleOAuthResponse {
       refreshToken: string;
     }
   }
+}
+
+export interface GoogleAuthError {
+  response?: {
+    data: {
+      error: string;
+      success: boolean;
+    };
+    status: number;
+  };
+  message: string;
 }
 
 export interface TempTokenPayload {

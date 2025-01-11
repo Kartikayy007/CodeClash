@@ -10,10 +10,7 @@ export const resetPasswordWithToken = createAsyncThunk<ResetPasswordResponse, Re
       const response = await authApi.resetPasswordWithToken(data);
       return response;
     } catch (error: unknown) {
-      const apiError = error as any;
-
-      console.log(apiError.response);
-
+      const apiError = error as AuthApiError;
       return rejectWithValue({
         success: false,
         message: apiError.response?.data?.error || apiError.message
