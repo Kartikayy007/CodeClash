@@ -29,16 +29,13 @@ export interface GoogleAuthError {
 }
 
 export interface AuthApiError {
-  success: boolean;
-  code?: string;
-  status?: number;
-  message: string;
   response?: {
     data: {
-      error: string;    
-      message?: string; 
+      message: any;
+      error: string;
+      success: boolean;
     };
-    status: number;   
-    statusText: string;
+    status: number;
   };
+  message: string;
 }

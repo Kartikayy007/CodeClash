@@ -2,9 +2,12 @@ import { Control } from 'react-hook-form'
 import CustomInput from '@/components/CustomInput'
 import LabelButton from '@/components/ui/LabelButton'
 import PasswordStrengthChecker from '../PasswordStrengthChecker'
+import { AuthFormSchema } from '@/lib/schemas/authSchema'
+import { z } from 'zod'
 
+type ResetPasswordFormData = z.infer<typeof AuthFormSchema>
 interface ResetPasswordFormProps {
-  control: Control<any>
+  control: Control<ResetPasswordFormData>
   isSubmitting: boolean
   newPassword: string
 }

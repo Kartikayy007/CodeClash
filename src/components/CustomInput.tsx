@@ -4,7 +4,7 @@ import { Control } from 'react-hook-form';
 import PasswordStrengthChecker from '../features/auth/components/PasswordStrengthChecker';
 import Image from 'next/image';
 import { z } from 'zod'
-import { AuthFormSchema } from '../lib/utils';
+import { AuthFormSchema } from '@/lib/schemas/authSchema';
 
 interface CustomInput {
   control: Control<z.infer<typeof AuthFormSchema>>,

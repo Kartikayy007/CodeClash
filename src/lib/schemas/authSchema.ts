@@ -57,3 +57,7 @@ export const AuthFormSchema = z.object({
 
   return true;
 });
+
+export const OTPFormSchema = z.object({
+  pin: z.string().min(4, "Please enter a valid 4-digit OTP").max(4)
+});

@@ -17,7 +17,7 @@ export function middleware(request: NextRequest) {
   const protectedRoutes = ['/dashboard', '/settings', '/profile'];
   if (protectedRoutes.some(route => pathname.startsWith(route))) {
     if (!accessToken) {
-      return NextResponse.redirect(new URL('/login', request.url));
+      return NextResponse.redirect(new URL('/get-started', request.url));
     }
     return NextResponse.next();
   }

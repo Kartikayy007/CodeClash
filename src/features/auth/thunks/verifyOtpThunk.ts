@@ -11,7 +11,8 @@ export const verifyOtp = createAsyncThunk<VerifyOtpResponse, VerifyOtpPayload>(
       return response;
     } catch (error: unknown) {
       const apiError = error as AuthApiError;
-      return rejectWithValue(apiError.response?.data?.message || 'OTP verification failed');
+      // console.log(apiError.response?.data?.error);
+      return rejectWithValue(apiError.response?.data?.error || 'OTP verification failed');
     }
   }
 );
