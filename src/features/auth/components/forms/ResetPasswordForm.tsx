@@ -14,7 +14,7 @@ interface ResetPasswordFormProps {
 
 export default function ResetPasswordForm({ control, isSubmitting, newPassword }: ResetPasswordFormProps) {
   return (
-    <>
+    <div className='w-full space-y-4 sm:space-y-6'>
       <div className="relative">
         <div className='hidden'>
           <CustomInput
@@ -54,6 +54,6 @@ export default function ResetPasswordForm({ control, isSubmitting, newPassword }
       >
         Reset Password
       </LabelButton>
-    </>
+    </div>
   )
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import Image from 'next/image';
 import { BackButton } from '@/components/ui/BackButton';
 import AuthForm from '@/features/auth/components/AuthForm';
@@ -11,14 +11,14 @@ const TokenHandler = () => {
   const token = searchParams.get('token');
   const router = useRouter();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!token) {
       router.push('/login');
     }
   }, [token, router]);
 
   return (
-    <div className="flex flex-col items-start justify-center gap-4 sm:gap-6  sm:p-8 min-w-[320px]">
+    <div className="flex flex-col items-start justify-center gap-4 sm:gap-6 px-8 sm:p-8 min-w-[320px]">
 
       <Image
         src='/logo.svg'

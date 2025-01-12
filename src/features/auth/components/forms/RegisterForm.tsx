@@ -17,7 +17,7 @@ interface RegisterFormProps {
 
 export default function RegisterForm({ control, isSubmitting, password }: RegisterFormProps) {
   return (
-    <>
+    <div className='w-full space-y-4 sm:space-y-6'>
       <CustomInput
         name="email"
         label="Email"
@@ -72,6 +72,6 @@ export default function RegisterForm({ control, isSubmitting, password }: Regist
       >
         Sign Up
       </LabelButton>
-    </>
+    </div>
   )
 }
