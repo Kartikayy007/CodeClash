@@ -90,12 +90,15 @@ export const handleRegister = async ({
   setIsSubmitting,
   router
 }: RegisterHandlerProps) => {
+
+  console.log(values.terms)
+
   if (!values.email || !values.username || !values.password) {
     toast.error('Required Fields', 'Please fill in all required fields')
     return false
   }
   
-  if (!values.terms) {
+  if (values.terms === false) {
     toast.error('Terms & Conditions', 'Please accept the terms and conditions')
     return false
   }

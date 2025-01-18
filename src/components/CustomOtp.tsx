@@ -113,6 +113,7 @@ const CustomOtp = () => {
         toast.error('Error', 'Email not found. Please register again.');
         return;
       }
+      
 
       const result = await dispatch(resendOtp({ email })).unwrap();
       
@@ -133,13 +134,13 @@ const CustomOtp = () => {
   const onSubmit = async (data: OTPFormValues) => {
     try {
       setValidationState('idle');
+      console.log(data.pin.length)
       
-      if (!data.pin || data.pin.length === 0) {
+      if (data.pin.length < 4) {
         toast.error(
           'Fields Cannot be Empty',
           'Please fill in all required fields'
         );
-        setValidationState('error');
         return;
       }
 
