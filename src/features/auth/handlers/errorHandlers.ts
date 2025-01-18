@@ -12,6 +12,7 @@ interface ErrorHandlerProps {
 }
 
 export const handleResetPasswordError = ({ errors, form }: ErrorHandlerProps) => {
+
   if (!form.getValues('Newpassword') || !form.getValues('confirmPassword')) {
     toast.error('Required Fields', 'Please fill in both password fields')
     return true

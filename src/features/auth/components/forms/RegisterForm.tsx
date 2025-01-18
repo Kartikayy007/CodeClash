@@ -1,7 +1,6 @@
 import { Control } from 'react-hook-form'
 import CustomInput from '@/components/CustomInput'
 import Link from 'next/link'
-import PasswordStrengthChecker from '../PasswordStrengthChecker'
 import CustomCheckbox from '@/components/ui/CustomCheckbox'
 import LabelButton from '@/components/ui/LabelButton'
 import { AuthFormSchema } from '@/lib/schemas/authSchema'
@@ -15,7 +14,7 @@ interface RegisterFormProps {
   password: string
 }
 
-export default function RegisterForm({ control, isSubmitting, password }: RegisterFormProps) {
+export default function RegisterForm({ control, isSubmitting }: RegisterFormProps) {
   return (
     <div className='w-full space-y-4 sm:space-y-6'>
       <CustomInput
@@ -40,10 +39,6 @@ export default function RegisterForm({ control, isSubmitting, password }: Regist
           placeholder=""
           type="password"
           showStrengthChecker={true}
-        />
-        <PasswordStrengthChecker
-          password={password ?? ''}
-          isFocused={true}
         />
       </div>
 

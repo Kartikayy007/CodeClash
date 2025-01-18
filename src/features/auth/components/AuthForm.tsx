@@ -13,16 +13,17 @@ import { ApiError } from '@/types/error.types';
 import GetStartedForm from './forms/GetStartedForm';
 import LoginForm from './forms/LoginForm';
 import RegisterForm from './forms/RegisterForm';
-import ResetPasswordForm from './forms/ResetPasswordForm';
+// import ResetPasswordForm from './forms/ResetPasswordForm';
 import ForgotPasswordForm from './forms/ForgotPasswordForm';
-import { 
-  handleResetPasswordError, 
-  handleLoginError, 
+// import PasswordStrengthChecker from './PasswordStrengthChecker';
+import {
+  handleResetPasswordError,
+  handleLoginError,
   handleRegisterError,
-  handleCommonErrors, 
+  handleCommonErrors,
   handleApiError
 } from '../handlers/errorHandlers'
-import { 
+import {
   handleResetPassword,
   handleLogin,
   handleRegister,
@@ -30,6 +31,8 @@ import {
   handleGetStarted
 } from '../handlers/submitHandlers'
 import { useRouter } from 'next/navigation';
+import CustomInput from '@/components/CustomInput';
+import LabelButton from '@/components/ui/LabelButton';
 
 interface AuthFormProps {
   type: string;
@@ -47,6 +50,7 @@ const AuthForm = ({
   const router = useRouter();
   const [resetLinkSent, setResetLinkSent] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
+  // const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
   useEffect(() => {
     if (timeLeft === 0) return;
@@ -71,6 +75,12 @@ const AuthForm = ({
     mode: "onChange",
     context: type,
   });
+
+  // const password = useWatch({
+  //   control: form.control,
+  //   name: 'Newpassword',
+  //   defaultValue: ''
+  // }) as string;
 
   useEffect(() => {
     if ((type === 'login' || type === 'register')) {
@@ -103,20 +113,20 @@ const AuthForm = ({
       } else if (type === 'register') {
         await handleRegister({ values, dispatch, setIsSubmitting, router })
       } else if (type === 'forgot-password') {
-        await handleForgotPassword({ 
-          values, 
-          dispatch, 
-          setIsSubmitting, 
-          setResetLinkSent,  
-          setTimeLeft, 
-          onResetLinkSent 
+        await handleForgotPassword({
+          values,
+          dispatch,
+          setIsSubmitting,
+          setResetLinkSent,
+          setTimeLeft,
+          onResetLinkSent
         })
       } else if (type === 'get-started') {
         await handleGetStarted({ values, dispatch, setIsSubmitting, router })
       }
     } catch (error: unknown) {
       const apiError = error as ApiError;
-      handleApiError(apiError, type, router); 
+      handleApiError(apiError, type, router);
     } finally {
       setIsSubmitting(false);
     }
@@ -177,17 +187,46 @@ const AuthForm = ({
           {type === 'register' && (
             <RegisterForm
               control={form.control}
-              isSubmitting={isSubmitting} 
-              password={''} 
-              />
+              isSubmitting={isSubmitting}
+              password={''}
+            />
           )}
 
           {type === 'reset-password' && (
-            <ResetPasswordForm
-              control={form.control}
-              isSubmitting={isSubmitting} 
-              newPassword={''}            
-              />
+            <>
+              <div className="relative">
+                <CustomInput
+                  name="Newpassword"
+                  label="New Password"
+                  control={form.control}
+                  placeholder=""
+                  type="password"
+                  showStrengthChecker={true}
+                />
+                {/* <PasswordStrengthChecker
+                  password={form.watch('Newpassword') ?? ''}  
+                /> */}
+              </div>
+              <div className="relative">
+                <CustomInput
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  control={form.control}
+                  placeholder=""
+                  type="password"
+                  showStrengthChecker={true}
+                />
+                
+              </div>
+
+              <LabelButton
+                type="submit"
+                variant="filled"
+                disabled={isSubmitting}
+              >
+                Reset Password
+              </LabelButton>
+            </>
           )}
 
           {type === 'forgot-password' && (

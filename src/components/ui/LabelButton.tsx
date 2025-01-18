@@ -52,7 +52,6 @@ const LabelButton = ({
         relative
         w-full
         min-w-[280px]
-        sm:w-[400px] 
         md:w-[450px] 
         lg:w-[500px]
         h-[45px] 

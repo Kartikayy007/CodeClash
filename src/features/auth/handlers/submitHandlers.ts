@@ -19,21 +19,21 @@ export const handleResetPassword = async ({
   dispatch,
   setIsSubmitting,
 }: ResetPasswordHandlerProps) => {
-  if (!token) {
-    toast.error('Invalid Token', 'Password reset link is invalid')
-    return false
-  }
-
-  setIsSubmitting(true)
-  if (!values.Newpassword) {
+  if (!values.Newpassword || !values.confirmPassword) {
     toast.error('Password Required', 'Please enter a new password')
     return false
   }
-
   if (values.Newpassword !== values.confirmPassword) {
     toast.error('Password Mismatch', 'Passwords do not match')
     return false
   }
+  if (!token) {
+    toast.error('Link Expired', 'Password reset link is invalid')
+    return false
+  }
+  
+  setIsSubmitting(true)
+
 
   const result = await dispatch(resetPasswordWithToken({
     token,
@@ -94,6 +94,13 @@ export const handleRegister = async ({
     toast.error('Required Fields', 'Please fill in all required fields')
     return false
   }
+  
+  if (!values.terms) {
+    toast.error('Terms & Conditions', 'Please accept the terms and conditions')
+    return false
+  }
+
+  
 
   setIsSubmitting(true)
   const result = await dispatch(register({

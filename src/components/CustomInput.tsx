@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FormControl, FormField, FormLabel, FormMessage } from '@/components/ui/form';
 import { Control } from 'react-hook-form';
-import PasswordStrengthChecker from '../features/auth/components/PasswordStrengthChecker';
+// import PasswordStrengthChecker from '../features/auth/components/PasswordStrengthChecker';
 import Image from 'next/image';
 import { z } from 'zod'
 import { AuthFormSchema } from '@/lib/schemas/authSchema';
@@ -21,9 +21,9 @@ const CustomInput = ({
   label,
   placeholder,
   type = 'text',
-  showStrengthChecker
+  
 }: CustomInput) => {
-  const [isFocused, setIsFocused] = useState(false);
+  const [, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -43,7 +43,7 @@ const CustomInput = ({
                   onBlur={() => setIsFocused(false)}
                   type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
                   className={`w-full min-w-[280px]
-                    sm:w-[400px] md:w-[450px] lg:w-[500px]
+                    md:w-[450px] lg:w-[500px]
                     h-[45px] sm:h-[55px]
                     px-3 sm:px-4
                     py-2
@@ -64,22 +64,22 @@ const CustomInput = ({
                 />
               </FormControl>
               {type === 'password' && (
-                <div className="absolute right-0 top-0 h-full flex items-center pr-3 sm:pr-4">
-                    <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="flex items-center justify-center w-6 h-6"
-                    >
-                    <Image
-                      src={showPassword ? '/eyeclosed.svg' : '/eye.svg'}
-                      alt={showPassword ? 'Hide password' : 'Show password'}
-                      width={20}
-                      height={20}
-                      className="w-5 h-5 sm:mr-5 md:mr-0"
-                    />
-                    </button>
-                </div>
-              )}
+  <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center">
+    <button
+      type="button"
+      onClick={() => setShowPassword(!showPassword)}
+      className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6"
+    >
+      <Image
+        src={showPassword ? '/eyeclosed.svg' : '/eye.svg'}
+        alt={showPassword ? 'Hide password' : 'Show password'}
+        width={20}
+        height={20}
+        className="w-4 h-4 sm:w-5 sm:h-5"
+      />
+    </button>
+  </div>
+)}
             </div>
             {name === 'password'&& error && (
               <FormMessage className="text-[#EF4444] text-sm mt-1 ml-1" />
@@ -87,12 +87,12 @@ const CustomInput = ({
             {(name === 'Newpassword' || name === 'confirmPassword') && error && (
               <FormMessage className="text-[#EF4444] text-sm mt-1 ml-1" />
             )}
-            {showStrengthChecker && (name === 'Newpassword') && (
+            {/* {showStrengthChecker && (name === 'Newpassword') && (
               <PasswordStrengthChecker
                 password={String(field.value || '')}
                 isFocused={isFocused}
               />
-            )}
+            )} */}
           </div>
         </div>
       )}

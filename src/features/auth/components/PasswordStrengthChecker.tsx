@@ -26,10 +26,9 @@ const ProgressBar = ({ checks }: { checks: { [key: string]: boolean } }) => {
 
 interface PasswordCheckerProps {
   password: string;
-  isFocused: boolean;
 }
 
-const PasswordStrengthChecker = ({ password, isFocused }: PasswordCheckerProps) => {
+const PasswordStrengthChecker = ({ password }: PasswordCheckerProps) => {
   const [checks, setChecks] = useState({
     minLength: false,
     hasUppercase: false,
@@ -47,10 +46,10 @@ const PasswordStrengthChecker = ({ password, isFocused }: PasswordCheckerProps) 
   }, [password]);
 
   const completedChecks = Object.values(checks).filter(Boolean).length;
-  const shouldShow = isFocused && password.length > 0 && completedChecks < 4;
+  const shouldShow = password.length > 0 && completedChecks < 4;
 
   return (
-    <div className={`absolute left-0 right-0 top-20 sm:top-24 z-10 p-4 sm:p-6 bg-[#282D37] rounded-lg shadow-lg 
+    <div className={`absolute z-10 p-4 sm:p-6 bg-[#282D37] rounded-lg shadow-lg w-full sm:w-[400px] md:w-[450px] lg:w-[500px]
       ${shouldShow 
         ? 'opacity-100 translate-y-0 duration-200 transition-all ease-in'
         : 'opacity-0 -translate-y-4 pointer-events-none duration-1000 transition-all ease-out'
@@ -62,7 +61,7 @@ const PasswordStrengthChecker = ({ password, isFocused }: PasswordCheckerProps) 
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-y-4">
         <div className="flex items-center gap-2">
-          <span className={`text-sm sm:text-lg ${checks.minLength ? 'text-[#6BBD6F]' : 'text-white'}`}>
+          <span className={`text-sm sm:text-lg ${checks.minLength ? 'text-[#6BBD6F]' : 'text-purple-400'}`}>
             • 8 characters minimum
           </span>
         </div>

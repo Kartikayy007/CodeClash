@@ -2,7 +2,10 @@ import { z } from "zod"
 
 export const AuthFormSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),
-  password: z.string().optional(),
+  password: z.string().min(8, "Password must meet all requirements")
+  .regex(/[A-Z]/, "Password must meet all requirements")
+  .regex(/[0-9]/, "Password must meet all requirements")
+  .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must meet all requirements"),
   username: z.string().optional(),
   Newpassword: z.string().optional(),
   confirmPassword: z.string().optional(),
