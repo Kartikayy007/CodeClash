@@ -1,10 +1,10 @@
 import CustomInput from '@/components/CustomInput'
 import LabelButton from '@/components/ui/LabelButton'
 import { Control } from 'react-hook-form'
-import { AuthFormSchema } from '@/lib/schemas/authSchema'
+import { startingShema } from '@/lib/schemas/authSchema'
 import { z } from 'zod'
 
-type GetstartedFromData = z.infer<typeof AuthFormSchema>
+type GetstartedFromData = z.infer<typeof startingShema>
 
 interface GetStartedFormProps {
   control: Control<GetstartedFromData>

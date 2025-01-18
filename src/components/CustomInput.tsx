@@ -44,7 +44,8 @@ const CustomInput = ({
                   type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
                   className={`w-full min-w-[280px]
                     md:w-[450px] lg:w-[500px]
-                    h-[45px] sm:h-[55px]
+                    sm:w-[400px]
+                    h-[45px] 
                     px-3 sm:px-4
                     py-2
                     rounded-md
