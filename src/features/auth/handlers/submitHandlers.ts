@@ -156,6 +156,7 @@ export const handleGetStarted = async ({
   router,
   setIsSubmitting
 }: GetStartedHandlerProps) => {
+  console.log(values.email)
   if (!values.email) {
     toast.error('Required Field', 'Please enter your email address')
     return false

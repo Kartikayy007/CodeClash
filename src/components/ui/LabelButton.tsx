@@ -54,8 +54,8 @@ const LabelButton = ({
         min-w-[280px]
         md:w-[450px] 
         lg:w-[500px]
+        sm:w-[400px]
         h-[45px] 
-        sm:h-[55px]
         px-3 
         sm:px-4 
         py-2 

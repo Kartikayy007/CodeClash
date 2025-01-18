@@ -17,7 +17,7 @@ const Page = () => {
           onClick={() => router.push('/get-started')}
           className="text-base sm:text-lg text-[#D1D1D1] hover:opacity-80 transition-opacity"
         >
-          Get Started
+          Get Started 
         </LabelButton>
       </h1>
     </div>
