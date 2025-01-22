@@ -1,24 +1,25 @@
 import { Control } from 'react-hook-form'
 import CustomInput from '@/components/CustomInput'
 import LabelButton from '@/components/ui/LabelButton'
-import { AuthFormSchema } from '@/lib/schemas/authSchema'
+import { ForgotPasswordFormSchema } from '@/lib/schemas/authSchema'
 import { z } from 'zod'
 
-type ForgotPasswordFormData = z.infer<typeof AuthFormSchema>
+
+type ForgotPasswordFormData = z.infer<typeof ForgotPasswordFormSchema>;
+
 interface ForgotPasswordFormProps {
-  control: Control<ForgotPasswordFormData>
-  isSubmitting: boolean
-  resetLinkSent: boolean
-  timeLeft: number
-  onResendClick?: () => void
+  control: Control<ForgotPasswordFormData>;
+  isSubmitting: boolean;
+  resetLinkSent: boolean;
+  timeLeft: number;
+  onResendClick?: () => void;
 }
 
 export default function ForgotPasswordForm({ 
   control, 
   isSubmitting, 
   resetLinkSent,
-  timeLeft,
-  onResendClick 
+  timeLeft
 }: ForgotPasswordFormProps) {
   return (
     <div className="w-full space-y-4 sm:space-y-6">
@@ -40,11 +41,10 @@ export default function ForgotPasswordForm({
       <LabelButton
         type='submit'
         variant="filled"
-        disabled={isSubmitting || timeLeft > 0}
-        onClick={resetLinkSent ? onResendClick : undefined}
+        disabled={isSubmitting}
       >
         {resetLinkSent ? 'Resend Link' : 'Send Reset Link'}
       </LabelButton>
     </div>
-  )
+  );
 }

@@ -2,8 +2,12 @@ import { z } from "zod"
 
 export const AuthFormSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),
-  password: z.string().optional(),
-  username: z.string().optional(),
+  password: z.string()
+  .min(8, "Password must be at least 8 characters")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+  .regex(/[0-9]/, "Password must contain at least one number")
+  .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character"),
+  username: z.string().min(3, 'Username must be at least 3 characters'),
   Newpassword: z.string().optional(),
   confirmPassword: z.string().optional(),
   terms: z.boolean().optional(),
@@ -65,3 +69,68 @@ export const OTPFormSchema = z.object({
 export const startingShema = z.object({
   email: z.string().email()
 })
+
+export const GetStartedFormSchema = z.object({
+  email: z.string().email(),
+});
+
+export const LoginFormSchema = z.object({
+  email: z.string().min(1, "Email is required").email("Invalid email format"),
+  password: z.string().min(8, "Password must be at least 8 characters")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+  .regex(/[0-9]/, "Password must contain at least one number")
+  .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character"),
+  rememberMe: z.boolean().optional(),
+});
+
+
+
+export const RegisterFormSchema = z.object({
+  email: z.string().min(1, "Email is required").email("Invalid email format"),
+  username: z.string().min(3, 'Username must be at least 3 characters'),
+  password: z.string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character"),
+  terms: z.boolean().refine((val) => val === true, {
+    message: "You must accept the terms and conditions"
+  })
+});
+
+export const ResetPasswordFormSchema = z.object({
+  Newpassword: z.string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character"),
+  confirmPassword: z.string()
+}).superRefine((data, ctx) => {
+  if (!data.Newpassword) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "New password is required",
+      path: ["Newpassword"],
+    });
+  }
+
+  if (!data.confirmPassword) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Confirm password is required",
+      path: ["confirmPassword"],
+    });
+  }
+
+  if (data.Newpassword !== data.confirmPassword) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Passwords do not match",
+      path: ["confirmPassword"],
+    });
+  }
+});
+
+export const ForgotPasswordFormSchema = z.object({
+  email: z.string().min(1, "Email is required").email("Invalid email format"),
+});
