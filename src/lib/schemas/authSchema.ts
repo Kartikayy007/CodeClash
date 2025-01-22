@@ -3,16 +3,22 @@ import { z } from "zod"
 export const AuthFormSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   password: z.string()
   .min(8, "Password must be at least 8 characters")
   .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
   .regex(/[0-9]/, "Password must contain at least one number")
   .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character"),
   username: z.string().min(3, 'Username must be at least 3 characters'),
+<<<<<<< HEAD
 =======
   password: z.string().optional(),
   username: z.string().optional(),
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   Newpassword: z.string().optional(),
   confirmPassword: z.string().optional(),
   terms: z.boolean().optional(),
@@ -143,8 +149,11 @@ export const ResetPasswordFormSchema = z.object({
 
 export const ForgotPasswordFormSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),
+<<<<<<< HEAD
 =======
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 =======
 >>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
+=======
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 });

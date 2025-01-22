@@ -3,6 +3,7 @@ import LabelButton from '@/components/ui/LabelButton'
 import { Control } from 'react-hook-form'
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 // import { GetStartedFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
 import { FormData } from '@/types/form.types';
@@ -24,6 +25,16 @@ interface GetStartedFormProps {
   control: Control<GetstartedFromData>
   isSubmitting: boolean
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
+=======
+import { GetStartedFormSchema } from '@/lib/schemas/authSchema'
+import { z } from 'zod'
+
+// type GetStartedFormData = z.infer<typeof GetStartedFormSchema>
+
+interface GetStartedFormProps {
+  control: Control<z.infer<typeof GetStartedFormSchema>>;
+  isSubmitting: boolean;
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 }
 
 export default function GetStartedForm({ control, isSubmitting }: GetStartedFormProps) {

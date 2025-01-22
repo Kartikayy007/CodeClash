@@ -11,6 +11,35 @@ const Page = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [testimonialPage, setTestimonialPage] = useState(0);
 
+<<<<<<< HEAD
+=======
+  const features = [
+    {
+      title: "Coding Challenges",
+      description: "Solve challenges tailored for all skill levels, from beginner to advanced.",
+      image: "/coding-challenges.svg",
+      className: "w-full md:w-1/2 h-[600px]"
+    },
+    {
+      title: "Tutorials",
+      description: "Master concepts with interactive tutorials and expert-guided paths.",
+      image: "/tutorials.svg",
+      className: "w-full md:w-1/2 h-[290px]"
+    },
+    {
+      title: "Community",
+      description: "Join a thriving community of passionate programmers.",
+      image: "/community.svg",
+      className: "w-full md:w-1/2 h-[290px]"
+    },
+    {
+      title: "Leaderboards",
+      description: "Climb the ranks as you compete with coders worldwide.",
+      image: "/leaderboards.svg",
+      className: "w-full md:w-1/2 h-[290px]"
+    }
+  ];
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 
   const testimonials = [
     {
@@ -99,6 +128,7 @@ const Page = () => {
         </ul>
       </nav>
 
+<<<<<<< HEAD
       <section className='flex flex-col md:flex-row justify-between items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-20 gap-8 mt-9'>
         <div className='flex-1'>
           <p className='text-base sm:text-lg mb-4 text-[#db83d8] font-semibold leading-9'>
@@ -108,6 +138,17 @@ const Page = () => {
             Conquer Every Challenge
           </h1>
           <p className="w-full sm:w-[450px] md:w-[550px] lg:w-[630px] mb-8 text-lg sm:text-xl md:text-2xl font-medium text-white leading-7 sm:leading-9">
+=======
+      <section className='flex flex-col md:flex-row justify-between items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-20 gap-8 mt-16'>
+        <div className='flex-1'>
+          <p className='text-[#DB84D9] text-lg mb-4'>
+            With CodeClash
+          </p>
+          <h1 className='text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6'>
+            Conquer Every Challenge
+          </h1>
+          <p className='text-gray-300 text-lg md:text-xl mb-8 max-w-xl'>
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
             The ultimate platform for coding enthusiasts to learn, compete, and grow.
           </p>
           <LabelButton
@@ -116,14 +157,22 @@ const Page = () => {
               width: '200px',
               height: '48px'
             }}
+<<<<<<< HEAD
             className="w-full sm:w-[200px]"
+=======
+            className="w-full md:w-[200px]"
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
             onClick={() => router.push('/get-started')}
           >
             Get Started
           </LabelButton>
         </div>
 
+<<<<<<< HEAD
         <div className='flex-1 relative hidden md:block'>
+=======
+        <div className='flex-1 relative'>
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
           <div className='w-full max-w-xl'>
             <Image
               src="/illustration1.svg"
@@ -137,6 +186,7 @@ const Page = () => {
         </div>
       </section>
 
+<<<<<<< HEAD
       <section className='flex flex-col items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20'>
         <h2 className='text-white font-[600] text-2xl sm:text-3xl mb-8 sm:mb-16 text-center'>
           Why Choose Us?
@@ -196,10 +246,35 @@ const Page = () => {
                     priority
                   />
                 </div>
+=======
+      <section className='flex flex-col items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-20'>
+        <h2 className='text-white font-[600] text-3xl mb-16'>
+          Why Choose Us?
+        </h2>
+
+        <div className='w-full flex flex-wrap gap-8'>
+          <div className='w-full md:w-[calc(50%-16px)] flex flex-col gap-8'>
+            <div className='bg-[#1A1D24] rounded-lg p-8 hover:bg-[#212631] transition-colors h-full'>
+              <h3 className='text-white text-2xl font-semibold mb-4'>
+                {features[0].title}
+              </h3>
+              <p className='text-gray-300 mb-8'>
+                {features[0].description}
+              </p>
+              <div className='w-full h-96 relative'>
+                <Image
+                  src={features[0].image}
+                  alt={features[0].title}
+                  fill
+                  className="object-contain"
+                  priority
+                />
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
               </div>
             </div>
           </div>
 
+<<<<<<< HEAD
           <div className='flex flex-col gap-4'>
             <div className='bg-[#1E1B2E] rounded-2xl p-4 sm:p-8 w-full lg:w-[522px] h-auto sm:h-80 bg-[#0000ff]/0 backdrop-blur-[206.80px] relative overflow-hidden'>
               <Image
@@ -254,6 +329,42 @@ const Page = () => {
                     priority
                   />
                 </div>
+=======
+          <div className='w-full md:w-[calc(50%-16px)] flex flex-col gap-8'>
+            <div className='bg-[#1A1D24] rounded-lg p-8 hover:bg-[#212631] transition-colors'>
+              <h3 className='text-white text-2xl font-semibold mb-4'>
+                {features[1].title}
+              </h3>
+              <p className='text-gray-300 mb-8'>
+                {features[1].description}
+              </p>
+              <div className='w-full h-48 relative'>
+                <Image
+                  src={features[1].image}
+                  alt={features[1].title}
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            </div>
+
+            <div className='bg-[#1A1D24] rounded-lg p-8 hover:bg-[#212631] transition-colors'>
+              <h3 className='text-white text-2xl font-semibold mb-4'>
+                {features[2].title}
+              </h3>
+              <p className='text-gray-300 mb-8'>
+                {features[2].description}
+              </p>
+              <div className='w-full h-48 relative'>
+                <Image
+                  src={features[2].image}
+                  alt={features[2].title}
+                  fill
+                  className="object-contain"
+                  priority
+                />
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
               </div>
             </div>
           </div>
@@ -336,6 +447,7 @@ const Page = () => {
       </section>
 
       <section className='flex flex-col items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-10 md:py-20'>
+<<<<<<< HEAD
         <div className='w-full relative rounded-lg overflow-hidden'>
           <Image
             src="/foot.svg"
@@ -347,12 +459,22 @@ const Page = () => {
           />
           <div className='flex flex-col md:flex-row items-center justify-between p-6 md:p-8 relative z-10'>
             <div className='flex-1 w-full md:w-auto mb-8 md:mb-0 relative top-8'>
+=======
+        <div className='w-full bg-gradient-to-r from-[#1A1D24] to-[#2A1D3C] rounded-lg overflow-hidden'>
+          <div className='flex flex-col md:flex-row items-center justify-between p-6 md:p-0'>
+
+            <div className='flex-1 w-full md:w-auto mb-8 md:mb-0'>
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
               <Image
                 height={300}
                 width={400}
                 src='/coding1.svg'
                 alt={'Coding illustration'}
+<<<<<<< HEAD
                 className='w-full max-w-[200px] sm:max-w-[300px] md:max-w-[400px] mx-auto'
+=======
+                className='w-full max-w-[300px] md:max-w-[400px] mx-auto'
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
               />
             </div>
 
@@ -383,11 +505,19 @@ const Page = () => {
                   alt="Ready to code"
                   width={250}
                   height={100}
+<<<<<<< HEAD
                   className="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[250px] mx-auto md:mx-0 h-auto relative z-10"
+=======
+                  className="w-full max-w-[200px] md:max-w-[250px] mx-auto md:mx-0 h-auto relative z-10"
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
                   priority
                 />
               </div>
             </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
           </div>
         </div>
       </section>
@@ -436,19 +566,31 @@ const Page = () => {
               <div className="flex space-x-4">
                 <Link
                   href="https://twitter.com"
+<<<<<<< HEAD
                   className="bg-[#551870] rounded-md p-2 hover:opacity-80 transition-opacity"
+=======
+                  className="bg-[#7C3AED] p-2 rounded-lg hover:opacity-80 transition-opacity"
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
                 >
                   <Twitter size={24} className="text-white" />
                 </Link>
                 <Link
                   href="https://instagram.com"
+<<<<<<< HEAD
                   className="bg-[#551870] rounded-md p-2 hover:opacity-80 transition-opacity"
+=======
+                  className="bg-[#7C3AED] p-2 rounded-lg hover:opacity-80 transition-opacity"
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
                 >
                   <Instagram size={24} className="text-white" />
                 </Link>
                 <Link
                   href="https://linkedin.com"
+<<<<<<< HEAD
                   className="bg-[#551870] rounded-md p-2 hover:opacity-80 transition-opacity"
+=======
+                  className="bg-[#7C3AED] p-2 rounded-lg hover:opacity-80 transition-opacity"
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
                 >
                   <Linkedin size={24} className="text-white" />
                 </Link>

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import CustomCheckbox from '@/components/ui/CustomCheckbox'
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 // import { LoginFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
 import { FormData } from '@/types/form.types';
@@ -18,10 +19,14 @@ interface LoginFormProps {
 =======
 =======
 import { AuthFormSchema } from '@/lib/schemas/authSchema'
+=======
+import { LoginFormSchema } from '@/lib/schemas/authSchema'
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 import { z } from 'zod'
 >>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
 
-type LoginFormData = z.infer<typeof AuthFormSchema>
+type LoginFormData = z.infer<typeof LoginFormSchema>
+
 interface LoginFormProps {
   control: Control<LoginFormData>
   isSubmitting: boolean
@@ -42,9 +47,13 @@ export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
         placeholder=""
         type="text"
 <<<<<<< HEAD
+<<<<<<< HEAD
         isLoginForm={true}
 =======
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
+=======
+        isLoginForm={true}
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
       />
       <CustomInput
         name="password"
@@ -53,9 +62,13 @@ export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
         placeholder=""
         type="password"
 <<<<<<< HEAD
+<<<<<<< HEAD
         isLoginForm={true}
 =======
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
+=======
+        isLoginForm={true}
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
       />
 
       <div className="flex justify-between items-center">

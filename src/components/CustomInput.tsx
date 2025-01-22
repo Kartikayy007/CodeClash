@@ -15,11 +15,27 @@ import { FormData } from '@/types/form.types';
 type FieldNames = 'password' | 'email' | 'username' | 'Newpassword' | 'confirmPassword' | 'terms' | 'rememberMe';
 =======
 import { z } from 'zod'
+<<<<<<< HEAD
 import { AuthFormSchema } from '@/lib/schemas/authSchema';
 >>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
 
 interface CustomInput {
   control: Control<FormData>;
+=======
+import { AuthFormSchema, ForgotPasswordFormSchema, GetStartedFormSchema, LoginFormSchema, RegisterFormSchema, ResetPasswordFormSchema } from '@/lib/schemas/authSchema';
+
+type FieldNames = 'password' | 'email' | 'username' | 'Newpassword' | 'confirmPassword' | 'terms' | 'rememberMe';
+
+interface CustomInput {
+  control: Control<
+    | z.infer<typeof AuthFormSchema>
+    | z.infer<typeof RegisterFormSchema>
+    | z.infer<typeof ResetPasswordFormSchema>
+    | z.infer<typeof LoginFormSchema>
+    | z.infer<typeof GetStartedFormSchema>
+    | z.infer<typeof ForgotPasswordFormSchema>
+  >;
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   name: FieldNames;
   label: string;
   placeholder: string;
