@@ -78,7 +78,7 @@ export const handleLogin = async ({
     }
 
     toast.success('Login Successful', 'Welcome back!')
-    router.push('/home')
+    router.push('/dashboard')
     return true
   }
   return false

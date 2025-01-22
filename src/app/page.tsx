@@ -5,6 +5,8 @@ import LabelButton from '@/components/ui/LabelButton';
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Twitter, Instagram, Linkedin } from 'lucide-react';
 import Link from 'next/link';
+import PixelCard from '@/components/ui/PixelCard';
+import Hyperspeed, { hyperspeedPresets } from '@/components/ui/Hyperspeed';
 
 const Page = () => {
   const router = useRouter();
@@ -70,7 +72,7 @@ const Page = () => {
 
   return (
     <div className='bg-[#10141D] min-h-screen'>
-      <nav className='bg-[#292C33] fixed top-0 z-50 w-full max-w-[1440px] h-16 mx-auto px-4 sm:px-6 md:px-20 py-2.5 flex items-center justify-between'>
+      <nav className='bg-[#292C33] sticky top-0 z-50 w-full max-w-[1440px] h-16 mx-auto px-4 sm:px-6 md:px-20 py-2.5 flex items-center justify-between'>
         <Image
           src='/logo.svg'
           alt="logo"
@@ -125,9 +127,9 @@ const Page = () => {
         </ul>
       </nav>
 
-      <section className='flex flex-col md:flex-row justify-between items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-20 gap-8 mt-16'>
-        <div className='flex-1'>
-          <p className='text-[#DB84D9] text-lg mb-4'>
+      <section className='flex flex-col md:flex-row justify-center items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-20 gap-8 mt-16'>
+        <div className='flex-1 z-10'>
+          <p className='text-[#DB84D9] text-lg mb-4  '>
             With CodeClash
           </p>
           <h1 className='text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6'>
@@ -149,7 +151,7 @@ const Page = () => {
           </LabelButton>
         </div>
 
-        <div className='flex-1 relative'>
+        {/* <div className='flex-1 relative z-10'>
           <div className='w-full max-w-xl'>
             <Image
               src="/illustration1.svg"
@@ -160,7 +162,17 @@ const Page = () => {
               priority
             />
           </div>
-        </div>
+        </div> */}
+
+
+
+        <Hyperspeed
+          effectOptions={{
+            ...hyperspeedPresets.cyberpunk
+          }}
+        />
+
+
       </section>
 
       <section className='flex flex-col items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-20'>
@@ -170,61 +182,73 @@ const Page = () => {
 
         <div className='w-full flex flex-wrap gap-8'>
           <div className='w-full md:w-[calc(50%-16px)] flex flex-col gap-8'>
-            <div className='bg-[#1A1D24] rounded-lg p-8 hover:bg-[#212631] transition-colors h-full'>
-              <h3 className='text-white text-2xl font-semibold mb-4'>
-                {features[0].title}
-              </h3>
-              <p className='text-gray-300 mb-8'>
-                {features[0].description}
-              </p>
-              <div className='w-full h-96 relative'>
-                <Image
-                  src={features[0].image}
-                  alt={features[0].title}
-                  fill
-                  className="object-contain"
-                  priority
-                />
+            <PixelCard
+              variant="blue"
+              className='h-[290px] w-full' gap={10} speed={50} noFocus={true} colors={undefined} >
+              <div className='z-10 p-8 absolute'>
+                <h3 className='text-white text-2xl font-semibold mb-4'>
+                  {features[0].title}
+                </h3>
+                <p className='text-gray-300 mb-8'>
+                  {features[0].description}
+                </p>
+                <div className='w-full h-96 relative'>
+                  <Image
+                    src={features[0].image}
+                    alt={features[0].title}
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
               </div>
-            </div>
+            </PixelCard>
           </div>
 
           <div className='w-full md:w-[calc(50%-16px)] flex flex-col gap-8'>
-            <div className='bg-[#1A1D24] rounded-lg p-8 hover:bg-[#212631] transition-colors'>
-              <h3 className='text-white text-2xl font-semibold mb-4'>
-                {features[1].title}
-              </h3>
-              <p className='text-gray-300 mb-8'>
-                {features[1].description}
-              </p>
-              <div className='w-full h-48 relative'>
-                <Image
-                  src={features[1].image}
-                  alt={features[1].title}
-                  fill
-                  className="object-contain"
-                  priority
-                />
+            <PixelCard
+              variant="blue"
+              className='h-[290px] w-full' gap={10} speed={50} noFocus={true} colors={undefined} >
+              <div className='z-10 p-8 absolute'>
+                <h3 className='text-white text-2xl font-semibold mb-4'>
+                  {features[1].title}
+                </h3>
+                <p className='text-gray-300 mb-8'>
+                  {features[1].description}
+                </p>
+                <div className='w-full h-48 relative'>
+                  <Image
+                    src={features[1].image}
+                    alt={features[1].title}
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
               </div>
-            </div>
+            </PixelCard>
 
-            <div className='bg-[#1A1D24] rounded-lg p-8 hover:bg-[#212631] transition-colors'>
-              <h3 className='text-white text-2xl font-semibold mb-4'>
-                {features[2].title}
-              </h3>
-              <p className='text-gray-300 mb-8'>
-                {features[2].description}
-              </p>
-              <div className='w-full h-48 relative'>
-                <Image
-                  src={features[2].image}
-                  alt={features[2].title}
-                  fill
-                  className="object-contain"
-                  priority
-                />
+            <PixelCard
+              variant="blue"
+              className='h-[290px] w-full' gap={10} speed={50} noFocus={true} colors={undefined} >
+              <div className='z-10 p-8 absolute'>
+                <h3 className='text-white text-2xl font-semibold mb-4'>
+                  {features[2].title}
+                </h3>
+                <p className='text-gray-300 mb-8'>
+                  {features[2].description}
+                </p>
+                <div className='w-full h-48 relative'>
+                  <Image
+                    src={features[2].image}
+                    alt={features[2].title}
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
               </div>
-            </div>
+            </PixelCard>
           </div>
         </div>
       </section>
@@ -308,7 +332,7 @@ const Page = () => {
         <div className='w-full bg-gradient-to-r from-[#1A1D24] to-[#2A1D3C] rounded-lg overflow-hidden'>
           <div className='flex flex-col md:flex-row items-center justify-between p-6 md:p-0'>
 
-            <div className='flex-1 w-full md:w-auto mb-8 md:mb-0'>
+            <div className='flex-1 w-full md:w-auto mb-8 md:mb-</div>0'>
               <Image
                 height={300}
                 width={400}
