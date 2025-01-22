@@ -15,7 +15,7 @@ const TokenExchange = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const token = searchParams.get('token');
+    const token = searchParams?.get('token') || null;
     
     const handleTokenExchange = async () => {
       if (!token) {

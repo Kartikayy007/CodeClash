@@ -43,7 +43,8 @@ const routeImages: RouteImages = {
 
 export function AuthHeroImage() {
   const pathname = usePathname();
-  const Info = routeImages[pathname] || routeImages['/register'];
+  const validPathname = pathname as keyof typeof routeImages;
+  const Info = routeImages[validPathname] || routeImages['/register'];
 
   return (
     <div className="bg-[#282D37] w-1/2 lg:flex flex-col hidden">
