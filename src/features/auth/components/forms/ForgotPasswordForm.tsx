@@ -1,14 +1,15 @@
 import { Control } from 'react-hook-form'
 import CustomInput from '@/components/CustomInput'
 import LabelButton from '@/components/ui/LabelButton'
-import { ForgotPasswordFormSchema } from '@/lib/schemas/authSchema'
-import { z } from 'zod'
+// import { ForgotPasswordFormSchema } from '@/lib/schemas/authSchema'
+// import { z } from 'zod'
+import { FormData } from '@/types/form.types'
 
 
-type ForgotPasswordFormData = z.infer<typeof ForgotPasswordFormSchema>;
+// type ForgotPasswordFormData = z.infer<typeof ForgotPasswordFormSchema>;
 
 interface ForgotPasswordFormProps {
-  control: Control<ForgotPasswordFormData>;
+  control: Control<FormData>;
   isSubmitting: boolean;
   resetLinkSent: boolean;
   timeLeft: number;

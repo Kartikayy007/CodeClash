@@ -8,7 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 const TokenHandler = () => {
   const searchParams = useSearchParams();
-  const token = searchParams.get('token');
+  const token = searchParams?.get('token') || null;
   const router = useRouter();
 
   React.useEffect(() => {

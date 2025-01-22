@@ -3,20 +3,14 @@ import { FormControl, FormField, FormLabel, FormMessage } from '@/components/ui/
 import { Control } from 'react-hook-form';
 // import PasswordStrengthChecker from '../features/auth/components/PasswordStrengthChecker';
 import Image from 'next/image';
-import { z } from 'zod'
-import { AuthFormSchema, ForgotPasswordFormSchema, GetStartedFormSchema, LoginFormSchema, RegisterFormSchema, ResetPasswordFormSchema } from '@/lib/schemas/authSchema';
+// import { z } from 'zod'
+// import { AuthFormSchema, ForgotPasswordFormSchema, GetStartedFormSchema, LoginFormSchema, RegisterFormSchema, ResetPasswordFormSchema } from '@/lib/schemas/authSchema';
+import { FormData } from '@/types/form.types';
 
 type FieldNames = 'password' | 'email' | 'username' | 'Newpassword' | 'confirmPassword' | 'terms' | 'rememberMe';
 
 interface CustomInput {
-  control: Control<
-    | z.infer<typeof AuthFormSchema>
-    | z.infer<typeof RegisterFormSchema>
-    | z.infer<typeof ResetPasswordFormSchema>
-    | z.infer<typeof LoginFormSchema>
-    | z.infer<typeof GetStartedFormSchema>
-    | z.infer<typeof ForgotPasswordFormSchema>
-  >;
+  control: Control<FormData>;
   name: FieldNames;
   label: string;
   placeholder: string;

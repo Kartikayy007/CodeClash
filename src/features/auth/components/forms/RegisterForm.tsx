@@ -3,15 +3,16 @@ import CustomInput from '@/components/CustomInput'
 import Link from 'next/link'
 import CustomCheckbox from '@/components/ui/CustomCheckbox'
 import LabelButton from '@/components/ui/LabelButton'
-import { RegisterFormSchema } from '@/lib/schemas/authSchema'
-import { z } from 'zod'
+// import { RegisterFormSchema } from '@/lib/schemas/authSchema'
+// import { z } from 'zod'
+import { FormData } from '@/types/form.types';
 
-type RegisterFormData = z.infer<typeof RegisterFormSchema>
+// type RegisterFormData = z.infer<typeof RegisterFormSchema>
 
 interface RegisterFormProps {
-  control: Control<RegisterFormData>
-  isSubmitting: boolean
-  password: string
+  control: Control<FormData>;
+  isSubmitting: boolean;
+  password: string;
 }
 
 export default function RegisterForm({ control, isSubmitting }: RegisterFormProps) {

@@ -1,25 +1,18 @@
-import { Control, useWatch } from 'react-hook-form'
+import { Control } from 'react-hook-form'
 import CustomInput from '@/components/CustomInput'
 import LabelButton from '@/components/ui/LabelButton'
 import { useState } from 'react'
-import PasswordStrengthChecker from '../PasswordStrengthChecker'
-import { ResetPasswordFormSchema } from '@/lib/schemas/authSchema'
-import { z } from 'zod'
-
-type ResetPasswordFormData = z.infer<typeof ResetPasswordFormSchema>
+// import PasswordStrengthChecker from '../PasswordStrengthChecker'
+// import { ResetPasswordFormData } from '@/types/form.types'
+import { FormData } from '@/types/form.types'
 
 interface ResetPasswordFormProps {
-  control: Control<ResetPasswordFormData>
+  control: Control<FormData>
   isSubmitting: boolean
 }
 
 export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswordFormProps) {
-  const [isFocused, setIsFocused] = useState(false);
-  const password = useWatch({
-    control,
-    name: 'Newpassword',
-    defaultValue: ''
-  });
+  const [, setIsFocused] = useState(false);
 
   return (
     <div className='w-full space-y-4 sm:space-y-6'>
@@ -34,10 +27,10 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
         />
-        <PasswordStrengthChecker 
+        {/* <PasswordStrengthChecker 
           password={password} 
           isFocused={isFocused}
-        />
+        /> */}
       </div>
       <div className="relative">
         <CustomInput

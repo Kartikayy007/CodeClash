@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { z } from "zod";
-import { FieldErrors, useForm, UseFormReturn, Control } from "react-hook-form";
+import { FieldErrors, useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { AuthFormSchema, RegisterFormSchema, LoginFormSchema, GetStartedFormSchema, ResetPasswordFormSchema, ForgotPasswordFormSchema } from '@/lib/schemas/authSchema';
@@ -235,21 +235,22 @@ const AuthForm = ({
         >
           {type === 'get-started' && (
             <GetStartedForm
-              control={form.control as Control<z.infer<typeof GetStartedFormSchema>>}
+              control={form.control}
               isSubmitting={isSubmitting}
             />
           )}
 
           {type === 'login' && (
             <LoginForm
-              control={form.control as Control<z.infer<typeof LoginFormSchema>>}
+              control={form.control}
               isSubmitting={isSubmitting}
+              password=''
             />
           )}
 
           {type === 'register' && (
             <RegisterForm
-              control={form.control as Control<z.infer<typeof RegisterFormSchema>>}
+              control={form.control}
               isSubmitting={isSubmitting}
               password={''}
             />
@@ -257,14 +258,14 @@ const AuthForm = ({
 
           {type === 'reset-password' && (
             <ResetPasswordForm
-            control={form.control as Control<z.infer<typeof ResetPasswordFormSchema>>}
+            control={form.control}
             isSubmitting={isSubmitting}
           />
           )}
 
           {type === 'forgot-password' && (
             <ForgotPasswordForm
-              control={form.control as Control<z.infer<typeof ForgotPasswordFormSchema>>}
+              control={form.control}
               isSubmitting={isSubmitting}
               resetLinkSent={resetLinkSent}
               timeLeft={timeLeft}

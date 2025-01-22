@@ -1,21 +1,33 @@
-import { FieldErrors, UseFormReturn } from "react-hook-form"
+import { FieldErrors, UseFormReturn, FieldValues } from "react-hook-form"
 import { z } from "zod"
-import { LoginFormSchema, RegisterFormSchema, ResetPasswordFormSchema, ForgotPasswordFormSchema, GetStartedFormSchema } from "@/lib/schemas/authSchema"
+import { 
+  LoginFormSchema, 
+  RegisterFormSchema, 
+  ResetPasswordFormSchema, 
+  ForgotPasswordFormSchema, 
+  GetStartedFormSchema 
+} from "@/lib/schemas/authSchema"
 import { toast } from "@/providers/toast-config"
 import { ApiError } from "@/types/error.types"
 import { isAxiosError } from "axios"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 
-interface BaseErrorHandlerProps<T> {
+interface BaseErrorHandlerProps<T extends FieldValues> {
   errors: FieldErrors<T>
   form: UseFormReturn<T>
 }
 
-type LoginErrorHandlerProps = BaseErrorHandlerProps<z.infer<typeof LoginFormSchema>>
-type RegisterErrorHandlerProps = BaseErrorHandlerProps<z.infer<typeof RegisterFormSchema>>
-type ResetPasswordErrorHandlerProps = BaseErrorHandlerProps<z.infer<typeof ResetPasswordFormSchema>>
-type ForgotPasswordErrorHandlerProps = BaseErrorHandlerProps<z.infer<typeof ForgotPasswordFormSchema>>
-type GetStartedErrorHandlerProps = BaseErrorHandlerProps<z.infer<typeof GetStartedFormSchema>>
+type LoginFormValues = z.infer<typeof LoginFormSchema>
+type RegisterFormValues = z.infer<typeof RegisterFormSchema>
+type ResetPasswordFormValues = z.infer<typeof ResetPasswordFormSchema>
+type ForgotPasswordFormValues = z.infer<typeof ForgotPasswordFormSchema>
+type GetStartedFormValues = z.infer<typeof GetStartedFormSchema>
+
+type LoginErrorHandlerProps = BaseErrorHandlerProps<LoginFormValues>
+type RegisterErrorHandlerProps = BaseErrorHandlerProps<RegisterFormValues>
+type ResetPasswordErrorHandlerProps = BaseErrorHandlerProps<ResetPasswordFormValues>
+type ForgotPasswordErrorHandlerProps = BaseErrorHandlerProps<ForgotPasswordFormValues>
+type GetStartedErrorHandlerProps = BaseErrorHandlerProps<GetStartedFormValues>
 
 export const handleLoginError = ({ errors, form }: LoginErrorHandlerProps) => {
   if (!form.getValues('email') || !form.getValues('password')) {
