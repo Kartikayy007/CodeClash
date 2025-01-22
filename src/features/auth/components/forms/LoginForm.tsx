@@ -8,10 +8,13 @@ import CustomCheckbox from '@/components/ui/CustomCheckbox'
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
 =======
 >>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 // import { LoginFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
 import { FormData } from '@/types/form.types';
@@ -43,11 +46,15 @@ interface LoginFormProps {
 =======
 =======
 import { AuthFormSchema } from '@/lib/schemas/authSchema'
+=======
+import { LoginFormSchema } from '@/lib/schemas/authSchema'
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 import { z } from 'zod'
 >>>>>>> e488d9d (implemented handeling for otp, removed unused import, fixed types)
 >>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
 
-type LoginFormData = z.infer<typeof AuthFormSchema>
+type LoginFormData = z.infer<typeof LoginFormSchema>
+
 interface LoginFormProps {
   control: Control<LoginFormData>
   isSubmitting: boolean
@@ -75,6 +82,7 @@ export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         isLoginForm={true}
 =======
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
@@ -86,6 +94,14 @@ export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
 =======
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+        isLoginForm={true}
+=======
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+=======
+        isLoginForm={true}
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
       />
       <CustomInput
         name="password"
@@ -96,6 +112,7 @@ export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         isLoginForm={true}
 =======
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
@@ -107,6 +124,14 @@ export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
 =======
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+        isLoginForm={true}
+=======
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+=======
+        isLoginForm={true}
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
       />
 
       <div className="flex justify-between items-center">

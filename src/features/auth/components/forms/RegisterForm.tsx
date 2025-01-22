@@ -25,6 +25,7 @@ import CustomCheckbox from '@/components/ui/CustomCheckbox'
 import LabelButton from '@/components/ui/LabelButton'
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { RegisterFormSchema } from '@/lib/schemas/authSchema'
 import { z } from 'zod'
 
@@ -39,9 +40,12 @@ interface RegisterFormProps {
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
 =======
 import { AuthFormSchema } from '@/lib/schemas/authSchema'
+=======
+import { RegisterFormSchema } from '@/lib/schemas/authSchema'
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 import { z } from 'zod'
 
-type RegisterFormData = z.infer<typeof AuthFormSchema>
+type RegisterFormData = z.infer<typeof RegisterFormSchema>
 
 interface RegisterFormProps {
   control: Control<RegisterFormData>

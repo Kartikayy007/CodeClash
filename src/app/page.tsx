@@ -39,7 +39,11 @@ const Page = () => {
       className: "w-full md:w-1/2 h-[290px]"
     }
   ];
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 
   const testimonials = [
     {
@@ -148,7 +152,11 @@ const Page = () => {
             Conquer Every Challenge
           </h1>
           <p className='text-gray-300 text-lg md:text-xl mb-8 max-w-xl'>
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
             The ultimate platform for coding enthusiasts to learn, compete, and grow.
           </p>
           <LabelButton
@@ -161,7 +169,11 @@ const Page = () => {
             className="w-full sm:w-[200px]"
 =======
             className="w-full md:w-[200px]"
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
             onClick={() => router.push('/get-started')}
           >
             Get Started
@@ -172,7 +184,11 @@ const Page = () => {
         <div className='flex-1 relative hidden md:block'>
 =======
         <div className='flex-1 relative'>
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
           <div className='w-full max-w-xl'>
             <Image
               src="/illustration1.svg"
@@ -269,7 +285,11 @@ const Page = () => {
                   className="object-contain"
                   priority
                 />
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
               </div>
             </div>
           </div>
@@ -364,7 +384,11 @@ const Page = () => {
                   className="object-contain"
                   priority
                 />
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
               </div>
             </div>
           </div>
@@ -464,7 +488,11 @@ const Page = () => {
           <div className='flex flex-col md:flex-row items-center justify-between p-6 md:p-0'>
 
             <div className='flex-1 w-full md:w-auto mb-8 md:mb-0'>
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
               <Image
                 height={300}
                 width={400}
@@ -474,7 +502,11 @@ const Page = () => {
                 className='w-full max-w-[200px] sm:max-w-[300px] md:max-w-[400px] mx-auto'
 =======
                 className='w-full max-w-[300px] md:max-w-[400px] mx-auto'
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
               />
             </div>
 
@@ -509,7 +541,11 @@ const Page = () => {
                   className="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[250px] mx-auto md:mx-0 h-auto relative z-10"
 =======
                   className="w-full max-w-[200px] md:max-w-[250px] mx-auto md:mx-0 h-auto relative z-10"
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
                   priority
                 />
               </div>
@@ -517,7 +553,11 @@ const Page = () => {
 <<<<<<< HEAD
 =======
 
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
           </div>
         </div>
       </section>
@@ -570,7 +610,11 @@ const Page = () => {
                   className="bg-[#551870] rounded-md p-2 hover:opacity-80 transition-opacity"
 =======
                   className="bg-[#7C3AED] p-2 rounded-lg hover:opacity-80 transition-opacity"
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
                 >
                   <Twitter size={24} className="text-white" />
                 </Link>
@@ -580,7 +624,11 @@ const Page = () => {
                   className="bg-[#551870] rounded-md p-2 hover:opacity-80 transition-opacity"
 =======
                   className="bg-[#7C3AED] p-2 rounded-lg hover:opacity-80 transition-opacity"
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
                 >
                   <Instagram size={24} className="text-white" />
                 </Link>
@@ -590,7 +638,11 @@ const Page = () => {
                   className="bg-[#551870] rounded-md p-2 hover:opacity-80 transition-opacity"
 =======
                   className="bg-[#7C3AED] p-2 rounded-lg hover:opacity-80 transition-opacity"
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
                 >
                   <Linkedin size={24} className="text-white" />
                 </Link>

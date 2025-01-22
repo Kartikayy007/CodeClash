@@ -256,6 +256,7 @@ export const handleForgotPassword = async ({
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     toast.success('Reset Link Sent', 'Please check your email for the reset link')
 =======
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
@@ -267,6 +268,14 @@ export const handleForgotPassword = async ({
 =======
 >>>>>>> c52728d (Add error handling and submission logic for authentication forms)
 >>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
+=======
+    toast.success('Reset Link Sent', 'Please check your email for the reset link')
+=======
+>>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+=======
+    toast.success('Reset Link Sent', 'Please check your email for the reset link')
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
     setResetLinkSent?.(true)
     setTimeLeft?.(30)
     onResetLinkSent?.(values.email)

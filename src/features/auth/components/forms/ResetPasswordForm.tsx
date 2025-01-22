@@ -92,7 +92,38 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+<<<<<<< HEAD
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+import { Control, useWatch } from 'react-hook-form'
+import CustomInput from '@/components/CustomInput'
+import LabelButton from '@/components/ui/LabelButton'
+import { useState } from 'react'
+import PasswordStrengthChecker from '../PasswordStrengthChecker'
+import { ResetPasswordFormSchema } from '@/lib/schemas/authSchema'
+import { z } from 'zod'
+
+type ResetPasswordFormData = z.infer<typeof ResetPasswordFormSchema>
+
+interface ResetPasswordFormProps {
+  control: Control<ResetPasswordFormData>
+  isSubmitting: boolean
+}
+
+export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswordFormProps) {
+  const [isFocused, setIsFocused] = useState(false);
+  const password = useWatch({
+    control,
+    name: 'Newpassword',
+    defaultValue: ''
+  });
+
+  return (
+    <div className='w-full space-y-4 sm:space-y-6'>
+      <div className="relative">
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
         <CustomInput
           name="Newpassword"
           label="New Password"
@@ -103,8 +134,11 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
         />
@@ -131,7 +165,19 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+<<<<<<< HEAD
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+        />
+        <PasswordStrengthChecker 
+          password={password} 
+          isFocused={isFocused}
+        />
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
       </div>
       <div className="relative">
         <CustomInput
@@ -152,6 +198,7 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     </div>
 =======
     </>
@@ -160,10 +207,18 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
     </div>
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
     </div>
 =======
     </>
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+<<<<<<< HEAD
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+    </div>
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   )
 }

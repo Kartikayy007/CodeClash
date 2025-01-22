@@ -13,7 +13,11 @@ import {
 export type FormData = 
 =======
 export type FormDataType = 
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   | z.infer<typeof AuthFormSchema>
   | z.infer<typeof RegisterFormSchema>
   | z.infer<typeof LoginFormSchema>
@@ -28,4 +32,8 @@ export type ResetPasswordFormData = z.infer<typeof ResetPasswordFormSchema>
 export type ForgotPasswordFormData = z.infer<typeof ForgotPasswordFormSchema>
 =======
 export type FormControl = Control<FormDataType>
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)

@@ -21,9 +21,12 @@ type FieldNames = 'password' | 'email' | 'username' | 'Newpassword' | 'confirmPa
 import { z } from 'zod'
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { AuthFormSchema } from '@/lib/schemas/authSchema';
 >>>>>>> 70784f3 (implemented handeling for otp, removed unused import, fixed types)
 =======
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 import { AuthFormSchema } from '@/lib/schemas/authSchema';
 >>>>>>> e488d9d (implemented handeling for otp, removed unused import, fixed types)
 >>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
@@ -44,7 +47,11 @@ interface CustomInput {
     | z.infer<typeof GetStartedFormSchema>
     | z.infer<typeof ForgotPasswordFormSchema>
   >;
+<<<<<<< HEAD
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   name: FieldNames;
   label: string;
   placeholder: string;

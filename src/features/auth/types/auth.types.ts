@@ -6,8 +6,11 @@ import { UseFormReturn } from 'react-hook-form'
 import { ForgotPasswordFormSchema, GetStartedFormSchema, LoginFormSchema, RegisterFormSchema, ResetPasswordFormSchema } from '@/lib/schemas/authSchema'
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 import { NextRouter } from 'next/router'
 import { UseFormReturn } from 'react-hook-form'
@@ -18,7 +21,12 @@ import { AuthFormSchema } from '@/lib/schemas/authSchema'
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+<<<<<<< HEAD
 >>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
+=======
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 import { z } from 'zod'
 
 export interface User {
@@ -163,6 +171,7 @@ export interface BaseAuthHandlerProps<T> {
   values: T;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 export interface BaseAuthHandlerProps {
   values: z.infer<typeof AuthFormSchema>;
@@ -171,10 +180,17 @@ export interface BaseAuthHandlerProps {
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 =======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
 export interface BaseAuthHandlerProps {
   values: z.infer<typeof AuthFormSchema>;
 >>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+<<<<<<< HEAD
 >>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
+=======
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   dispatch: AppDispatch;
   setIsSubmitting: (value: boolean) => void;
 }
@@ -182,8 +198,11 @@ export interface BaseAuthHandlerProps {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 export interface ResetPasswordHandlerProps extends BaseAuthHandlerProps<z.infer<typeof ResetPasswordFormSchema>> {
   token?: string;
   form: UseFormReturn<z.infer<typeof ResetPasswordFormSchema>>;
@@ -237,7 +256,27 @@ export interface ForgotPasswordHandlerProps extends BaseAuthHandlerProps<z.infer
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+<<<<<<< HEAD
 >>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
+=======
+=======
+export interface ResetPasswordHandlerProps extends BaseAuthHandlerProps<z.infer<typeof ResetPasswordFormSchema>> {
+  token?: string;
+  form: UseFormReturn<z.infer<typeof ResetPasswordFormSchema>>;
+}
+
+export interface LoginHandlerProps extends BaseAuthHandlerProps<z.infer<typeof LoginFormSchema>> {
+  form: UseFormReturn<z.infer<typeof LoginFormSchema>>;
+  router: AppRouterInstance;
+}
+
+export interface RegisterHandlerProps extends BaseAuthHandlerProps<z.infer<typeof RegisterFormSchema>> {
+  router: AppRouterInstance | NextRouter;
+}
+
+export interface ForgotPasswordHandlerProps extends BaseAuthHandlerProps<z.infer<typeof ForgotPasswordFormSchema>> {
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   setResetLinkSent: (value: boolean) => void;
   setTimeLeft: (value: number) => void;
   onResetLinkSent?: (email: string) => void;
@@ -246,10 +285,15 @@ export interface ForgotPasswordHandlerProps extends BaseAuthHandlerProps<z.infer
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
+=======
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 export interface GetStartedHandlerProps extends BaseAuthHandlerProps<z.infer<typeof GetStartedFormSchema>> {
   router: AppRouterInstance | NextRouter;
 }
@@ -263,8 +307,11 @@ export type FormData =
   | z.infer<typeof ForgotPasswordFormSchema>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   | z.infer<typeof GetStartedFormSchema>;
 =======
 export interface GetStartedHandlerProps extends BaseAuthHandlerProps {
@@ -279,4 +326,10 @@ export type AuthFormType = 'login' | 'register' | 'forgot-password' | 'reset-pas
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> c52728d (Add error handling and submission logic for authentication forms)
+<<<<<<< HEAD
 >>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
+=======
+=======
+  | z.infer<typeof GetStartedFormSchema>;
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)

@@ -6,10 +6,13 @@ import { Control } from 'react-hook-form'
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
 =======
 >>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 // import { GetStartedFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
 import { FormData } from '@/types/form.types';
@@ -55,7 +58,20 @@ interface GetStartedFormProps {
   control: Control<GetstartedFromData>
   isSubmitting: boolean
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+<<<<<<< HEAD
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+import { GetStartedFormSchema } from '@/lib/schemas/authSchema'
+import { z } from 'zod'
+
+// type GetStartedFormData = z.infer<typeof GetStartedFormSchema>
+
+interface GetStartedFormProps {
+  control: Control<z.infer<typeof GetStartedFormSchema>>;
+  isSubmitting: boolean;
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 }
 
 export default function GetStartedForm({ control, isSubmitting }: GetStartedFormProps) {

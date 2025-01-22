@@ -6,10 +6,13 @@ import LabelButton from '@/components/ui/LabelButton'
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
 =======
 >>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 // import { ForgotPasswordFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
 import { FormData } from '@/types/form.types'
@@ -44,16 +47,24 @@ interface ForgotPasswordFormProps {
 =======
 =======
 import { AuthFormSchema } from '@/lib/schemas/authSchema'
+=======
+import { ForgotPasswordFormSchema } from '@/lib/schemas/authSchema'
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 import { z } from 'zod'
 >>>>>>> e488d9d (implemented handeling for otp, removed unused import, fixed types)
 >>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
 
-type ForgotPasswordFormData = z.infer<typeof AuthFormSchema>
+
+type ForgotPasswordFormData = z.infer<typeof ForgotPasswordFormSchema>;
+
 interface ForgotPasswordFormProps {
+<<<<<<< HEAD
 <<<<<<< HEAD
   control: Control<any>
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
 =======
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   control: Control<ForgotPasswordFormData>
 >>>>>>> 4e70137 (implemented handeling for otp, removed unused import, fixed types)
   isSubmitting: boolean
@@ -71,7 +82,17 @@ interface ForgotPasswordFormProps {
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+<<<<<<< HEAD
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+  control: Control<ForgotPasswordFormData>;
+  isSubmitting: boolean;
+  resetLinkSent: boolean;
+  timeLeft: number;
+  onResendClick?: () => void;
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 }
 
 export default function ForgotPasswordForm({ 
@@ -81,8 +102,11 @@ export default function ForgotPasswordForm({
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   timeLeft
 =======
   timeLeft,
@@ -94,7 +118,13 @@ export default function ForgotPasswordForm({
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+<<<<<<< HEAD
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+  timeLeft
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 }: ForgotPasswordFormProps) {
   return (
     <div className="w-full space-y-4 sm:space-y-6">
@@ -119,8 +149,11 @@ export default function ForgotPasswordForm({
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
         disabled={isSubmitting}
 =======
         disabled={isSubmitting || timeLeft > 0}
@@ -132,11 +165,18 @@ export default function ForgotPasswordForm({
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+<<<<<<< HEAD
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+        disabled={isSubmitting}
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
       >
         {resetLinkSent ? 'Resend Link' : 'Send Reset Link'}
       </LabelButton>
     </div>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -148,9 +188,17 @@ export default function ForgotPasswordForm({
   );
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   );
 =======
   )
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+<<<<<<< HEAD
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+  );
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 }

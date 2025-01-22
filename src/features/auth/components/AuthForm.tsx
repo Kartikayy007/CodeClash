@@ -5,12 +5,19 @@ import { z } from "zod";
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
 import { FieldErrors, useForm, UseFormReturn } from "react-hook-form";
 =======
 import { FieldErrors, useForm, UseFormReturn, Control } from "react-hook-form";
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+=======
+import { FieldErrors, useForm, UseFormReturn } from "react-hook-form";
+=======
+import { FieldErrors, useForm, UseFormReturn, Control } from "react-hook-form";
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { AuthFormSchema, RegisterFormSchema, LoginFormSchema, GetStartedFormSchema, ResetPasswordFormSchema, ForgotPasswordFormSchema } from '@/lib/schemas/authSchema';
@@ -52,12 +59,17 @@ import ForgotPasswordForm from './forms/ForgotPasswordForm';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
 =======
 >>>>>>> c6737e0 (Add error handling and submission logic for authentication forms)
+=======
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 import {
   handleResetPasswordError,
   handleLoginError,
@@ -116,7 +128,15 @@ interface AuthFormProps {
 interface AuthFormProps {
   type: string;
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+<<<<<<< HEAD
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+
+interface AuthFormProps {
+  type: AuthFormType;
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   token?: string;
   onResetLinkSent?: (email: string) => void;
 }
@@ -124,10 +144,15 @@ interface AuthFormProps {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 // Create type for all possible form types
 type FormData = 
   | z.infer<typeof ResetPasswordFormSchema>
@@ -156,6 +181,7 @@ const getSchema = (type: string) => {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 34daeff (Refactor authentication components; move to features/auth directory for better organization)
 =======
@@ -164,6 +190,12 @@ const getSchema = (type: string) => {
 =======
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+>>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 const AuthForm = ({
   type,
   token,
@@ -188,8 +220,11 @@ const AuthForm = ({
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   // Use FormData type for form
   const form = useForm<FormData>({
     resolver: zodResolver(getSchema(type)),
@@ -238,11 +273,33 @@ const AuthForm = ({
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+<<<<<<< HEAD
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+  // Use FormData type for form
+  const form = useForm<FormData>({
+    resolver: zodResolver(getSchema(type)),
+    defaultValues: {
+      email: '',  
+      ...(type === 'reset-password' ? {
+        Newpassword: '',
+        confirmPassword: ''
+      } : type === 'register' ? {
+        username: '',
+        password: '',
+        terms: false
+      } : type === 'login' ? {
+        password: '',
+        rememberMe: false
+      } : {})
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
     },
     mode: "onChange",
     context: type,
   });
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -254,11 +311,19 @@ const AuthForm = ({
   
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   
 =======
 
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+<<<<<<< HEAD
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+  
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   useEffect(() => {
     if ((type === 'login' || type === 'register')) {
       const savedEmail = localStorage.getItem('enteredEmail');
@@ -284,10 +349,15 @@ const AuthForm = ({
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   const onSubmit = async (values: FormData) => {
     try {
       if (type === 'reset-password') {
@@ -452,31 +522,32 @@ const AuthForm = ({
 
   const onError = (errors: FieldErrors<z.infer<typeof AuthFormSchema>>) => {
     if (type === 'reset-password' && handleResetPasswordError({ errors, form })) {
+=======
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
       return
     }
 
-    if (type === 'login' && handleLoginError({ errors, form })) {
+    if (type === 'get-started') {
+      handleGetStartedError({
+        errors: errors as FieldErrors<z.infer<typeof GetStartedFormSchema>>,
+        form: form as UseFormReturn<z.infer<typeof GetStartedFormSchema>>
+      })
       return
     }
-
-    if (type === 'register' && handleRegisterError({ errors, form })) {
+  
+    if (type === 'forgot-password') {
+      handleForgotPasswordError({
+        errors: errors as FieldErrors<z.infer<typeof ForgotPasswordFormSchema>>,
+        form: form as UseFormReturn<z.infer<typeof ForgotPasswordFormSchema>>
+      })
       return
     }
-
-    if (type === 'login' && (!form.getValues('email') || !form.getValues('password'))) {
-      toast.error('Fields Cant be Empty', 'Please fill in all required fields')
-      return
-    }
-
-    if (type === 'register' && (!form.getValues('email') || !form.getValues('username') || !form.getValues('password'))) {
-      toast.error('Fields Cant be Empty', 'Please fill in all required fields')
-      return
-    }
-
+  
     if (type === 'forgot-password' && !form.getValues('email')) {
       toast.error('Fields Cant be Empty', 'Please fill in all required fields')
       return
     }
+<<<<<<< HEAD
 
 <<<<<<< HEAD
     if (errors.email) {
@@ -506,6 +577,8 @@ const AuthForm = ({
 =======
 =======
     handleCommonErrors({ errors, form })
+=======
+>>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
   }
 >>>>>>> 0e26516 (Add error handling and submission logic for authentication forms)
 >>>>>>> c52728d (Add error handling and submission logic for authentication forms)
@@ -614,11 +687,17 @@ const AuthForm = ({
               control={form.control}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
               control={form.control as Control<z.infer<typeof RegisterFormSchema>>}
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+              control={form.control as Control<z.infer<typeof RegisterFormSchema>>}
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
               isSubmitting={isSubmitting}
               password={''}
             />
@@ -638,8 +717,11 @@ const AuthForm = ({
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
             control={form.control}
             isSubmitting={isSubmitting}
           />
@@ -657,7 +739,15 @@ const AuthForm = ({
 >>>>>>> 854819a (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
 =======
 >>>>>>> 92f450a (Refactor authentication components; move to features/auth directory for better organization)
+<<<<<<< HEAD
 >>>>>>> 35d1a9c (Refactor authentication components; move to features/auth directory for better organization)
+=======
+=======
+            control={form.control as Control<z.infer<typeof ResetPasswordFormSchema>>}
+            isSubmitting={isSubmitting}
+          />
+>>>>>>> 7e7cc14 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
+>>>>>>> d9063d5 (Refactor authentication forms to use specific schemas, enhance reset password feedback, and improve button component sizing)
           )}
 
           {type === 'forgot-password' && (
