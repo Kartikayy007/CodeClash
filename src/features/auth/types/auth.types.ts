@@ -2,7 +2,7 @@ import { AppDispatch } from '@/store/store'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { NextRouter } from 'next/router'
 import { UseFormReturn } from 'react-hook-form'
-import { AuthFormSchema } from '@/lib/schemas/authSchema'
+import { ForgotPasswordFormSchema, GetStartedFormSchema, LoginFormSchema, RegisterFormSchema, ResetPasswordFormSchema } from '@/lib/schemas/authSchema'
 import { z } from 'zod'
 
 export interface User {
@@ -141,34 +141,42 @@ export interface AuthError {
   status?: number;
 }
 
-export interface BaseAuthHandlerProps {
-  values: z.infer<typeof AuthFormSchema>;
+// Update BaseAuthHandlerProps to be generic
+export interface BaseAuthHandlerProps<T> {
+  values: T;
   dispatch: AppDispatch;
   setIsSubmitting: (value: boolean) => void;
 }
 
-export interface ResetPasswordHandlerProps extends BaseAuthHandlerProps {
-  token: string | undefined;
-  form: UseFormReturn<z.infer<typeof AuthFormSchema>>;
+export interface ResetPasswordHandlerProps extends BaseAuthHandlerProps<z.infer<typeof ResetPasswordFormSchema>> {
+  token?: string;
+  form: UseFormReturn<z.infer<typeof ResetPasswordFormSchema>>;
 }
 
-export interface LoginHandlerProps extends BaseAuthHandlerProps {
+export interface LoginHandlerProps extends BaseAuthHandlerProps<z.infer<typeof LoginFormSchema>> {
+  form: UseFormReturn<z.infer<typeof LoginFormSchema>>;
+  router: AppRouterInstance;
+}
+
+export interface RegisterHandlerProps extends BaseAuthHandlerProps<z.infer<typeof RegisterFormSchema>> {
   router: AppRouterInstance | NextRouter;
-  form: UseFormReturn<z.infer<typeof AuthFormSchema>>;
 }
 
-export interface RegisterHandlerProps extends BaseAuthHandlerProps {
-  router: AppRouterInstance | NextRouter;
-}
-
-export interface ForgotPasswordHandlerProps extends BaseAuthHandlerProps {
+export interface ForgotPasswordHandlerProps extends BaseAuthHandlerProps<z.infer<typeof ForgotPasswordFormSchema>> {
   setResetLinkSent: (value: boolean) => void;
   setTimeLeft: (value: number) => void;
   onResetLinkSent?: (email: string) => void;
 }
 
-export interface GetStartedHandlerProps extends BaseAuthHandlerProps {
+export interface GetStartedHandlerProps extends BaseAuthHandlerProps<z.infer<typeof GetStartedFormSchema>> {
   router: AppRouterInstance | NextRouter;
 }
 
-export type AuthFormType = 'login' | 'register' | 'forgot-password' | 'reset-password' | 'get-started';
+export type AuthFormType = 'login' | 'register' | 'reset-password' | 'forgot-password' | 'get-started';
+
+export type FormData = 
+  | z.infer<typeof LoginFormSchema>
+  | z.infer<typeof RegisterFormSchema>
+  | z.infer<typeof ResetPasswordFormSchema>
+  | z.infer<typeof ForgotPasswordFormSchema>
+  | z.infer<typeof GetStartedFormSchema>;

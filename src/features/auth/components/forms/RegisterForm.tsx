@@ -3,10 +3,10 @@ import CustomInput from '@/components/CustomInput'
 import Link from 'next/link'
 import CustomCheckbox from '@/components/ui/CustomCheckbox'
 import LabelButton from '@/components/ui/LabelButton'
-import { AuthFormSchema } from '@/lib/schemas/authSchema'
+import { RegisterFormSchema } from '@/lib/schemas/authSchema'
 import { z } from 'zod'
 
-type RegisterFormData = z.infer<typeof AuthFormSchema>
+type RegisterFormData = z.infer<typeof RegisterFormSchema>
 
 interface RegisterFormProps {
   control: Control<RegisterFormData>

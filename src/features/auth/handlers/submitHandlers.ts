@@ -142,6 +142,7 @@ export const handleForgotPassword = async ({
   const result = await dispatch(resetPassword({ email: values.email })).unwrap()
 
   if (result.success) {
+    toast.success('Reset Link Sent', 'Please check your email for the reset link')
     setResetLinkSent?.(true)
     setTimeLeft?.(30)
     onResetLinkSent?.(values.email)

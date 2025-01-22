@@ -3,12 +3,17 @@ import React, { PropsWithChildren } from 'react';
 interface LabelButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   variant?: 'filled' | 'outlined' | 'light';
+  customSize?: {
+    width?: string;
+    height?: string;
+  };
 }
 
 const LabelButton = ({ 
   children, 
   className, 
   variant = 'filled', 
+  customSize,
   disabled,
   ...props 
 }: PropsWithChildren<LabelButtonProps>) => {
@@ -46,22 +51,29 @@ const LabelButton = ({
     `
   };
 
+  const sizeStyles = customSize ? `
+    w-[${customSize.width}]
+    h-[${customSize.height}]
+  ` : `
+    w-full
+    min-w-[280px]
+    md:w-[450px] 
+    lg:w-[500px]
+    sm:w-[400px]
+    h-[45px]
+  `;
+
   return (
     <button
       className={`
         relative
-        w-full
-        min-w-[280px]
-        md:w-[450px] 
-        lg:w-[500px]
-        sm:w-[400px]
-        h-[45px] 
         px-3 
         sm:px-4 
         py-2 
         rounded-md 
         text-base
         sm:text-lg
+        ${sizeStyles}
         ${variantStyles[variant]}
         ${className || ''}
       `}

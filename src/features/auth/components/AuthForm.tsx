@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { z } from "zod";
-import { FieldErrors, useForm } from "react-hook-form";
+import { FieldErrors, useForm, UseFormReturn, Control } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
-import { AuthFormSchema } from '@/lib/schemas/authSchema';
+import { AuthFormSchema, RegisterFormSchema, LoginFormSchema, GetStartedFormSchema, ResetPasswordFormSchema, ForgotPasswordFormSchema } from '@/lib/schemas/authSchema';
 import { toast } from '@/providers/toast-config';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
@@ -13,15 +13,15 @@ import { ApiError } from '@/types/error.types';
 import GetStartedForm from './forms/GetStartedForm';
 import LoginForm from './forms/LoginForm';
 import RegisterForm from './forms/RegisterForm';
-// import ResetPasswordForm from './forms/ResetPasswordForm';
+import ResetPasswordForm from './forms/ResetPasswordForm';
 import ForgotPasswordForm from './forms/ForgotPasswordForm';
-// import PasswordStrengthChecker from './PasswordStrengthChecker';
 import {
   handleResetPasswordError,
   handleLoginError,
   handleRegisterError,
-  handleCommonErrors,
-  handleApiError
+  handleApiError,
+  handleGetStartedError,
+  handleForgotPasswordError
 } from '../handlers/errorHandlers'
 import {
   handleResetPassword,
@@ -31,14 +31,39 @@ import {
   handleGetStarted
 } from '../handlers/submitHandlers'
 import { useRouter } from 'next/navigation';
-import CustomInput from '@/components/CustomInput';
-import LabelButton from '@/components/ui/LabelButton';
+import { AuthFormType } from '../types/auth.types';
 
 interface AuthFormProps {
-  type: string;
+  type: AuthFormType;
   token?: string;
   onResetLinkSent?: (email: string) => void;
 }
+
+// Create type for all possible form types
+type FormData = 
+  | z.infer<typeof ResetPasswordFormSchema>
+  | z.infer<typeof LoginFormSchema>
+  | z.infer<typeof RegisterFormSchema>
+  | z.infer<typeof GetStartedFormSchema>
+  | z.infer<typeof ForgotPasswordFormSchema>;
+
+// Get correct schema based on type
+const getSchema = (type: string) => {
+  switch(type) {
+    case 'reset-password':
+      return ResetPasswordFormSchema;
+    case 'login':
+      return LoginFormSchema;
+    case 'register':
+      return RegisterFormSchema;
+    case 'get-started':
+      return GetStartedFormSchema;
+    case 'forgot-password':
+      return ForgotPasswordFormSchema;
+    default:
+      return AuthFormSchema;
+  }
+};
 
 const AuthForm = ({
   type,
@@ -50,7 +75,6 @@ const AuthForm = ({
   const router = useRouter();
   const [resetLinkSent, setResetLinkSent] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
-  // const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
   useEffect(() => {
     if (timeLeft === 0) return;
@@ -62,26 +86,27 @@ const AuthForm = ({
     return () => clearInterval(timer);
   }, [timeLeft]);
 
-  const form = useForm<z.infer<typeof AuthFormSchema>>({
-    resolver: zodResolver(AuthFormSchema),
+  // Use FormData type for form
+  const form = useForm<FormData>({
+    resolver: zodResolver(getSchema(type)),
     defaultValues: {
-      email: type === 'reset-password' ? 'test@example.com' : '',
-      password: type === 'forgot-password' ? undefined : "",
-      username: "",
-      Newpassword: "",
-      confirmPassword: "",
-      terms: false,
+      email: '',  
+      ...(type === 'reset-password' ? {
+        Newpassword: '',
+        confirmPassword: ''
+      } : type === 'register' ? {
+        username: '',
+        password: '',
+        terms: false
+      } : type === 'login' ? {
+        password: '',
+        rememberMe: false
+      } : {})
     },
     mode: "onChange",
     context: type,
   });
-
-  // const password = useWatch({
-  //   control: form.control,
-  //   name: 'Newpassword',
-  //   defaultValue: ''
-  // }) as string;
-
+  
   useEffect(() => {
     if ((type === 'login' || type === 'register')) {
       const savedEmail = localStorage.getItem('enteredEmail');
@@ -104,17 +129,34 @@ const AuthForm = ({
     }
   }, [type, form]);
 
-  const onSubmit = async (values: z.infer<typeof AuthFormSchema>) => {
+  const onSubmit = async (values: FormData) => {
     try {
       if (type === 'reset-password') {
-        await handleResetPassword({ values, token, dispatch, setIsSubmitting, form })
+        await handleResetPassword({ 
+          values: values as z.infer<typeof ResetPasswordFormSchema>, 
+          token, 
+          dispatch, 
+          setIsSubmitting, 
+          form: form as UseFormReturn<z.infer<typeof ResetPasswordFormSchema>>
+        })
       } else if (type === 'login') {
-        await handleLogin({ values, dispatch, form, setIsSubmitting, router })
+        await handleLogin({ 
+          values: values as z.infer<typeof LoginFormSchema>, 
+          dispatch, 
+          setIsSubmitting, 
+          form: form as UseFormReturn<z.infer<typeof LoginFormSchema>>, 
+          router 
+        })
       } else if (type === 'register') {
-        await handleRegister({ values, dispatch, setIsSubmitting, router })
+        await handleRegister({ 
+          values: values as z.infer<typeof RegisterFormSchema>, 
+          dispatch, 
+          setIsSubmitting, 
+          router 
+        })
       } else if (type === 'forgot-password') {
         await handleForgotPassword({
-          values,
+          values: values as z.infer<typeof ForgotPasswordFormSchema>,
           dispatch,
           setIsSubmitting,
           setResetLinkSent,
@@ -122,7 +164,12 @@ const AuthForm = ({
           onResetLinkSent
         })
       } else if (type === 'get-started') {
-        await handleGetStarted({ values, dispatch, setIsSubmitting, router })
+        await handleGetStarted({ 
+          values: values as z.infer<typeof GetStartedFormSchema>, 
+          dispatch, 
+          setIsSubmitting, 
+          router 
+        })
       }
     } catch (error: unknown) {
       const apiError = error as ApiError;
@@ -132,35 +179,51 @@ const AuthForm = ({
     }
   }
 
-  const onError = (errors: FieldErrors<z.infer<typeof AuthFormSchema>>) => {
-    if (type === 'reset-password' && handleResetPasswordError({ errors, form })) {
+  const onError = (errors: FieldErrors<FormData>) => {
+    if (type === 'reset-password') {
+      handleResetPasswordError({ 
+        errors: errors as FieldErrors<z.infer<typeof ResetPasswordFormSchema>>, 
+        form: form as UseFormReturn<z.infer<typeof ResetPasswordFormSchema>> 
+      })
+      return
+    }
+  
+    if (type === 'login') {
+      handleLoginError({ 
+        errors: errors as FieldErrors<z.infer<typeof LoginFormSchema>>, 
+        form: form as UseFormReturn<z.infer<typeof LoginFormSchema>> 
+      })
+      return
+    }
+  
+    if (type === 'register') {
+      handleRegisterError({ 
+        errors: errors as FieldErrors<z.infer<typeof RegisterFormSchema>>, 
+        form: form as UseFormReturn<z.infer<typeof RegisterFormSchema>> 
+      })
       return
     }
 
-    if (type === 'login' && handleLoginError({ errors, form })) {
+    if (type === 'get-started') {
+      handleGetStartedError({
+        errors: errors as FieldErrors<z.infer<typeof GetStartedFormSchema>>,
+        form: form as UseFormReturn<z.infer<typeof GetStartedFormSchema>>
+      })
       return
     }
-
-    if (type === 'register' && handleRegisterError({ errors, form })) {
+  
+    if (type === 'forgot-password') {
+      handleForgotPasswordError({
+        errors: errors as FieldErrors<z.infer<typeof ForgotPasswordFormSchema>>,
+        form: form as UseFormReturn<z.infer<typeof ForgotPasswordFormSchema>>
+      })
       return
     }
-
-    if (type === 'login' && (!form.getValues('email') || !form.getValues('password'))) {
-      toast.error('Fields Cant be Empty', 'Please fill in all required fields')
-      return
-    }
-
-    if (type === 'register' && (!form.getValues('email') || !form.getValues('username') || !form.getValues('password'))) {
-      toast.error('Fields Cant be Empty', 'Please fill in all required fields')
-      return
-    }
-
+  
     if (type === 'forgot-password' && !form.getValues('email')) {
       toast.error('Fields Cant be Empty', 'Please fill in all required fields')
       return
     }
-
-    handleCommonErrors({ errors, form })
   }
 
   return (
@@ -172,66 +235,36 @@ const AuthForm = ({
         >
           {type === 'get-started' && (
             <GetStartedForm
-              control={form.control}
+              control={form.control as Control<z.infer<typeof GetStartedFormSchema>>}
               isSubmitting={isSubmitting}
             />
           )}
 
           {type === 'login' && (
             <LoginForm
-              control={form.control}
+              control={form.control as Control<z.infer<typeof LoginFormSchema>>}
               isSubmitting={isSubmitting}
             />
           )}
 
           {type === 'register' && (
             <RegisterForm
-              control={form.control}
+              control={form.control as Control<z.infer<typeof RegisterFormSchema>>}
               isSubmitting={isSubmitting}
               password={''}
             />
           )}
 
           {type === 'reset-password' && (
-            <>
-              <div className="relative">
-                <CustomInput
-                  name="Newpassword"
-                  label="New Password"
-                  control={form.control}
-                  placeholder=""
-                  type="password"
-                  showStrengthChecker={true}
-                />
-                {/* <PasswordStrengthChecker
-                  password={form.watch('Newpassword') ?? ''}  
-                /> */}
-              </div>
-              <div className="relative">
-                <CustomInput
-                  name="confirmPassword"
-                  label="Confirm Password"
-                  control={form.control}
-                  placeholder=""
-                  type="password"
-                  showStrengthChecker={true}
-                />
-                
-              </div>
-
-              <LabelButton
-                type="submit"
-                variant="filled"
-                disabled={isSubmitting}
-              >
-                Reset Password
-              </LabelButton>
-            </>
+            <ResetPasswordForm
+            control={form.control as Control<z.infer<typeof ResetPasswordFormSchema>>}
+            isSubmitting={isSubmitting}
+          />
           )}
 
           {type === 'forgot-password' && (
             <ForgotPasswordForm
-              control={form.control}
+              control={form.control as Control<z.infer<typeof ForgotPasswordFormSchema>>}
               isSubmitting={isSubmitting}
               resetLinkSent={resetLinkSent}
               timeLeft={timeLeft}

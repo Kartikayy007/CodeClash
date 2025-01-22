@@ -4,15 +4,27 @@ import { Control } from 'react-hook-form';
 // import PasswordStrengthChecker from '../features/auth/components/PasswordStrengthChecker';
 import Image from 'next/image';
 import { z } from 'zod'
-import { AuthFormSchema } from '@/lib/schemas/authSchema';
+import { AuthFormSchema, ForgotPasswordFormSchema, GetStartedFormSchema, LoginFormSchema, RegisterFormSchema, ResetPasswordFormSchema } from '@/lib/schemas/authSchema';
+
+type FieldNames = 'password' | 'email' | 'username' | 'Newpassword' | 'confirmPassword' | 'terms' | 'rememberMe';
 
 interface CustomInput {
-  control: Control<z.infer<typeof AuthFormSchema>>,
-  name: keyof z.infer<typeof AuthFormSchema>,
-  label: string,
-  placeholder: string,
+  control: Control<
+    | z.infer<typeof AuthFormSchema>
+    | z.infer<typeof RegisterFormSchema>
+    | z.infer<typeof ResetPasswordFormSchema>
+    | z.infer<typeof LoginFormSchema>
+    | z.infer<typeof GetStartedFormSchema>
+    | z.infer<typeof ForgotPasswordFormSchema>
+  >;
+  name: FieldNames;
+  label: string;
+  placeholder: string;
   type?: string;
   showStrengthChecker?: boolean;
+  isLoginForm?: boolean;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 const CustomInput = ({
@@ -21,7 +33,7 @@ const CustomInput = ({
   label,
   placeholder,
   type = 'text',
-  
+  isLoginForm = false,
 }: CustomInput) => {
   const [, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -51,10 +63,8 @@ const CustomInput = ({
                     rounded-md
                     bg-transparent
                     border-2
-                    ${(name === 'Newpassword' || name === 'confirmPassword' || name == 'password') && error ? 'border-[#EF4444]' : 'border-[#D1D1D1]'}
+                    ${(!isLoginForm && (name === 'Newpassword' || name === 'confirmPassword' || name === 'password') && error) ? 'border-[#EF4444]' : 'border-[#D1D1D1]'}
                     focus:outline-none
-                    focus:ring-2
-                    ${(name === 'Newpassword' || name === 'confirmPassword' || name == 'password') && error ? 'focus:ring-[#EF4444] focus:border-[#EF4444]' : 'focus:ring-[#C879EB] focus:border-[#C879EB]'}
                     transition-all
                     duration-500
                     text-sm sm:text-base
@@ -65,24 +75,25 @@ const CustomInput = ({
                 />
               </FormControl>
               {type === 'password' && (
-  <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center">
-    <button
-      type="button"
-      onClick={() => setShowPassword(!showPassword)}
-      className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6"
-    >
-      <Image
-        src={showPassword ? '/eyeclosed.svg' : '/eye.svg'}
-        alt={showPassword ? 'Hide password' : 'Show password'}
-        width={20}
-        height={20}
-        className="w-4 h-4 sm:w-5 sm:h-5"
-      />
-    </button>
-  </div>
-)}
+                <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center">
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6"
+                  >
+                    <Image
+                      src={showPassword ? '/eyeclosed.svg' : '/eye.svg'}
+                      alt={showPassword ? 'Hide password' : 'Show password'}
+                      width={20}
+                      height={20}
+                      className="w-4 h-4 sm:w-5 sm:h-5"
+                    />
+                  </button>
+                </div>
+              )}
             </div>
-            {name === 'password'&& error && (
+            {/* Show form message only for non-login forms */}
+            {!isLoginForm && name === 'password' && error && (
               <FormMessage className="text-[#EF4444] text-sm mt-1 ml-1" />
             )}
             {(name === 'Newpassword' || name === 'confirmPassword') && error && (

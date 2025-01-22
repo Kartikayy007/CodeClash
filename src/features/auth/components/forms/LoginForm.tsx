@@ -3,10 +3,11 @@ import CustomInput from '@/components/CustomInput'
 import LabelButton from '@/components/ui/LabelButton'
 import Link from 'next/link'
 import CustomCheckbox from '@/components/ui/CustomCheckbox'
-import { AuthFormSchema } from '@/lib/schemas/authSchema'
+import { LoginFormSchema } from '@/lib/schemas/authSchema'
 import { z } from 'zod'
 
-type LoginFormData = z.infer<typeof AuthFormSchema>
+type LoginFormData = z.infer<typeof LoginFormSchema>
+
 interface LoginFormProps {
   control: Control<LoginFormData>
   isSubmitting: boolean
@@ -21,6 +22,7 @@ export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
         control={control}
         placeholder=""
         type="text"
+        isLoginForm={true}
       />
       <CustomInput
         name="password"
@@ -28,6 +30,7 @@ export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
         control={control}
         placeholder=""
         type="password"
+        isLoginForm={true}
       />
 
       <div className="flex justify-between items-center">
