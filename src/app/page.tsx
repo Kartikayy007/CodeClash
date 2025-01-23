@@ -5,40 +5,12 @@ import LabelButton from '@/components/ui/LabelButton';
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Twitter, Instagram, Linkedin } from 'lucide-react';
 import Link from 'next/link';
-import PixelCard from '@/components/ui/PixelCard';
-import Hyperspeed, { hyperspeedPresets } from '@/components/ui/Hyperspeed';
 
 const Page = () => {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [testimonialPage, setTestimonialPage] = useState(0);
 
-  const features = [
-    {
-      title: "Coding Challenges",
-      description: "Solve challenges tailored for all skill levels, from beginner to advanced.",
-      image: "/coding-challenges.svg",
-      className: "w-full md:w-1/2 h-[600px]"
-    },
-    {
-      title: "Tutorials",
-      description: "Master concepts with interactive tutorials and expert-guided paths.",
-      image: "/tutorials.svg",
-      className: "w-full md:w-1/2 h-[290px]"
-    },
-    {
-      title: "Community",
-      description: "Join a thriving community of passionate programmers.",
-      image: "/community.svg",
-      className: "w-full md:w-1/2 h-[290px]"
-    },
-    {
-      title: "Leaderboards",
-      description: "Climb the ranks as you compete with coders worldwide.",
-      image: "/leaderboards.svg",
-      className: "w-full md:w-1/2 h-[290px]"
-    }
-  ];
 
   const testimonials = [
     {
@@ -72,7 +44,7 @@ const Page = () => {
 
   return (
     <div className='bg-[#10141D] min-h-screen'>
-      <nav className='bg-[#292C33] sticky top-0 z-50 w-full max-w-[1440px] h-16 mx-auto px-4 sm:px-6 md:px-20 py-2.5 flex items-center justify-between'>
+      <nav className='bg-[#292C33] fixed top-0 z-50 w-full max-w-[1440px] h-16 mx-auto px-4 sm:px-6 md:px-20 py-2.5 flex items-center justify-between'>
         <Image
           src='/logo.svg'
           alt="logo"
@@ -127,15 +99,15 @@ const Page = () => {
         </ul>
       </nav>
 
-      <section className='flex flex-col md:flex-row justify-center items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-20 gap-8 mt-16'>
-        <div className='flex-1 z-10'>
-          <p className='text-[#DB84D9] text-lg mb-4  '>
+      <section className='flex flex-col md:flex-row justify-between items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-20 gap-8 mt-9'>
+        <div className='flex-1'>
+          <p className='text-base sm:text-lg mb-4 text-[#db83d8] font-semibold leading-9'>
             With CodeClash
           </p>
-          <h1 className='text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6'>
+          <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold text-white mb-6'>
             Conquer Every Challenge
           </h1>
-          <p className='text-gray-300 text-lg md:text-xl mb-8 max-w-xl'>
+          <p className="w-full sm:w-[450px] md:w-[550px] lg:w-[630px] mb-8 text-lg sm:text-xl md:text-2xl font-medium text-white leading-7 sm:leading-9">
             The ultimate platform for coding enthusiasts to learn, compete, and grow.
           </p>
           <LabelButton
@@ -144,14 +116,14 @@ const Page = () => {
               width: '200px',
               height: '48px'
             }}
-            className="w-full md:w-[200px]"
+            className="w-full sm:w-[200px]"
             onClick={() => router.push('/get-started')}
           >
             Get Started
           </LabelButton>
         </div>
 
-        {/* <div className='flex-1 relative z-10'>
+        <div className='flex-1 relative hidden md:block'>
           <div className='w-full max-w-xl'>
             <Image
               src="/illustration1.svg"
@@ -162,93 +134,128 @@ const Page = () => {
               priority
             />
           </div>
-        </div> */}
-
-
-
-        <Hyperspeed
-          effectOptions={{
-            ...hyperspeedPresets.cyberpunk
-          }}
-        />
-
-
+        </div>
       </section>
 
-      <section className='flex flex-col items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-20'>
-        <h2 className='text-white font-[600] text-3xl mb-16'>
+      <section className='flex flex-col items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20'>
+        <h2 className='text-white font-[600] text-2xl sm:text-3xl mb-8 sm:mb-16 text-center'>
           Why Choose Us?
         </h2>
-
-        <div className='w-full flex flex-wrap gap-8'>
-          <div className='w-full md:w-[calc(50%-16px)] flex flex-col gap-8'>
-            <PixelCard
-              variant="blue"
-              className='h-[290px] w-full' gap={10} speed={50} noFocus={true} colors={undefined} >
-              <div className='z-10 p-8 absolute'>
-                <h3 className='text-white text-2xl font-semibold mb-4'>
-                  {features[0].title}
+        <div className='flex flex-col lg:flex-row gap-4'>
+          <div className='flex flex-col gap-4'>
+            <div className='rounded-2xl p-4 sm:p-8 w-full lg:w-[522px] h-auto sm:h-[512px] bg-[#0000ff]/0 backdrop-blur-[206.80px] relative overflow-hidden'>
+              <Image
+                src="/gradient.png"
+                alt="Gradient Background"
+                fill
+                className="object-cover opacity-70"
+                priority
+              />
+              <div className="relative z-10">
+                <h3 className='text-white text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 w-full sm:w-[211px] text-center leading-7'>
+                  Coding Challenges
                 </h3>
-                <p className='text-gray-300 mb-8'>
-                  {features[0].description}
+                <p className='mb-4 sm:mb-8 w-full sm:w-[404px] text-white text-base sm:text-lg font-medium leading-6 sm:leading-7'>
+                  Solve challenges tailored for all skill levels, from beginner to advanced.
                 </p>
-                <div className='w-full h-96 relative'>
+                <div className='w-full flex justify-center items-start relative'>
                   <Image
-                    src={features[0].image}
-                    alt={features[0].title}
-                    fill
-                    className="object-contain"
+                    src="/box1.svg"
+                    alt="Coding Challenges"
+                    width={360}
+                    height={360}
+                    className="w-[200px] sm:w-[360px] h-auto object-contain"
                     priority
                   />
                 </div>
               </div>
-            </PixelCard>
+            </div>
+
+            <div className='bg-[#1E1B2E] rounded-2xl p-4 sm:p-8 w-full lg:w-[522px] h-auto sm:h-80 bg-[#0000ff]/0 backdrop-blur-[206.80px] relative overflow-hidden'>
+              <Image
+                src="/gradient2.png"
+                alt="Gradient Background"
+                fill
+                className="object-cover opacity-50"
+                priority
+              />
+              <div className="relative z-10">
+                <h3 className='text-white text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 w-full sm:w-[211px] text-center sm:text-left'>
+                  Community
+                </h3>
+                <p className='mb-4 sm:mb-8 w-full sm:w-[404px] text-white text-base sm:text-lg font-medium leading-6 sm:leading-7'>
+                  Join a thriving community of passionate programmers.
+                </p>
+                <div className='w-full h-[150px] sm:h-[200px] flex justify-center items-center relative sm:bottom-12'>
+                  <Image
+                    src="/box3.svg"
+                    alt="Community"
+                    width={260}
+                    height={260}
+                    className="w-[180px] sm:w-[260px] h-auto object-contain"
+                    priority
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className='w-full md:w-[calc(50%-16px)] flex flex-col gap-8'>
-            <PixelCard
-              variant="blue"
-              className='h-[290px] w-full' gap={10} speed={50} noFocus={true} colors={undefined} >
-              <div className='z-10 p-8 absolute'>
-                <h3 className='text-white text-2xl font-semibold mb-4'>
-                  {features[1].title}
+          <div className='flex flex-col gap-4'>
+            <div className='bg-[#1E1B2E] rounded-2xl p-4 sm:p-8 w-full lg:w-[522px] h-auto sm:h-80 bg-[#0000ff]/0 backdrop-blur-[206.80px] relative overflow-hidden'>
+              <Image
+                src="/gradient1.png"
+                alt="Gradient Background"
+                fill
+                className="object-cover opacity-10"
+                priority
+              />
+              <div className="relative z-10">
+                <h3 className='text-white text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 w-full sm:w-[211px] text-center sm:text-left'>
+                  Tutorials
                 </h3>
-                <p className='text-gray-300 mb-8'>
-                  {features[1].description}
+                <p className='mb-4 sm:mb-8 w-full sm:w-[404px] text-white text-base sm:text-lg font-medium leading-6 sm:leading-7'>
+                  Master concepts with interactive tutorials and expert-guided paths.
                 </p>
-                <div className='w-full h-48 relative'>
+                <div className='w-full h-[150px] sm:h-[200px] flex justify-center items-center relative sm:bottom-12'>
                   <Image
-                    src={features[1].image}
-                    alt={features[1].title}
-                    fill
-                    className="object-contain"
+                    src="/box2.svg"
+                    alt="Tutorials"
+                    width={250}
+                    height={250}
+                    className="w-[180px] sm:w-[250px] h-auto object-contain"
                     priority
                   />
                 </div>
               </div>
-            </PixelCard>
+            </div>
 
-            <PixelCard
-              variant="blue"
-              className='h-[290px] w-full' gap={10} speed={50} noFocus={true} colors={undefined} >
-              <div className='z-10 p-8 absolute'>
-                <h3 className='text-white text-2xl font-semibold mb-4'>
-                  {features[2].title}
+            <div className='rounded-2xl p-4 sm:p-8 w-full lg:w-[522px] h-auto sm:h-[512px] bg-[#0000ff]/0 backdrop-blur-[206.80px] relative overflow-hidden'>
+              <Image
+                src="/gradient3.png"
+                alt="Gradient Background"
+                fill
+                className="object-cover opacity-90"
+                priority
+              />
+              <div className="relative z-10">
+                <h3 className='text-white text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 w-full sm:w-[211px] text-center sm:text-left'>
+                  Leaderboards
                 </h3>
-                <p className='text-gray-300 mb-8'>
-                  {features[2].description}
+                <p className='mb-4 sm:mb-8 w-full sm:w-[404px] text-white text-base sm:text-lg font-medium leading-6 sm:leading-7'>
+                  Climb the ranks as you compete with coders worldwide.
                 </p>
-                <div className='w-full h-48 relative'>
+                <div className='w-full h-[150px] sm:h-[200px] flex justify-center items-center relative sm:bottom-12'>
                   <Image
-                    src={features[2].image}
-                    alt={features[2].title}
-                    fill
-                    className="object-contain"
+                    src="/box4.svg"
+                    alt="Leaderboards"
+                    width={360}
+                    height={360}
+                    className="w-[180px] sm:w-[360px] h-auto object-contain"
                     priority
                   />
                 </div>
               </div>
-            </PixelCard>
+            </div>
           </div>
         </div>
       </section>
@@ -329,16 +336,23 @@ const Page = () => {
       </section>
 
       <section className='flex flex-col items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-10 md:py-20'>
-        <div className='w-full bg-gradient-to-r from-[#1A1D24] to-[#2A1D3C] rounded-lg overflow-hidden'>
-          <div className='flex flex-col md:flex-row items-center justify-between p-6 md:p-0'>
-
-            <div className='flex-1 w-full md:w-auto mb-8 md:mb-</div>0'>
+        <div className='w-full relative rounded-lg overflow-hidden'>
+          <Image
+            src="/foot.svg"
+            alt="Gradient Background"
+            width={1060}
+            height={234}
+            className="w-full h-full absolute top-0 left-0 object-cover opacity-90"
+            priority
+          />
+          <div className='flex flex-col md:flex-row items-center justify-between p-6 md:p-8 relative z-10'>
+            <div className='flex-1 w-full md:w-auto mb-8 md:mb-0 relative top-8'>
               <Image
                 height={300}
                 width={400}
                 src='/coding1.svg'
                 alt={'Coding illustration'}
-                className='w-full max-w-[300px] md:max-w-[400px] mx-auto'
+                className='w-full max-w-[200px] sm:max-w-[300px] md:max-w-[400px] mx-auto'
               />
             </div>
 
@@ -369,12 +383,11 @@ const Page = () => {
                   alt="Ready to code"
                   width={250}
                   height={100}
-                  className="w-full max-w-[200px] md:max-w-[250px] mx-auto md:mx-0 h-auto relative z-10"
+                  className="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[250px] mx-auto md:mx-0 h-auto relative z-10"
                   priority
                 />
               </div>
             </div>
-
           </div>
         </div>
       </section>
@@ -423,19 +436,19 @@ const Page = () => {
               <div className="flex space-x-4">
                 <Link
                   href="https://twitter.com"
-                  className="bg-[#7C3AED] p-2 rounded-lg hover:opacity-80 transition-opacity"
+                  className="bg-[#551870] rounded-md p-2 hover:opacity-80 transition-opacity"
                 >
                   <Twitter size={24} className="text-white" />
                 </Link>
                 <Link
                   href="https://instagram.com"
-                  className="bg-[#7C3AED] p-2 rounded-lg hover:opacity-80 transition-opacity"
+                  className="bg-[#551870] rounded-md p-2 hover:opacity-80 transition-opacity"
                 >
                   <Instagram size={24} className="text-white" />
                 </Link>
                 <Link
                   href="https://linkedin.com"
-                  className="bg-[#7C3AED] p-2 rounded-lg hover:opacity-80 transition-opacity"
+                  className="bg-[#551870] rounded-md p-2 hover:opacity-80 transition-opacity"
                 >
                   <Linkedin size={24} className="text-white" />
                 </Link>
