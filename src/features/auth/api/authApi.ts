@@ -51,20 +51,20 @@ export const authApi = {
     return response.data;
   },
   googleAuth: {
-    initiate: () => `${BASE_URL}/api/v1/auth/google`,
+    getAuthUrl: () => `${BASE_URL}/api/v1/auth/google`,
     exchangeToken: async (data: TempTokenPayload): Promise<GoogleOAuthResponse> => {
       const response = await api.post<GoogleOAuthResponse>(
-        `${BASE_URL}/api/v1/auth/google/tokens`,
+        `${BASE_URL}/api/v1/auth/google/callback`,
         data
       );
       return response.data;
+    },
+    handleCallback: async (code: string): Promise<GoogleOAuthResponse> => {
+      const response = await api.post<GoogleOAuthResponse>(
+        `${BASE_URL}/api/v1/auth/google/callback`,
+        { code }
+      );
+      return response.data;
     }
-  },
-  exchangeGoogleToken: async (data: TempTokenPayload): Promise<GoogleOAuthResponse> => {
-    const response = await api.post<GoogleOAuthResponse>(
-      `${BASE_URL}/api/v1/auth/google/tokens`,
-      data
-    );
-    return response.data;
-  },
+  }
 };
