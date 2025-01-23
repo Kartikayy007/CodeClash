@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
-import { exchangeGoogleToken } from '@/features/auth/thunks/googleAuthThunk';
+import { handleGoogleCallback } from '@/features/auth/thunks/googleAuthThunk';
 import { toast } from '@/providers/toast-config';
 import { AuthApiError } from '@/types/error.types';
 import Image from 'next/image';
@@ -25,8 +25,8 @@ const TokenExchange = () => {
       }
 
       try {
-        const result = await dispatch(exchangeGoogleToken({ 
-          tempOAuthToken: token 
+        const result = await dispatch(handleGoogleCallback({ 
+          code: token 
         })).unwrap();
         
         if (result.success && result.data?.tokens) {
