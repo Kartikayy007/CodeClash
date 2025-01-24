@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 
 const BattleRoom = () => {
   const params = useParams();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const roomId = params?.roomId as string;
 
   const questionData = {

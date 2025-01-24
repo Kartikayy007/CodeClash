@@ -1,6 +1,4 @@
-import { Maximize2 } from 'lucide-react'
 import { Timer } from 'lucide-react'
-import { ChevronLeft } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import LabelButton from '@/components/ui/LabelButton'
