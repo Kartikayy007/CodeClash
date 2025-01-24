@@ -244,7 +244,7 @@ const Page = () => {
                 <p className='mb-4 sm:mb-8 w-full sm:w-[404px] text-white text-base sm:text-lg font-medium leading-6 sm:leading-7'>
                   Climb the ranks as you compete with coders worldwide.
                 </p>
-                <div className='w-full h-[150px] sm:h-[200px] flex justify-center items-center relative sm:bottom-12'>
+                <div className='w-full h-[150px] sm:h-[200px] flex justify-center items-center relative top-12 sm:bottom-12'>
                   <Image
                     src="/box4.svg"
                     alt="Leaderboards"
