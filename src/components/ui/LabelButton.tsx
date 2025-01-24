@@ -87,14 +87,14 @@ const LabelButton = ({
       disabled={disabled}
       {...props}
     >
-      <span
-        className={variant === 'filled' ? 'text-black' : ''}
+      <div
+        className={`${variant === 'filled' ? 'text-black' : ''} ${className || ''}`}
         style={{
           textShadow: variant === 'filled' ? '1px 1px 4px rgba(0, 0, 0, 0.35)' : 'none'
         }}
       >
         {children}
-      </span>
+      </div>
     </button>
   );
 };
