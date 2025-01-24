@@ -5,6 +5,7 @@ import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
+import { EditorView } from '@codemirror/view';
 
 interface EditorProps {
   language: 'c' | 'cpp' | 'python' | 'java' | 'javascript';
@@ -49,8 +50,8 @@ const CodeEditor = ({ language, onLanguageChange, onMaximize, className = '' }: 
 
   return (
     <div className={`bg-[#1A1D24] w-full rounded-lg overflow-hidden transform transition-all duration-300 ease-in-out ${
-      isCollapsed ? 'h-[50px]' : className
-    }`}>
+      isCollapsed ? 'h-[50px]' : 'h-full'
+    } ${className}`}>
       <div className="flex items-center justify-between p-2 border-b border-[#292C33] bg-[#1A1D24] z-10">
         <select 
           className="bg-[#292C33] text-white px-3 py-1 rounded-lg outline-none"
@@ -83,12 +84,15 @@ const CodeEditor = ({ language, onLanguageChange, onMaximize, className = '' }: 
       } bg-[#1E1B2E] flex flex-col`}>
         <CodeMirror
           value={defaultCode[language]}
-          height="100vh"
+          height="calc(100vh - 400px)" 
           width="100%"
           theme="dark"
           style={{ flex: 1 }}
           className="h-full"
-          extensions={[getLanguageExtension(language)]}
+          extensions={[
+            getLanguageExtension(language),
+            EditorView.lineWrapping
+          ]}
           basicSetup={{
             lineNumbers: true,
             highlightActiveLineGutter: true,
