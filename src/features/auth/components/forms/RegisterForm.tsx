@@ -65,6 +65,7 @@ export default function RegisterForm({ control, isSubmitting }: RegisterFormProp
         type="submit"
         variant="filled"
         disabled={isSubmitting}
+        className="w-full max-w-none"
       >
         Sign Up
       </LabelButton>

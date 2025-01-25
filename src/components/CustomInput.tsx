@@ -48,9 +48,7 @@ const CustomInput = ({
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => setIsFocused(false)}
                   type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
-                  className={`w-full min-w-[280px]
-                    md:w-[450px] lg:w-[500px]
-                    sm:w-[400px]
+                  className={`w-full 
                     h-[45px] 
                     px-3 sm:px-4
                     py-2
@@ -64,29 +62,26 @@ const CustomInput = ({
                     text-sm sm:text-base
                     text-white
                     placeholder:text-gray-400
-                    pr-10`}
+                    ${type === 'password' ? 'pr-12' : 'pr-4'}`}
                   placeholder={placeholder}
                 />
               </FormControl>
               {type === 'password' && (
-                <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center">
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6"
-                  >
-                    <Image
-                      src={showPassword ? '/eyeclosed.svg' : '/eye.svg'}
-                      alt={showPassword ? 'Hide password' : 'Show password'}
-                      width={20}
-                      height={20}
-                      className="w-4 h-4 sm:w-5 sm:h-5"
-                    />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-white/5 rounded-full transition-colors"
+                >
+                  <Image
+                    src={showPassword ? '/eyeclosed.svg' : '/eye.svg'}
+                    alt={showPassword ? 'Hide password' : 'Show password'}
+                    width={20}
+                    height={20}
+                    className="w-4 h-4 sm:w-5 sm:h-5"
+                  />
+                </button>
               )}
             </div>
-            {/* Show form message only for non-login forms */}
             {!isLoginForm && name === 'password' && error && (
               <FormMessage className="text-[#EF4444] text-sm mt-1 ml-1" />
             )}

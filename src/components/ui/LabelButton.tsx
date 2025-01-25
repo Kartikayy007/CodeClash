@@ -55,11 +55,6 @@ const LabelButton = ({
     w-[${customSize.width}]
     h-[${customSize.height}]
   ` : `
-    w-full
-    min-w-[280px]
-    md:w-[450px] 
-    lg:w-[500px]
-    sm:w-[400px]
     h-[45px]
   `;
 

@@ -14,7 +14,7 @@ interface GetStartedFormProps {
 
 export default function GetStartedForm({ control, isSubmitting }: GetStartedFormProps) {
   return (
-    <div className='w-full space-y-4 sm:space-y-6'>
+    <div className='w-full min-w-[280px] md:w-[450px] space-y-4 sm:space-y-6'>
       <CustomInput
         name="email"
         label="Email"
@@ -25,6 +25,7 @@ export default function GetStartedForm({ control, isSubmitting }: GetStartedForm
         type="submit"
         variant="filled"
         disabled={isSubmitting}
+        className="w-full max-w-none"
       >
         Get Started
       </LabelButton>
