@@ -10,7 +10,7 @@ export default function DashboardLayout({
     <ProtectedRoute>
       <div className="min-h-screen bg-[#15171B] text-white">
         <Navbar />
-        <main className="container mx-auto py-6">
+        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
           {children}
         </main>
       </div>

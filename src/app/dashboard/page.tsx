@@ -45,13 +45,13 @@ export default function Dashboard() {
         </LabelButton>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        <div className="grid grid-rows-[auto_1fr] gap-4 -mt-20">
+      <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-4 ">
+        <div className="grid grid-rows-[auto_1fr] gap-4 lg:-mt-20">
           <UserStats />
           <Leaderboard className="min-h-[400px]" />
         </div>
 
-        <div className="grid grid-rows-[auto_1fr] gap-4 -mt-20">
+        <div className="grid grid-rows-[auto_1fr] gap-4 lg:-mt-20">
           <RecentMatches />
           <RecentContests className="min-h-[400px]" />
         </div>
