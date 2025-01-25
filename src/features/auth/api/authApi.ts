@@ -1,5 +1,5 @@
 import { api } from '@/utils/api';
-import { RegisterPayload, RegisterResponse, ResendOtpPayload, ResendOtpResponse, VerifyOtpPayload, VerifyOtpResponse, LoginPayload, LoginResponse, ResetPasswordPayload, ResetPasswordResponse, ResetPasswordWithTokenPayload, CheckEmailPayload, CheckEmailResponse, TempTokenPayload, GoogleOAuthResponse } from '../types/auth.types';
+import { RegisterPayload, RegisterResponse, ResendOtpPayload, ResendOtpResponse, VerifyOtpPayload, VerifyOtpResponse, LoginPayload, LoginResponse, ResetPasswordPayload, ResetPasswordResponse, ResetPasswordWithTokenPayload, CheckEmailPayload, CheckEmailResponse, TempTokenPayload, GoogleOAuthResponse, RefreshTokenResponse } from '../types/auth.types';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -64,6 +64,21 @@ export const authApi = {
     const response = await api.post<GoogleOAuthResponse>(
       `${BASE_URL}/api/v1/auth/google/tokens`,
       data
+    );
+    return response.data;
+  },
+  refreshToken: async (refreshToken: string): Promise<RefreshTokenResponse> => {
+    const formData = new URLSearchParams();
+    formData.append('refreshToken', refreshToken);
+    
+    const response = await api.post<RefreshTokenResponse>(
+      `${BASE_URL}/api/v1/auth/refresh-token`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
     );
     return response.data;
   },
