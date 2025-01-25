@@ -263,7 +263,7 @@ const CustomOtp = () => {
           <LabelButton 
             type="button"
             variant="filled" 
-            className='mt-8'
+            className="w-full max-w-none"
             disabled={loading || validationState === 'validating'}
             onClick={handleButtonClick}
           >

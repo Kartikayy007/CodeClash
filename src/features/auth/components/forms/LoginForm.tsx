@@ -17,7 +17,7 @@ interface LoginFormProps {
 
 export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
   return (
-    <div className='w-full min-w-[280px] md:w-[450px] space-y-4 sm:space-y-6'>
+    <div className='w-full space-y-4 sm:space-y-6'>
       <CustomInput
         name="email" 
         label="Email"
