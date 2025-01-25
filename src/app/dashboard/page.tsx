@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
-import { Settings } from 'lucide-react';
+// import Image from 'next/image';
+// import { Settings } from 'lucide-react';
 // import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
