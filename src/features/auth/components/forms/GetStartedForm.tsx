@@ -25,6 +25,7 @@ export default function GetStartedForm({ control, isSubmitting }: GetStartedForm
         type="submit"
         variant="filled"
         disabled={isSubmitting}
+        className="w-full max-w-none"
       >
         Get Started
       </LabelButton>

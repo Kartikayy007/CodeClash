@@ -141,6 +141,21 @@ export interface AuthError {
   status?: number;
 }
 
+export interface RefreshTokenResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    tokens: {
+      accessToken: string;
+    };
+  };
+}
+
+export interface RefreshTokenError {
+  success: boolean;
+  message: string;
+}
+
 // Update BaseAuthHandlerProps to be generic
 export interface BaseAuthHandlerProps<T> {
   values: T;

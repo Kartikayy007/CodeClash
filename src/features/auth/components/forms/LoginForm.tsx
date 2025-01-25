@@ -55,6 +55,7 @@ export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
         type="submit"
         variant="filled"
         disabled={isSubmitting}
+        className="w-full max-w-none"
       >
         Login
       </LabelButton>

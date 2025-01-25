@@ -15,7 +15,7 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
   const [, setIsFocused] = useState(false);
 
   return (
-    <div className='w-full space-y-4 sm:space-y-6'>
+    <div className='w-full min-w-[280px] md:w-[450px] space-y-4 sm:space-y-6'>
       <div className="relative">
         <CustomInput
           name="Newpassword"
@@ -45,6 +45,7 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
         type="submit"
         variant="filled"
         disabled={isSubmitting}
+        className="w-full max-w-none"
       >
         Reset Password
       </LabelButton>

@@ -2,12 +2,11 @@
 
 import React from 'react';
 import EditorLayout from '@/features/editor/components/EditorLayout';
-import { useParams } from 'next/navigation';
+// import { useParams } from 'next/navigation';
 
 const BattleRoom = () => {
-  const params = useParams();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const roomId = params?.roomId as string;
+  // const params = useParams();
+  // const roomId = params?.roomId as string;
 
   const questionData = {
     title: "Two Sum",

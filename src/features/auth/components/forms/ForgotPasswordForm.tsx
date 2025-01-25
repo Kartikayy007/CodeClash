@@ -23,7 +23,7 @@ export default function ForgotPasswordForm({
   timeLeft
 }: ForgotPasswordFormProps) {
   return (
-    <div className="w-full space-y-4 sm:space-y-6">
+    <div className="w-full min-w-[280px] md:w-[450px] space-y-4 sm:space-y-6">
       <div className='text-center'>
       </div>
       {!resetLinkSent ? (
@@ -43,6 +43,7 @@ export default function ForgotPasswordForm({
         type='submit'
         variant="filled"
         disabled={isSubmitting}
+        className="w-full max-w-none"
       >
         {resetLinkSent ? 'Resend Link' : 'Send Reset Link'}
       </LabelButton>
