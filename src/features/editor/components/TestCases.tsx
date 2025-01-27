@@ -25,7 +25,7 @@ const TestCases = ({ isCollapsed, onCollapse, questionData }: TestCasesProps) =>
     <div className={`bg-[#1A1D24] w-full rounded-lg overflow-hidden transition-all duration-300 ease-in-out ${
       isCollapsed ? 'h-12' : 'h-full'
     }`}>
-      <div className="flex items-center justify-between p-4 border-b border-[#292C33]">
+      <div className="flex items-center justify-between p-4">
         <h1 className="text-white font-bold hover:text-gray-300">Test Cases</h1>
         <button 
           className="p-1 hover:bg-[#292C33] rounded"

@@ -42,7 +42,7 @@ const EditorLayout = ({ questionData }: EditorLayoutProps) => {
             isDescriptionCollapsed ? 'w-12' : 
             isEditorMaximized ? 'hidden' : 'w-1/2'
           } h-screen `}>
-            <div className="flex items-center justify-between p-4 border-b border-[#292C33] sticky top-0 bg-[#1C202A] z-10">
+            <div className="flex items-center justify-between p-4 sticky top-0 bg-[#1C202A] z-10">
               <div className={`flex gap-4 ${isDescriptionCollapsed ? 'hidden' : ''}`}>
                 <button 
                   className={`${activeTab === 'description' ? 'text-white bg-white/10 rounded-md px-2 py-1' : 'text-gray-500'} hover:text-gray-300 font-bold text-lg`}

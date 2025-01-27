@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const TopBar = () => {
   return (
-      <div className="flex items-center justify-between rounded-lg px-8 py-3 bg-[#1A1D24] border-t border-[#292C33]">
+      <div className="flex items-center justify-between rounded-lg px-8 py-3 bg-[#1A1D24]">
         <div className="flex items-center gap-4">
         <div className="w-10 h-10 bg-gray-600 rounded-full"></div>
         <div className="text-white text-base font-medium leading-normal">Player 1 (You)</div>
