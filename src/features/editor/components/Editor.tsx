@@ -52,7 +52,7 @@ const CodeEditor = ({ language, onLanguageChange, onMaximize, className = '' }: 
     <div className={`bg-[#1A1D24] w-full rounded-lg overflow-hidden transform transition-all duration-300 ease-in-out ${
       isCollapsed ? 'h-[50px]' : 'h-full'
     } ${className}`}>
-      <div className="flex items-center justify-between p-2 border-b border-[#292C33] bg-[#1A1D24] z-10">
+      <div className="flex items-center justify-between p-2 bg-[#1A1D24] z-10">
         <select 
           className="bg-[#292C33] text-white px-3 py-1 rounded-lg outline-none"
           value={language}
