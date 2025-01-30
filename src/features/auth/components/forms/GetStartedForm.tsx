@@ -3,7 +3,7 @@ import LabelButton from '@/components/ui/LabelButton'
 import { Control } from 'react-hook-form'
 // import { GetStartedFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
-import { FormData } from '@/types/form.types';
+import { FormData } from '@/features/auth/types/form.types';
 
 // type GetStartedFormData = z.infer<typeof GetStartedFormSchema>
 

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ResendOtpPayload, ResendOtpResponse } from '../types/auth.types';
 import { authApi } from '../api/authApi';
-import { AuthApiError } from '@/types/error.types';
+import { AuthApiError } from '@/features/auth/types/error.types';
 
 interface ResendOtpError {
   success: false;

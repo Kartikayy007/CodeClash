@@ -5,7 +5,7 @@ import Link from 'next/link'
 import CustomCheckbox from '@/components/ui/CustomCheckbox'
 // import { LoginFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
-import { FormData } from '@/types/form.types';
+import { FormData } from '@/features/auth/types/form.types';
 
 // type LoginFormData = z.infer<typeof LoginFormSchema>
 

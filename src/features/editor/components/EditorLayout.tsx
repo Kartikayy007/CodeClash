@@ -31,11 +31,15 @@ const EditorLayout = ({ questionData }: EditorLayoutProps) => {
   const [isEditorMaximized, setIsEditorMaximized] = useState(false);
   const [isTestCaseCollapsed, setIsTestCaseCollapsed] = useState(false);
 
+  // Dummy data for testing
+  const dummyMatchId = "971d5848-aa34-4bb7-aeb7-a66dda164ad2";
+  const dummyInput = "4\n1 3 4";
+
   return (
     <div className="min-h-screen bg-[#10141D] text-white">
       <Header />
       <div className="grid grid-cols-2 gap-4 px-8 py-4 h-[calc(100vh-180px)]">
-        <TopBar />
+        <TopBar matchId={dummyMatchId} input={dummyInput} />
         <div className={`flex gap-4  mb-4 ${isDescriptionMaximized ? 'flex-col' : ''}`}>
           <div className={`bg-[#1A1D24] overflow-hidden rounded-lg flex flex-col transition-all duration-300 ease-in-out ${
             isDescriptionMaximized ? 'w-full' : 

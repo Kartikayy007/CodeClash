@@ -4,7 +4,7 @@ import LabelButton from '@/components/ui/LabelButton'
 import { useState } from 'react'
 // import PasswordStrengthChecker from '../PasswordStrengthChecker'
 // import { ResetPasswordFormData } from '@/types/form.types'
-import { FormData } from '@/types/form.types'
+import { FormData } from '@/features/auth/types/form.types'
 
 interface ResetPasswordFormProps {
   control: Control<FormData>

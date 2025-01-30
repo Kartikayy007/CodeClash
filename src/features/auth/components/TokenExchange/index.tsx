@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { exchangeGoogleToken } from '@/features/auth/thunks/googleAuthThunk';
 import { toast } from '@/providers/toast-config';
-import { AuthApiError } from '@/types/error.types';
+import { AuthApiError } from '@/features/auth/types/error.types';
 import Image from 'next/image';
 
 const TokenExchange = () => {

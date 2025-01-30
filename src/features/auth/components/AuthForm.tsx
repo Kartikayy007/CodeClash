@@ -9,7 +9,7 @@ import { AuthFormSchema, RegisterFormSchema, LoginFormSchema, GetStartedFormSche
 import { toast } from '@/providers/toast-config';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
-import { ApiError } from '@/types/error.types';
+import { ApiError } from '@/features/auth/types/error.types';
 import GetStartedForm from './forms/GetStartedForm';
 import LoginForm from './forms/LoginForm';
 import RegisterForm from './forms/RegisterForm';

@@ -5,7 +5,7 @@ import { Control } from 'react-hook-form';
 import Image from 'next/image';
 // import { z } from 'zod'
 // import { AuthFormSchema, ForgotPasswordFormSchema, GetStartedFormSchema, LoginFormSchema, RegisterFormSchema, ResetPasswordFormSchema } from '@/lib/schemas/authSchema';
-import { FormData } from '@/types/form.types';
+import { FormData } from '@/features/auth/types/form.types';
 
 type FieldNames = 'password' | 'email' | 'username' | 'Newpassword' | 'confirmPassword' | 'terms' | 'rememberMe';
 
