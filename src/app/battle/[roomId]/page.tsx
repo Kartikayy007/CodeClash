@@ -2,6 +2,7 @@
 
 import React from 'react';
 import EditorLayout from '@/features/editor/components/EditorLayout';
+import Editor from '@/features/editor/components/Editor';
 // import { useParams } from 'next/navigation';
 
 const BattleRoom = () => {
@@ -38,8 +39,27 @@ const BattleRoom = () => {
     ]
   };
 
+  const handleLanguageChange = (language: string) => {
+    // Implementation of handleLanguageChange
+  };
+
+  const handleMaximize = () => {
+    // Implementation of handleMaximize
+  };
+
+  const matchId = 'some-match-id';
+  const testCaseInput = 'some-test-case-input';
+
   return (
-    <EditorLayout questionData={questionData} />
+    <EditorLayout questionData={questionData}>
+      <Editor
+        language="cpp"
+        onLanguageChange={handleLanguageChange}
+        onMaximize={handleMaximize}
+        matchId={matchId}
+        input={testCaseInput}
+      />
+    </EditorLayout>
   );
 };
 

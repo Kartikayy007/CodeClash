@@ -6,6 +6,9 @@ import { javascript } from '@codemirror/lang-javascript';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { EditorView } from '@codemirror/view';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store/store';
+import { setCode, setLanguage } from '../slices/editorSlice';
 
 interface EditorProps {
   language: 'c' | 'cpp' | 'python' | 'java' | 'javascript';
@@ -14,7 +17,14 @@ interface EditorProps {
   className?: string;
 }
 
-const CodeEditor = ({ language, onLanguageChange, onMaximize, className = '' }: EditorProps) => {
+const CodeEditor = ({ 
+  language, 
+  onLanguageChange, 
+  onMaximize, 
+  className = '',
+}: EditorProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { code, output, error } = useSelector((state: RootState) => state.editor);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
 
@@ -24,12 +34,49 @@ const CodeEditor = ({ language, onLanguageChange, onMaximize, className = '' }: 
     onMaximize(newMaximizedState);
   };
 
+  const handleCodeChange = (value: string) => {
+    dispatch(setCode(value));
+  };
+
+  const handleLanguageChange = (value: string) => {
+    dispatch(setLanguage(value));
+    onLanguageChange(value);
+  };
+
   const defaultCode = {
-    cpp: `#include <iostream>\nusing namespace std;\n\nclass Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) {\n        // Write your code here\n    }\n};`,
-    python: `class Solution:\n    def twoSum(self, nums: List[int], target: int) -> List[int]:\n        # Write your code here\n        pass`,
-    java: `class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        // Write your code here\n    }\n}`,
-    javascript: `/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number[]}\n */\nvar twoSum = function(nums, target) {\n    // Write your code here\n};`,
-    c: `int* twoSum(int* nums, int numsSize, int target, int* returnSize) {\n    // Write your code here\n}`
+    cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {     
+    int t;   
+    cin >> t;   
+    while (t--) {     
+        int b, c, d; // Declare inside loop to ensure correct scoping
+        cin >> b >> c >> d;  
+        cout << b << " " << d << " " << c << endl; // Fixed print statement
+    }
+    return 0;
+}`,
+    python: `class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        # Write your code here
+        pass`,
+    java: `class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        // Write your code here
+    }
+}`,
+    javascript: `/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+var twoSum = function(nums, target) {
+    // Write your code here
+};`,
+    c: `int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
+    // Write your code here
+}`
   };
 
   const getLanguageExtension = (lang: string) => {
@@ -56,7 +103,7 @@ const CodeEditor = ({ language, onLanguageChange, onMaximize, className = '' }: 
         <select 
           className="bg-[#292C33] text-white px-3 py-1 rounded-lg outline-none"
           value={language}
-          onChange={(e) => onLanguageChange(e.target.value)}
+          onChange={(e) => handleLanguageChange(e.target.value)}
         >
           <option value="c">C</option>
           <option value="cpp">C++</option>
@@ -83,12 +130,13 @@ const CodeEditor = ({ language, onLanguageChange, onMaximize, className = '' }: 
         isCollapsed ? 'hidden' : 'h-[calc(100%-34px)]'
       } bg-[#1E1B2E] flex flex-col`}>
         <CodeMirror
-          value={defaultCode[language]}
+          value={code || defaultCode[language]}
           height="calc(100vh - 400px)" 
           width="100%"
           theme="dark"
           style={{ flex: 1 }}
           className="h-full"
+          onChange={handleCodeChange}
           extensions={[
             getLanguageExtension(language),
             EditorView.lineWrapping
@@ -119,6 +167,16 @@ const CodeEditor = ({ language, onLanguageChange, onMaximize, className = '' }: 
             lintKeymap: true
           }}
         />
+        {(output || error) && (
+          <div className="p-4 bg-[#292C33] border-t border-[#1A1D24]">
+            <h3 className="text-sm font-medium mb-2">Output:</h3>
+            <pre className={`text-sm p-2 rounded ${
+              error ? 'bg-red-500/10 text-red-400' : 'bg-[#1A1D24]'
+            }`}>
+              {error || output}
+            </pre>
+          </div>
+        )}
       </div>
     </div>
   );

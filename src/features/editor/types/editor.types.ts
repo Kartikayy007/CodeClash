@@ -40,4 +40,21 @@ export interface BattleState {
   player2: PlayerState;
   timeLeft: number;
   status: 'waiting' | 'in-progress' | 'completed';
+}
+
+export interface RunCodePayload {
+  code: string;
+  language: string;
+  matchId: string;
+  input: string;
+}
+
+export interface RunCodeResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    output: string;
+    error?: string;
+    status: 'success' | 'error';
+  };
 } 

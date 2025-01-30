@@ -8,7 +8,7 @@ import {
   GetStartedFormSchema 
 } from "@/lib/schemas/authSchema"
 import { toast } from "@/providers/toast-config"
-import { ApiError } from "@/types/error.types"
+import { ApiError } from "@/features/auth/types/error.types"
 import { isAxiosError } from "axios"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 

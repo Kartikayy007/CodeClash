@@ -17,10 +17,10 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp"
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { resendOtp } from '@/features/auth/thunks/resendOtpThunk';
 import { useRouter } from 'next/navigation';
-import { OtpError } from '@/types/error.types';
+import { OtpError } from '@/features/auth/types/error.types';
 import axios from 'axios';
 import { OTPFormSchema } from '@/lib/schemas/authSchema';
 
