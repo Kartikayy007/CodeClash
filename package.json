@@ -20,7 +20,7 @@
     "@mui/x-charts": "^7.24.1",
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.1",
-    "@reduxjs/toolkit": "^2.5.0",
+    "@reduxjs/toolkit": "^2.5.1",
     "@types/react-redux": "^7.1.34",
     "@types/redux-logger": "^3.0.13",
     "@uiw/react-codemirror": "^4.23.7",
@@ -30,7 +30,7 @@
     "clsx": "^2.1.1",
     "input-otp": "^1.4.1",
     "lucide-react": "^0.469.0",
-    "next": "15.1.3",
+    "next": "^15.1.6",
     "postprocessing": "^6.36.6",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",
@@ -41,6 +41,8 @@
     "react-redux": "^9.2.0",
     "react-toastify": "^11.0.2",
     "redux-logger": "^3.0.6",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.172.0",
@@ -48,14 +50,14 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@types/node": "^20",
-    "@types/react": "^19",
+    "@types/node": "^20.17.16",
+    "@types/react": "^19.0.8",
     "@types/react-dom": "^19",
     "@types/three": "^0.172.0",
     "eslint": "^9",
     "eslint-config-next": "15.1.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5.7.3"
   }
 }
