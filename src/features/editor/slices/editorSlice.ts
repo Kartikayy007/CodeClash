@@ -3,6 +3,10 @@ import { runCode as runCodeApi } from '../api/editorApi';
 import type { RunCodePayload, RunCodeResponse } from '@/features/editor/types/editor.types';
 import { AxiosError } from 'axios';
 
+interface ErrorResponse {
+  message: string;
+}
+
 interface EditorState {
   code: string;
   language: string;
@@ -30,8 +34,9 @@ export const runCode = createAsyncThunk<
     const response = await runCodeApi(data);
     return response;
   } catch (error: unknown) {
+    const axiosError = error as AxiosError<ErrorResponse>;
     return rejectWithValue(
-      (error as AxiosError).response?.data?.message || 'Failed to run code'
+      axiosError.response?.data?.message || 'Failed to run code'
     );
   }
 });

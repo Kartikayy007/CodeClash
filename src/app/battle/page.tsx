@@ -5,25 +5,30 @@ import { useRouter } from 'next/navigation';
 import { socketService } from '@/lib/socket';
 import LabelButton from '@/components/ui/LabelButton';
 
+interface MatchFoundData {
+  roomId: string;
+}
+
+interface MatchmakingErrorData {
+  message: string;
+}
+
 export default function BattleLobbyPage() {
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    // Setup event listeners for matchmaking
-    const onMatchFound = (data: any) => {
+    const onMatchFound = (data: MatchFoundData) => {
       console.log('✅ Match found:', data);
       setIsSearching(false);
       
-      // Join the match
       socketService.joinRoom(data.roomId);
       
-      // Navigate to the battle page
       router.push(`/battle/${data.roomId}`);
     };
 
-    const onMatchmakingError = (data: any) => {
+    const onMatchmakingError = (data: MatchmakingErrorData) => {
       console.error('❌ Matchmaking error:', data);
       setIsSearching(false);
       setError(data.message || 'Failed to find a match');

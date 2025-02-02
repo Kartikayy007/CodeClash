@@ -22,6 +22,7 @@ import PerformanceInsights from '@/components/PerformanceInsights';
 import Leaderboard from '@/components/Leaderboard';
 import RecentMatches from '@/components/RecentMatches';
 import RecentContests from '@/components/RecentContests';
+import { PlayButton } from '@/features/battle/components/PlayButton';
 
 ChartJS.register(
   CategoryScale,
@@ -37,9 +38,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="flex justify-end gap-4 mb-8">
-        <LabelButton variant='filled' >
-          Play Game
-        </LabelButton>
+        <PlayButton />
         <LabelButton variant='filled'>
           Play Contest
         </LabelButton>
