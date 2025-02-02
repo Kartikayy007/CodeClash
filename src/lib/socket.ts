@@ -1,3 +1,4 @@
+import router from 'next/router';
 import { io, Socket } from 'socket.io-client';
 
 // Types for events
@@ -11,29 +12,80 @@ interface Player {
   isReady: boolean;
 }
 
+interface Problem {
+  id: string;
+  title: string;
+  description: string;
+  testCases: Array<{ input: string; output: string }>;
+}
+
 interface RoomState {
-  roomId: string;
+  matchId: string;
   players: Player[];
-  problems: any[];
+  problems: Problem[];
   startTime: number;
   endTime: number | null;
   status: 'WAITING' | 'IN_PROGRESS' | 'COMPLETED' | 'ABORTED';
 }
 
-interface GameState extends RoomState {
-  scores: { [playerId: string]: number };
-  submissions: { [playerId: string]: any[] };
-  timeLeft: number;
+type SocketEventCallback<T> = (data: T) => void;
+
+interface EventData {
+  // Matchmaking events
+  match_found: { matchId: string; players: string[] };
+  matchmaking_error: { message: string };
+  matchmaking_timeout: Record<string, never>;
+
+  // Match events
+  match_state: {
+    matchId: string;
+    players: Player[];
+    status: RoomState['status'];
+    problems?: Problem[];
+  };
+  match_error: { message: string };
+  match_aborted: { message: string };
+
+  // Game events
+  game_start: { 
+    matchId: string; 
+    player1: Player; 
+    player2: Player; 
+    problems: Problem[] 
+  };
+  game_error: { message: string };
+  game_state: { 
+    timeLeft: number; 
+    status: RoomState['status'] 
+  };
+  game_state_update: { 
+    timeLeft: number; 
+    player1: Player; 
+    player2: Player 
+  };
+  game_end: { 
+    player1: Player; 
+    player2: Player 
+  };
+
+  // Other events
+  player_disconnected: { playerId: string };
+  code_update: { matchId: string; playerId?: string; code?: string; language?: string };
+  code_result: { playerId: string; output: string; error: string };
+  connect: Record<string, never>;
+  disconnect: { reason: string };
+  error: { message: string };
+  auth_error: { message: string };
 }
 
 class SocketService {
   private socket: Socket | null = null;
-  private eventListeners: { [key: string]: ((data: any) => void)[] } = {};
-  private currentRoomId: string | null = null;
-  private reconnectAttempts: number = 0;
-  private maxReconnectAttempts: number = 5;
+  private eventListeners: Map<keyof EventData, Set<(data: any) => void>> = new Map();
+  private currentmatchId: string | null = null;
+  private reconnectAttempts = 0;
+  private maxReconnectAttempts = 5;
 
-  connect(token: string) {
+  connect(token: string): void {
     if (this.socket?.connected) return;
 
     console.log('🔌 Connecting to Socket.IO server...');
@@ -55,7 +107,7 @@ class SocketService {
     this.setupEventListeners();
   }
 
-  private setupEventListeners() {
+  private setupEventListeners(): void {
     if (!this.socket) return;
 
     this.socket.on('connect', () => {
@@ -68,22 +120,23 @@ class SocketService {
       this.notifyListeners('disconnect', { reason });
     });
 
-    this.socket.on('connect_error', (error) => {
+    this.socket.on('connect_error', (error: Error) => {
       console.error('❌ Socket.IO Connection Error:', error);
       if (error.message === 'Invalid token') {
         this.notifyListeners('auth_error', { message: 'Invalid token' });
       }
     });
 
-    this.socket.on('error', (error) => {
+    this.socket.on('error', (error: Error) => {
       console.error('❌ Socket.IO Error:', error);
       this.notifyListeners('error', { message: error.message });
     });
   }
 
-  private notifyListeners(event: string, data: any) {
-    if (this.eventListeners[event]) {
-      this.eventListeners[event].forEach(listener => {
+  private notifyListeners<K extends keyof EventData>(event: K, data: EventData[K]): void {
+    const listeners = this.eventListeners.get(event);
+    if (listeners) {
+      listeners.forEach(listener => {
         try {
           listener(data);
         } catch (error) {
@@ -93,90 +146,112 @@ class SocketService {
     }
   }
 
-  // Matchmaking methods
-  joinMatchmaking(mode: GameMode) {
+  joinMatchmaking(mode: GameMode): void {
     if (!this.socket?.connected) {
       console.error('❌ Cannot join matchmaking: Socket not connected');
       return;
     }
     console.log('🎮 Joining matchmaking queue:', mode);
     this.socket.emit('join_matchmaking', { mode });
+    this.on('match_found', (data) => {
+      console.log('🎮 Match found:', data);
+    });
   }
 
-  leaveMatchmaking() {
+  leaveMatchmaking(): void {
     if (this.socket?.connected) {
       console.log('🚪 Leaving matchmaking queue');
       this.socket.emit('leave_matchmaking', {});
     }
   }
 
-  // Room methods
-  joinRoom(roomId: string) {
-    if (!this.socket?.connected) return;
-    console.log('🎯 Joining room:', roomId);
-    this.currentRoomId = roomId;
-    this.socket.emit('join_room', { roomId });
+  joinRoom(matchId: string): void {
+    if (!this.socket?.connected) {
+      console.error('❌ Cannot join room: Socket not connected');
+      return;
+    }
+    console.log('🎯 Joining match:', matchId);
+    this.currentmatchId = matchId;
+    this.socket.emit('join_match', matchId);
+
+    this.socket.on('match_state', (response) => {
+      console.log('📨 Join match response:', response);
+      if (response.status === true) {
+        this.startGame(matchId);
+        window.location.href = `/battle/${matchId}`;
+      } else {
+        console.log('kartikay2');
+      }
+    });
   }
 
-  startGame(roomId: string) {
-    if (!this.socket?.connected) return;
-    console.log('🎬 Starting game:', roomId);
-    this.socket.emit('start_game', { roomId });
+  startGame(matchId: string): void {
+    if (!this.socket?.connected) {
+      console.error('❌ Cannot start game: Socket not connected');
+      return;
+    }
+    console.log('🎬 Starting game:', matchId);
+    this.socket.emit('start_game', matchId);
   }
 
-  getGameState(roomId: string) {
+  getGameState(matchId: string): void {
     if (!this.socket?.connected) return;
-    console.log('📊 Getting game state:', roomId);
-    this.socket.emit('get_game_state', { roomId });
+    console.log('📊 Getting game state:', matchId);
+    this.socket.emit('get_game_state', { matchId });
   }
 
-  rejoinRoom(roomId: string) {
+  rejoinRoom(matchId: string): void {
     if (!this.socket?.connected) return;
-    console.log('🔄 Rejoining room:', roomId);
-    this.socket.emit('rejoin_room', { roomId });
+    console.log('🔄 Rejoining room:', matchId);
+    this.socket.emit('rejoin_room', { matchId });
   }
 
-  // Base Socket.IO methods
-  disconnect() {
+  disconnect(): void {
     if (this.socket) {
       console.log('🔌 Disconnecting Socket.IO...');
       this.socket.disconnect();
       this.socket = null;
-      this.currentRoomId = null;
+      this.currentmatchId = null;
     }
   }
 
-  on(event: string, callback: (data: any) => void) {
-    if (!this.eventListeners[event]) {
-      this.eventListeners[event] = [];
+  on<K extends keyof EventData>(event: K, callback: SocketEventCallback<EventData[K]>): void {
+    if (!this.eventListeners.has(event)) {
+      this.eventListeners.set(event, new Set());
     }
-    this.eventListeners[event].push(callback);
+    this.eventListeners.get(event)?.add(callback);
 
     // If it's a custom event (not a Socket.IO built-in event), register it with Socket.IO
     if (!['connect', 'disconnect', 'connect_error', 'error'].includes(event) && this.socket) {
-      this.socket.on(event, (data) => {
-        console.log(`📨 ${event}:`, data);
-        this.notifyListeners(event, data);
+      this.socket.on(event as string, (data) => {
+        console.log(`📨 Received ${event} event:`, data);
+        this.notifyListeners(event, data as EventData[K]);
       });
     }
   }
 
-  off(event: string, callback: (data: any) => void) {
-    if (this.eventListeners[event]) {
-      this.eventListeners[event] = this.eventListeners[event].filter(
-        listener => listener !== callback
-      );
-    }
-    // Remove Socket.IO listener if no more callbacks for this event
-    if (this.eventListeners[event]?.length === 0 && this.socket) {
-      this.socket.off(event);
+  off<K extends keyof EventData>(event: K, callback: SocketEventCallback<EventData[K]>): void {
+    const listeners = this.eventListeners.get(event);
+    if (listeners) {
+      listeners.delete(callback);
+      
+      if (listeners.size === 0 && this.socket) {
+        this.socket.off(event as string);
+      }
     }
   }
 
-  emit(event: string, data: any) {
-    if (this.socket?.connected) {
-      console.log(`📤 Emitting ${event}:`, data);
-      this.socket.emit(event, data);
+  emit<K extends keyof EventData>(event: K, data: EventData[K]): void {
+      if (this.socket?.connected) {
+      if (event === 'code_update' && 'roomId' in data) {
+        const { roomId, ...rest } = data as any;
+        const transformedData = { matchId: roomId, ...rest };
+        console.log(`📤 Emitting ${event}:`, transformedData);
+        this.socket.emit(event as string, transformedData);
+      } else {
+        console.log(`📤 Emitting ${event}:`, data);
+        this.socket.emit(event as string, data);
+      }
     } else {
       console.error('❌ Cannot emit event: Socket not connected');
     }
