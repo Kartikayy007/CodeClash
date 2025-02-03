@@ -12,7 +12,7 @@ interface MatchStateData {
   matchId: string;
   players: any[];
   status: boolean;
-  problems?: any[];
+  problems?: string[];
 }
 
 interface GameStartData {

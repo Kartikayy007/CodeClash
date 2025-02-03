@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
+import { Modal, Box, Fade, Backdrop } from '@mui/material';
 import { useBattleWebSocket } from '../hooks/useBattleWebSocket';
-import LabelButton from '@/components/ui/LabelButton';
 import { toast } from '@/providers/toast-config';
+import Image from 'next/image';
+import LabelButton from '@/components/ui/LabelButton';
 
 interface GameModeModalProps {
   isOpen: boolean;
@@ -10,6 +12,17 @@ interface GameModeModalProps {
 }
 
 type GameMode = 'STANDARD' | 'SPEED' | 'ACCURACY';
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  outline: 'none',
+  width: 'auto',
+  minWidth: '400px',
+  overflow: 'hidden',
+};
 
 export const GameModeModal: React.FC<GameModeModalProps> = ({ isOpen, onClose }) => {
   const [selectedMode, setSelectedMode] = useState<GameMode>('STANDARD');
@@ -19,60 +32,113 @@ export const GameModeModal: React.FC<GameModeModalProps> = ({ isOpen, onClose })
     toast.error('Failed to find match', error);
   }
 
-  if (!isOpen) return null;
-
-  const modes: { id: GameMode; label: string; icon: string }[] = [
-    { id: 'STANDARD', label: 'Standard', icon: '🎮' },
-    { id: 'SPEED', label: 'Speed', icon: '⚡' },
-    { id: 'ACCURACY', label: 'Accuracy', icon: '🎯' }
+  const modes = [
+    { id: 'STANDARD' as const, label: 'Standard', icon: '/scale.svg' },
+    { id: 'SPEED' as const, label: 'Speed', icon: '/speed.svg' },
+    { id: 'ACCURACY' as const, label: 'Accuracy', icon: '/accuracy.svg' }
   ];
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-[#1A1D24] rounded-lg p-6 w-[400px] space-y-6">
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-white">Select Your Mode</h2>
-          <button 
-            onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
-          >
-            <X size={20} />
-          </button>
-        </div>
+    <Modal
+      open={isOpen}
+      onClose={onClose}
+      closeAfterTransition
+      slots={{ backdrop: Backdrop }}
+      slotProps={{
+        backdrop: {
+          timeout: 500,
+          style: {
+            backgroundColor: 'rgba(45, 39, 53, 0.5)',
+            backdropFilter: 'blur(5px)'
+          }
+        }
+      }}
+    >
+      <Fade in={isOpen}>
+        <Box sx={modalStyle}>
+          <div className="bg-[#10141D] rounded-lg p-6 flex flex-col">
+            <div className="flex justify-end items-center">
+              <button
+                onClick={onClose}
+                className="text-white transition-colors"
+              >
+                <X size={25} />
+              </button>
+            </div>
 
-        <div className="space-y-3">
-          {modes.map((mode) => (
-            <button
-              key={mode.id}
-              onClick={() => setSelectedMode(mode.id)}
-              className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors ${
-                selectedMode === mode.id
-                  ? 'bg-[#292C33] text-white'
-                  : 'text-gray-400 hover:bg-[#292C33]/50'
-              }`}
-            >
-              <span className="text-xl">{mode.icon}</span>
-              <span>{mode.label}</span>
-            </button>
-          ))}
-        </div>
+            <div className="flex flex-col gap-8">
+              <div className="flex flex-col gap-8">
+                <h2 className="text-3xl font-semibold text-[#E7E7E7]">
+                  Select Your Mode
+                </h2>
+                <div className="flex flex-col gap-4">
+                  {modes.map((mode) => (
+                    <label
+                      key={mode.id}
+                      className={`
+                        w-full flex items-center gap-3 px-4 py-3 rounded cursor-pointer transition-all
+                        border ${
+                          selectedMode === mode.id 
+                            ? 'bg-[#ffffff1a] border-[#E7E7E7]' 
+                            : 'border-transparent hover:bg-[#ffffff1a]'
+                        }
+                      `}
+                    >
+                      <input
+                        type="radio"
+                        name="gameMode"
+                        value={mode.id}
+                        checked={selectedMode === mode.id}
+                        onChange={() => setSelectedMode(mode.id)}
+                        className="hidden"
+                      />
+                      <div className={`
+                        w-3 h-3 rounded-full border-2 ${
+                          selectedMode === mode.id 
+                            ? 'border-[#E7E7E7]' 
+                            : 'border-[#B0B0B0]'
+                        } flex items-center justify-center
+                      `}>
+                        {selectedMode === mode.id && (
+                          <div className="w-[10px] h-[10px] bg-[#E7E7E7] rounded-full" />
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Image 
+                          src={mode.icon} 
+                          alt={mode.label} 
+                          width={20} 
+                          height={20}
+                          className="text-[#E7E7E7]"
+                        />
+                        <span className="text-xl font-semibold text-[#E7E7E7]">
+                          {mode.label}
+                        </span>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
 
-        <div className="space-y-3">
-          <LabelButton
-            onClick={findMatch}
-            disabled={isSearching}
-            className="w-full"
-          >
-            {isSearching ? 'Searching...' : 'Play Game'}
-          </LabelButton>
-          <button
-            onClick={onClose}
-            className="w-full py-2 text-[#B4A5FF] hover:text-white transition-colors"
-          >
-            Invite Friend
-          </button>
-        </div>
-      </div>
-    </div>
+              <div className="flex flex-col gap-4">
+                <LabelButton
+                  variant="filled"
+                  onClick={findMatch}
+                  disabled={isSearching}
+                >
+                  {isSearching ? 'Searching...' : 'Play Game'}
+                </LabelButton>
+                <LabelButton
+                  variant="outlined"
+                  onClick={onClose}
+                >
+                  Invite Friend
+                </LabelButton>
+              </div>
+            </div>
+          </div>
+        </Box>
+      </Fade>
+    </Modal>
   );
-}; 
+};
