@@ -71,7 +71,7 @@ const BattleRoom = () => {
     const handleMatchAborted = (data: { message: string }) => {
       console.error('❌ Match aborted:', data);
       setError(data.message);
-      setTimeout(() => router.push('/'), 3000); // Redirect to home after 3 seconds
+      setTimeout(() => router.push('/'), 3000); 
     };
 
     const handleGameError = (data: { message: string }) => {
@@ -140,7 +140,6 @@ const BattleRoom = () => {
       </div>
     );
   }
-
   return (
     <EditorLayout questionData={currentProblem}>
       <Editor
@@ -154,3 +153,4 @@ const BattleRoom = () => {
 };
 
 export default BattleRoom;
+

@@ -1,7 +1,6 @@
 import router from 'next/router';
 import { io, Socket } from 'socket.io-client';
 
-// Types for events
 type GameMode = 'STANDARD' | 'BLITZ';
 
 interface Player {
@@ -31,12 +30,10 @@ interface RoomState {
 type SocketEventCallback<T> = (data: T) => void;
 
 interface EventData {
-  // Matchmaking events
   match_found: { matchId: string; players: string[] };
   matchmaking_error: { message: string };
   matchmaking_timeout: Record<string, never>;
 
-  // Match events
   match_state: {
     matchId: string;
     players: Player[];
@@ -46,12 +43,13 @@ interface EventData {
   match_error: { message: string };
   match_aborted: { message: string };
 
-  // Game events
   game_start: { 
-    matchId: string; 
-    player1: Player; 
-    player2: Player; 
-    problems: Problem[] 
+    problems: string[];
+    gameState: Array<{
+      userId: string;
+      problemsSolved: number;
+      solvedProblems: Record<string, any>;
+    }>;
   };
   game_error: { message: string };
   game_state: { 
@@ -68,7 +66,6 @@ interface EventData {
     player2: Player 
   };
 
-  // Other events
   player_disconnected: { playerId: string };
   code_update: { matchId: string; playerId?: string; code?: string; language?: string };
   code_result: { playerId: string; output: string; error: string };
@@ -86,7 +83,10 @@ class SocketService {
   private maxReconnectAttempts = 5;
 
   connect(token: string): void {
-    if (this.socket?.connected) return;
+    if (this.socket?.connected) {
+      console.log('🔌 Socket already connected, skipping connection');
+      return;
+    }
 
     console.log('🔌 Connecting to Socket.IO server...');
     
@@ -97,6 +97,7 @@ class SocketService {
       reconnectionAttempts: this.maxReconnectAttempts,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
+      autoConnect: true,
       query: {
         token,
         EIO: '4',
@@ -104,20 +105,32 @@ class SocketService {
       }
     });
 
+    // Persist socket instance across page navigations
+    if (typeof window !== 'undefined') {
+      (window as any).__socketInstance = this.socket;
+    }
+
     this.setupEventListeners();
   }
 
   private setupEventListeners(): void {
     if (!this.socket) return;
 
+    // Remove existing listeners before adding new ones
+    this.socket.removeAllListeners();
+
     this.socket.on('connect', () => {
       console.log('✅ Socket.IO Connected');
+      this.reconnectAttempts = 0;
       this.notifyListeners('connect', {});
     });
 
     this.socket.on('disconnect', (reason) => {
       console.log(`❌ Socket.IO Disconnected: ${reason}`);
-      this.notifyListeners('disconnect', { reason });
+      // Only notify if it's not a navigation-related disconnect
+      if (reason !== 'transport close' && reason !== 'io client disconnect') {
+        this.notifyListeners('disconnect', { reason });
+      }
     });
 
     this.socket.on('connect_error', (error: Error) => {
@@ -130,6 +143,16 @@ class SocketService {
     this.socket.on('error', (error: Error) => {
       console.error('❌ Socket.IO Error:', error);
       this.notifyListeners('error', { message: error.message });
+    });
+
+    this.socket.on('match_state', (data) => {
+      console.log('🎯 Match state received:', data);
+      this.notifyListeners('match_state', data);
+    });
+
+    this.socket.on('game_start', (data) => {
+      console.log('🎮 Raw game_start event received:', data);
+      this.notifyListeners('game_start', data);
     });
   }
 
@@ -173,21 +196,15 @@ class SocketService {
     console.log('🎯 Joining match:', matchId);
     this.currentmatchId = matchId;
     this.socket.emit('join_match', matchId);
-
-    this.socket.on('match_state', (response) => {
-      console.log('📨 Join match response:', response);
-      if (response.status === true) {
-        this.startGame(matchId);
-        window.location.href = `/battle/${matchId}`;
-      } else {
-        console.log('kartikay2');
-      }
-    });
   }
 
   startGame(matchId: string): void {
     if (!this.socket?.connected) {
       console.error('❌ Cannot start game: Socket not connected');
+      return;
+    }
+    if (matchId !== this.currentmatchId) {
+      console.error('❌ Match ID mismatch:', { current: this.currentmatchId, received: matchId });
       return;
     }
     console.log('🎬 Starting game:', matchId);
@@ -208,10 +225,13 @@ class SocketService {
 
   disconnect(): void {
     if (this.socket) {
-      console.log('🔌 Disconnecting Socket.IO...');
-      this.socket.disconnect();
-      this.socket = null;
-      this.currentmatchId = null;
+      if (typeof window !== 'undefined' && !window.location.pathname.includes('/battle')) {
+        console.log('🔌 Disconnecting Socket.IO...');
+        this.socket.disconnect();
+        this.socket = null;
+        this.currentmatchId = null;
+        delete (window as any).__socketInstance;
+      }
     }
   }
 
@@ -221,7 +241,6 @@ class SocketService {
     }
     this.eventListeners.get(event)?.add(callback);
 
-    // If it's a custom event (not a Socket.IO built-in event), register it with Socket.IO
     if (!['connect', 'disconnect', 'connect_error', 'error'].includes(event) && this.socket) {
       this.socket.on(event as string, (data) => {
         console.log(`📨 Received ${event} event:`, data);

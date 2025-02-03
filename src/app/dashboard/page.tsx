@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { socketService } from '@/lib/socket';
 // import Image from 'next/image';
 // import { Settings } from 'lucide-react';
 // import { Line } from 'react-chartjs-2';
@@ -35,6 +36,18 @@ ChartJS.register(
 );
 
 export default function Dashboard() {
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (token && !socketService.isConnected()) {
+      console.log('🔌 Connecting socket from dashboard');
+      socketService.connect(token);
+    }
+
+    return () => {
+      // Don't disconnect on unmount, let the socket stay connected
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="flex justify-end gap-4 mb-8">

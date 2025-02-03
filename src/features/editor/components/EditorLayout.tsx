@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Maximize2, Minimize2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Problem } from '@/features/editor/api/problems';
 import TopBar from './TopBar';
 import Header from './Header';
 import Question from './Question';
@@ -9,18 +10,7 @@ import TestCases from './TestCases';
 
 interface EditorLayoutProps {
   children?: React.ReactNode;
-  questionData: {
-    title: string;
-    difficulty: string;
-    description: string[];
-    constraints: string[];
-    examples: {
-      id: number;
-      input: string;
-      output: string;
-      explanation?: string;
-    }[];
-  };
+  questionData: Problem;
 }
 
 const EditorLayout = ({ questionData }: EditorLayoutProps) => {
@@ -31,16 +21,25 @@ const EditorLayout = ({ questionData }: EditorLayoutProps) => {
   const [isEditorMaximized, setIsEditorMaximized] = useState(false);
   const [isTestCaseCollapsed, setIsTestCaseCollapsed] = useState(false);
 
-  // Dummy data for testing
-  const dummyMatchId = "971d5848-aa34-4bb7-aeb7-a66dda164ad2";
-  const dummyInput = "4\n1 3 4";
+  // Transform problem data for Question component
+  const questionProps = {
+    title: questionData.title,
+    difficulty: questionData.difficulty,
+    description: [questionData.description],
+    constraints: [questionData.constraints],
+    examples: questionData.testCases.filter(tc => !tc.isHidden).map((tc, idx) => ({
+      id: idx + 1,
+      input: tc.input,
+      output: tc.output
+    }))
+  };
 
   return (
     <div className="min-h-screen bg-[#10141D] text-white">
       <Header />
       <div className="grid grid-cols-2 gap-4 px-8 py-4 h-[calc(100vh-180px)]">
-        <TopBar matchId={dummyMatchId} input={dummyInput} />
-        <div className={`flex gap-4  mb-4 ${isDescriptionMaximized ? 'flex-col' : ''}`}>
+        <TopBar matchId={questionData.id} input={questionData.testCases[0]?.input || ''} />
+        <div className={`flex gap-4 mb-4 ${isDescriptionMaximized ? 'flex-col' : ''}`}>
           <div className={`bg-[#1A1D24] overflow-hidden rounded-lg flex flex-col transition-all duration-300 ease-in-out ${
             isDescriptionMaximized ? 'w-full' : 
             isDescriptionCollapsed ? 'w-12' : 
@@ -80,14 +79,8 @@ const EditorLayout = ({ questionData }: EditorLayoutProps) => {
             
             <div className={`flex-1 overflow-y-scroll ${isDescriptionCollapsed ? 'hidden' : ''}`}>
               {activeTab === 'description' ? (
-                <div className="h-full ">
-                  <Question 
-                    title={questionData.title}
-                    difficulty={questionData.difficulty}
-                    description={questionData.description}
-                    constraints={questionData.constraints}
-                    examples={questionData.examples}
-                  />
+                <div className="h-full">
+                  <Question {...questionProps} />
                 </div>
               ) : (
                 <div className="h-full overflow-y-auto">
@@ -111,7 +104,7 @@ const EditorLayout = ({ questionData }: EditorLayoutProps) => {
             {!isEditorMaximized && (
               <div className="h-full">
                 <TestCases 
-                  questionData={questionData}
+                  testCases={questionData.testCases.filter(tc => !tc.isHidden)}
                   isCollapsed={isTestCaseCollapsed}
                   onCollapse={setIsTestCaseCollapsed}
                 />
