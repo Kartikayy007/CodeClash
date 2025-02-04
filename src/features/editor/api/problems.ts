@@ -1,6 +1,6 @@
 import axios from "axios";
 
-interface TestCase {
+export interface TestCase {
   id: string;
   questionId: string;
   input: string;
@@ -26,11 +26,6 @@ export interface Problem {
   testCases: TestCase[];
 }
 
-interface ProblemResponse {
-  success: boolean;
-  message: string;
-  data: Problem;
-}
 
 export async function fetchProblem(problemId: string): Promise<Problem> {
   const token = localStorage.getItem('accessToken');

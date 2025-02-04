@@ -7,13 +7,18 @@ import Question from './Question';
 import Submissions from './Submissions';
 import Editor from './Editor';
 import TestCases from './TestCases';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { setCurrentProblemIndex } from '@/features/battle/slices/battleSlice';
 
 interface EditorLayoutProps {
   children?: React.ReactNode;
   questionData: Problem;
 }
 
-const EditorLayout = ({ questionData }: EditorLayoutProps) => {
+const EditorLayout = ({ questionData, children }: EditorLayoutProps) => {
+  const dispatch = useDispatch();
+  const { problems, currentProblemIndex } = useSelector((state: RootState) => state.battle);
   const [activeTab, setActiveTab] = useState<'description' | 'submissions'>('description');
   const [language, setLanguage] = useState('cpp');
   const [isDescriptionMaximized, setIsDescriptionMaximized] = useState(false);
@@ -21,7 +26,10 @@ const EditorLayout = ({ questionData }: EditorLayoutProps) => {
   const [isEditorMaximized, setIsEditorMaximized] = useState(false);
   const [isTestCaseCollapsed, setIsTestCaseCollapsed] = useState(false);
 
-  // Transform problem data for Question component
+  const handleProblemChange = (index: number) => {
+    dispatch(setCurrentProblemIndex(index));
+  };
+
   const questionProps = {
     title: questionData.title,
     difficulty: questionData.difficulty,
@@ -38,7 +46,11 @@ const EditorLayout = ({ questionData }: EditorLayoutProps) => {
     <div className="min-h-screen bg-[#10141D] text-white">
       <Header />
       <div className="grid grid-cols-2 gap-4 px-8 py-4 h-[calc(100vh-180px)]">
-        <TopBar matchId={questionData.id} input={questionData.testCases[0]?.input || ''} />
+        <TopBar 
+          matchId={questionData.id} 
+          input={questionData.testCases[0]?.input || ''} 
+          onProblemChange={handleProblemChange}
+        />
         <div className={`flex gap-4 mb-4 ${isDescriptionMaximized ? 'flex-col' : ''}`}>
           <div className={`bg-[#1A1D24] overflow-hidden rounded-lg flex flex-col transition-all duration-300 ease-in-out ${
             isDescriptionMaximized ? 'w-full' : 
@@ -80,7 +92,7 @@ const EditorLayout = ({ questionData }: EditorLayoutProps) => {
             <div className={`flex-1 overflow-y-scroll ${isDescriptionCollapsed ? 'hidden' : ''}`}>
               {activeTab === 'description' ? (
                 <div className="h-full">
-                  <Question {...questionProps} />
+                  <Question problem={questionData} />
                 </div>
               ) : (
                 <div className="h-full overflow-y-auto">
@@ -95,12 +107,14 @@ const EditorLayout = ({ questionData }: EditorLayoutProps) => {
             isDescriptionCollapsed ? 'w-[calc(100%-56px)]' : 
             isEditorMaximized ? 'w-full' : 'w-1/2'
           } h-[calc(100vh-180px)]`}>
-            <Editor 
-              language={language as 'c' | 'cpp' | 'python' | 'java' | 'javascript'} 
-              onLanguageChange={setLanguage}
-              onMaximize={setIsEditorMaximized}
-              className={isEditorMaximized ? 'h-[calc(100vh-180px)]' : 'h-12'}
-            />
+            {children || (
+              <Editor 
+                language={language as 'c' | 'cpp' | 'python' | 'java' | 'javascript'} 
+                onLanguageChange={setLanguage}
+                onMaximize={setIsEditorMaximized}
+                className={isEditorMaximized ? 'h-[calc(100vh-180px)]' : 'h-12'}
+              />
+            )}
             {!isEditorMaximized && (
               <div className="h-full">
                 <TestCases 

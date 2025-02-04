@@ -24,19 +24,23 @@ const modalStyle = {
   overflow: 'hidden',
 };
 
+const modes = [
+  { id: 'STANDARD' as const, label: 'Standard', icon: '/scale.svg' },
+  { id: 'SPEED' as const, label: 'Speed', icon: '/speed.svg' },
+  { id: 'ACCURACY' as const, label: 'Accuracy', icon: '/accuracy.svg' }
+];
+
 export const GameModeModal: React.FC<GameModeModalProps> = ({ isOpen, onClose }) => {
-  const [selectedMode, setSelectedMode] = useState<GameMode>('STANDARD');
+  const [selectedMode, setSelectedMode] = useState<GameMode>(modes[0].id);
   const { isSearching, error, findMatch } = useBattleWebSocket();
 
   if (error) {
     toast.error('Failed to find match', error);
   }
 
-  const modes = [
-    { id: 'STANDARD' as const, label: 'Standard', icon: '/scale.svg' },
-    { id: 'SPEED' as const, label: 'Speed', icon: '/speed.svg' },
-    { id: 'ACCURACY' as const, label: 'Accuracy', icon: '/accuracy.svg' }
-  ];
+  const handleFindMatch = () => {
+    findMatch(selectedMode);
+  };
 
   return (
     <Modal
@@ -90,19 +94,8 @@ export const GameModeModal: React.FC<GameModeModalProps> = ({ isOpen, onClose })
                         value={mode.id}
                         checked={selectedMode === mode.id}
                         onChange={() => setSelectedMode(mode.id)}
-                        className="hidden"
+                        className='outline-none focus:outline-none appearance-none'
                       />
-                      <div className={`
-                        w-3 h-3 rounded-full border-2 ${
-                          selectedMode === mode.id 
-                            ? 'border-[#E7E7E7]' 
-                            : 'border-[#B0B0B0]'
-                        } flex items-center justify-center
-                      `}>
-                        {selectedMode === mode.id && (
-                          <div className="w-[10px] h-[10px] bg-[#E7E7E7] rounded-full" />
-                        )}
-                      </div>
                       <div className="flex items-center gap-2">
                         <Image 
                           src={mode.icon} 
@@ -123,7 +116,7 @@ export const GameModeModal: React.FC<GameModeModalProps> = ({ isOpen, onClose })
               <div className="flex flex-col gap-4">
                 <LabelButton
                   variant="filled"
-                  onClick={findMatch}
+                  onClick={handleFindMatch}
                   disabled={isSearching}
                 >
                   {isSearching ? 'Searching...' : 'Play Game'}

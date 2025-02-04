@@ -68,18 +68,19 @@ export const authApi = {
     return response.data;
   },
   refreshToken: async (refreshToken: string): Promise<RefreshTokenResponse> => {
-    const formData = new URLSearchParams();
-    formData.append('refreshToken', refreshToken);
-    
     const response = await api.post<RefreshTokenResponse>(
       `${BASE_URL}/api/v1/auth/refresh-token`,
-      formData,
+      {
+        refreshToken: refreshToken
+      },
       {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
         },
       }
     );
+    console.log('refresh token response', response.data.data?.tokens.accessToken);
+    localStorage.setItem('accessToken', response.data.data?.tokens.accessToken || '');
     return response.data;
   },
 };

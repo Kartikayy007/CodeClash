@@ -2,16 +2,25 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { socketService } from '@/lib/socket';
 import { fetchProblem } from '@/features/editor/api/problems';
+import { useDispatch } from 'react-redux';
+import { setProblems, setStatus, setPlayer1, setPlayer2 } from '@/features/battle/slices/battleSlice';
 
 interface MatchFoundData {
   matchId: string;
   players: string[];
 }
 
+type BattleStatus = 'WAITING' | 'IN_PROGRESS' | 'COMPLETED' | 'ABORTED';
+type GameMode = 'STANDARD' | 'SPEED' | 'ACCURACY';
+
 interface MatchStateData {
   matchId: string;
-  players: any[];
-  status: boolean;
+  players: Array<{
+    id: string;
+    name: string;
+    isReady: boolean;
+  }>;
+  status: BattleStatus;
   problems?: string[];
 }
 
@@ -42,6 +51,7 @@ export const useBattleWebSocket = () => {
   });
   const currentMatchId = useRef<string | null>(null);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const onGameStart = async (data: GameStartData) => {
     console.log('🎮 Game start handler called');
@@ -49,13 +59,60 @@ export const useBattleWebSocket = () => {
     if (!currentMatchId.current) {
       console.error('❌ No match ID available');
       setState(prev => ({ ...prev, error: 'Failed to start game: No match ID' }));
+      router.push('/dashboard');
       return;
     } 
 
     try {
       console.log('🚀 Navigating to:', `/battle/${currentMatchId.current}`);
-      const problem = await fetchProblem(data.problems[0]);
-      console.log('🎯 Fetched problem:', problem);  
+      
+      // Fetch all problems in parallel
+      const problemPromises = data.problems.map(problemId => fetchProblem(problemId));
+      const problems = await Promise.all(problemPromises);
+      console.log('🎯 Fetched problems:', problems);
+      
+      // Convert all problems to battle state format
+      const battleProblems = problems.map(problem => ({
+        ...problem,
+        description: [problem.description],
+        constraints: [problem.constraints],
+        examples: problem.testCases.map((testCase, index) => ({
+          id: index + 1,
+          input: testCase.input,
+          output: testCase.output
+        }))
+      }));
+      
+      dispatch(setProblems(battleProblems));
+      dispatch(setStatus('in-progress'));
+      
+      // Update player states from gameState
+      const [player1, player2] = data.gameState;
+      if (player1) {
+        dispatch(setPlayer1({
+          id: player1.userId,
+          name: player1.userId,
+          isReady: true,
+          code: '',
+          language: 'cpp',
+          output: null,
+          error: null,
+          score: 0
+        }));
+      }
+      if (player2) {
+        dispatch(setPlayer2({
+          id: player2.userId,
+          name: player2.userId,
+          isReady: true,
+          code: '',
+          language: 'cpp',
+          output: null,
+          error: null,
+          score: 0
+        }));
+      }
+      
       router.push(`/battle/${currentMatchId.current}`);
     } catch (error) {
       console.error('❌ Failed to handle game start:', error);
@@ -156,7 +213,7 @@ export const useBattleWebSocket = () => {
     };
   }, [router]);
 
-  const findMatch = () => {
+  const findMatch = (mode: 'STANDARD' | 'SPEED' | 'ACCURACY') => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       setState(prev => ({ ...prev, error: 'Please log in to play' }));
@@ -171,11 +228,11 @@ export const useBattleWebSocket = () => {
       socketService.connect(token);
       socketService.on('connect', () => {
         console.log('✅ Socket connected, starting matchmaking');
-        socketService.joinMatchmaking('STANDARD');
+        socketService.joinMatchmaking(mode);
       });
     } else {
       console.log('✅ Socket already connected, starting matchmaking');
-      socketService.joinMatchmaking('STANDARD');
+      socketService.joinMatchmaking(mode);
     }
   };
 

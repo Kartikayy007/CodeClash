@@ -68,14 +68,20 @@ const editorSlice = createSlice({
       .addCase(runCode.fulfilled, (state, action) => {
         state.isRunning = false;
         state.status = 'succeeded';
-        if (action.payload.data) {
-          if (action.payload.data.status === 'success') {
-            state.output = action.payload.data.output;
+        
+        // Handle the new response format
+        if (action.payload.body) {
+          if (!action.payload.body.error) {
+            state.output = action.payload.body.output;
             state.error = null;
           } else {
-            state.error = action.payload.data.error || 'Unknown error occurred';
+            state.error = action.payload.body.error;
             state.output = null;
           }
+        } else if (action.payload.output) {
+          // Fallback to top-level output/error
+          state.output = action.payload.output;
+          state.error = action.payload.error || null;
         }
       })
       .addCase(runCode.rejected, (state, action) => {

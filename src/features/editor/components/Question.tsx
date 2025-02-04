@@ -1,61 +1,66 @@
-import React from 'react'
+import React from 'react';
+import { Problem } from '@/features/editor/api/problems';
 
 interface QuestionProps {
-  title: string;
-  difficulty: string;
-  description: string[];
-  constraints: string[];
-  examples: {
-    id: number;
-    input: string;
-    output: string;
-    explanation?: string;
-  }[];
+  problem: Problem;
 }
 
-const Question: React.FC<QuestionProps> = ({
-  title,
-  difficulty,
-  description,
-  constraints,
-  examples
-}) => {
+const Question: React.FC<QuestionProps> = ({ problem }) => {
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-8">
+      {/* Title and Difficulty */}
       <div>
-        <h1 className="text-xl font-bold mb-2">
-          {title} <span className="text-gray-400">({difficulty})</span>
+        <h1 className="text-2xl font-bold mb-2 flex items-center gap-4">
+          {problem.title}
+          <span className={`text-base px-3 py-1 rounded ${
+            problem.difficulty === 'EASY' ? 'bg-green-500/20 text-green-500' :
+            problem.difficulty === 'MEDIUM' ? 'bg-yellow-500/20 text-yellow-500' :
+            'bg-red-500/20 text-red-500'
+          }`}>
+            {problem.difficulty}
+          </span>
+          <span className="text-base text-gray-400">
+            Rating: {problem.rating}
+          </span>
         </h1>
-        {description.map((paragraph, index) => (
-          <p key={index} className="text-gray-300">
-            {paragraph}
-          </p>
-        ))}
       </div>
 
-      <div className="space-y-2">
-        {constraints.map((constraint, index) => (
-          <p key={index} className="text-gray-300">
-            {constraint}
-          </p>
-        ))}
-      </div>
-
+      {/* Description */}
       <div className="space-y-4">
-        {examples.map((example) => (
-          <div key={example.id}>
-            <h3 className="font-medium mb-2">Example {example.id}:</h3>
-            <div className="space-y-1">
-              <p className="text-gray-400">Input: {example.input}</p>
-              <p className="text-gray-400">Output: {example.output}</p>
-              {example.explanation && (
-                <p className="text-gray-400">
-                  Explanation: {example.explanation}
-                </p>
-              )}
-            </div>
-          </div>
-        ))}
+        <h2 className="text-lg font-semibold text-white/90">Description</h2>
+        <div className="text-gray-300 whitespace-pre-wrap">
+          {problem.description}
+        </div>
+      </div>
+
+      {/* Input Format */}
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold text-white/90">Input Format</h2>
+        <div className="text-gray-300 whitespace-pre-wrap">
+          {problem.inputFormat}
+        </div>
+      </div>
+
+      {/* Output Format */}
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold text-white/90">Output Format</h2>
+        <div className="text-gray-300 whitespace-pre-wrap">
+          {problem.outputFormat}
+        </div>
+      </div>
+
+      {/* Constraints */}
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold text-white/90">Constraints</h2>
+        <div className="text-gray-300 whitespace-pre-wrap">
+          {problem.constraints}
+        </div>
+      </div>
+
+      {/* Time and Memory Limits */}
+      <div className="flex gap-8 text-sm text-gray-400">
+        <div>Time Limit: {problem.timeLimit}ms</div>
+        <div>Memory Limit: {problem.memoryLimit}MB</div>
       </div>
     </div>
   );

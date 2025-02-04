@@ -48,12 +48,7 @@ const CodeEditor = ({
 using namespace std;
 
 int main() {     
-    int t;   
-    cin >> t;   
-    while (t--) {     
-        int b, c, d; // Declare inside loop to ensure correct scoping
-        cin >> b >> c >> d;  
-        cout << b << " " << d << " " << c << endl; // Fixed print statement
+    // Write your code here
     }
     return 0;
 }`,
@@ -61,22 +56,17 @@ int main() {
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         # Write your code here
         pass`,
-    java: `class Solution {
-    public int[] twoSum(int[] nums, int target) {
+    java: `
+
+    `,
+    javascript: `// Write your code here
+    `,
+    c: `
+      #include <stdio.h>
+      int main() {
         // Write your code here
-    }
-}`,
-    javascript: `/**
- * @param {number[]} nums
- * @param {number} target
- * @return {number[]}
- */
-var twoSum = function(nums, target) {
-    // Write your code here
-};`,
-    c: `int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
-    // Write your code here
-}`
+      }
+    `
   };
 
   const getLanguageExtension = (lang: string) => {

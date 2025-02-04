@@ -1,34 +1,28 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { Quicksand } from 'next/font/google';
-import "./globals.css";
-import { ReduxProvider } from '@/providers/redux-provider';
+import './globals.css';
+import { Providers } from '@/providers/redux-provider';
+import { Toaster } from 'react-hot-toast';
 
-const quicksand = Quicksand({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-});
+const quicksand = Quicksand({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'CodeClash',
-  description: 'CodeClash Platform',
-  icons: {
-    icon: [
-      { rel: 'icon', url: '/favicon.svg' },
-    ],
-  }
+  description: 'Real-time coding battles',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className={quicksand.className}>
-      <body className="antialiased">
-        <ReduxProvider>
+    <html lang="en">
+      <body className={quicksand.className}>
+        <Providers>
           {children}
-        </ReduxProvider>
+        </Providers>
+        <Toaster />
       </body>
     </html>
   );

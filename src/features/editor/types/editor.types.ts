@@ -1,6 +1,7 @@
 export type Language = 'cpp' | 'python' | 'java';
 
 export interface TestCase {
+  id: string;
   input: string;
   output: string;
   explanation?: string;
@@ -50,11 +51,11 @@ export interface RunCodePayload {
 }
 
 export interface RunCodeResponse {
-  success: boolean;
-  message: string;
-  data?: {
+  body: {
+    taskId: string;
     output: string;
-    error?: string;
-    status: 'success' | 'error';
+    error: string | null;
   };
+  output: string;
+  error: string | null;
 } 
