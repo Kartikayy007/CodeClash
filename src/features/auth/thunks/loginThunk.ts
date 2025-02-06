@@ -11,6 +11,8 @@ export const login = createAsyncThunk<LoginResponse, LoginPayload>(
       if (response.success && response.data?.tokens) {
         localStorage.setItem('accessToken', response.data.tokens.accessToken);
         localStorage.setItem('refreshToken', response.data.tokens.refreshToken);
+        document.cookie = `accessToken=${response.data.tokens.accessToken}; path=/`;
+        document.cookie = `refreshToken=${response.data.tokens.refreshToken}; path=/`;
       }
       return response;
     } catch (error: unknown) {
