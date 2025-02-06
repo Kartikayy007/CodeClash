@@ -157,16 +157,6 @@ int main() {
             lintKeymap: true
           }}
         />
-        {(output || error) && (
-          <div className="p-4 bg-[#292C33] border-t border-[#1A1D24]">
-            <h3 className="text-sm font-medium mb-2">Output:</h3>
-            <pre className={`text-sm p-2 rounded ${
-              error ? 'bg-red-500/10 text-red-400' : 'bg-[#1A1D24]'
-            }`}>
-              {error || output}
-            </pre>
-          </div>
-        )}
       </div>
     </div>
   );

@@ -26,8 +26,13 @@ interface Player {
   score: number;
 }
 
+interface ProblemStatus {
+  status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
+  userId: string;
+}
+
 interface BattleState {
-  roomId: string | null;
+  matchId: string | null;
   player1: Player | null;
   player2: Player | null;
   problems: Problem[];
@@ -36,10 +41,11 @@ interface BattleState {
   status: 'waiting' | 'in-progress' | 'completed';
   isConnected: boolean;
   error: string | null;
+  problemStatuses: Record<string, ProblemStatus>;
 }
 
 const initialState: BattleState = {
-  roomId: null,
+  matchId: null,
   player1: null,
   player2: null,
   problems: [],
@@ -48,14 +54,16 @@ const initialState: BattleState = {
   status: 'waiting',
   isConnected: false,
   error: null,
+  problemStatuses: {},
 };
+
 
 const battleSlice = createSlice({
   name: 'battle',
   initialState,
   reducers: {
-    setRoomId: (state, action: PayloadAction<string>) => {
-      state.roomId = action.payload;
+    setMatchId: (state, action: PayloadAction<string>) => {
+      state.matchId = action.payload;
     },
     setPlayer1: (state, action: PayloadAction<Player>) => {
       state.player1 = action.payload;
@@ -122,11 +130,19 @@ const battleSlice = createSlice({
     resetBattle: (state) => {
       Object.assign(state, initialState);
     },
+    updateProblemStatus: (state, action: PayloadAction<{
+      problemId: string;
+      status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
+      userId: string;
+    }>) => {
+      const { problemId, status, userId } = action.payload;
+      state.problemStatuses[problemId] = { status, userId };
+    },
   },
 });
 
 export const {
-  setRoomId,
+  setMatchId,
   setPlayer1,
   setPlayer2,
   setProblems,
@@ -140,6 +156,7 @@ export const {
   updatePlayerOutput,
   updatePlayerScore,
   resetBattle,
+  updateProblemStatus,
 } = battleSlice.actions;
 
 export default battleSlice.reducer; 

@@ -7,7 +7,7 @@ import { socketService } from '@/lib/socket';
 import EditorLayout from '@/features/editor/components/EditorLayout';
 import Editor from '@/features/editor/components/Editor';
 import { RootState } from '@/store/store';
-import { setRoomId, setStatus, setPlayer1, setPlayer2, setProblems } from '@/features/battle/slices/battleSlice';
+import { setMatchId, setStatus, setPlayer1, setPlayer2, setProblems } from '@/features/battle/slices/battleSlice';
 import { useRouter } from 'next/navigation';
 import { Problem } from '@/features/editor/api/problems';
 
@@ -45,8 +45,8 @@ interface GameStartData {
 }
 
 const BattleRoom = () => {
-  const params = useParams<{ roomId: string }>();
-  const roomId = params?.roomId;
+  const params = useParams<{ matchId: string }>();
+  // const matchId = params?.matchId;
   const dispatch = useDispatch();
   const router = useRouter();
   const token = localStorage.getItem('accessToken');
@@ -54,22 +54,23 @@ const BattleRoom = () => {
   const [isMaximized, setIsMaximized] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const battleState = useSelector((state: RootState) => state.battle);
+  // const matchId = battleState.matchId;
   
   console.log('🔍 Battle state:', battleState);
 
   // useEffect(() => {
-  //   if (!token || !roomId) return;
+  //   if (!token || !matchId) return;
 
-  //   dispatch(setRoomId(roomId));
+  //   dispatch(setmatchId(matchId));
   //   dispatch(setStatus('waiting'));
 
   //   socketService.connect(token);
 
   //   const handleConnect = () => {
-  //     console.log('✅ Connected to Socket.IO - joining room:', roomId);
-  //     socketService.joinRoom(roomId);
+  //     console.log('✅ Connected to Socket.IO - joining room:', matchId);
+  //     socketService.joinRoom(matchId);
   //     if(battleState.player1 && battleState.player2){
-  //       socketService.startGame(roomId);
+  //       socketService.startGame(matchId);
   //     }
   //   };
 
@@ -121,7 +122,7 @@ const BattleRoom = () => {
 
   //   // Start the game when both players are ready
   //   if (battleState.player1 && battleState.player2) {
-  //     socketService.startGame(roomId);
+  //     socketService.startGame(matchId);
   //   }
 
   //   // Cleanup on unmount
@@ -136,13 +137,13 @@ const BattleRoom = () => {
   //     socketService.off('game_error', handleGameError);
   //     socketService.disconnect();
   //   };
-  // }, [dispatch, roomId, token, router, battleState.player1, battleState.player2]);
+  // }, [dispatch, matchId, token, router, battleState.player1, battleState.player2]);
 
   const handleLanguageChange = (newLanguage: string) => {
     const validLanguage = newLanguage as Language;
     setLanguage(validLanguage);
     socketService.emit('code_update', {
-      matchId: roomId as string,
+      matchId: battleState.matchId as string,
       language: validLanguage
     });
   };
@@ -165,8 +166,10 @@ const BattleRoom = () => {
     );
   }
 
+  console.log('battleState.matchId', battleState.matchId);
+
   return (
-    <EditorLayout questionData={currentProblem}>
+    <EditorLayout questionData={currentProblem} matchId={battleState.matchId as string}>
       <Editor
         language={language}
         onLanguageChange={handleLanguageChange}

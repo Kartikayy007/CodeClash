@@ -57,9 +57,9 @@ interface EventData {
     status: RoomState['status'] 
   };
   game_state_update: { 
-    timeLeft: number; 
-    player1: Player; 
-    player2: Player 
+    userId: string;
+    problemId: string;
+    status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
   };
   game_end: { 
     player1: Player; 
@@ -116,7 +116,6 @@ class SocketService {
   private setupEventListeners(): void {
     if (!this.socket) return;
 
-    // Remove existing listeners before adding new ones
     this.socket.removeAllListeners();
 
     this.socket.on('connect', () => {
@@ -125,9 +124,17 @@ class SocketService {
       this.notifyListeners('connect', {});
     });
 
+    this.socket.on('game_state_update', (data) => {
+      console.log('🎮 Game state update received in socket service:', {
+        data,
+        isConnected: this.socket?.connected,
+        currentMatchId: this.currentmatchId
+      });
+      this.notifyListeners('game_state_update', data);
+    });
+
     this.socket.on('disconnect', (reason) => {
       console.log(`❌ Socket.IO Disconnected: ${reason}`);
-      // Only notify if it's not a navigation-related disconnect
       if (reason !== 'transport close' && reason !== 'io client disconnect') {
         this.notifyListeners('disconnect', { reason });
       }
@@ -154,6 +161,8 @@ class SocketService {
       console.log('🎮 Raw game_start event received:', data);
       this.notifyListeners('game_start', data);
     });
+
+    
   }
 
   private notifyListeners<K extends keyof EventData>(event: K, data: EventData[K]): void {
@@ -262,9 +271,9 @@ class SocketService {
 
   emit<K extends keyof EventData>(event: K, data: EventData[K]): void {
       if (this.socket?.connected) {
-      if (event === 'code_update' && 'roomId' in data) {
-        const { roomId, ...rest } = data as any;
-        const transformedData = { matchId: roomId, ...rest };
+      if (event === 'code_update' && 'matchId' in data) {
+        const { matchId, ...rest } = data as any;
+        const transformedData = { matchId: matchId, ...rest };
         console.log(`📤 Emitting ${event}:`, transformedData);
         this.socket.emit(event as string, transformedData);
       } else {

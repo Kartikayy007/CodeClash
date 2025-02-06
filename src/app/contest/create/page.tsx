@@ -7,10 +7,10 @@ import Image from 'next/image';
 const CreateBattle = () => {
   const router = useRouter();
 
-  const handleCreateRoom = () => {
-    // TODO: API call to create room
-    const roomId = 'test-room-123'; // This will come from API
-    router.push(`/battle/${roomId}`);
+  const handleCreateMatch = () => {
+    // TODO: API call to create match
+    const matchId = 'test-match-123'; // This will come from API
+    router.push(`/battle/${matchId}`);
   };
 
   return (
@@ -26,7 +26,7 @@ const CreateBattle = () => {
             priority
           />
           <h2 className="mt-6 text-3xl font-bold text-white">
-            Create Battle Room
+            Create Battle Match
           </h2>
           <p className="mt-2 text-gray-400">
             Set up your competitive coding battle
@@ -73,10 +73,10 @@ const CreateBattle = () => {
 
           <div>
             <button
-              onClick={handleCreateRoom}
+              onClick={handleCreateMatch}
               className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#DB84D9] hover:bg-[#c76dc4] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DB84D9]"
             >
-              Create Room
+              Create Match
             </button>
           </div>
         </div>

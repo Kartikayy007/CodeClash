@@ -6,11 +6,11 @@ import Image from 'next/image';
 
 const JoinBattle = () => {
   const router = useRouter();
-  const [roomId, setRoomId] = useState('');
+  const [matchId, setMatchId] = useState('');
 
-  const handleJoinRoom = () => {
-    if (roomId.trim()) {
-      router.push(`/battle/${roomId}`);
+  const handleJoinMatch = () => {
+    if (matchId.trim()) {
+      router.push(`/battle/${matchId}`);
     }
   };
 
@@ -30,32 +30,32 @@ const JoinBattle = () => {
             Join Battle Room
           </h2>
           <p className="mt-2 text-gray-400">
-            Enter room code to join the battle
+            Enter match code to join the battle
           </p>
         </div>
 
         <div className="mt-8 space-y-6 bg-[#1A1D24] p-8 rounded-lg">
           <div>
-            <label htmlFor="room-id" className="block text-sm font-medium text-gray-300">
-              Room Code
+            <label htmlFor="match-id" className="block text-sm font-medium text-gray-300">
+              Match Code
             </label>
             <input
-              id="room-id"
+              id="match-id"
               type="text"
-              value={roomId}
-              onChange={(e) => setRoomId(e.target.value)}
+              value={matchId}
+              onChange={(e) => setMatchId(e.target.value)}
               className="mt-1 block w-full px-3 py-2 bg-[#292C33] border border-[#404040] rounded-md text-white focus:outline-none focus:ring-2 focus:ring-[#DB84D9]"
-              placeholder="Enter room code"
+              placeholder="Enter match code"
             />
           </div>
 
           <div>
             <button
-              onClick={handleJoinRoom}
-              disabled={!roomId.trim()}
+              onClick={handleJoinMatch}
+              disabled={!matchId.trim()}
               className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#DB84D9] hover:bg-[#c76dc4] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DB84D9] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Join Room
+              Join Match
             </button>
           </div>
         </div>

@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { socketService } from '@/lib/socket';
 import { fetchProblem } from '@/features/editor/api/problems';
 import { useDispatch } from 'react-redux';
-import { setProblems, setStatus, setPlayer1, setPlayer2 } from '@/features/battle/slices/battleSlice';
+import { setProblems, setStatus, setPlayer1, setPlayer2, setMatchId, updateProblemStatus } from '@/features/battle/slices/battleSlice';
 
 interface MatchFoundData {
   matchId: string;
@@ -66,12 +66,10 @@ export const useBattleWebSocket = () => {
     try {
       console.log('🚀 Navigating to:', `/battle/${currentMatchId.current}`);
       
-      // Fetch all problems in parallel
       const problemPromises = data.problems.map(problemId => fetchProblem(problemId));
       const problems = await Promise.all(problemPromises);
       console.log('🎯 Fetched problems:', problems);
       
-      // Convert all problems to battle state format
       const battleProblems = problems.map(problem => ({
         ...problem,
         description: [problem.description],
@@ -84,9 +82,9 @@ export const useBattleWebSocket = () => {
       }));
       
       dispatch(setProblems(battleProblems));
+      dispatch(setMatchId(currentMatchId.current as string));
       dispatch(setStatus('in-progress'));
       
-      // Update player states from gameState
       const [player1, player2] = data.gameState;
       if (player1) {
         dispatch(setPlayer1({
@@ -125,6 +123,26 @@ export const useBattleWebSocket = () => {
     
     const onConnect = () => {
       console.log('✅ Connected to socket');
+    };
+
+    const onGameStateUpdate = (data: { userId: string; problemId: string; status: string }) => {
+      console.log('🎮 Game state update received in hook:', {
+        data,
+        matchId: currentMatchId.current,
+        timestamp: new Date().toISOString()
+      });
+      
+      if (!data.userId || !data.problemId || !data.status) {
+        console.warn('❌ Invalid game state update data:', data);
+        return;
+      }
+
+      dispatch(updateProblemStatus({
+        problemId: data.problemId,
+        status: data.status as 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR',
+        userId: data.userId
+      }));
+      console.log('✅ Problem status updated in store');
     };
 
     const onMatchFound = (data: MatchFoundData) => {
@@ -184,6 +202,9 @@ export const useBattleWebSocket = () => {
       setState(prev => ({ ...prev, error: data.message }));
     };
 
+    
+
+    socketService.on('game_state_update', onGameStateUpdate);
     socketService.on('connect', onConnect);
     socketService.on('match_found', onMatchFound);
     socketService.on('match_state', onMatchState);
@@ -205,6 +226,7 @@ export const useBattleWebSocket = () => {
       socketService.off('game_error', onGameError);
       socketService.off('matchmaking_error', onMatchmakingError);
       socketService.off('auth_error', onAuthError);
+      socketService.off('game_state_update', onGameStateUpdate);
       
       if (!window.location.pathname.includes('/battle') && socketService.isConnected()) {
         socketService.leaveMatchmaking();

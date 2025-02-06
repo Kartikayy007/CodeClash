@@ -46,16 +46,35 @@ export interface BattleState {
 export interface RunCodePayload {
   code: string;
   language: string;
-  matchId: string;
   input: string;
+  matchId: string;
 }
 
 export interface RunCodeResponse {
   body: {
-    taskId: string;
-    output: string;
+    output: string | null;
     error: string | null;
   };
-  output: string;
-  error: string | null;
+}
+
+export interface SubmitCodePayload {
+  code: string;
+  language: string;
+  matchId: string;
+}
+
+export interface SubmitCodeResponse {
+  success: boolean;
+  data: {
+    submissionId: string;
+    status: string;
+    testCasesPassed: number;
+    totalTestCases: number;
+    executionTime: number;
+    failedTestCase: string | null;
+  };
+}
+
+export interface ApiError {
+  message: string;
 } 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Maximize2, Minimize2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Problem } from '@/features/editor/api/problems';
 import TopBar from './TopBar';
@@ -7,47 +7,52 @@ import Question from './Question';
 import Submissions from './Submissions';
 import Editor from './Editor';
 import TestCases from './TestCases';
+import SubmissionDetails from './SubmissionDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setCurrentProblemIndex } from '@/features/battle/slices/battleSlice';
+import { setActiveTab } from '@/features/editor/slices/editorSlice';
 
 interface EditorLayoutProps {
   children?: React.ReactNode;
   questionData: Problem;
+  matchId: string;
 }
 
-const EditorLayout = ({ questionData, children }: EditorLayoutProps) => {
+const EditorLayout = ({ questionData, children, matchId }: EditorLayoutProps) => {
   const dispatch = useDispatch();
-  const { problems, currentProblemIndex } = useSelector((state: RootState) => state.battle);
-  const [activeTab, setActiveTab] = useState<'description' | 'submissions'>('description');
+  const { activeTab } = useSelector((state: RootState) => state.editor);
+  const submissionResponse = useSelector((state: RootState) => state.editor.submissionResponse);
+
   const [language, setLanguage] = useState('cpp');
   const [isDescriptionMaximized, setIsDescriptionMaximized] = useState(false);
   const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(false);
   const [isEditorMaximized, setIsEditorMaximized] = useState(false);
   const [isTestCaseCollapsed, setIsTestCaseCollapsed] = useState(false);
 
+  useEffect(() => {
+    if (submissionResponse) {
+      console.log('New submission response received:', submissionResponse);
+      dispatch(setActiveTab('submission-details'));
+    }
+  }, [submissionResponse, dispatch]);
+
   const handleProblemChange = (index: number) => {
     dispatch(setCurrentProblemIndex(index));
   };
 
-  const questionProps = {
-    title: questionData.title,
-    difficulty: questionData.difficulty,
-    description: [questionData.description],
-    constraints: [questionData.constraints],
-    examples: questionData.testCases.filter(tc => !tc.isHidden).map((tc, idx) => ({
-      id: idx + 1,
-      input: tc.input,
-      output: tc.output
-    }))
-  };
+  const tabs = [
+    { id: 'description', label: 'Description' },
+    { id: 'submissions', label: 'Submissions' },
+    ...(submissionResponse ? [{ id: 'submission-details', label: 'Result' }] : [])
+  ] as const;
 
   return (
     <div className="min-h-screen bg-[#10141D] text-white">
       <Header />
       <div className="grid grid-cols-2 gap-4 px-8 py-4 h-[calc(100vh-180px)]">
         <TopBar 
-          matchId={questionData.id} 
+          matchId={matchId as string} 
           input={questionData.testCases[0]?.input || ''} 
           onProblemChange={handleProblemChange}
         />
@@ -59,18 +64,15 @@ const EditorLayout = ({ questionData, children }: EditorLayoutProps) => {
           } h-screen `}>
             <div className="flex items-center justify-between p-4 sticky top-0 bg-[#1C202A] z-10">
               <div className={`flex gap-4 ${isDescriptionCollapsed ? 'hidden' : ''}`}>
-                <button 
-                  className={`${activeTab === 'description' ? 'text-white bg-white/10 rounded-md px-2 py-1' : 'text-gray-500'} hover:text-gray-300 font-bold text-lg`}
-                  onClick={() => setActiveTab('description')}
-                >
-                  Description
-                </button>
-                <button 
-                  className={`${activeTab === 'submissions' ? 'text-white bg-white/10 rounded-md px-2 py-1' : 'text-gray-500'} hover:text-gray-300 font-bold text-lg`}
-                  onClick={() => setActiveTab('submissions')}
-                >
-                  Submissions
-                </button>
+                {tabs.map(tab => (
+                  <button 
+                    key={tab.id}
+                    className={`${activeTab === tab.id ? 'text-white bg-white/10 rounded-md px-2 py-1' : 'text-gray-500'} hover:text-gray-300 font-bold text-lg`}
+                    onClick={() => dispatch(setActiveTab(tab.id))}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
               
               <div className={`flex gap-2 ml-auto ${isDescriptionCollapsed ? 'flex-col [&>button]:rotate-90' : ''}`}>
@@ -94,11 +96,29 @@ const EditorLayout = ({ questionData, children }: EditorLayoutProps) => {
                 <div className="h-full">
                   <Question problem={questionData} />
                 </div>
-              ) : (
+              ) : activeTab === 'submissions' ? (
                 <div className="h-full overflow-y-auto">
                   <Submissions />
                 </div>
-              )}
+              ) : activeTab === 'submission-details' && submissionResponse ? (
+                <div className="h-full overflow-y-auto">
+                  <SubmissionDetails
+                    submission={{
+                      id: submissionResponse.submissionId,
+                      status: submissionResponse.status,
+                      testCasesPassed: submissionResponse.testCasesPassed,
+                      totalTestCases: submissionResponse.totalTestCases,
+                      createdAt: new Date().toISOString(),
+                      code: '',
+                      input: questionData.testCases[0]?.input || '',
+                      expectedOutput: questionData.testCases[0]?.output || '',
+                      actualOutput: submissionResponse.failedTestCase || '',
+                    }}
+                    isOpen={true}
+                    onToggle={() => {}}
+                  />
+                </div>
+              ) : null}
             </div>
           </div>
 
@@ -131,4 +151,4 @@ const EditorLayout = ({ questionData, children }: EditorLayoutProps) => {
   );
 };
 
-export default EditorLayout; 
+export default EditorLayout;
