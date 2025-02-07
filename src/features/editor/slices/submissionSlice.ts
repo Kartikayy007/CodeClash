@@ -13,19 +13,26 @@ interface Match {
   createdAt: string;
 }
 
-interface Submission {
+export interface Submission {
   id: string;
   status: string;
-  question: Question;
   createdAt: string;
-  language: string;
+  testCasesPassed: number;
+  totalTestCases: number;
   code?: string;
-  match?: Match;
+  input?: string;
+  expectedOutput?: string;
+  actualOutput?: string;
 }
 
 interface SubmissionDetails extends Submission {
   code: string;
   match: Match;
+  testCasesPassed: number;
+  totalTestCases: number;
+  input?: string;
+  expectedOutput?: string;
+  actualOutput?: string;
 }
 
 interface PaginationInfo {

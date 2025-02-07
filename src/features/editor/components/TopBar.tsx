@@ -3,7 +3,7 @@ import LabelButton from '@/components/ui/LabelButton';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
-import { runCode, submitCode } from '@/features/editor/slices/editorSlice';
+import { runCode, submitCode, setActiveTab } from '@/features/editor/slices/editorSlice';
 import { setCurrentProblemIndex } from '@/features/battle/slices/battleSlice';
 import toast from 'react-hot-toast';
 
@@ -42,6 +42,8 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
       toast.error('No problem selected');
       return;
     }
+
+    dispatch(setActiveTab('submissions'));
 
     dispatch(submitCode({
       code,

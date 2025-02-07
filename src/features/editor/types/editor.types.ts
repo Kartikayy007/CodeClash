@@ -64,15 +64,12 @@ export interface SubmitCodePayload {
 }
 
 export interface SubmitCodeResponse {
-  success: boolean;
-  data: {
-    submissionId: string;
-    status: string;
-    testCasesPassed: number;
-    totalTestCases: number;
-    executionTime: number;
-    failedTestCase: string | null;
-  };
+  submissionId: string;
+  status: string;
+  testCasesPassed: number;
+  totalTestCases: number;
+  executionTime: number;
+  failedTestCase: string | null;
 }
 
 export interface ApiError {

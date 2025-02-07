@@ -32,7 +32,7 @@ export const store = configureStore({
 
 export const persistor = persistStore(store);
 
-console.log(store.getState().editor.submissionResponse);
+console.log("editor state", store.getState().editor);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

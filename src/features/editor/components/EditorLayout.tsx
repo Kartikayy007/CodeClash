@@ -4,14 +4,15 @@ import { Problem } from '@/features/editor/api/problems';
 import TopBar from './TopBar';
 import Header from './Header';
 import Question from './Question';
-import Submissions from './Submissions';
+import Submissions from './submissionTab/Submissions';
 import Editor from './Editor';
 import TestCases from './TestCases';
-import SubmissionDetails from './SubmissionDetails';
+import SubmissionDetails from './submissionTab/SubmissionDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setCurrentProblemIndex } from '@/features/battle/slices/battleSlice';
 import { setActiveTab } from '@/features/editor/slices/editorSlice';
+import SubmissionTab from './submissionTab/SubmissionTab';
 
 interface EditorLayoutProps {
   children?: React.ReactNode;
@@ -22,7 +23,6 @@ interface EditorLayoutProps {
 const EditorLayout = ({ questionData, children, matchId }: EditorLayoutProps) => {
   const dispatch = useDispatch();
   const { activeTab } = useSelector((state: RootState) => state.editor);
-  const submissionResponse = useSelector((state: RootState) => state.editor.submissionResponse);
 
   const [language, setLanguage] = useState('cpp');
   const [isDescriptionMaximized, setIsDescriptionMaximized] = useState(false);
@@ -30,21 +30,13 @@ const EditorLayout = ({ questionData, children, matchId }: EditorLayoutProps) =>
   const [isEditorMaximized, setIsEditorMaximized] = useState(false);
   const [isTestCaseCollapsed, setIsTestCaseCollapsed] = useState(false);
 
-  useEffect(() => {
-    if (submissionResponse) {
-      console.log('New submission response received:', submissionResponse);
-      dispatch(setActiveTab('submission-details'));
-    }
-  }, [submissionResponse, dispatch]);
-
   const handleProblemChange = (index: number) => {
     dispatch(setCurrentProblemIndex(index));
   };
 
   const tabs = [
     { id: 'description', label: 'Description' },
-    { id: 'submissions', label: 'Submissions' },
-    ...(submissionResponse ? [{ id: 'submission-details', label: 'Result' }] : [])
+    { id: 'submissions', label: 'Submissions' }
   ] as const;
 
   return (
@@ -96,29 +88,11 @@ const EditorLayout = ({ questionData, children, matchId }: EditorLayoutProps) =>
                 <div className="h-full">
                   <Question problem={questionData} />
                 </div>
-              ) : activeTab === 'submissions' ? (
+              ) : activeTab === 'submissions' && (
                 <div className="h-full overflow-y-auto">
-                  <Submissions />
+                  <SubmissionTab matchId={matchId} />
                 </div>
-              ) : activeTab === 'submission-details' && submissionResponse ? (
-                <div className="h-full overflow-y-auto">
-                  <SubmissionDetails
-                    submission={{
-                      id: submissionResponse.submissionId,
-                      status: submissionResponse.status,
-                      testCasesPassed: submissionResponse.testCasesPassed,
-                      totalTestCases: submissionResponse.totalTestCases,
-                      createdAt: new Date().toISOString(),
-                      code: '',
-                      input: questionData.testCases[0]?.input || '',
-                      expectedOutput: questionData.testCases[0]?.output || '',
-                      actualOutput: submissionResponse.failedTestCase || '',
-                    }}
-                    isOpen={true}
-                    onToggle={() => {}}
-                  />
-                </div>
-              ) : null}
+              )}
             </div>
           </div>
 

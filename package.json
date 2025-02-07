@@ -23,6 +23,8 @@
     "@reduxjs/toolkit": "^2.5.1",
     "@types/react-redux": "^7.1.34",
     "@types/redux-logger": "^3.0.13",
+    "@uiw/codemirror-theme-tokyo-night": "^4.23.8",
+    "@uiw/codemirror-theme-vscode": "^4.23.8",
     "@uiw/react-codemirror": "^4.23.7",
     "axios": "^1.7.9",
     "chart.js": "^4.4.7",

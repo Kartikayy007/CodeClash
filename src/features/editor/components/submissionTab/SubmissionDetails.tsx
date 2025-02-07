@@ -1,19 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { ChevronLeft } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store/store';
+import { fetchSubmissionById } from '@/features/editor/slices/submissionSlice';
 
 interface SubmissionDetailsProps {
-  isOpen: boolean;
-  onToggle: () => void;
-  submission: {
-    id: string;
-    status: string;
-    testCasesPassed?: number;
-    totalTestCases?: number;
-    createdAt: string;
-    code?: string;
-    input?: string;
-    expectedOutput?: string;
-    actualOutput?: string;
-  };
+  submissionId: string;
+  onBack: () => void;
 }
 
 const getStatusIcon = (status: string) => {
@@ -63,11 +56,38 @@ const getStatusText = (status: string) => {
 };
 
 const SubmissionDetails: React.FC<SubmissionDetailsProps> = ({
-  submission
+  submissionId,
+  onBack
 }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const submissionDetails = useSelector((state: RootState) => state.submissions.selectedSubmission);
+
+  useEffect(() => {
+    dispatch(fetchSubmissionById(submissionId));
+  }, [submissionId, dispatch]);
+
+  if (!submissionDetails) {
+    return (
+      <div className="h-full bg-[#1A1D24] text-white flex flex-col items-center justify-center gap-4">
+        <div className="w-8 h-8 border-4 border-t-[#DB84D9] border-r-[#DB84D9] border-b-transparent border-l-transparent rounded-full animate-spin" />
+        <div className="text-lg">Loading submission details...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full bg-[#1A1D24] text-white">
-      <div className="grid grid-cols-4 p-4 text-sm font-medium text-white/60">
+      <div className="flex items-center gap-4 p-4 border-b border-[#232323]">
+        <button 
+          onClick={onBack}
+          className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+        >
+          <ChevronLeft size={20} />
+          <span>Back to Submissions</span>
+        </button>
+      </div>
+
+      <div className="grid grid-cols-4 p-4 text-sm text-center font-medium text-white/60">
         <div>Time</div>
         <div>Test Cases</div>
         <div>Status</div>
@@ -77,7 +97,7 @@ const SubmissionDetails: React.FC<SubmissionDetailsProps> = ({
         <div className="border border-[#232323] rounded-lg overflow-hidden">
           <div className="grid grid-cols-4 p-4 bg-[#1A1D24] items-center">
             <div className="text-sm">
-              {new Date(submission.createdAt).toLocaleString('en-US', {
+              {new Date(submissionDetails.createdAt).toLocaleString('en-US', {
                 day: '2-digit',
                 month: 'short',
                 hour: '2-digit',
@@ -86,41 +106,41 @@ const SubmissionDetails: React.FC<SubmissionDetailsProps> = ({
               }).replace(',', '')}
             </div>
             <div className="text-sm">
-              {submission.testCasesPassed}/{submission.totalTestCases}
+              {submissionDetails.testCasesPassed}/{submissionDetails.totalTestCases}
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-lg">{getStatusIcon(submission.status)}</span>
-              <span className="text-sm">{getStatusText(submission.status)}</span>
+              <span className="text-lg">{getStatusIcon(submissionDetails.status)}</span>
+              <span className="text-sm">{getStatusText(submissionDetails.status)}</span>
             </div>
             <div className="text-sm">00</div>
           </div>
 
           <div className="p-4 space-y-4 bg-[#1A1D24] border-t border-[#232323]">
             <h3 className="text-lg font-medium">Analysis :</h3>
-            {submission.input && (
+            {submissionDetails.input && (
               <div>
                 <p className="text-white/60">Input value :</p>
-                <p className="font-mono">{submission.input}</p>
+                <p className="font-mono">{submissionDetails.input}</p>
               </div>
             )}
-            {submission.expectedOutput && (
+            {submissionDetails.expectedOutput && (
               <div>
                 <p className="text-white/60">Expected Output :</p>
-                <p className="font-mono">{submission.expectedOutput}</p>
+                <p className="font-mono">{submissionDetails.expectedOutput}</p>
               </div>
             )}
-            {submission.actualOutput && (
+            {submissionDetails.actualOutput && (
               <div>
                 <p className="text-white/60">Your Output :</p>
-                <p className="font-mono">{submission.actualOutput}</p>
+                <p className="font-mono">{submissionDetails.actualOutput}</p>
               </div>
             )}
-            {submission.code && (
+            {submissionDetails.code && (
               <div>
                 <p className="text-white/60 mb-2">Your Code :</p>
                 <div className="bg-[#292C33] p-4 rounded-lg">
                   <pre className="font-mono text-sm whitespace-pre-wrap overflow-x-auto">
-                    {submission.code}
+                    {submissionDetails.code}
                   </pre>
                 </div>
               </div>
