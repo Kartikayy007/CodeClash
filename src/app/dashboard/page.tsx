@@ -2,9 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { socketService } from '@/lib/socket';
-// import Image from 'next/image';
-// import { Settings } from 'lucide-react';
-// import { Line } from 'react-chartjs-2';
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,8 +14,7 @@ import {
   Legend
 } from 'chart.js';
 import LabelButton from '@/components/ui/LabelButton';
-// import RecentMatches from '@/components/RecentMatches';
-// import RecentContests from '@/components/RecentContests';
+
 import UserStats from '@/components/UserStats';
 import PerformanceInsights from '@/components/PerformanceInsights';
 import Leaderboard from '@/components/Leaderboard';
@@ -44,7 +41,6 @@ export default function Dashboard() {
     }
 
     return () => {
-      // Don't disconnect on unmount, let the socket stay connected
     };
   }, []);
 
