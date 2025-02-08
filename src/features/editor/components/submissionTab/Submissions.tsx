@@ -1,103 +1,29 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@/store/store';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import { fetchSubmissions, fetchSubmissionById, setPage, fetchSubmissionsByMatchId, clearSelectedSubmission } from '../../slices/submissionSlice';
-import { format } from 'date-fns';
-
-const SubmissionDetails: React.FC<{ submission: any; onBack: () => void }> = ({ submission, onBack }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const submissionDetails = useSelector((state: RootState) => state.submissions.selectedSubmission);
-
-  useEffect(() => {
-    if (submission.id) {
-      dispatch(fetchSubmissionById(submission.id));
-    }
-  }, [submission.id, dispatch]);
-
-  if (!submissionDetails) return null;
-
-  return (
-    <div className="p-4 space-y-4 bg-[#1A1D24] rounded-b-lg border-t border-[#232323]">
-      <h3 className="text-lg font-medium">Analysis :</h3>
-      <div>
-        <p className="text-white/60">Question :</p>
-        <p className="font-medium">{submissionDetails.question.title} ({submissionDetails.question.difficulty})</p>
-      </div>
-      <div>
-        <p className="text-white/60 mb-2">Your Code :</p>
-        <div className="bg-[#292C33] p-4 rounded-lg">
-          <pre className="font-mono text-sm whitespace-pre-wrap overflow-x-auto">
-            {submissionDetails.code || 'Code not available'}
-          </pre>
-        </div>
-      </div>
-      <div>
-        <p className="text-white/60 mb-2">Test Cases Passed :</p>
-        <p className="font-medium">{submissionDetails.testCasesPassed || 0} / {submissionDetails.totalTestCases || 0}</p>
-      </div>
-      <div>
-        <p className="text-white/60 mb-2">Status :</p>
-        <p className="font-medium">{submissionDetails.status}</p>
-      </div>
-      <div>
-        <p className="text-white/60 mb-2">Created At :</p>
-        <p className="font-medium">{format(new Date(submissionDetails.createdAt), 'dd MMM hh:mm a')}</p>
-      </div>
-      <div>
-        <p className="text-white/60 mb-2">Input :</p>
-        <div className="bg-[#292C33] p-4 rounded-lg">
-          <pre className="font-mono text-sm whitespace-pre-wrap overflow-x-auto">
-            {submissionDetails.input || 'Input not available'}
-          </pre>
-        </div>
-      </div>
-      <div>
-        <p className="text-white/60 mb-2">Expected Output :</p>
-        <div className="bg-[#292C33] p-4 rounded-lg">
-          <pre className="font-mono text-sm whitespace-pre-wrap overflow-x-auto">
-            {submissionDetails.expectedOutput || 'Expected output not available'}
-          </pre>
-        </div>
-      </div>
-      <div>
-        <p className="text-white/60 mb-2">Actual Output :</p>
-        <div className="bg-[#292C33] p-4 rounded-lg">
-          <pre className="font-mono text-sm whitespace-pre-wrap overflow-x-auto">
-            {submissionDetails.actualOutput || 'Actual output not available'}
-          </pre>
-        </div>
-      </div>
-      <button
-        onClick={onBack}
-        className="px-4 py-2 bg-[#DB84D9] text-white rounded-lg hover:bg-[#DB84D9]/90"
-      >
-        Back
-      </button>
-    </div>
-  );
-};
+import { Check, X, AlertTriangle, Clock, Settings, BarChart, Lock, Infinity, HelpCircle } from 'lucide-react';
+import { fetchSubmissionsByMatchId } from '../../slices/submissionSlice';
 
 const getStatusIcon = (status: string) => {
   switch (status) {
     case 'ACCEPTED':
-      return '✓';
+      return <Check className="w-4 h-4 text-green-500" />;
     case 'TIME_LIMIT_EXCEEDED':
-      return '⏱';
+      return <Clock className="w-4 h-4 text-yellow-500" />;
     case 'RUNTIME_ERROR':
-      return '⚠';
+      return <AlertTriangle className="w-4 h-4 text-red-500" />;
     case 'WRONG_ANSWER':
-      return '✕';
+      return <X className="w-4 h-4 text-red-500" />;
     case 'COMPILATION_ERROR':
-      return '⚙';
+      return <Settings className="w-4 h-4 text-blue-500" />;
     case 'MEMORY_LIMIT_EXCEEDED':
-      return '📊';
+      return <BarChart className="w-4 h-4 text-purple-500" />;
     case 'SEGMENTATION_FAULT':
-      return '🔒';
+      return <Lock className="w-4 h-4 text-orange-500" />;
     case 'INFINITE_LOOP':
-      return '♾';
+      return <Infinity className="w-4 h-4 text-red-500" />;
     default:
-      return '?';
+      return <HelpCircle className="w-4 h-4 text-gray-500" />;
   }
 };
 
@@ -130,9 +56,9 @@ interface SubmissionsProps {
 
 const Submissions: React.FC<SubmissionsProps> = ({ onSelectSubmission }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const [selectedSubmission, setSelectedSubmission] = React.useState<string | null>(null);
-  const { submissions, pagination, loading, selectedSubmission: submissionDetails } = useSelector((state: RootState) => state.submissions);
+  const { submissions, loading } = useSelector((state: RootState) => state.submissions);
   const { matchId } = useSelector((state: RootState) => state.battle);
+  console.log(submissions);
 
   useEffect(() => {
     if (matchId) {
@@ -140,82 +66,60 @@ const Submissions: React.FC<SubmissionsProps> = ({ onSelectSubmission }) => {
     }
   }, [dispatch, matchId]);
 
-  if (loading || submissionDetails?.status === 'PROCESSING') {
-    return (
-      <div className="h-full bg-[#1A1D24] text-white flex flex-col items-center justify-center gap-4">
-        <div className="w-8 h-8 border-4 border-t-[#DB84D9] border-r-[#DB84D9] border-b-transparent border-l-transparent rounded-full animate-spin" />
-        <div className="text-lg">Processing submission...</div>
-      </div>
-    );
-  }
-
-  if (selectedSubmission && submissionDetails) {
-    return (
-      <SubmissionDetails
-        submission={{
-          id: submissionDetails.id,
-          status: submissionDetails.status,
-          testCasesPassed: submissionDetails.testCasesPassed || 0,
-          totalTestCases: submissionDetails.totalTestCases || 0,
-          createdAt: submissionDetails.createdAt,
-          code: submissionDetails.code,
-          input: submissionDetails.input || '',
-          expectedOutput: submissionDetails.expectedOutput || '',
-          actualOutput: submissionDetails.actualOutput || '',
-        }}
-        onBack={() => {
-          setSelectedSubmission(null);
-          dispatch(clearSelectedSubmission());
-        }}
-      />
-    );
-  }
-
-  if (submissions.length === 0) {
-    return (
-      <div className="h-full bg-[#1A1D24] text-white flex flex-col items-center justify-center gap-4">
-        <div className="text-lg">No submissions yet</div>
-      </div>
-    );
-  }
 
   return (
     <div className="h-full bg-[#1A1D24] text-white">
-      <div className="grid grid-cols-4 p-4 text-sm font-medium text-white/60">
-        <div>Time</div>
-        <div>Test Cases</div>
-        <div>Status</div>
-        <div>Score</div>
+      <div className="grid grid-cols-4 p-4 text-lg font-semibold text-white">
+        <div className='text-center'>Time</div>
+        <div className='text-center'>Test Cases</div>
+        <div className='text-center'>Status</div>
+        <div className='text-center'>Score</div>
       </div>
-      <div className="p-4">
-        <div className="border border-[#232323] rounded-lg overflow-hidden">
-          {submissions.map((submission) => (
-            <button
-              key={submission.id}
-              onClick={() => onSelectSubmission(submission.id)}
-              className="w-full grid grid-cols-4 p-4 bg-[#1A1D24] items-center hover:bg-[#232323] transition-colors border-b border-[#232323] last:border-b-0"
-            >
-              <div className="text-sm">
-                {new Date(submission.createdAt).toLocaleString('en-US', {
-                  day: '2-digit',
-                  month: 'short',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  hour12: true
-                }).replace(',', '')}
-              </div>
-              <div className="text-sm">
-                {submission.testCasesPassed}/{submission.totalTestCases}
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-lg">{getStatusIcon(submission.status)}</span>
-                <span className="text-sm">{getStatusText(submission.status)}</span>
-              </div>
-              <div className="text-sm">00</div>
-            </button>
-          ))}
+      {loading ? (
+        <div className="px-6">
+          <div className="rounded-lg overflow-hidden">
+            <h1 className="text-center mt-16 py-8 text-gray-400">
+              Loading Submissions...
+            </h1>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="px-6">
+          <div className="rounded-lg overflow-hidden">
+            {submissions.length === 0 ? (
+              <div className="text-center py-8 text-gray-400">
+                No submissions yet
+              </div>
+            ) : (
+              submissions.map((submission) => (
+                <button
+                  key={submission.id}
+                  onClick={() => onSelectSubmission(submission.id)}
+                  className="w-full grid grid-cols-4 p-4 mb-4 rounded-lg bg-[#1A1D24] items-center border border-[#5D5D5D] text-[#5D5D5D] hover:border-gray-400 hover:text-gray-400 transition-colors"
+                >
+                  <div className="text-sm">
+                    {new Date(submission.createdAt).toLocaleString('en-US', {
+                      day: '2-digit',
+                      month: 'short',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true
+                    }).replace(',', '')}
+                  </div>
+                  <div className="text-sm">
+                    {submission.testCasesPassed}/{submission.totalTestCases}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">{getStatusIcon(submission.status)}</span>
+                    <span className="text-sm">{getStatusText(submission.status)}</span>
+                  </div>
+                  <div className="text-sm"></div>
+                </button>
+              ))
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
