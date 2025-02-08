@@ -1,0 +1,36 @@
+<svg width="55" height="64" viewBox="0 0 55 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Bronze Medal" filter="url(#filter0_d_1736_12432)">
+<path id="Rectangle 12" d="M18 31.4429L23.609 34.3415L12.219 51.9998L8.94978 45.4737L18 31.4429Z" fill="#AA75CB"/>
+<path id="Rectangle 13" d="M18 31.4429L12.391 28.5443L1.00102 46.2026L8.94978 45.4737L18 31.4429Z" fill="#73488D"/>
+<path id="Rectangle 14" d="M26 31.4429L20.391 34.3415L31.781 51.9998L35.0502 45.4737L26 31.4429Z" fill="#73488D"/>
+<path id="Rectangle 15" d="M26 31.4429L31.609 28.5443L42.999 46.2026L35.0502 45.4737L26 31.4429Z" fill="#AA75CB"/>
+<path id="Ellipse 5" d="M21.9903 37.0692C32.8778 37.0692 41.8008 29.1575 41.8008 19.2846C41.8008 9.41177 32.8778 1.5 21.9903 1.5C11.1027 1.5 2.17969 9.41177 2.17969 19.2846C2.17969 29.1575 11.1027 37.0692 21.9903 37.0692Z" fill="#DC9E42" stroke="#774700"/>
+<ellipse id="Ellipse 6" cx="21.9916" cy="19.2847" rx="15.0736" ry="13.4922" fill="#734C12"/>
+<g id="Mask Group">
+<mask id="mask0_1736_12432" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="7" y="7" width="31" height="28">
+<ellipse id="Ellipse 4" cx="22.7962" cy="20.7253" rx="15.1087" ry="13.5236" fill="#C28B37"/>
+</mask>
+<g mask="url(#mask0_1736_12432)">
+<ellipse id="Ellipse 3" cx="21.9915" cy="19.2848" rx="15.1087" ry="13.5236" fill="#A36D1D"/>
+</g>
+</g>
+<path id="Vector" d="M22.0744 9.87646L25.3335 15.7109L31.8519 16.4402L27.376 20.9328L28.5927 27.3799L22.0744 24.4626L15.556 27.3799L16.7837 20.9328L12.2969 16.4402L18.8152 15.7109L22.0744 9.87646Z" fill="url(#paint0_linear_1736_12432)"/>
+</g>
+<defs>
+<filter id="filter0_d_1736_12432" x="0.216502" y="0.216502" width="54.536" height="63.536" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="5.48449" dy="5.48449"/>
+<feGaussianBlur stdDeviation="3.13399"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1736_12432"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1736_12432" result="shape"/>
+</filter>
+<linearGradient id="paint0_linear_1736_12432" x1="22.0744" y1="9.87646" x2="22.0744" y2="27.3799" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FCFF80"/>
+<stop offset="0.401042" stop-color="#FDE870"/>
+<stop offset="1" stop-color="#FFC759"/>
+</linearGradient>
+</defs>
+</svg>
