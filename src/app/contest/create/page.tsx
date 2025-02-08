@@ -8,8 +8,7 @@ const CreateBattle = () => {
   const router = useRouter();
 
   const handleCreateMatch = () => {
-    // TODO: API call to create match
-    const matchId = 'test-match-123'; // This will come from API
+    const matchId = 'test-match-123'; 
     router.push(`/battle/${matchId}`);
   };
 

@@ -1,4 +1,3 @@
-// import ProtectedRoute from '@/features/auth/components/ProtectedRoute';
 import Navbar from '@/components/ui/Navbar';
 
 export default function DashboardLayout({
