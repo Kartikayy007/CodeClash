@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { Language } from '../types/editor.types';
 
 interface Question {
   title: string;
@@ -28,9 +29,11 @@ export interface Submission {
 interface SubmissionDetails extends Submission {
   code: string;
   match: Match;
+  language: string;
   testCasesPassed: number;
   totalTestCases: number;
   input?: string;
+  score: number;
   expectedOutput?: string;
   actualOutput?: string;
 }
@@ -128,7 +131,6 @@ const submissionSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch all submissions
       .addCase(fetchSubmissions.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -154,7 +156,6 @@ const submissionSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch submission details';
       })
-      // Fetch submissions by match ID
       .addCase(fetchSubmissionsByMatchId.pending, (state) => {
         state.loading = true;
         state.error = null;

@@ -1,8 +1,13 @@
-import React, { useEffect } from 'react';
-import { ChevronLeft } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ChevronLeft, Check, X, AlertTriangle, Clock, Settings, BarChart, Lock, Infinity, HelpCircle, Copy, CheckCheck } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
 import { fetchSubmissionById } from '@/features/editor/slices/submissionSlice';
+import CodeMirror from '@uiw/react-codemirror';
+import { cpp } from '@codemirror/lang-cpp';
+import { javascript } from '@codemirror/lang-javascript';
+import { python } from '@codemirror/lang-python';
+import { java } from '@codemirror/lang-java';
 
 interface SubmissionDetailsProps {
   submissionId: string;
@@ -12,23 +17,23 @@ interface SubmissionDetailsProps {
 const getStatusIcon = (status: string) => {
   switch (status) {
     case 'ACCEPTED':
-      return '✓';
+      return <Check className="w-4 h-4 text-green-500" />;
     case 'TIME_LIMIT_EXCEEDED':
-      return '⏱';
+      return <Clock className="w-4 h-4 text-yellow-500" />;
     case 'RUNTIME_ERROR':
-      return '⚠';
+      return <AlertTriangle className="w-4 h-4 text-red-500" />;
     case 'WRONG_ANSWER':
-      return '✕';
+      return <X className="w-4 h-4 text-red-500" />;
     case 'COMPILATION_ERROR':
-      return '⚙';
+      return <Settings className="w-4 h-4 text-blue-500" />;
     case 'MEMORY_LIMIT_EXCEEDED':
-      return '📊';
+      return <BarChart className="w-4 h-4 text-purple-500" />;
     case 'SEGMENTATION_FAULT':
-      return '🔒';
+      return <Lock className="w-4 h-4 text-orange-500" />;
     case 'INFINITE_LOOP':
-      return '♾';
+      return <Infinity className="w-4 h-4 text-red-500" />;
     default:
-      return '?';
+      return <HelpCircle className="w-4 h-4 text-gray-500" />;
   }
 };
 
@@ -55,98 +60,160 @@ const getStatusText = (status: string) => {
   }
 };
 
+const getLanguageExtension = (lang: string) => {
+  switch (lang) {
+    case 'cpp':
+    case 'c':
+      return cpp();
+    case 'javascript':
+      return javascript();
+    case 'python':
+      return python();
+    case 'java':
+      return java();
+    default:
+      return cpp();
+  }
+};
+
 const SubmissionDetails: React.FC<SubmissionDetailsProps> = ({
   submissionId,
   onBack
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const submissionDetails = useSelector((state: RootState) => state.submissions.selectedSubmission);
+  const { loading } = useSelector((state: RootState) => state.submissions);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     dispatch(fetchSubmissionById(submissionId));
   }, [submissionId, dispatch]);
 
-  if (!submissionDetails) {
-    return (
-      <div className="h-full bg-[#1A1D24] text-white flex flex-col items-center justify-center gap-4">
-        <div className="w-8 h-8 border-4 border-t-[#DB84D9] border-r-[#DB84D9] border-b-transparent border-l-transparent rounded-full animate-spin" />
-        <div className="text-lg">Loading submission details...</div>
-      </div>
-    );
-  }
 
   return (
     <div className="h-full bg-[#1A1D24] text-white">
-      <div className="flex items-center gap-4 p-4 border-b border-[#232323]">
-        <button 
+
+      <div className="grid grid-cols-4 p-4 text-lg font-semibold text-white">
+      <button 
           onClick={onBack}
-          className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+          className="absolute flex items-center justify-center text-gray-400 hover:text-white transition-colors"
         >
-          <ChevronLeft size={20} />
-          <span>Back to Submissions</span>
+          <ChevronLeft size={28} />
         </button>
+        <div className='text-center'>Time</div>
+        <div className='text-center'>Test Cases</div>
+        <div className='text-center'>Status</div>
+        <div className='text-center'>Score</div>
       </div>
 
-      <div className="grid grid-cols-4 p-4 text-sm text-center font-medium text-white/60">
-        <div>Time</div>
-        <div>Test Cases</div>
-        <div>Status</div>
-        <div>Score</div>
-      </div>
-      <div className="p-4">
-        <div className="border border-[#232323] rounded-lg overflow-hidden">
-          <div className="grid grid-cols-4 p-4 bg-[#1A1D24] items-center">
-            <div className="text-sm">
-              {new Date(submissionDetails.createdAt).toLocaleString('en-US', {
-                day: '2-digit',
-                month: 'short',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
-              }).replace(',', '')}
-            </div>
-            <div className="text-sm">
-              {submissionDetails.testCasesPassed}/{submissionDetails.totalTestCases}
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-lg">{getStatusIcon(submissionDetails.status)}</span>
-              <span className="text-sm">{getStatusText(submissionDetails.status)}</span>
-            </div>
-            <div className="text-sm">00</div>
-          </div>
-
-          <div className="p-4 space-y-4 bg-[#1A1D24] border-t border-[#232323]">
-            <h3 className="text-lg font-medium">Analysis :</h3>
-            {submissionDetails.input && (
-              <div>
-                <p className="text-white/60">Input value :</p>
-                <p className="font-mono">{submissionDetails.input}</p>
-              </div>
-            )}
-            {submissionDetails.expectedOutput && (
-              <div>
-                <p className="text-white/60">Expected Output :</p>
-                <p className="font-mono">{submissionDetails.expectedOutput}</p>
-              </div>
-            )}
-            {submissionDetails.actualOutput && (
-              <div>
-                <p className="text-white/60">Your Output :</p>
-                <p className="font-mono">{submissionDetails.actualOutput}</p>
-              </div>
-            )}
-            {submissionDetails.code && (
-              <div>
-                <p className="text-white/60 mb-2">Your Code :</p>
-                <div className="bg-[#292C33] p-4 rounded-lg">
-                  <pre className="font-mono text-sm whitespace-pre-wrap overflow-x-auto">
-                    {submissionDetails.code}
-                  </pre>
+    <div className='px-4'>
+      <div className='p-4 border border-[#5D5D5D] rounded-lg'>
+        <div className="rounded-lg overflow-hidden ">
+          <div className="w-full grid text-center grid-cols-4  mb-4 rounded-lg bg-[#1A1D24] items-center  text-[#5D5D5D]">
+            {submissionDetails ? (
+              <>
+                <div className="text-sm">
+                  {new Date(submissionDetails.createdAt).toLocaleString('en-US', {
+                    day: '2-digit',
+                    month: 'short',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                  }).replace(',', '')}
                 </div>
-              </div>
+                <div className="text-sm">
+                  {submissionDetails.testCasesPassed}/{submissionDetails.totalTestCases}
+                </div>
+                <div className="flex items-center justify-center gap-2">
+                  <span className="text-lg">{getStatusIcon(submissionDetails.status)}</span>
+                  <span className="text-sm">{getStatusText(submissionDetails.status)}</span>
+                </div>
+                <div className="text-sm">
+                  {submissionDetails.score}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="text-sm animate-pulse bg-gray-700/20 h-4 rounded"></div>
+                <div className="text-sm animate-pulse bg-gray-700/20 h-4 rounded"></div>
+                <div className="text-sm animate-pulse bg-gray-700/20 h-4 rounded"></div>
+                <div className="text-sm"></div>
+              </>
             )}
           </div>
         </div>
+
+        <div className="space-y-4 bg-[#1A1D24] border-[#232323]">
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-8 gap-4">
+              <div className="w-8 h-8 border-4 border-t-[#DB84D9] border-r-[#DB84D9] border-b-transparent border-l-transparent rounded-full animate-spin" />
+              <div className="text-lg">Loading analysis...</div>
+            </div>
+          ) : submissionDetails && (
+            <>
+              <h3 className="text-lg font-medium flex justify-between items-center">
+                <span>Your code</span>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(submissionDetails.code || '');
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  }}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-[#1A1D24] hover:bg-[#292C33] transition-colors text-sm text-gray-400 hover:text-white"
+                >
+                  {copied ? (
+                    <>
+                      <CheckCheck size={16} />
+                      <span>Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy size={16} />
+                      <span>Copy code</span>
+                    </>
+                  )}
+                </button>
+              </h3>
+              {submissionDetails.code && (
+                <div>
+                  <div className="bg-[#292C33] p-4 rounded-lg">
+                    <CodeMirror
+                      value={submissionDetails.code}
+                      height="30rem"
+                      width="100%"
+                      theme="dark"
+                      extensions={[getLanguageExtension(submissionDetails.language || 'cpp')]}
+                      editable={false}
+                      style={{ overflow: 'auto' }}
+                      basicSetup={{
+                        lineNumbers: true,
+                        highlightActiveLineGutter: true,
+                        foldGutter: true,
+                        dropCursor: true,
+                        allowMultipleSelections: true,
+                        indentOnInput: true,
+                        bracketMatching: true,
+                        closeBrackets: true,
+                        autocompletion: false,
+                        rectangularSelection: false,
+                        crosshairCursor: false,
+                        highlightActiveLine: false,
+                        highlightSelectionMatches: false,
+                        closeBracketsKeymap: false,
+                        searchKeymap: false,
+                        foldKeymap: false,
+                        completionKeymap: true,
+                        lintKeymap: false
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+
+        </div>
+      </div>
       </div>
     </div>
   );
