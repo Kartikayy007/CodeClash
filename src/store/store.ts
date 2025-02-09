@@ -6,6 +6,7 @@ import authReducer from '@/features/auth/slices/authSlice';
 import editorReducer from '@/features/editor/slices/editorSlice';
 import battleReducer from '@/features/battle/slices/battleSlice';
 import submissionReducer from '@/features/editor/slices/submissionSlice';
+import profileReducer from '@/features/home/profile/slices/profileSlice';
 
 const battlePersistConfig = {
   key: 'battle',
@@ -15,13 +16,16 @@ const battlePersistConfig = {
 
 const persistedBattleReducer = persistReducer(battlePersistConfig, battleReducer);
 
+const rootReducer = {
+  auth: authReducer,
+  editor: editorReducer,
+  battle: persistedBattleReducer,
+  submissions: submissionReducer,
+  profile: profileReducer,
+};
+
 export const store = configureStore({
-  reducer: {
-    auth: authReducer,
-    editor: editorReducer,
-    battle: persistedBattleReducer,
-    submissions: submissionReducer,
-  },
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
