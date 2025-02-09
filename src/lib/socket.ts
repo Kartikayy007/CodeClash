@@ -1,3 +1,4 @@
+import { updateProblemStatus } from '@/features/battle/slices/battleSlice';
 import router from 'next/router';
 import { io, Socket } from 'socket.io-client';
 
@@ -105,7 +106,6 @@ class SocketService {
       }
     });
 
-    // Persist socket instance across page navigations
     if (typeof window !== 'undefined') {
       (window as any).__socketInstance = this.socket;
     }
@@ -116,65 +116,76 @@ class SocketService {
   private setupEventListeners(): void {
     if (!this.socket) return;
 
-    this.socket.removeAllListeners();
-
     this.socket.on('connect', () => {
-      console.log('✅ Socket.IO Connected');
+      console.log('✅ Socket connected successfully');
       this.reconnectAttempts = 0;
-      this.notifyListeners('connect', {});
-    });
-
-    this.socket.on('game_state_update', (data) => {
-      console.log('🎮 Game state update received in socket service:', {
-        data,
-        isConnected: this.socket?.connected,
-        currentMatchId: this.currentmatchId
-      });
-      this.notifyListeners('game_state_update', data);
     });
 
     this.socket.on('disconnect', (reason) => {
-      console.log(`❌ Socket.IO Disconnected: ${reason}`);
-      if (reason !== 'transport close' && reason !== 'io client disconnect') {
-        this.notifyListeners('disconnect', { reason });
+      console.log('❌ Socket disconnected:', reason);
+    });
+
+    this.socket.on('connect_error', (error) => {
+      console.error('❌ Socket connection error:', error);
+      this.reconnectAttempts++;
+      
+      if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+        console.error('🚫 Max reconnection attempts reached');
+        this.socket?.disconnect();
       }
     });
 
-    this.socket.on('connect_error', (error: Error) => {
-      console.error('❌ Socket.IO Connection Error:', error);
-      if (error.message === 'Invalid token') {
-        this.notifyListeners('auth_error', { message: 'Invalid token' });
+    // Game state update event
+    this.socket.on('game_state_update', (data) => {
+      console.log('🎮 Game state update received in socket:', data);
+      const listeners = this.eventListeners.get('game_state_update');
+      if (listeners) {
+        listeners.forEach(listener => listener(data));
       }
     });
 
-    this.socket.on('error', (error: Error) => {
-      console.error('❌ Socket.IO Error:', error);
-      this.notifyListeners('error', { message: error.message });
+    // Handle other socket events
+    this.socket.onAny((eventName, ...args) => {
+      console.log(`📡 Socket event received: ${eventName}`, args);
+      const listeners = this.eventListeners.get(eventName as keyof EventData);
+      if (listeners) {
+        listeners.forEach(listener => listener(...args));
+      }
     });
-
-    this.socket.on('match_state', (data) => {
-      console.log('🎯 Match state received:', data);
-      this.notifyListeners('match_state', data);
-    });
-
-    this.socket.on('game_start', (data) => {
-      console.log('🎮 Raw game_start event received:', data);
-      this.notifyListeners('game_start', data);
-    });
-
-    
   }
 
-  private notifyListeners<K extends keyof EventData>(event: K, data: EventData[K]): void {
+  on<K extends keyof EventData>(event: K, callback: (data: EventData[K]) => void): void {
+    if (!this.eventListeners.has(event)) {
+      this.eventListeners.set(event, new Set());
+    }
+    this.eventListeners.get(event)?.add(callback);
+  }
+
+  off<K extends keyof EventData>(event: K, callback: (data: EventData[K]) => void): void {
     const listeners = this.eventListeners.get(event);
     if (listeners) {
-      listeners.forEach(listener => {
-        try {
-          listener(data);
-        } catch (error) {
-          console.error(`❌ Error in listener for ${event}:`, error);
-        }
-      });
+      listeners.delete(callback);
+    }
+  }
+
+  emit<K extends keyof EventData>(event: K, data: EventData[K]): void {
+    if (!this.socket?.connected) {
+      console.warn('⚠️ Socket not connected, cannot emit event:', event);
+      return;
+    }
+    this.socket.emit(event, data);
+  }
+
+  isConnected(): boolean {
+    return !!this.socket?.connected;
+  }
+
+  disconnect(): void {
+    if (this.socket) {
+      this.socket.disconnect();
+      this.socket = null;
+      this.eventListeners.clear();
+      console.log('🔌 Socket disconnected manually');
     }
   }
 
@@ -230,63 +241,6 @@ class SocketService {
     if (!this.socket?.connected) return;
     console.log('🔄 Rejoining room:', matchId);
     this.socket.emit('rejoin_room', { matchId });
-  }
-
-  disconnect(): void {
-    if (this.socket) {
-      if (typeof window !== 'undefined' && !window.location.pathname.includes('/battle')) {
-        console.log('🔌 Disconnecting Socket.IO...');
-        this.socket.disconnect();
-        this.socket = null;
-        this.currentmatchId = null;
-        delete (window as any).__socketInstance;
-      }
-    }
-  }
-
-  on<K extends keyof EventData>(event: K, callback: SocketEventCallback<EventData[K]>): void {
-    if (!this.eventListeners.has(event)) {
-      this.eventListeners.set(event, new Set());
-    }
-    this.eventListeners.get(event)?.add(callback);
-
-    if (!['connect', 'disconnect', 'connect_error', 'error'].includes(event) && this.socket) {
-      this.socket.on(event as string, (data) => {
-        console.log(`📨 Received ${event} event:`, data);
-        this.notifyListeners(event, data as EventData[K]);
-      });
-    }
-  }
-
-  off<K extends keyof EventData>(event: K, callback: SocketEventCallback<EventData[K]>): void {
-    const listeners = this.eventListeners.get(event);
-    if (listeners) {
-      listeners.delete(callback);
-      
-      if (listeners.size === 0 && this.socket) {
-        this.socket.off(event as string);
-      }
-    }
-  }
-
-  emit<K extends keyof EventData>(event: K, data: EventData[K]): void {
-      if (this.socket?.connected) {
-      if (event === 'code_update' && 'matchId' in data) {
-        const { matchId, ...rest } = data as any;
-        const transformedData = { matchId: matchId, ...rest };
-        console.log(`📤 Emitting ${event}:`, transformedData);
-        this.socket.emit(event as string, transformedData);
-      } else {
-        console.log(`📤 Emitting ${event}:`, data);
-        this.socket.emit(event as string, data);
-      }
-    } else {
-      console.error('❌ Cannot emit event: Socket not connected');
-    }
-  }
-
-  isConnected(): boolean {
-    return this.socket?.connected || false;
   }
 }
 
