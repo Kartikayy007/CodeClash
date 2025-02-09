@@ -4,9 +4,11 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Settings, Menu, X,House } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
 
   const navLinks = [
     { href: "/dashboard", label: "Home" },
@@ -29,13 +31,17 @@ const Navbar = () => {
           />
         </div>
 
-       
         <div className='flex items-center gap-4'>
           <button className='flex items-center gap-6'>
-            <House  size={30} color='white'  />
-            <Settings  size={30} color='white' className="hover:rotate-90 transition-transform duration-300 " />
+            <House size={30} color='white' onClick={() => router.push('/dashboard')}/>
+            <Settings 
+              size={30} 
+              color='white' 
+              className="hover:rotate-90 transition-transform duration-300"
+              onClick={() => router.push('/settings')}
+            />
           </button>
-            
+          
           <button 
             className='lg:hidden flex items-center'
             onClick={() => setIsMenuOpen(!isMenuOpen)}

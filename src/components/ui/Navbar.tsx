@@ -4,9 +4,13 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Settings, Menu, X } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const router = useRouter();
+  
 
   const navLinks = [
     { href: "/dashboard", label: "Home" },
@@ -41,7 +45,8 @@ const Navbar = () => {
 
         <div className='flex items-center gap-4'>
           <button className='flex items-center'>
-            <Settings size={30} className="hover:rotate-90 transition-transform duration-300" />
+            <Settings size={30} className="hover:rotate-90 transition-transform duration-300"               onClick={() => router.push('/settings')}
+            />
           </button>
             
           <button 
