@@ -1,4 +1,3 @@
-// components/Stats.tsx
 interface StatsProps {
     levelCP: string;
     totalPoints: number;
@@ -21,7 +20,7 @@ interface StatsProps {
             Total Match Played: <span>{totalMatchPlayed}</span>
           </p>
           <p className="text-gray-400 text-lg flex justify-between">
-            Win Percentage: <span>{winPercentage}%</span>
+            Win Percentage: <span>{winPercentage.toFixed(1)}%</span>
           </p>
         </div>
       </div>
