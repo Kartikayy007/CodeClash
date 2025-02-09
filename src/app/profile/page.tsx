@@ -1,162 +1,99 @@
-'use client';
-
-import { useState } from 'react';
-import Image from 'next/image';
+'use client'
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store/store';
+import { fetchProfile } from '@/features/home/profile/thunks/profileThunks';
+import ProfileHeader from '@/components/profile/ProfileHeader';
+import PersonalInfo from '@/components/profile/PersonalInfo';
+import Stats from '@/components/profile/Stats';
+import Badges from '@/components/profile/Badges';
+import ActivityCalendar from '@/components/profile/ActivityCalendar';
+import PeriodSelect from '@/components/profile/PeriodSelect';
 import NavbarPlain from '@/components/ui/NavbarPlain';
-import { Edit } from 'lucide-react';
+import toast from 'react-hot-toast';
 
-interface UserProfile {
-  username: string;
-  rank: number;
-  email: string;
-  phone: string;
-  stats: {
-    levelCP: string;
-    totalPoints: number;
-    totalMatchPlayed: number;
-    winPercentage: number;
-  };
-  badges: Array<{
-    id: number;
-    name: string;
-    rank: string;
-    icon: string;
-  }>;
-}
-
-export default function ProfilePage() {
+const ProfilePage = () => {
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const { profile, loading, error } = useSelector((state: RootState) => state.profile);
   const [selectedPeriod, setSelectedPeriod] = useState<'Current' | 'Year' | 'All'>('Current');
   const [startMonthIndex, setStartMonthIndex] = useState(0);
   const months = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-  const profile: UserProfile = {
-    username: "Username",
-    rank: 23000,
-    email: "abc@gmail.com",
-    phone: "Phone Number",
-    stats: {
-      levelCP: "Intermediate",
-      totalPoints: 220,
-      totalMatchPlayed: 26,
-      winPercentage: 86,
-    },
-    badges: [
-      { id: 1, name: "Fire Starter", rank: "10K", icon: "/badges/fire.svg" },
-      { id: 2, name: "Badge 2", rank: "10K", icon: "/badges/placeholder.svg" },
-      { id: 3, name: "Badge 3", rank: "10K", icon: "/badges/placeholder.svg" },
-      { id: 4, name: "Badge 4", rank: "10K", icon: "/badges/placeholder.svg" },
-      { id: 5, name: "Badge 5", rank: "10K", icon: "/badges/placeholder.svg" },
-    ]
-  };
-
-  const getFirstDayOfMonth = (month: number, year: number) => {
-    return new Date(year, month, 1).getDay();
-  };
-
-  const getMonthData = (month: number, year: number = new Date().getFullYear()) => {
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const firstDayOfMonth = getFirstDayOfMonth(month, year);
-    const weeks: string[][] = [];
-    let currentWeek: string[] = [];
-
-    for (let i = 0; i < firstDayOfMonth; i++) {
-      currentWeek.push('empty');
+  const formatActivityData = () => {
+    const today = new Date();
+    const activityData = [];
+    
+    for (let i = 365; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      
+      const count = profile ? Math.floor(Math.random() * 5) : 0;
+      activityData.push({
+        date: date.toISOString().split('T')[0],
+        count,
+        level: count as 0 | 1 | 2 | 3 | 4
+      });
     }
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      currentWeek.push(Math.random() > 0.7 ? 'active' : 'inactive');
-
-      if (currentWeek.length === 7) {
-        weeks.push(currentWeek);
-        currentWeek = [];
-      }
-    }
-
-    if (currentWeek.length > 0) {
-      while (currentWeek.length < 7) {
-        currentWeek.push('empty');
-      }
-      weeks.push(currentWeek);
-    }
-
-    return weeks;
+    
+    return activityData;
   };
 
-  const generateActivityData = () => {
-    const currentYear = new Date().getFullYear();
-    return months.map((_, monthIndex) => getMonthData(monthIndex, currentYear));
-  };
+  useEffect(() => {
+    dispatch(fetchProfile())
+      .unwrap()
+      .catch((error) => {
+        toast.error(error || 'Failed to fetch profile');
+        router.push('/login');
+      });
+  }, [dispatch]);
 
-  const visibleMonths = months.slice(startMonthIndex, startMonthIndex + 4);
-  const activityData = generateActivityData();
-  const visibleActivityData = activityData.slice(startMonthIndex, startMonthIndex + 4);
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#15171B] flex items-center justify-center">
+        <div className="text-white text-xl">Loading profile...</div>
+      </div>
+    );
+  }
 
-  const handlePrevMonth = () => {
-    setStartMonthIndex(prev => Math.max(0, prev - 1));
-  };
-
-  const handleNextMonth = () => {
-    setStartMonthIndex(prev => Math.min(months.length - 4, prev + 1));
-  };
-
-  const weekDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#15171B] flex items-center justify-center">
+        <div className="text-red-500 text-xl">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div>
       <NavbarPlain />
       <div className="p-16 bg-[#15171B] min-h-screen">
         <div className="mb-12">
-          <button className="text-white text-xl flex items-center gap-3">
+          <button 
+            className="text-white text-xl flex items-center gap-3"
+            onClick={() => router.back()}
+          >
             <span>←</span> Your Profile
           </button>
         </div>
 
         <div className="grid grid-cols-12 gap-12">
           <div className="col-span-4 bg-[#1E2127] rounded-lg p-8">
-            <div className="flex items-start justify-between mb-8">
-              <div className="flex items-center gap-6">
-                <div className="w-24 h-24 bg-gray-600 rounded-full"></div>
-                <div>
-                  <h2 className="text-white text-2xl font-semibold">{profile.username}</h2>
-                  <p className="text-gray-400 text-lg mt-1">Rank {profile.rank}</p>
-                </div>
-              </div>
-              <button className="text-gray-400">
-                <Edit size={24} />
-              </button>
-            </div>
-
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-white text-xl mb-6">Personal Information</h3>
-                <div className="space-y-4">
-                  <p className="text-gray-400 text-lg flex items-center gap-3">
-                    <span className="text-xl">✉</span> {profile.email}
-                  </p>
-                  <p className="text-gray-400 text-lg flex items-center gap-3">
-                    <span className="text-xl">📱</span> {profile.phone}
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-white text-xl mb-6">Stats</h3>
-                <div className="space-y-4">
-                  <p className="text-gray-400 text-lg flex justify-between">
-                    Level of CP: <span>{profile.stats.levelCP}</span>
-                  </p>
-                  <p className="text-gray-400 text-lg flex justify-between">
-                    Total Points: <span>{profile.stats.totalPoints}</span>
-                  </p>
-                  <p className="text-gray-400 text-lg flex justify-between">
-                    Total Match Played: <span>{profile.stats.totalMatchPlayed}</span>
-                  </p>
-                  <p className="text-gray-400 text-lg flex justify-between">
-                    Win Percentage: <span>{profile.stats.winPercentage}%</span>
-                  </p>
-                </div>
-              </div>
-            </div>
+            <ProfileHeader 
+              username={profile?.username || 'Username'} 
+              rank={profile?.rating || 0} 
+            />
+            <PersonalInfo 
+              email={profile?.email || ''} 
+              phone="Phone Number" 
+            />
+            <Stats 
+              levelCP={profile?.skillLevel || 'Intermediate'} 
+              totalPoints={profile?.rating || 0} 
+              totalMatchPlayed={profile?.totalMatches || 0} 
+              winPercentage={profile?.winRate || 0} 
+            />
           </div>
 
           <div className="col-span-8 space-y-12">
@@ -183,10 +120,10 @@ export default function ProfilePage() {
             <div className="bg-[#1E2127] rounded-lg p-8">
               <div className="flex justify-between items-center mb-8">
                 <div>
-                  <h3 className="text-white text-xl">20 matches in one year</h3>
+                  <h3 className="text-white text-xl">{profile?.totalMatches || 0} matches in one year</h3>
                   <div className="flex gap-8 text-base text-gray-400 mt-3">
-                    <p>Total active days: 13</p>
-                    <p>Max Streak: 2</p>
+                    <p>Total active days: {profile?.wins || 0}</p>
+                    <p>Max Streak: {profile?.maxWinStreak || 0}</p>
                   </div>
                 </div>
                 <div className="relative">
@@ -202,64 +139,14 @@ export default function ProfilePage() {
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-lg">▼</span>
                 </div>
               </div>
-
-              <div className="relative">
-                <button 
-                  className={`absolute left-0 top-1/2 -translate-y-1/2 text-white/50 hover:text-white text-2xl
-                    ${startMonthIndex === 0 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-                  onClick={handlePrevMonth}
-                  disabled={startMonthIndex === 0}
-                >
-                  ←
-                </button>
-                <button 
-                  className={`absolute right-0 top-1/2 -translate-y-1/2 text-white/50 hover:text-white text-2xl
-                    ${startMonthIndex >= months.length - 4 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-                  onClick={handleNextMonth}
-                  disabled={startMonthIndex >= months.length - 4}
-                >
-                  →
-                </button>
-
-                <div className="px-8">
-                  <div className="flex gap-8 transition-all duration-300 justify-center">
-                    {visibleActivityData.map((monthWeeks, monthIndex) => (
-                      <div key={visibleMonths[monthIndex]} className="flex flex-col">
-                        <div className="flex gap-2 mb-2">
-                          {weekDays.map((day, index) => (
-                            <div key={index} className="w-[10px] text-center">
-                              <span className="text-gray-400 text-[10px]">{day}</span>
-                            </div>
-                          ))}
-                        </div>
-                        {/* Calendar grid */}
-                        <div className="space-y-[3px]">
-                          {monthWeeks.map((week, weekIndex) => (
-                            <div key={weekIndex} className="flex gap-2">
-                              {week.map((status, dayIndex) => (
-                                <div
-                                  key={dayIndex}
-                                  className={`
-                                    h-[10px] w-[10px] rounded-[1px]
-                                    ${status === 'active' ? 'bg-purple-500' : 
-                                      status === 'empty' ? 'bg-transparent' : 'bg-[#282C34]'}
-                                  `}
-                                  title={status !== 'empty' ? 
-                                    `${visibleMonths[monthIndex]} ${weekDays[dayIndex]}`
-                                    : ''}
-                                />
-                              ))}
-                            </div>
-                          ))}
-                        </div>
-                        <p className="text-gray-400 text-base text-center mt-4">
-                          {visibleMonths[monthIndex]}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <ActivityCalendar 
+                activityData={formatActivityData()} 
+                months={months} 
+                startMonthIndex={startMonthIndex} 
+                visibleMonths={months.slice(startMonthIndex, startMonthIndex + 4)} 
+                handlePrevMonth={() => setStartMonthIndex(prev => Math.max(0, prev - 1))} 
+                handleNextMonth={() => setStartMonthIndex(prev => Math.min(months.length - 4, prev + 1))}
+              />
             </div>
           </div>
         </div>
