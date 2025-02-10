@@ -47,9 +47,11 @@ const Header = () => {
           </div>
         </div>
 
-        <LabelButton variant="filled" customSize={{ width: '56px', height: '20px' }}>
-          END
-        </LabelButton>
+        <a href="/dashboard">
+          <LabelButton variant="filled" customSize={{ width: '56px', height: '20px' }}>
+            END
+          </LabelButton>
+        </a>
         </header>
   )
 }

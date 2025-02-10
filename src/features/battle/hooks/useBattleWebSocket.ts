@@ -4,6 +4,7 @@ import { socketService } from '@/lib/socket';
 import { fetchProblem } from '@/features/editor/api/problems';
 import { useDispatch } from 'react-redux';
 import { setProblems, setStatus, setPlayer1, setPlayer2, setMatchId, updateProblemStatus } from '@/features/battle/slices/battleSlice';
+import { store } from '@/store/store';
 
 interface MatchFoundData {
   matchId: string;
@@ -136,11 +137,13 @@ export const useBattleWebSocket = () => {
         console.warn('❌ Invalid game state update data:', data);
         return;
       }
-
+      const myId = store.getState().auth.user?.id;
+      console.log("myId", myId);
       dispatch(updateProblemStatus({
         problemId: data.problemId,
         status: data.status as 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR',
-        userId: data.userId
+        userId: data.userId,
+        myId: myId as string
       }));
       console.log('✅ Problem status updated in store');
     };

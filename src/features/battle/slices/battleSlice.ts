@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
+import { store } from '@/store/store';
 interface Problem {
   id: string;
   title: string;
@@ -41,9 +41,10 @@ interface BattleState {
   isConnected: boolean;
   error: string | null;
   problemStatuses: Record<string, {
-    status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
-    userId: string;
-    timestamp: number;
+    [userId: string]: {  
+      status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
+      timestamp: number;
+    };
   }>;
 }
 
@@ -69,9 +70,15 @@ const battleSlice = createSlice({
     },
     setPlayer1: (state, action: PayloadAction<Player>) => {
       state.player1 = action.payload;
+      if(!state.player1?.solvedProblems){
+        state.problemStatuses = {};
+      }
     },
     setPlayer2: (state, action: PayloadAction<Player>) => {
       state.player2 = action.payload;
+      if(!state.player2?.solvedProblems){
+        state.problemStatuses = {};
+      }
     },
     setProblems: (state, action: PayloadAction<Problem[]>) => {
       state.problems = action.payload;
@@ -136,34 +143,38 @@ const battleSlice = createSlice({
       problemId: string;
       status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
       userId: string;
+      myId: string;
     }>) => {
-      const { problemId, status, userId } = action.payload;
-      
+      const { problemId, status, userId, myId } = action.payload;
+      console.log("updateProblemStatus", action.payload);
       // Update the problem status in the global problemStatuses
-      state.problemStatuses[problemId] = {
+      if (!state.problemStatuses[problemId]) {
+        state.problemStatuses[problemId] = {};
+      }
+      state.problemStatuses[problemId][userId] = {
         status,
-        userId,
         timestamp: Date.now()
       };
-
+      console.log("state.problemStatuses", state.problemStatuses[problemId]);
+      const player = userId === state.player1?.id ? state.player1 : 
+      userId === state.player2?.id ? state.player2 : null;
       // Update the player's solved problems
-      if (state.player1?.id === userId) {
-        if (!state.player1.solvedProblems) {
-          state.player1.solvedProblems = {};
+      if(myId === userId){
+        console.log("me");
+      }else{
+        console.log("opponent");
+      }
+
+      if (player) {
+        if (!player.solvedProblems) {
+          player.solvedProblems = {};
         }
-        state.player1.solvedProblems[problemId] = {
-          status,
-          timestamp: Date.now()
-        };
-      } else if (state.player2?.id === userId) {
-        if (!state.player2.solvedProblems) {
-          state.player2.solvedProblems = {};
-        }
-        state.player2.solvedProblems[problemId] = {
+        player.solvedProblems[problemId] = {
           status,
           timestamp: Date.now()
         };
       }
+      console.log("player.solvedProblems", player?.solvedProblems[problemId]);
     },
     updateMultipleProblemStatuses: (state, action: PayloadAction<Array<{
       problemId: string;

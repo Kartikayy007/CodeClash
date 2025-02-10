@@ -3,7 +3,8 @@ import {
   LoginHandlerProps,
   ForgotPasswordHandlerProps,
   GetStartedHandlerProps,
-  RegisterHandlerProps
+  RegisterHandlerProps,
+  User
 } from '../types/auth.types'
 import { toast } from '@/providers/toast-config'
 import { login } from '@/features/auth/thunks/loginThunk'
@@ -12,6 +13,7 @@ import { resetPassword } from '@/features/auth/thunks/resetPasswordThunk'
 import { resetPasswordWithToken } from '@/features/auth/thunks/resetPasswordWithTokenThunk'
 import { checkEmail } from '@/features/auth/thunks/checkEmailThunk'
 import router from 'next/router'
+import { setCredentials } from '../slices/authSlice'
 
 export const handleResetPassword = async ({
   values,
@@ -65,6 +67,10 @@ export const handleLogin = async ({
     email: values.email,
     password: values.password
   })).unwrap()
+  dispatch(setCredentials({
+    user: result.data?.user as User,
+    token: result.data?.tokens?.accessToken as string
+  }))
 
 
   if (result.success) {

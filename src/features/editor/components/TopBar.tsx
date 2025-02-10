@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import LabelButton from '@/components/ui/LabelButton';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/store/store';
+import { AppDispatch, RootState, store } from '@/store/store';
 import { runCode, submitCode, setActiveTab } from '@/features/editor/slices/editorSlice';
 import { setCurrentProblemIndex, updateProblemStatus, updateMultipleProblemStatuses } from '@/features/battle/slices/battleSlice';
 import { socketService } from '@/lib/socket';
@@ -27,6 +27,7 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
   const { code, language, isRunning, isSubmitting } = useSelector((state: RootState) => state.editor);
   const { player1, player2, problems, currentProblemIndex } = useSelector((state: RootState) => state.battle);
   const userId = useSelector((state: RootState) => state.auth.user?.id);
+  console.log("userId", userId);
 
   console.log('🔍 Current state:', {
     userId,
@@ -48,13 +49,13 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
   useEffect(() => {
     const handleGameStateUpdate = (data: GameStateUpdate | GameStateUpdate[]) => {
       console.log('🎮 Game state update received in TopBar:', data);
-      
+      const myId = store.getState().auth.user?.id;
       if (Array.isArray(data)) {
         console.log('📊 Updating multiple problem statuses:', data);
         dispatch(updateMultipleProblemStatuses(data));
       } else {
         console.log('📊 Updating single problem status:', data);
-        dispatch(updateProblemStatus(data));
+        dispatch(updateProblemStatus({...data, myId: myId as string}));
       }
     };
 
@@ -133,7 +134,14 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
 
   const getUserProblemStatusColor = (index: number) => {
     const problem = problems[index];
-    if (!problem || !currentPlayer?.solvedProblems) return '';
+    console.log("currentPlayer", currentPlayer);
+    if (!problem || !currentPlayer?.solvedProblems){
+      if(currentProblemIndex === index) {
+        return "border-blue-500 bg-blue-500/10 text-blue-500";
+      }
+      return '';
+    }
+    console.log("currentPlayer.solvedProblems", currentPlayer.solvedProblems);
     const status = currentPlayer.solvedProblems[problem.id]?.status;
     console.log('🎨 User problem status:', {
       problemId: problem.id,
@@ -145,20 +153,31 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
     } else if (status) {
       return 'border-red-500 bg-red-500/10 text-red-500';
     }
+    if(currentProblemIndex === index) {
+      return "border-blue-500 bg-blue-500/10 text-blue-500";
+    }
     return '';
   };
 
   const getOpponentProblemStatusColor = (index: number) => {
     const problem = problems[index];
+    console.log("opponentPlayer", opponentPlayer);
     if (!problem || !opponentPlayer?.solvedProblems) return '';
+    console.log(problem.id, opponentPlayer.solvedProblems);
     const status = opponentPlayer.solvedProblems[problem.id]?.status;
+    console.log("opponentPlayer.solvedProblems", opponentPlayer.solvedProblems);
     console.log('🎨 Opponent problem status:', {
       problemId: problem.id,
       status,
       userId: opponentPlayer?.id
     });
     if (status === 'ACCEPTED') {
+      return 'border-green-500 bg-green-500/10 text-green-500';
+    } else if (status) {
       return 'border-red-500 bg-red-500/10 text-red-500';
+    }
+    if(currentProblemIndex === index) {
+      return "border-blue-500 bg-blue-500/10 text-blue-500";
     }
     return '';
   };
@@ -174,9 +193,7 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
               key={index}
               onClick={() => handleProblemClick(index)}
               className={`w-10 h-10 py-2 rounded-md border justify-center items-center inline-flex overflow-hidden
-                ${currentProblemIndex === index 
-                  ? 'border-blue-500 bg-blue-500/10 text-blue-500' 
-                  : getUserProblemStatusColor(index) || 'border-[#232323] text-gray-500 hover:border-gray-400 hover:text-gray-400'}`}
+                ${getUserProblemStatusColor(index) || 'border-[#232323] text-gray-500 hover:border-gray-400 hover:text-gray-400'}`}
             >
               <p className="text-base font-medium font-['Quicksand'] leading-normal">
                 {index + 1}
@@ -225,9 +242,7 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
             <div
               key={index}
               className={`w-10 h-10 py-2 rounded-md border justify-center items-center inline-flex overflow-hidden
-                ${currentProblemIndex === index 
-                  ? 'border-blue-500 bg-blue-500/10 text-blue-500' 
-                  : getOpponentProblemStatusColor(index) || 'border-[#232323] text-gray-500'}`}
+                ${getOpponentProblemStatusColor(index) || 'border-[#232323] text-gray-500'}`}
             >
               <p className="text-base font-medium font-['Quicksand'] leading-normal">
                 {index + 1}

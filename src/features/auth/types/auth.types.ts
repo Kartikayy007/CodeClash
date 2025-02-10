@@ -8,6 +8,7 @@ import { z } from 'zod'
 export interface User {
   id: string;
   email: string;
+  username: string;
   verified: boolean;
 }
 
@@ -65,6 +66,7 @@ export interface LoginResponse {
   success: boolean;
   message: string;
   data?: {
+    user: User;
     tokens: {
       accessToken: string;
       refreshToken: string;
