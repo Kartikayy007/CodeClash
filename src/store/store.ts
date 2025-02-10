@@ -7,6 +7,7 @@ import editorReducer from '@/features/editor/slices/editorSlice';
 import battleReducer from '@/features/battle/slices/battleSlice';
 import submissionReducer from '@/features/editor/slices/submissionSlice';
 import profileReducer from '@/features/home/profile/slices/profileSlice';
+import matchesReducer from '@/features/home/matches/slices/matchesSlice';
 
 const battlePersistConfig = {
   key: 'battle',
@@ -22,6 +23,7 @@ const rootReducer = {
   battle: persistedBattleReducer,
   submissions: submissionReducer,
   profile: profileReducer,
+  matches: matchesReducer,
 };
 
 export const store = configureStore({

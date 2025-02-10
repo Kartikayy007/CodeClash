@@ -1,33 +1,31 @@
 // components/ui/ModeSelector.tsx
 import React from 'react';
 import { Award, Clock, Zap } from 'lucide-react';
-
-type MatchMode = 'All' | 'Standard' | 'Accuracy' | 'Speed';
+import { MatchMode } from '@/features/home/matches/types/matches.types';
 
 interface ModeSelectorProps {
-  selectedMode: MatchMode;
-  setSelectedMode: (mode: MatchMode) => void;
+  selectedMode: MatchMode | 'All';
+  setSelectedMode: (mode: MatchMode | 'All') => void;
 }
 
-const ModeSelector: React.FC<ModeSelectorProps> = ({ selectedMode, setSelectedMode }) => {
+export default function ModeSelector({ selectedMode, setSelectedMode }: ModeSelectorProps) {
+  const modes: (MatchMode | 'All')[] = ['All', 'STANDARD', 'ACCURACY', 'SPEED'];
+
   return (
-    <div className="flex gap-3 mb-8">
-      {['All', 'Standard', 'Accuracy', 'Speed'].map((mode) => (
+    <div className="flex gap-4 mb-8">
+      {modes.map((mode) => (
         <button
           key={mode}
-          onClick={() => setSelectedMode(mode as MatchMode)}
-          className={`px-4 py-2 rounded flex items-center gap-2 ${
-            selectedMode === mode ? 'bg-[#282C34]' : 'text-gray-400'
+          onClick={() => setSelectedMode(mode)}
+          className={`px-4 py-2 rounded-lg transition-colors ${
+            selectedMode === mode
+              ? 'bg-[#C879EB] text-black'
+              : 'bg-[#1A1D24] text-white hover:bg-[#292C33]'
           }`}
         >
-          {mode === 'Standard' && <Award size={16} />}
-          {mode === 'Accuracy' && <Clock size={16} />}
-          {mode === 'Speed' && <Zap size={16} />}
-          {mode}
+          {mode === 'All' ? mode : mode.charAt(0) + mode.slice(1).toLowerCase()}
         </button>
       ))}
     </div>
   );
-};
-
-export default ModeSelector;
+}

@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 
 export default function RecentMatches() {
   const matchTypes = ["All", "Standard", "Accuracy", "Speed"];
@@ -23,7 +24,13 @@ export default function RecentMatches() {
     <div className="relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-semibold">Recent Matches</h2>
-        <button className="text-base hover:text-white/80">View All</button>
+        <Link 
+          href="/performance" 
+          className="text-base hover:text-white/80 cursor-pointer"
+          prefetch={true}
+        >
+          View All
+        </Link>
       </div>
 
       <div className="flex gap-3 mb-6">

@@ -1,11 +1,12 @@
 // components/ui/MatchTable.tsx
 import React from 'react';
+import { MatchMode } from '@/features/home/matches/types/matches.types';
 
 interface Match {
-  mode: string;
+  mode: MatchMode;
   player: string;
   opponent: string;
-  result: string;
+  result: 'win' | 'loss';
   duration: string;
   date: string;
 }
@@ -14,39 +15,50 @@ interface MatchTableProps {
   matches: Match[];
 }
 
-const MatchTable: React.FC<MatchTableProps> = ({ matches }) => {
+export default function MatchTable({ matches }: MatchTableProps) {
+  if (!matches.length) {
+    return (
+      <div className="bg-[#1A1D24] rounded-lg p-6">
+        <div className="text-gray-400 text-center">No matches found</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-[#1E2127] rounded-lg overflow-hidden">
-      <div className="grid grid-cols-5 p-4 text-gray-400 border-b border-gray-700">
+    <div className="bg-[#1A1D24] rounded-lg p-6">
+      <div className="grid grid-cols-5 gap-4 mb-4 text-gray-400 font-medium">
         <div>Mode</div>
         <div>Players</div>
         <div>Result</div>
         <div>Duration</div>
         <div>Date</div>
       </div>
-      {matches.map((match, index) => (
-        <div
-          key={index}
-          className="grid grid-cols-5 p-4 border-b border-gray-700 text-white hover:bg-[#282C34]"
-        >
-          <div className="flex items-center gap-2">
-            {match.mode === 'Standard' }
-            {match.mode === 'Accuracy'}
-            {match.mode === 'Speed' }
-            {match.mode}
+      <div className="space-y-4">
+        {matches.map((match, index) => (
+          <div
+            key={index}
+            className="grid grid-cols-5 gap-4 p-4 bg-[#292C33] rounded-lg hover:bg-[#31343C] transition-colors"
+          >
+            <div className="text-white">
+              {match.mode.charAt(0) + match.mode.slice(1).toLowerCase()}
+            </div>
+            <div className="text-gray-400">
+              {match.player} vs {match.opponent}
+            </div>
+            <div>
+              <span className={`px-2 py-1 rounded text-sm ${
+                match.result === 'win' 
+                  ? 'bg-green-500/20 text-green-500' 
+                  : 'bg-red-500/20 text-red-500'
+              }`}>
+                {match.result.toUpperCase()}
+              </span>
+            </div>
+            <div className="text-gray-400">{match.duration}</div>
+            <div className="text-gray-400">{match.date}</div>
           </div>
-          <div>{match.player} vs {match.opponent}</div>
-          <div>
-            <span className={match.result === 'win' ? 'text-green-500' : 'text-red-500'}>
-              {match.result === 'win' ? '✓' : '✗'}
-            </span>
-          </div>
-          <div>{match.duration}</div>
-          <div>{match.date}</div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
-};
-
-export default MatchTable;
+}
