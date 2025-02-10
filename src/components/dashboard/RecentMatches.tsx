@@ -25,7 +25,7 @@ export default function RecentMatches() {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-semibold">Recent Matches</h2>
         <Link 
-          href="/performance" 
+          href="/recent-matches" 
           className="text-base hover:text-white/80 cursor-pointer"
           prefetch={true}
         >

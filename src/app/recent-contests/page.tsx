@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import NavbarPlain from '@/components/ui/NavbarPlain';
-import ContestFilters from '@/components/matches/ContestFilters';
-import ContestTable from '@/components/ContestTable';
+import ContestFilters from '@/components/RecentContests/ContestFilters';
+import ContestTable from '@/components/RecentContests/ContestTable';
 import { fetchMatches } from '@/features/home/matches/thunks/matchesThunks';
 import { RootState } from '@/store/store';
 import { AppDispatch } from '@/store/store';

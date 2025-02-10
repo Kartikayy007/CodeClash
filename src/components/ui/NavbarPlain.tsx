@@ -2,21 +2,12 @@
 
 import React, { useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
-import { Settings, Menu, X,House } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { Settings, House } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
-
-  const navLinks = [
-    { href: "/dashboard", label: "Home" },
-    { href: "/leaderboard", label: "Leaderboard" },
-    { href: "/performance", label: "Performance" },
-    { href: "/matches", label: "Matches/Contest" },
-    { href: "/profile", label: "Profile" },
-  ];
+  const pathname = usePathname();
 
   return (
     <nav className='relative bg-[#15171B] z-50'>
@@ -33,33 +24,31 @@ const Navbar = () => {
 
         <div className='flex items-center gap-4'>
           <button className='flex items-center gap-6'>
-            <House size={30} color='white' onClick={() => router.push('/dashboard')}/>
-            <Settings 
-              size={30} 
-              color='white' 
-              className="hover:rotate-90 transition-transform duration-300"
-              onClick={() => router.push('/settings')}
-            />
-          </button>
-          
-          <button 
-            className='lg:hidden flex items-center'
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? (
-              <X size={30} className="text-white" />
+            {pathname === '/dashboard' ? (
+              <Settings 
+                size={30} 
+                color='white' 
+                className="hover:rotate-90 transition-transform duration-300"
+                onClick={() => router.push('/settings')}
+              />
             ) : (
-              <Menu size={30} className="text-white" />
+              <>
+                <House 
+                  size={30} 
+                  color='white' 
+                  onClick={() => router.push('/dashboard')}
+                />
+                <Settings 
+                  size={30} 
+                  color='white' 
+                  className="hover:rotate-90 transition-transform duration-300"
+                  onClick={() => router.push('/settings')}
+                />
+              </>
             )}
           </button>
         </div>
       </div>
-
-      {isMenuOpen && (
-        <div className='lg:hidden absolute top-full left-0 right-0 bg-[#15171B] border-t border-white/10'>
-         
-        </div>
-      )}
     </nav>
   )
 }

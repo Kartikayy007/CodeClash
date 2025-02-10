@@ -8,6 +8,7 @@ import battleReducer from '@/features/battle/slices/battleSlice';
 import submissionReducer from '@/features/editor/slices/submissionSlice';
 import profileReducer from '@/features/home/profile/slices/profileSlice';
 import matchesReducer from '@/features/home/matches/slices/matchesSlice';
+import leaderboardReducer from '@/features/home/leaderboard/slices/leaderboardSlice';
 
 const battlePersistConfig = {
   key: 'battle',
@@ -24,6 +25,7 @@ const rootReducer = {
   submissions: submissionReducer,
   profile: profileReducer,
   matches: matchesReducer,
+  leaderboard: leaderboardReducer,
 };
 
 export const store = configureStore({
