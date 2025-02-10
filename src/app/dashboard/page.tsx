@@ -16,7 +16,7 @@ import {
 import LabelButton from '@/components/ui/LabelButton';
 
 import UserStats from '@/components/dashboard/UserStats';
-import PerformanceInsights from '@/components/PerformanceInsights';
+import PerformanceInsights from '@/components/dashboard/PerformanceInsights';
 import Leaderboard from '@/components/dashboard/Leaderboard';
 import RecentMatches from '@/components/dashboard/RecentMatches';
 import RecentContests from '@/components/dashboard/RecentContests';
