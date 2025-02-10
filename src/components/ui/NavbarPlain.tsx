@@ -57,19 +57,7 @@ const Navbar = () => {
 
       {isMenuOpen && (
         <div className='lg:hidden absolute top-full left-0 right-0 bg-[#15171B] border-t border-white/10'>
-          <ul className='flex flex-col py-4'>
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <Link 
-                  href={link.href}
-                  className="block px-6 py-3 hover:bg-white/5 transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+         
         </div>
       )}
     </nav>

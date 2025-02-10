@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { useRouter } from 'next/navigation'
 interface LeaderboardProps {
   className?: string;
 }
@@ -14,11 +14,13 @@ export default function Leaderboard({ className = '' }: LeaderboardProps) {
     { rank: 16, name: "UserName(You)", victories: 134 },
   ];
 
+  const router = useRouter();
+
   return (
     <div className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`}>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-semibold">Leaderboard</h2>
-        <button className="text-base hover:text-white/80">View All</button>
+        <button onClick={() => router.push('/leaderboard')} className="text-base hover:text-white/80">View All</button>
       </div>
 
       <div className="flex justify-between items-center bg-white/10 rounded-lg px-3 py-1.5 mb-4">

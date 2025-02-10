@@ -15,11 +15,11 @@ import {
 } from 'chart.js';
 import LabelButton from '@/components/ui/LabelButton';
 
-import UserStats from '@/components/UserStats';
+import UserStats from '@/components/dashboard/UserStats';
 import PerformanceInsights from '@/components/PerformanceInsights';
-import Leaderboard from '@/components/Leaderboard';
-import RecentMatches from '@/components/RecentMatches';
-import RecentContests from '@/components/RecentContests';
+import Leaderboard from '@/components/dashboard/Leaderboard';
+import RecentMatches from '@/components/dashboard/RecentMatches';
+import RecentContests from '@/components/dashboard/RecentContests';
 import { PlayButton } from '@/features/battle/components/PlayButton';
 
 ChartJS.register(

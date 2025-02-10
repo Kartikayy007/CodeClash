@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 
 interface RecentContestsProps {
   className?: string;
@@ -26,7 +27,11 @@ export default function RecentContests({ className = '' }: RecentContestsProps) 
     <div className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`}>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-semibold">Recent Contests</h2>
-        <button className="text-base hover:text-white/80">View All</button>
+        <Link 
+          href="/matches" 
+          className="text-base hover:text-white/80" 
+          prefetch={true}
+        >View All</Link>
       </div>
 
       <div className="flex gap-3 mb-6">
