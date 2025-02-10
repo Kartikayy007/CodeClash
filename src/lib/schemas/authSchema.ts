@@ -83,8 +83,6 @@ export const LoginFormSchema = z.object({
   rememberMe: z.boolean().optional(),
 });
 
-
-
 export const RegisterFormSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),
   username: z.string().min(3, 'Username must be at least 3 characters'),
@@ -133,4 +131,24 @@ export const ResetPasswordFormSchema = z.object({
 
 export const ForgotPasswordFormSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),
+});
+
+export const SettingsPasswordFormSchema = z.object({
+  password: z.string().min(1, "Current password is required"),
+  Newpassword: z.string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character"),
+  confirmPassword: z.string().min(1, "Please confirm your password")
+}).refine((data) => data.Newpassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+export const SettingsUsernameFormSchema = z.object({
+  username: z.string()
+    .min(3, 'Username must be at least 3 characters')
+    .max(30, 'Username must be less than 30 characters')
+    .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores')
 });
