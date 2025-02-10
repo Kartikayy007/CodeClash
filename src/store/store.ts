@@ -16,10 +16,17 @@ const battlePersistConfig = {
   whitelist: ['problems', 'currentProblemIndex', 'player1', 'player2', 'matchId', 'status'] 
 };
 
+const authPersistConfig = {
+  key: 'auth',
+  storage,
+  whitelist: ['user']
+};
+
 const persistedBattleReducer = persistReducer(battlePersistConfig, battleReducer);
+const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 
 const rootReducer = {
-  auth: authReducer,
+  auth: persistedAuthReducer,
   editor: editorReducer,
   battle: persistedBattleReducer,
   submissions: submissionReducer,
@@ -36,6 +43,7 @@ export const store = configureStore({
         ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE', 'persist/REGISTER'],
       },
     }).concat(logger),
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
 export const persistor = persistStore(store);
