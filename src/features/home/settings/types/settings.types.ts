@@ -12,6 +12,16 @@ export interface SettingsResponse {
   message: string;
 }
 
+export interface LogoutResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface DeleteAccountResponse {
+  success: boolean;
+  message: string;
+}
+
 export interface SettingsError {
   success: boolean;
   message: string;

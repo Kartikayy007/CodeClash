@@ -8,9 +8,9 @@ import { SettingsPasswordFormSchema, SettingsUsernameFormSchema } from '@/lib/sc
 import { Form } from '@/components/ui/form';
 import { SettingsPasswordFormData, SettingsUsernameFormData } from '@/features/auth/types/form.types';
 import { settingsApi } from '@/features/home/settings/apis/settingsApi';
-import { toast } from 'react-hot-toast';
+import { toast } from "@/providers/toast-config"
 import { useRouter } from 'next/navigation';
-
+import { ToastProvider } from '@/providers/ToastProvider';
 export default function AccountSettings() {
   const router = useRouter();
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -39,11 +39,11 @@ export default function AccountSettings() {
         oldPassword: data.password,
         newPassword: data.Newpassword
       });
-      toast.success('Password changed successfully');
+      toast.success('Password changed successfully', 'Password changed successfully');
       setIsPasswordModalOpen(false);
       passwordForm.reset();
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to change password');
+      toast.error(error.response?.data?.message || 'Failed to change password', 'Failed to change password');
     }
   };
 
@@ -52,28 +52,44 @@ export default function AccountSettings() {
       await settingsApi.changeUsername({
         username: data.username
       });
-      toast.success('Username changed successfully');
+      console.log('Username changed successfully');
+      toast.success('Username changed successfully', 'Username changed successfully');
       setIsProfileModalOpen(false);
       usernameForm.reset();
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to change username');
+      toast.error(error.response?.data?.message || 'Failed to change username', 'Failed to change username');
     }
   };
 
   const handleDeleteAccount = async () => {
     try {
       await settingsApi.deleteAccount();
-      toast.success('Account deleted successfully');
+      toast.success('Account deleted successfully', 'Account deleted successfully');
+      localStorage.removeItem('accessToken');
+      console.log('Account deleted successfully');  
+      // router.push('/login');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to delete account', 'Failed to delete account');
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await settingsApi.logoutAllDevices();
       localStorage.removeItem('accessToken');
       router.push('/login');
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to delete account');
+      toast.error(error.response?.data?.message || 'Failed to logout', 'Failed to logout');
     }
   };
 
   return (
     <div className="bg-[#1E2127] rounded-lg p-6">
       <h2 className="text-white text-xl mb-6">Account Settings</h2>
+
+      <div className="absolute top-20">
+          <ToastProvider />
+      </div> 
       
       <div className="space-y-6">
         <div>
@@ -99,10 +115,7 @@ export default function AccountSettings() {
           <p className="text-gray-400 text-sm mb-4">Log out of your account to end your session securely.</p>
           <button 
             className="text-white bg-red-500 px-4 py-2 rounded hover:bg-red-600"
-            onClick={() => {
-              localStorage.removeItem('accessToken');
-              router.push('/login');
-            }}
+            onClick={handleLogout}
           >
             Log Out
           </button>
