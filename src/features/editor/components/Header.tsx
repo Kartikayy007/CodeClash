@@ -23,7 +23,7 @@ const Header = () => {
   };
 
   return (
-    <header className="flex items-center justify-between p-8">
+    <header className="flex items-center justify-between px-6 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center gap-4 ">
             <Image
             src="/logo.svg"
@@ -48,7 +48,7 @@ const Header = () => {
         </div>
 
         <a href="/dashboard">
-          <LabelButton variant="filled" customSize={{ width: '56px', height: '20px' }}>
+          <LabelButton variant="red" customSize={{ width: '56px', height: '20px' }}>
             END
           </LabelButton>
         </a>
