@@ -1,17 +1,78 @@
 'use client';
 
-import { LineChart } from '@mui/x-charts/LineChart';
+import React, { useEffect, useState } from 'react';
+import { LineChart } from '@mui/x-charts';
+import axios from 'axios';
+
+interface WinTrendData {
+  date: string;
+  wins: number;
+  losses: number;
+}
+
+interface WinTrendResponse {
+  success: boolean;
+  trend: WinTrendData[];
+  winStreak: number;
+  maxWinStreak: number;
+}
 
 interface PerformanceInsightsProps {
   className?: string;
 }
 
-const PerformanceInsights = ({ className = '' }: PerformanceInsightsProps) => {
+const PerformanceInsights: React.FC<PerformanceInsightsProps> = ({ className = '' }) => {
+  const [trendData, setTrendData] = useState<WinTrendData[]>([]);
+  const [winStreak, setWinStreak] = useState(0);
+  const [maxWinStreak, setMaxWinStreak] = useState(0);
+  const [loading, setLoading] = useState(true);
+
   const stats = [
-    { label: 'Win Streak', value: '5' },
-    { label: 'Fastest Win', value: '10min' },
-    { label: 'Contest Participation', value: '5' },
+    { label: 'Win Streak', value: winStreak },
+    { label: 'Max Win Streak', value: maxWinStreak },
+    { label: 'Contest Participation', value: trendData.reduce((acc, curr) => acc + curr.wins + curr.losses, 0) },
   ];
+
+  useEffect(() => {
+    const fetchWinTrend = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const response = await axios.get<WinTrendResponse>(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/win-trend`,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+
+        if (response.data.success) {
+          setTrendData(response.data.trend);
+          setWinStreak(response.data.winStreak);
+          setMaxWinStreak(response.data.maxWinStreak);
+        }
+      } catch (error) {
+        console.error('Failed to fetch win trend:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWinTrend();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`}>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-lg font-semibold">Performance Insights</h2>
+        </div>
+        <div className="h-[220px] flex items-center justify-center">
+          <p className="text-gray-400">Loading performance data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`}>
@@ -19,17 +80,10 @@ const PerformanceInsights = ({ className = '' }: PerformanceInsightsProps) => {
         <h2 className="text-lg font-semibold">Performance Insights</h2>
       </div>
 
-      <select className="px-2 py-1 rounded border border-[#888888] text-[#e7e7e7] text-sm font-medium hover:bg-white/5 mb-6 bg-transparent cursor-pointer">
-        <option value="all" className="bg-[#1a1d26]">All</option>
-        <option value="week" className="bg-[#1a1d26]">Week</option>
-        <option value="month" className="bg-[#1a1d26]">Month</option>
-        <option value="year" className="bg-[#1a1d26]">Year</option>
-      </select>
-
       <div className="h-[220px] mb-6">
         <LineChart
           xAxis={[{
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            data: trendData.map(item => item.date.split('/').slice(0, 2).join('/')),
             scaleType: 'point',
             tickLabelStyle: {
               fill: '#D1D1D1',
@@ -47,11 +101,11 @@ const PerformanceInsights = ({ className = '' }: PerformanceInsightsProps) => {
             disableLine: true,
           }]}
           series={[{
-            data: [3, 7, 7, 5, 3, 7, 3],
+            data: trendData.map(item => item.wins),
             showMark: true,
             color: '#C879EB',
             curve: 'linear',
-            valueFormatter: (value) => value === 7 ? 'W' : 'L',
+            valueFormatter: (value: number | null) => value > 0 ? 'W' : 'L',
           }]}
           width={400}
           height={220}
