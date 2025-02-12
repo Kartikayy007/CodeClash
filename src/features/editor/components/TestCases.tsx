@@ -22,12 +22,14 @@ interface TestCasesProps {
   testCases: TestCase[];
   isCollapsed: boolean;
   onCollapse: (collapsed: boolean) => void;
+  className?: string;
 }
 
 const TestCases: React.FC<TestCasesProps> = ({
   testCases,
   isCollapsed,
   onCollapse,
+  className = ''
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { code, language, isRunning, output, error, submissionResponse } = useSelector((state: RootState) => state.editor);
@@ -71,19 +73,10 @@ const TestCases: React.FC<TestCasesProps> = ({
   }, [submissionResponse, testCases]);
 
   return (
-    <div className="bg-[#1A1D24] rounded-lg flex flex-col h-full">
-      <div className="flex items-center justify-between p-4 bg-[#1C202A]">
+    <div className={`bg-[#1A1D24] rounded-lg flex flex-col ${className}`}>
+      <div className="flex items-center justify-between px-4 py-3 bg-[#1C202A] ">
         <div className="flex items-center gap-4">
           <h2 className="font-bold text-lg">Test Cases</h2>
-          {submissionResponse && (
-            <div className={`px-2 py-1 rounded text-sm ${
-              submissionResponse.status === 'ACCEPTED' 
-                ? 'bg-green-500/10 text-green-500' 
-                : 'bg-red-500/10 text-red-500'
-            }`}>
-              {submissionResponse.testCasesPassed}/{submissionResponse.totalTestCases} Passed
-            </div>
-          )}
         </div>
         <button
           className="p-1 hover:bg-[#292C33] rounded"
@@ -95,7 +88,7 @@ const TestCases: React.FC<TestCasesProps> = ({
 
       {!isCollapsed && (
         <>
-          <div className="flex gap-2 p-4 bg-[#1C202A]/50 overflow-x-auto">
+          <div className="h-12 flex gap-2 px-4 bg-[#1C202A]/50 overflow-x-auto">
             {testCases.map((_, index) => {
               const result = testResults[index];
               const isSelected = selectedCase === index;
@@ -124,23 +117,30 @@ const TestCases: React.FC<TestCasesProps> = ({
             })}
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            <div className="bg-[#292C33] p-4 rounded-lg">
-              <p className="text-white/60 mb-2 font-medium">Input:</p>
-              <pre className="text-white/90 font-mono text-sm whitespace-pre-wrap">{testCases[selectedCase]?.input}</pre>
-            </div>
-            <div className="bg-[#292C33] p-4 rounded-lg">
-              <p className="text-white/60 mb-2 font-medium">Expected Output:</p>
-              <pre className="text-white/90 font-mono text-sm whitespace-pre-wrap">{testCases[selectedCase]?.output}</pre>
-            </div>
-            {testResults[selectedCase] && (
-              <div className={`p-4 rounded-lg ${testResults[selectedCase].passed ? 'bg-green-500/10' : 'bg-red-500/10'}`}>
-                <p className={`mb-2 font-medium ${testResults[selectedCase].passed ? 'text-green-500' : 'text-red-500'}`}>
-                  Your Output:
-                </p>
-                <pre className="font-mono text-sm whitespace-pre-wrap">{testResults[selectedCase].output}</pre>
+          <div className="flex-1 overflow-y-auto">
+            <div className="p-4 space-y-4">
+
+              <div className="bg-[#292C33] rounded-lg h-32 overflow-y-auto px-4 py-2">
+                <p className="text-white/60 mb-2 font-medium">Input:</p>
+                <pre className="text-white/90 font-mono h-32 overflow-y-auto text-sm">
+                  {testCases[selectedCase]?.input}
+                </pre>
               </div>
-            )}
+
+              <div className="bg-[#292C33] p-3 rounded-lg">
+                <p className="text-white/60 mb-2 font-medium">Expected Output:</p>
+                <pre className="text-white/90 font-mono text-sm overflow-y-auto">{testCases[selectedCase]?.output}</pre>
+              </div>
+
+              {testResults[selectedCase]?.output && (
+                <div className={`bg-[#292C33] p-3 rounded-lg ${
+                  testResults[selectedCase].passed ? 'bg-green-500/10' : 'bg-red-500/10'
+                }`}>
+                  <p className="text-white/60 mb-2 font-medium">Your Output:</p>
+                  <pre className="font-mono text-sm overflow-y-auto">{testResults[selectedCase].output}</pre>
+                </div>
+              )}
+            </div>
           </div>
         </>
       )}
@@ -148,4 +148,4 @@ const TestCases: React.FC<TestCasesProps> = ({
   );
 };
 
-export default TestCases; 
+export default TestCases;

@@ -12,7 +12,6 @@ interface MatchFoundData {
 }
 
 type BattleStatus = 'WAITING' | 'IN_PROGRESS' | 'COMPLETED' | 'ABORTED';
-type GameMode = 'STANDARD' | 'SPEED' | 'ACCURACY';
 
 interface MatchStateData {
   matchId: string;

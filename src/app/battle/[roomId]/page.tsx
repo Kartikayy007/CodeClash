@@ -7,7 +7,6 @@ import { socketService } from '@/lib/socket';
 import EditorLayout from '@/features/editor/components/EditorLayout';
 import Editor from '@/features/editor/components/Editor';
 import { RootState } from '@/store/store';
-import { setMatchId, setStatus, setPlayer1, setPlayer2, setProblems } from '@/features/battle/slices/battleSlice';
 import { useRouter } from 'next/navigation';
 import { Problem } from '@/features/editor/api/problems';
 
@@ -58,86 +57,6 @@ const BattleRoom = () => {
   
   console.log('🔍 Battle state:', battleState);
 
-  // useEffect(() => {
-  //   if (!token || !matchId) return;
-
-  //   dispatch(setmatchId(matchId));
-  //   dispatch(setStatus('waiting'));
-
-  //   socketService.connect(token);
-
-  //   const handleConnect = () => {
-  //     console.log('✅ Connected to Socket.IO - joining room:', matchId);
-  //     socketService.joinRoom(matchId);
-  //     if(battleState.player1 && battleState.player2){
-  //       socketService.startGame(matchId);
-  //     }
-  //   };
-
-  //   const handleMatchFound = (data: { matchId: string; players: string[] }) => {
-  //     console.log('🎯 Match found:', data);
-  //     router.push(`/battle/${data.matchId}`);
-  //   };
-
-  //   const handleMatchState = (data: any) => {
-  //     console.log('📊 Match state received:', data);
-  //     dispatch(setStatus(data.status));
-  //     if (data.players[0]) dispatch(setPlayer1(data.players[0]));
-  //     if (data.players[1]) dispatch(setPlayer2(data.players[1]));
-  //     if (data.problems) dispatch(setProblems(data.problems));
-  //   };
-
-  //   const handleGameStart = (data: any) => {
-  //     console.log('🎮 Game started:', data);
-  //     dispatch(setStatus('in-progress'));
-  //     dispatch(setProblems(data.problems));
-  //     const [player1, player2] = data.gameState;
-  //     if (player1) dispatch(setPlayer1(player1));
-  //     if (player2) dispatch(setPlayer2(player2));
-  //   };
-
-  //   const handleMatchError = (data: { message: string }) => {
-  //     console.error('❌ Match error:', data);
-  //     setError(data.message);
-  //   };
-
-  //   const handleMatchAborted = (data: { message: string }) => {
-  //     console.error('❌ Match aborted:', data);
-  //     setError(data.message);
-  //     setTimeout(() => router.push('/'), 3000); 
-  //   };
-
-  //   const handleGameError = (data: { message: string }) => {
-  //     console.error('❌ Game error:', data);
-  //     setError(data.message);
-  //   };
-
-  //   socketService.on('connect', handleConnect);
-  //   socketService.on('match_found', handleMatchFound);
-  //   socketService.on('match_state', handleMatchState);
-  //   socketService.on('match_error', handleMatchError);
-  //   socketService.on('match_aborted', handleMatchAborted);
-  //   socketService.on('game_start', handleGameStart);
-  //   socketService.on('game_error', handleGameError);
-
-  //   // Start the game when both players are ready
-  //   if (battleState.player1 && battleState.player2) {
-  //     socketService.startGame(matchId);
-  //   }
-
-  //   // Cleanup on unmount
-  //   return () => {
-  //     console.log('🧹 Cleaning up BattleRoom component');
-  //     socketService.off('connect', handleConnect);
-  //     socketService.off('match_found', handleMatchFound);
-  //     socketService.off('match_state', handleMatchState);
-  //     socketService.off('match_error', handleMatchError);
-  //     socketService.off('match_aborted', handleMatchAborted);
-  //     socketService.off('game_start', handleGameStart);
-  //     socketService.off('game_error', handleGameError);
-  //     socketService.disconnect();
-  //   };
-  // }, [dispatch, matchId, token, router, battleState.player1, battleState.player2]);
 
   const handleLanguageChange = (newLanguage: string) => {
     const validLanguage = newLanguage as Language;

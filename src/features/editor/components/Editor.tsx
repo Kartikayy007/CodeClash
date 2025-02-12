@@ -86,10 +86,9 @@ int main() {
   };
 
   return (
-    <div className={`bg-[#1A1D24] w-full rounded-lg overflow-hidden transform transition-all duration-300 ease-in-out ${
-      isCollapsed ? 'h-[50px]' : 'h-full'
-    } ${className}`}>
-      <div className="flex items-center justify-between p-2 bg-[#1A1D24] z-10">
+    <div className={`bg-[#1A1D24] w-full rounded-lg overflow-hidden ${className}`}>
+      {/* Header */}
+      <div className="flex items-center justify-between p-2 bg-[#1A1D24] ">
         <select 
           className="bg-[#292C33] text-white px-3 py-1 rounded-lg outline-none"
           value={language}
@@ -121,7 +120,7 @@ int main() {
       } bg-[#1E1B2E] flex flex-col`}>
         <CodeMirror
           value={code || defaultCode[language]}
-          height="calc(100vh - 400px)" 
+          height="calc(100vh - 520px)" 
           width="100%"
           theme="dark"
           style={{ flex: 1 }}

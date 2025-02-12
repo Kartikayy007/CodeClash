@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from 'react';
 
 interface LabelButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
-  variant?: 'filled' | 'outlined' | 'light';
+  variant?: 'filled' | 'outlined' | 'light' | 'red';
   customSize?: {
     width?: string;
     height?: string;
@@ -44,6 +44,16 @@ const LabelButton = ({
       text-[20px]
       font-[550]
       bg-[#E3BBF7]
+      hover:opacity-90
+      transition-all
+      duration-200
+      ${disabled ? 'opacity-50 bg-[#8B8B8B] cursor-not-allowed' : ''}
+    `,
+    red: `
+      bg-[#FF4D4D]
+      text-[#000000]
+      text-[20px]
+      font-[550]
       hover:opacity-90
       transition-all
       duration-200
