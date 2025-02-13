@@ -117,19 +117,18 @@ const TestCases: React.FC<TestCasesProps> = ({
             })}
           </div>
 
-          <div className="flex-1 overflow-y-auto">
+          <div className="overflow-y-auto">
             <div className="p-4 space-y-4">
-
-              <div className="bg-[#292C33] rounded-lg h-32 overflow-y-auto px-4 py-2">
+              <div className="bg-[#292C33] p-3 rounded-lg max-h-32 px-4 py-2">
                 <p className="text-white/60 mb-2 font-medium">Input:</p>
-                <pre className="text-white/90 font-mono h-32 overflow-y-auto text-sm">
+                <pre className="text-white/90 font-mono text-sm max-h-[100px]">
                   {testCases[selectedCase]?.input}
                 </pre>
               </div>
 
               <div className="bg-[#292C33] p-3 rounded-lg">
-                <p className="text-white/60 mb-2 font-medium">Expected Output:</p>
-                <pre className="text-white/90 font-mono text-sm overflow-y-auto">{testCases[selectedCase]?.output}</pre>
+              <p className="text-white/60 mb-2 font-medium">Output:</p>
+              <pre className="text-white/90 font-mono text-sm max-h-[100px]">{testCases[selectedCase]?.output}</pre>
               </div>
 
               {testResults[selectedCase]?.output && (
@@ -137,7 +136,7 @@ const TestCases: React.FC<TestCasesProps> = ({
                   testResults[selectedCase].passed ? 'bg-green-500/10' : 'bg-red-500/10'
                 }`}>
                   <p className="text-white/60 mb-2 font-medium">Your Output:</p>
-                  <pre className="font-mono text-sm overflow-y-auto">{testResults[selectedCase].output}</pre>
+                  <pre className="font-mono text-sm max-h-[100px] overflow-y-auto">{testResults[selectedCase].output}</pre>
                 </div>
               )}
             </div>
