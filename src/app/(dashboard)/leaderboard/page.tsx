@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
-import NavbarPlain from '@/components/ui/NavbarPlain';
 import LeaderboardHeader from '@/components/leaderboard/LeaderboardHeader';
 import TopPlayers from '@/components/leaderboard/TopPlayers';
 import PlayerList from '@/components/leaderboard/PlayerList';
@@ -60,7 +59,6 @@ export default function LeaderboardPage() {
 
   return (
     <div>
-      <NavbarPlain />
       <div className="p-12 bg-[#15171B] min-h-screen flex">
         <div className='w-[70%]'>
           <LeaderboardHeader />

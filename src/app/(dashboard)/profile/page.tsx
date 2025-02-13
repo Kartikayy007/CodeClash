@@ -10,7 +10,6 @@ import Stats from '@/components/profile/Stats';
 import Badges from '@/components/profile/Badges';
 import ActivityCalendar from '@/components/profile/ActivityCalendar';
 import PeriodSelect from '@/components/profile/PeriodSelect';
-import NavbarPlain from '@/components/ui/NavbarPlain';
 import toast from 'react-hot-toast';
 
 const ProfilePage = () => {
@@ -67,7 +66,6 @@ const ProfilePage = () => {
 
   return (
     <div>
-      <NavbarPlain />
       <div className="p-16 bg-[#15171B] min-h-screen">
         <div className="mb-12">
           <button 

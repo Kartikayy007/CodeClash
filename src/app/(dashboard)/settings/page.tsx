@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import NavbarPlain from '@/components/ui/NavbarPlain';
 import SettingsSidebar from '@/components/settings/SettingsSidebar';
 import GeneralSettings from '@/components/settings/GeneralSettings';
 import AccountSettings from '@/components/settings/AccountSettings';
@@ -14,7 +13,7 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-[#15171B]">
-      <NavbarPlain />
+      {/* <NavbarPlain /> */}
       <div className="p-8">
         <div className="mb-8">
           <button className="text-white text-lg flex items-center gap-2">
