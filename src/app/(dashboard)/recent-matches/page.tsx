@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
-import NavbarPlain from '@/components/ui/NavbarPlain';
 import ModeSelector from '@/components/RecentMatches/ModeSelector';
 import MatchTable from '@/components/RecentMatches/MatchTable';
 import WinsOverview from '@/components/RecentMatches/WinsOverview';
@@ -78,7 +77,6 @@ export default function MatchesPage() {
 
   return (
     <div className="min-h-screen bg-[#15171B]">
-      <NavbarPlain />
       <div className="container mx-auto p-6">
         <ModeSelector selectedMode={selectedMode} setSelectedMode={setSelectedMode} />
         <div className="grid grid-cols-12 gap-8">

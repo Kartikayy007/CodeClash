@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import NavbarPlain from '@/components/ui/NavbarPlain';
 import ContestFilters from '@/components/RecentContests/ContestFilters';
 import ContestTable from '@/components/RecentContests/ContestTable';
 import { fetchMatches } from '@/features/home/matches/thunks/matchesThunks';
@@ -42,7 +41,6 @@ export default function ContestsPage() {
 
   return (
     <div className="min-h-screen bg-[#15171B]">
-      <NavbarPlain />
       <div className="p-12">
         <div className="flex items-center justify-between mb-8">
           <div className="relative">
