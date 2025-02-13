@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { socketService } from '@/lib/socket';
-
+import { useRouter } from 'next/navigation';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -33,6 +33,7 @@ ChartJS.register(
 );
 
 export default function Dashboard() {
+  const router = useRouter();
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (token && !socketService.isConnected()) {
@@ -48,7 +49,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background p-8">
       <div className="flex justify-end gap-4 mb-8">
         <PlayButton />
-        <LabelButton variant='filled'>
+        <LabelButton variant='filled' onClick={() => router.push('/contest/create')}>
           Play Contest
         </LabelButton>
       </div>
