@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import Image from 'next/image'
 import { Settings, House } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
@@ -10,7 +10,7 @@ const Navbar = () => {
   const pathname = usePathname();
 
   return (
-    <nav className='relative bg-[#15171B] z-50'>
+    <nav className='relative bg-[#10141D] z-50'>
       <div className='flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4'>
         <div className='flex items-center gap-4'>
           <Image

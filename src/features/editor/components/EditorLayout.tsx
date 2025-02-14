@@ -15,12 +15,11 @@ import { setActiveTab } from '@/features/editor/slices/editorSlice';
 import SubmissionTab from './submissionTab/SubmissionTab';
 
 interface EditorLayoutProps {
-  children?: React.ReactNode;
   questionData: Problem;
   matchId: string;
 }
 
-const EditorLayout = ({ questionData, children, matchId }: EditorLayoutProps) => {
+const EditorLayout = ({ questionData, matchId }: EditorLayoutProps) => {
   const dispatch = useDispatch();
   const { activeTab } = useSelector((state: RootState) => state.editor);
 
@@ -40,24 +39,33 @@ const EditorLayout = ({ questionData, children, matchId }: EditorLayoutProps) =>
   ] as const;
 
   return (
-    <div className="min-h-screen bg-[#10141D] text-white">
+    <div className="flex flex-col bg-[#10141D] text-white min-h-screen">
+      
       <Header />
-      <div className="grid grid-cols-2 gap-4 px-8 py-4 h-[calc(100vh-180px)]">
-        <TopBar 
-          matchId={matchId as string} 
-          input={questionData.testCases[0]?.input || ''} 
+      
+      <div className="mb-4 px-4 h-full">
+        <TopBar
+          matchId={matchId as string}
+          input={questionData.testCases[0]?.input || ''}
           onProblemChange={handleProblemChange}
         />
-        <div className={`flex gap-4 mb-4 ${isDescriptionMaximized ? 'flex-col' : ''}`}>
-          <div className={`bg-[#1A1D24] overflow-hidden rounded-lg flex flex-col transition-all duration-300 ease-in-out ${
-            isDescriptionMaximized ? 'w-full' : 
-            isDescriptionCollapsed ? 'w-12' : 
+      </div>
+      
+
+      
+      <div className="flex-1 px-4 mb-4">
+        <div className={`flex gap-4 ${isDescriptionMaximized ? 'flex-col' : ''}`}>
+          
+          
+          <div className={`bg-[#1A1D24] overflow-hidden rounded-lg flex flex-col ${
+            isDescriptionMaximized ? 'w-full' :
+            isDescriptionCollapsed ? 'w-12' :
             isEditorMaximized ? 'hidden' : 'w-1/2'
-          } h-screen `}>
+          }`}>
             <div className="flex items-center justify-between p-4 sticky top-0 bg-[#1C202A] z-10">
               <div className={`flex gap-4 ${isDescriptionCollapsed ? 'hidden' : ''}`}>
                 {tabs.map(tab => (
-                  <button 
+                  <button
                     key={tab.id}
                     className={`${activeTab === tab.id ? 'text-white bg-white/10 rounded-md px-2 py-1' : 'text-gray-500'} hover:text-gray-300 font-bold text-lg`}
                     onClick={() => dispatch(setActiveTab(tab.id))}
@@ -66,15 +74,15 @@ const EditorLayout = ({ questionData, children, matchId }: EditorLayoutProps) =>
                   </button>
                 ))}
               </div>
-              
-              <div className={`flex gap-2 ml-auto ${isDescriptionCollapsed ? 'flex-col [&>button]:rotate-90' : ''}`}>
-                <button 
+
+              <div className={`flex gap-2 ${isDescriptionCollapsed ? 'flex-col [&>button]:rotate-90' : ''}`}>
+                <button
                   className="p-1 hover:bg-[#292C33] rounded"
                   onClick={() => setIsDescriptionMaximized(!isDescriptionMaximized)}
                 >
                   {isDescriptionCollapsed ? null : isDescriptionMaximized ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
                 </button>
-                <button 
+                <button
                   className="p-1 hover:bg-[#292C33] rounded"
                   onClick={() => setIsDescriptionCollapsed(!isDescriptionCollapsed)}
                 >
@@ -82,10 +90,10 @@ const EditorLayout = ({ questionData, children, matchId }: EditorLayoutProps) =>
                 </button>
               </div>
             </div>
-            
-            <div className={`flex-1 overflow-y-scroll ${isDescriptionCollapsed ? 'hidden' : ''}`}>
+
+            <div className={` overflow-y-scroll ${isDescriptionCollapsed ? 'hidden' : ''}`}>
               {activeTab === 'description' ? (
-                <div className="h-full">
+                <div className="h-full overflow-y-scroll">
                   <Question problem={questionData} />
                 </div>
               ) : activeTab === 'submissions' && (
@@ -96,29 +104,30 @@ const EditorLayout = ({ questionData, children, matchId }: EditorLayoutProps) =>
             </div>
           </div>
 
-          <div className={`flex flex-col gap-4 transition-all duration-300 ease-in-out ${
-            isDescriptionMaximized ? 'hidden' : 
-            isDescriptionCollapsed ? 'w-[calc(100%-56px)]' : 
-            isEditorMaximized ? 'w-full' : 'w-1/2'
-          } h-[calc(100vh-180px)]`}>
-            {children || (
-              <Editor 
-                language={language as 'c' | 'cpp' | 'python' | 'java' | 'javascript'} 
+          <div className={`flex flex-col gap-4 ${
+            isDescriptionMaximized ? 'hidden' :
+            isDescriptionCollapsed ? 'w-[calc(100%-56px)]' :
+            'w-1/2'
+          }`}>
+            <div className={`transition-all duration-300`}>
+              <Editor
+                language={language as 'c' | 'cpp' | 'python' | 'java' | 'javascript'}
                 onLanguageChange={setLanguage}
                 onMaximize={setIsEditorMaximized}
-                className={isEditorMaximized ? 'h-[calc(100vh-180px)]' : 'h-12'}
               />
-            )}
-            {!isEditorMaximized && (
-              <div className="h-full">
-                <TestCases 
-                  testCases={questionData.testCases.filter(tc => !tc.isHidden)}
-                  isCollapsed={isTestCaseCollapsed}
-                  onCollapse={setIsTestCaseCollapsed}
-                />
-              </div>
-            )}
+            </div>
+
+            <div className={`transition-all duration-300 h-[10rem]`}>
+              <TestCases
+                testCases={questionData.testCases.filter(tc => !tc.isHidden)}
+                isCollapsed={isTestCaseCollapsed}
+                onCollapse={setIsTestCaseCollapsed}
+                className={isEditorMaximized ? 'hidden' : ''}
+              />
+            </div>
           </div>
+
+
         </div>
       </div>
     </div>
