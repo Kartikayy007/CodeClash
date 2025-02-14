@@ -20,6 +20,7 @@ import PerformanceInsights from '@/components/dashboard/PerformanceInsights';
 import Leaderboard from '@/components/dashboard/Leaderboard';
 import RecentMatches from '@/components/dashboard/RecentMatches';
 import RecentContests from '@/components/dashboard/RecentContests';
+import ManageContest from '@/components/dashboard/ManageContest'; 
 import { PlayButton } from '@/features/battle/components/PlayButton';
 
 ChartJS.register(
@@ -67,6 +68,7 @@ export default function Dashboard() {
 
         <div className="grid grid-rows-[1fr] gap-4">
           <PerformanceInsights className="min-h-[calc(100%)]" />
+          <ManageContest />
         </div>
       </div>
     </div>

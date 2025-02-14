@@ -154,26 +154,6 @@ const PerformanceInsights: React.FC<PerformanceInsightsProps> = ({ className = '
           }}
         />
       </div>
-
-      <div className="flex items-center gap-2 mb-6">
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-0.5 bg-[#c879eb]" />
-          <div className="w-2 h-2 rounded-full bg-[#c879eb] border border-[#c879eb]" />
-        </div>
-        <span className="text-[#b0b0b0] text-xs">Win trend over last 7 days</span>
-      </div>
-
-      <div className="space-y-1">
-        {stats.map((stat, index) => (
-          <div
-            key={index}
-            className="flex justify-between items-center py-2 border-b border-black/20"
-          >
-            <span className="text-sm font-medium">{stat.label}</span>
-            <span className="text-sm font-medium">{stat.value}</span>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };

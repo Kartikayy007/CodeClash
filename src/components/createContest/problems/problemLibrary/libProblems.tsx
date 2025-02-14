@@ -15,7 +15,6 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [selectedProblems, setSelectedProblems] = useState<Set<string>>(new Set());
 
-  // Mock data - replace with actual API call
   const problems: Problem[] = [
     {
       id: '1',
