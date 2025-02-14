@@ -9,6 +9,10 @@ const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
 
+  const isContestRoute = pathname && pathname.includes('/contest/') && 
+    !pathname.includes('/contest/join') && 
+    !pathname.includes('/contest/create');
+
   return (
     <nav className='relative bg-[#10141D] z-50'>
       <div className='flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4'>
@@ -22,32 +26,34 @@ const Navbar = () => {
           />
         </div>
 
-        <div className='flex items-center gap-4'>
-          <button className='flex items-center gap-6'>
-            {pathname === '/dashboard' ? (
-              <Settings 
-                size={30} 
-                color='white' 
-                className="hover:rotate-90 transition-transform duration-300"
-                onClick={() => router.push('/settings')}
-              />
-            ) : (
-              <>
-                <House 
-                  size={30} 
-                  color='white' 
-                  onClick={() => router.push('/dashboard')}
-                />
+        {!isContestRoute && (
+          <div className='flex items-center gap-4'>
+            <button className='flex items-center gap-6'>
+              {pathname === '/dashboard' ? (
                 <Settings 
                   size={30} 
                   color='white' 
                   className="hover:rotate-90 transition-transform duration-300"
                   onClick={() => router.push('/settings')}
                 />
-              </>
-            )}
-          </button>
-        </div>
+              ) : (
+                <>
+                  <House 
+                    size={30} 
+                    color='white' 
+                    onClick={() => router.push('/dashboard')}
+                  />
+                  <Settings 
+                    size={30} 
+                    color='white' 
+                    className="hover:rotate-90 transition-transform duration-300"
+                    onClick={() => router.push('/settings')}
+                  />
+                </>
+              )}
+            </button>
+          </div>
+        )}
       </div>
     </nav>
   )
