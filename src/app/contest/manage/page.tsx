@@ -25,12 +25,11 @@ interface Problem {
   }>;
 }
 
-type ActiveTab = 'details' | 'problems' | 'settings';
-
+type ActiveTab = 'Contest' | 'Questions';
 const Details = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState<ActiveTab>('details');
+  const [activeTab, setActiveTab] = useState<ActiveTab>('Contest');
   const [activeSection, setActiveSection] = useState<ContestSection>('basic');
   const [formData, setFormData] = useState<ContestDetails>({
     name: '',
@@ -144,7 +143,7 @@ const Details = () => {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'details':
+      case 'Contest':
         return (
           <div className="flex gap-8 ">
             <div className="w-56">
@@ -187,20 +186,12 @@ const Details = () => {
             </div>
           </div>
         );
-      case 'problems':
+      case 'Questions':
         return (
-          <Problems 
-            problems={problems}
-            onAddProblem={handleAddProblem}
-            onCreateProblem={handleCreateProblem}
-            onDeleteProblem={handleDeleteProblem}
-            onSaveProblem={handleSaveProblem}
-          />
+          <div>
+            <h1 className='text-2xl font-bold text-white' >Questions</h1>
+          </div>
         );
-      case 'settings':
-        return <div>Settings Content</div>;
-      default:
-        return null;
     }
   };
 

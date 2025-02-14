@@ -4,16 +4,32 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import LabelButton from '@/components/ui/LabelButton';
 import Image from 'next/image';
-import CustomInput from '@/components/CustomInput';
 
 export default function JoinContest() {
   const [contestCode, setContestCode] = useState('');
+  const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleJoinContest = (e: React.FormEvent) => {
+  const handleJoinContest = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle join contest logic here
-    console.log('Joining contest with code:', contestCode);
+    setError('');
+
+    if (!contestCode.trim()) {
+      setError('Please enter a contest code');
+      return;
+    }
+
+    try {
+      // In real implementation, validate contest code with API
+      // const response = await validateContestCode(contestCode);
+      // if (response.success) {
+      router.push(`/contest/join/${contestCode}`);
+      // } else {
+      //   setError('Invalid contest code');
+      // }
+    } catch (error) {
+      setError('Failed to join contest. Please try again.');
+    }
   };
 
   return (
@@ -64,21 +80,24 @@ export default function JoinContest() {
                   name="contestCode"
                   value={contestCode}
                   onChange={(e) => setContestCode(e.target.value)}
-                  className="w-full 
+                  className={`w-full 
                   h-[45px] 
                   px-3 sm:px-4
                   py-2
                   rounded-md
                   bg-transparent
                   border-2
-                  border-[#D1D1D1]
+                  ${error ? 'border-red-500' : 'border-[#D1D1D1]'}
                   focus:outline-none
                   transition-all
                   duration-500
                   text-sm sm:text-base
                   text-white
-                  placeholder:text-gray-400"
+                  placeholder:text-gray-400`}
                 />
+                {error && (
+                  <p className="text-red-500 text-sm mt-1">{error}</p>
+                )}
               </div>
             </div>
 
