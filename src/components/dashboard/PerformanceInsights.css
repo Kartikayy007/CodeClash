@@ -1,0 +1,10 @@
+.performance-insights {
+  width: 100%; /* Ensure the container takes full width */
+  overflow: hidden; /* Prevent overflow */
+}
+
+.line-graph {
+  width: 100%; /* Ensure the line graph takes full width */
+  max-width: 100%; /* Prevent exceeding the parent width */
+  /* Add any additional styles needed for the graph */
+} 

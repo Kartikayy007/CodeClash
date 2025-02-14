@@ -1,6 +1,7 @@
 'use client';
 
 import { LineChart } from '@mui/x-charts/LineChart';
+import './PerformanceInsights.css';
 
 interface PerformanceInsightsProps {
   className?: string;
@@ -26,7 +27,7 @@ const PerformanceInsights = ({ className = '' }: PerformanceInsightsProps) => {
         <option value="year" className="bg-[#1a1d26]">Year</option>
       </select>
 
-      <div className="h-[220px] mb-6">
+      <div className="h-[220px]  mb-6">
         <LineChart
           xAxis={[{
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -53,7 +54,7 @@ const PerformanceInsights = ({ className = '' }: PerformanceInsightsProps) => {
             curve: 'linear',
             valueFormatter: (value) => value === 7 ? 'W' : 'L',
           }]}
-          width={400}
+          width={300}
           height={220}
           margin={{ top: 20, right: 20, bottom: 30, left: 40 }}
           disableAxisListener
