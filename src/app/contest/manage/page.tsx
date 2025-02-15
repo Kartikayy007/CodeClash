@@ -117,7 +117,7 @@ const Details = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Contest details:', formData);
+     ('Contest details:', formData);
     // Handle form submission
   };
 

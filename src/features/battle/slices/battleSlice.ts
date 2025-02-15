@@ -146,7 +146,7 @@ const battleSlice = createSlice({
       myId: string;
     }>) => {
       const { problemId, status, userId, myId } = action.payload;
-      console.log("updateProblemStatus", action.payload);
+       ("updateProblemStatus", action.payload);
       // Update the problem status in the global problemStatuses
       if (!state.problemStatuses[problemId]) {
         state.problemStatuses[problemId] = {};
@@ -155,14 +155,14 @@ const battleSlice = createSlice({
         status,
         timestamp: Date.now()
       };
-      console.log("state.problemStatuses", state.problemStatuses[problemId]);
+       ("state.problemStatuses", state.problemStatuses[problemId]);
       const player = userId === state.player1?.id ? state.player1 : 
       userId === state.player2?.id ? state.player2 : null;
       // Update the player's solved problems
       if(myId === userId){
-        console.log("me");
+         ("me");
       }else{
-        console.log("opponent");
+         ("opponent");
       }
 
       if (player) {
@@ -174,7 +174,7 @@ const battleSlice = createSlice({
           timestamp: Date.now()
         };
       }
-      console.log("player.solvedProblems", player?.solvedProblems[problemId]);
+       ("player.solvedProblems", player?.solvedProblems[problemId]);
     },
     updateMultipleProblemStatuses: (state, action: PayloadAction<Array<{
       problemId: string;

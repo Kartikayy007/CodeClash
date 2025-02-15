@@ -26,7 +26,7 @@ const ManageContest = () => {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-medium text-white">Manage Contest</h2>
         <button 
-          onClick={() => router.push('/matches')}
+          onClick={() => router.push('/contest/manage')}
           className="text-gray-400 hover:text-white transition-colors flex items-center gap-1"
         >
           view

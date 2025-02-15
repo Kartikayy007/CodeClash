@@ -14,7 +14,7 @@ interface ProblemsProps {
   onAddProblem: () => void;
   onCreateProblem: () => void;
   onDeleteProblem: (index: number) => void;
-  onSaveProblem: (problem: Problem) => void;
+  onSaveProblem: (problem: Problem) => Promise<void>;
 }
 
 const Problems: React.FC<ProblemsProps> = ({ 

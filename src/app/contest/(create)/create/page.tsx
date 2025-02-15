@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import LabelButton from '@/components/ui/LabelButton';
 import Image from 'next/image';
+import { contestApi } from '@/features/contests/api/contestApi';
+import { toast } from 'react-hot-toast';
 
 export default function CreateContest() {
   const router = useRouter();
@@ -13,7 +15,7 @@ export default function CreateContest() {
     startTime: '',
     endDate: '',
     endTime: '',
-    description: ''
+    description: 'This is a test description'
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -24,14 +26,24 @@ export default function CreateContest() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const searchParams = new URLSearchParams();
-    for (const [key, value] of Object.entries(formData)) {
-      searchParams.append(key, value);
+    try {
+      const startDateTime = `${formData.startDate} ${formData.startTime}:00`;
+      const endDateTime = `${formData.endDate} ${formData.endTime}:00`;
+
+      const response = await contestApi.createContest({
+        title: formData.name,
+        description: formData.description,
+        startTime: startDateTime,
+        endTime: endDateTime
+      });
+
+      toast.success('Contest created successfully!');
+      router.push(`/contest/create/details?contestId=${response.contest.id}`);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to create contest');
     }
-    router.push(`/contest/create/details?${searchParams.toString()}`);
-    console.log('Creating contest with data:', formData);
   };
 
   return (
@@ -81,8 +93,9 @@ export default function CreateContest() {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
+                required
                 className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
-                  focus:outline-none transition-all duration-500 text-sm sm:text-base text-white placeholder:text-gray-400"
+                  focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
               />
             </div>
 
@@ -94,6 +107,7 @@ export default function CreateContest() {
                   name="startDate"
                   value={formData.startDate}
                   onChange={handleInputChange}
+                  required
                   className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                     focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
                 />
@@ -105,6 +119,7 @@ export default function CreateContest() {
                   name="startTime"
                   value={formData.startTime}
                   onChange={handleInputChange}
+                  required
                   className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                     focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
                 />
@@ -119,6 +134,7 @@ export default function CreateContest() {
                   name="endDate"
                   value={formData.endDate}
                   onChange={handleInputChange}
+                  required
                   className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                     focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
                 />
@@ -130,6 +146,7 @@ export default function CreateContest() {
                   name="endTime"
                   value={formData.endTime}
                   onChange={handleInputChange}
+                  required
                   className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                     focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
                 />
@@ -138,7 +155,7 @@ export default function CreateContest() {
 
             <div className="flex justify-end">
               <LabelButton type="submit" className="w-full">
-                Next
+                Create Contest
               </LabelButton>
             </div>
           </form>

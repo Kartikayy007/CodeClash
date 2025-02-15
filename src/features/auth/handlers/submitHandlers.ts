@@ -97,7 +97,7 @@ export const handleRegister = async ({
   router
 }: RegisterHandlerProps) => {
 
-  console.log(values.terms)
+   (values.terms)
 
   if (!values.email || !values.username || !values.password) {
     toast.error('Required Fields', 'Please fill in all required fields')
@@ -163,7 +163,7 @@ export const handleGetStarted = async ({
   router,
   setIsSubmitting
 }: GetStartedHandlerProps) => {
-  console.log(values.email)
+   (values.email)
   if (!values.email) {
     toast.error('Required Field', 'Please enter your email address')
     return false

@@ -38,7 +38,7 @@ export default function Dashboard() {
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (token && !socketService.isConnected()) {
-      console.log('🔌 Connecting socket from dashboard');
+       ('🔌 Connecting socket from dashboard');
       socketService.connect(token);
     }
 
@@ -50,7 +50,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background p-8">
       <div className="flex justify-end gap-4 mb-8">
         <PlayButton />
-        <LabelButton variant='filled' onClick={() => router.push('/contest/create')}>
+        <LabelButton variant='filled' onClick={() => router.push('/contest/join')}>
           Play Contest
         </LabelButton>
       </div>

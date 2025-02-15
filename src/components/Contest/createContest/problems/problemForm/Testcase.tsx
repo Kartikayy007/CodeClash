@@ -14,11 +14,21 @@ interface TestCasesFormProps {
 }
 
 const TestCasesForm: React.FC<TestCasesFormProps> = ({ testCases, onChange, errors }) => {
-  const handleAddTestCase = () => {
-    onChange(testCases.length, 'input', '');
-    onChange(testCases.length, 'output', '');
-    onChange(testCases.length, 'sample', true);
-    onChange(testCases.length, 'strength', 10);
+  const handleAddTestCase = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent form submission
+    const newTestCase: TestCase = {
+      input: '',
+      output: '',
+      sample: true,
+      strength: 10
+    };
+    
+    // Add the new test case to the array
+    const newIndex = testCases.length;
+    onChange(newIndex, 'input', newTestCase.input);
+    onChange(newIndex, 'output', newTestCase.output);
+    onChange(newIndex, 'sample', newTestCase.sample);
+    onChange(newIndex, 'strength', newTestCase.strength);
   };
 
   return (

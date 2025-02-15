@@ -55,7 +55,7 @@ const BattleRoom = () => {
   const battleState = useSelector((state: RootState) => state.battle);
   // const matchId = battleState.matchId;
   
-  console.log('🔍 Battle state:', battleState);
+   ('🔍 Battle state:', battleState);
 
 
   const handleLanguageChange = (newLanguage: string) => {
@@ -85,7 +85,7 @@ const BattleRoom = () => {
     );
   }
 
-  console.log('battleState.matchId', battleState.matchId);
+   ('battleState.matchId', battleState.matchId);
 
   return (
     <EditorLayout questionData={currentProblem} matchId={battleState.matchId as string}>

@@ -8,10 +8,15 @@ import DescriptionForm from '@/components/Contest/createContest/detailsForm/Desc
 import Problems from '@/components/Contest/createContest/problems/problems';
 import { ContestDetails, ContestSection } from '@/types/contest.types';
 import { ArrowLeft } from 'lucide-react';
+import { contestApi } from '@/features/contests/api/contestApi';
+import { toast } from 'react-hot-toast';
 
 interface Problem {
+  id?: string;
   name: string;
+  title: string;
   maxScore: number;
+  score: number;
   rating: number;
   description: string;
   inputFormat: string;
@@ -49,14 +54,12 @@ const Details = () => {
     score: ''
   });
 
-  // Mock problems data
   const [problems, setProblems] = useState<Problem[]>([]);
   const [showCreateProblem, setShowCreateProblem] = useState(false);
 
   useEffect(() => {
     if (!searchParams) return;
     
-    // Get contest data from URL parameters
     const name = searchParams.get('name') || '';
     const startDate = searchParams.get('startDate') || '';
     const startTime = searchParams.get('startTime') || '';
@@ -78,7 +81,6 @@ const Details = () => {
   }, [searchParams]);
 
   useEffect(() => {
-    // Set initial form data
     setFormData({
       name: '',
       startTime: { date: '', time: '' },
@@ -116,10 +118,29 @@ const Details = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Contest details:', formData);
-    // Handle form submission
+    const contestId = searchParams?.get('contestId');
+    if (!contestId) {
+      toast.error('Contest ID not found');
+      return;
+    }
+
+    try {
+      const response = await contestApi.updateContest(contestId, {
+        title: formData.name,
+        description: formData.description,
+        startTime: `${formData.startTime.date} ${formData.startTime.time}:00`,
+        endTime: `${formData.endTime.date} ${formData.endTime.time}:00`,
+        rules: formData.rules,
+        prizes: formData.prizes,
+        score: formData.score
+      });
+
+      toast.success('Contest updated successfully!');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to update contest');
+    }
   };
 
   const handlePreview = () => {
@@ -134,12 +155,61 @@ const Details = () => {
     setShowCreateProblem(true);
   };
 
-  const handleDeleteProblem = (index: number) => {
-    setProblems(prev => prev.filter((_, i) => i !== index));
+  const handleDeleteProblem = async (index: number) => {
+    const contestId = searchParams?.get('contestId');
+    const problem = problems[index];
+    
+    if (!contestId || !problem.id) {
+      toast.error('Contest ID or Problem ID not found');
+      return;
+    }
+
+    try {
+      await contestApi.deleteQuestion({
+        contestId,
+        questionId: problem.id
+      });
+      
+      setProblems(prev => prev.filter((_, i) => i !== index));
+      toast.success('Problem deleted successfully!');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to delete problem');
+    }
   };
 
-  const handleSaveProblem = (problemData: Problem) => {
-    setProblems(prev => [...prev, problemData]);
+  const handleSaveProblem = async (problemData: Problem) => {
+    const contestId = searchParams?.get('contestId');
+    if (!contestId) {
+      toast.error('Contest ID not found');
+      return;
+    }
+
+    try {
+      await contestApi.addQuestion({
+        contestId,
+        title: problemData.name,
+        description: problemData.description,
+        inputFormat: problemData.inputFormat,
+        outputFormat: problemData.outputFormat,
+        constraints: problemData.constraints,
+        difficulty: problemData.rating < 1000 ? 'EASY' : 
+                   problemData.rating < 2000 ? 'MEDIUM' : 'HARD',
+        rating: problemData.rating,
+        score: problemData.maxScore,
+        timeLimit: 1000,
+        memoryLimit: 256,
+        testCases: problemData.testCases.map(tc => ({
+          input: tc.input,
+          output: tc.output,
+          isHidden: !tc.sample
+        }))
+      });
+
+      setProblems(prev => [...prev, problemData]);
+      toast.success('Problem added successfully!');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to add problem');
+    }
   };
 
   const renderContent = () => {

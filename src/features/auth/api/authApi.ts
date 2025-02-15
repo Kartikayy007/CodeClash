@@ -79,7 +79,7 @@ export const authApi = {
         },
       }
     );
-    console.log('refresh token response', response.data.data?.tokens.accessToken);
+     ('refresh token response', response.data.data?.tokens.accessToken);
     localStorage.setItem('accessToken', response.data.data?.tokens.accessToken || '');
     return response.data;
   },

@@ -9,7 +9,6 @@ interface DescriptionFormProps {
 const DescriptionForm: React.FC<DescriptionFormProps> = ({ formData, onChange }) => {
   return (
     <form className="space-y-6">
-      {/* Description */}
       <div>
         <label className="block text-gray-300 text-sm mb-2">Description</label>
         <textarea
@@ -21,7 +20,6 @@ const DescriptionForm: React.FC<DescriptionFormProps> = ({ formData, onChange })
         />
       </div>
 
-      {/* Rules */}
       <div>
         <label className="block text-gray-300 text-sm mb-2">Rules</label>
         <textarea
@@ -33,7 +31,6 @@ const DescriptionForm: React.FC<DescriptionFormProps> = ({ formData, onChange })
         />
       </div>
 
-      {/* Prizes */}
       <div>
         <label className="block text-gray-300 text-sm mb-2">Prizes</label>
         <textarea
@@ -45,7 +42,6 @@ const DescriptionForm: React.FC<DescriptionFormProps> = ({ formData, onChange })
         />
       </div>
 
-      {/* Score */}
       <div>
         <label className="block text-gray-300 text-sm mb-2">Score</label>
         <textarea

@@ -150,12 +150,33 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
   };
 
   const handleTestCaseChange = (index: number, field: keyof typeof formData.testCases[0], value: string | boolean | number) => {
-    setFormData(prev => ({
-      ...prev,
-      testCases: prev.testCases.map((tc, i) =>
-        i === index ? { ...tc, [field]: value } : tc
-      )
-    }));
+    setFormData(prev => {
+      const updatedTestCases = [...prev.testCases];
+      
+      // If this is a new test case, add it to the array
+      if (index === updatedTestCases.length) {
+        updatedTestCases.push({
+          input: '',
+          output: '',
+          sample: true,
+          strength: 10
+        });
+      }
+      
+      // Update the specific field
+      if (updatedTestCases[index]) {
+        updatedTestCases[index] = {
+          ...updatedTestCases[index],
+          [field]: value
+        };
+      }
+
+      return {
+        ...prev,
+        testCases: updatedTestCases
+      };
+    });
+
     // Clear error for this test case when user makes changes
     if (errors[`testCase${index}`]) {
       setErrors(prev => ({ ...prev, [`testCase${index}`]: false }));
