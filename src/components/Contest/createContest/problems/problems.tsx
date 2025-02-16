@@ -8,6 +8,7 @@ import CreateProblem from './createProblem';
 import Image from 'next/image';
 import LibProblems from './problemLibrary/libProblems';
 import { Problem } from '@/types/problem.types';
+import { toast } from 'react-hot-toast';
 
 interface ProblemsProps {
   problems: Problem[];
@@ -42,10 +43,18 @@ const Problems: React.FC<ProblemsProps> = ({
     setShowDeleteConfirm(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (selectedProblemIndex !== null) {
-      onDeleteProblem(selectedProblemIndex);
-      setIsDeleteModalOpen(false);
+      const problem = problems[selectedProblemIndex];
+      if (problem.id) {
+        try {
+          await onDeleteProblem(selectedProblemIndex);
+          toast.success('Problem deleted successfully');
+        } catch (error: any) {
+          toast.error(error.message || 'Failed to delete problem');
+        }
+      }
+      setShowDeleteConfirm(false);
       setSelectedProblemIndex(null);
     }
   };

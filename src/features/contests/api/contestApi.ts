@@ -1,5 +1,5 @@
 import { api } from '@/utils/api';
-import { ContestResponse, ValidateContestCodeResponse, RegisterContestResponse, CreateContestPayload, CreateContestResponse, UpdateContestPayload, AddQuestionPayload, DeleteQuestionPayload } from '../types/contest.types';
+import { ContestResponse, ValidateContestCodeResponse, RegisterContestResponse, CreateContestPayload, CreateContestResponse, UpdateContestPayload, AddQuestionPayload, DeleteQuestionPayload, DeleteQuestionResponse, LeaderboardResponse, UpdateLeaderboardResponse } from '../types/contest.types';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -90,16 +90,46 @@ export const contestApi = {
     return response.data;
   },
 
-  deleteQuestion: async (data: DeleteQuestionPayload): Promise<ContestResponse> => {
+  deleteQuestion: async (data: DeleteQuestionPayload): Promise<DeleteQuestionResponse> => {
     const token = localStorage.getItem('accessToken');
-    const response = await api.delete<ContestResponse>(
-      `${BASE_URL}/api/v1/contest/deleteQuestions`,
+    const params = new URLSearchParams();
+    params.append('contestId', data.contestId);
+    params.append('questionId', data.questionId);
+
+    const response = await api.delete<DeleteQuestionResponse>(
+      `${BASE_URL}/api/v1/contest/deleteQuestions?${params.toString()}`,
       {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        data
+        }
+      }
+    );
+    return response.data;
+  },
+
+  getLeaderboard: async (contestId: string, page: number = 1): Promise<LeaderboardResponse> => {
+    const token = localStorage.getItem('accessToken');
+    const response = await api.get<LeaderboardResponse>(
+      `${BASE_URL}/api/v1/contest/${contestId}/leaderboard?page=${page}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
+    );
+    return response.data;
+  },
+
+  updateLeaderboard: async (contestId: string): Promise<UpdateLeaderboardResponse> => {
+    const token = localStorage.getItem('accessToken');
+    const response = await api.post<UpdateLeaderboardResponse>(
+      `${BASE_URL}/api/v1/contest/${contestId}/leaderboard`,
+      {},
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       }
     );
     return response.data;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Trash } from 'lucide-react';
 
 interface TestCase {
   input: string;
@@ -10,41 +11,56 @@ interface TestCase {
 interface TestCasesFormProps {
   testCases: TestCase[];
   onChange: (index: number, field: keyof TestCase, value: string | boolean | number) => void;
+  onDelete: (index: number) => void;
   errors: { [key: string]: boolean };
 }
 
-const TestCasesForm: React.FC<TestCasesFormProps> = ({ testCases, onChange, errors }) => {
+const TestCasesForm: React.FC<TestCasesFormProps> = ({ testCases, onChange, onDelete, errors }) => {
+  React.useEffect(() => {
+    if (testCases.length === 0) {
+      for (let i = 0; i < 2; i++) {
+        const newTestCase: TestCase = {
+          input: '',
+          output: '',
+          sample: true,
+          strength: 10
+        };
+        onChange(i, 'input', newTestCase.input);
+        onChange(i, 'output', newTestCase.output);
+        onChange(i, 'sample', newTestCase.sample);
+        onChange(i, 'strength', newTestCase.strength);
+      }
+    }
+  }, []);
+
   const handleAddTestCase = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent form submission
-    const newTestCase: TestCase = {
-      input: '',
-      output: '',
-      sample: true,
-      strength: 10
-    };
-    
-    // Add the new test case to the array
+    e.preventDefault();
     const newIndex = testCases.length;
-    onChange(newIndex, 'input', newTestCase.input);
-    onChange(newIndex, 'output', newTestCase.output);
-    onChange(newIndex, 'sample', newTestCase.sample);
-    onChange(newIndex, 'strength', newTestCase.strength);
+    onChange(newIndex, 'input', '');
+  };
+
+  const handleDeleteTestCase = (index: number) => {
+    if (testCases.length <= 2) {
+      return;
+    }
+    onDelete(index);
   };
 
   return (
     <div className="space-y-6">
       <div className="bg-[#1A1D24] rounded-lg overflow-hidden">
-        <div className="grid grid-cols-5 p-4 text-white border-b border-gray-700">
+        <div className="grid grid-cols-6 p-4 text-white border-b border-gray-700">
           <div className="text-center">S.No</div>
           <div className="text-center">Input</div>
           <div className="text-center">Output</div>
           <div className="text-center">Sample</div>
           <div className="text-center">Strength</div>
+          <div className="text-center">Action</div>
         </div>
 
         <div className="divide-y divide-gray-700">
           {testCases.map((testCase, index) => (
-            <div key={index} className="grid grid-cols-5 p-4 items-center">
+            <div key={index} className="grid grid-cols-6 p-4 items-center">
               <div className="text-center">{index + 1}</div>
               <div className="px-2">
                 <input
@@ -88,6 +104,16 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({ testCases, onChange, erro
                   className="w-full bg-transparent border border-gray-700 rounded px-2 py-1"
                 />
               </div>
+              <div className="text-center">
+                <button
+                  onClick={() => handleDeleteTestCase(index)}
+                  className={`p-1 rounded ${testCases.length <= 2 ? 'text-gray-500 cursor-not-allowed hover:bg-transparent' : 'text-red-500 hover:bg-white/10'}`}
+                  disabled={testCases.length <= 2}
+                  title={testCases.length <= 2 ? "Cannot delete when only 2 test cases remain" : "Delete test case"}
+                >
+                  <Trash size={16} />
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -100,8 +126,8 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({ testCases, onChange, erro
         + Add TestCase
       </button>
 
-      {errors.testCases && testCases.length === 0 && (
-        <p className="text-red-500 text-sm">At least one test case is required</p>
+      {errors.testCases && testCases.length < 2 && (
+        <p className="text-red-500 text-sm">At least two test cases are required</p>
       )}
     </div>
   );

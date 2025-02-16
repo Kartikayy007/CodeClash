@@ -2,9 +2,15 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store/store';
+import { fetchLeaderboard, updateLeaderboard } from '@/features/contests/thunks/contestThunks';
+import { contestApi } from '@/features/contests/api/contestApi';
+import { LeaderboardEntry } from '@/features/contests/types/contest.types';
+import { toast } from 'react-hot-toast';
 import LabelButton from '@/components/ui/LabelButton';
 import { Timer } from 'lucide-react';
-import ProblemSet from '@/components/Contest/contestPage/ProblemSet';
+import ProblemSet from '@/components/Contest/PreviewContest/ProblemSet';
 import Leaderboard from '@/components/Contest/contestPage/Leaderboard';
 import MySubmissions from '@/components/Contest/contestPage/MySubmissions';
 import ContestInsights from '@/components/Contest/contestPage/ContestInsights';
@@ -27,50 +33,64 @@ interface ContestInsights {
   submissions: number;
 }
 
-interface LeaderboardEntry {
-  rank: string;
-  username: string;
-  timeTaken: string;
-  score: number;
-  questionsSolved: number;
+interface ContestData {
+  id: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  description: string;
+  problems: Array<{
+    id: string;
+    title: string;
+    rating: number;
+    score: number;
+  }>;
+}
+
+interface ContestResponse {
+  id: string;
+  name: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+  questions: Array<{
+    id: string;
+    title: string;
+    rating: number;
+    score: number;
+  }>;
 }
 
 type TabType = 'Problem Set' | 'Leaderboard' | 'My Submissions';
 
 export default function ContestPage() {
-  const params = useParams<{ contestId: string }>();
   const router = useRouter();
-  const [timeLeft, setTimeLeft] = useState(3600); 
+  const params = useParams();
+  const dispatch = useDispatch<AppDispatch>();
+  const contestId = params?.contestId as string;
+
   const [activeTab, setActiveTab] = useState<TabType>('Problem Set');
-  const [problems, setProblems] = useState<Problem[]>([
-    { id: '1', title: 'Two Pointer', rating: 900, score: 20, status: 'SOLVED' },
-    { id: '2', title: 'Two Pointer', rating: 900, score: 20, status: null },
-    { id: '3', title: 'Two Pointer', rating: 900, score: 20, status: null },
-    { id: '4', title: 'Two Pointer', rating: 900, score: 20, status: null },
-    { id: '5', title: 'Two Pointer', rating: 900, score: 20, status: null },
-  ]);
-  const [insights, setInsights] = useState<ContestInsights>({
-    rank: 2,
-    score: 50,
-    totalQuestions: 5,
-    solved: 1,
-    unsolved: 2,
-    attempted: 2,
-    submissions: 10
-  });
-  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([
-    { rank: "01", username: "Abcdef", timeTaken: "1 hr", score: 90.00, questionsSolved: 5 },
-    { rank: "02", username: "Efghij", timeTaken: "1 hr", score: 80.00, questionsSolved: 5 },
-    { rank: "03", username: "Qwetyu", timeTaken: "1 hr", score: 70.00, questionsSolved: 4 },
-    { rank: "04", username: "Ytrefgv", timeTaken: "1 hr", score: 60.00, questionsSolved: 4 },
-    { rank: "05", username: "Dfghksis", timeTaken: "1 hr", score: 50.00, questionsSolved: 4 },
-    { rank: "06", username: "Asdfhjc", timeTaken: "1 hr", score: 46.00, questionsSolved: 3 },
-    { rank: "07", username: "Zxfdteyfb", timeTaken: "1 hr", score: 40.00, questionsSolved: 3 },
-    { rank: "08", username: "Qeryuincksm", timeTaken: "1 hr", score: 30.00, questionsSolved: 3 },
-    { rank: "09", username: "Qpryu n n", timeTaken: "1 hr", score: 20.00, questionsSolved: 3 },
-    { rank: "10", username: "Ghjiilklngd", timeTaken: "1 hr", score: 10.00, questionsSolved: 2 }
-  ]);
+  const [timeLeft, setTimeLeft] = useState(3600); // 1 hour in seconds
+  const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([]);
+  const [leaderboardPage, setLeaderboardPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
+  const [contest, setContest] = useState<ContestData | null>(null);
+  const [problems, setProblems] = useState<Problem[]>([]);
+  const [insights, setInsights] = useState<ContestInsights>({
+    rank: 0,
+    score: 0,
+    totalQuestions: 0,
+    solved: 0,
+    unsolved: 0,
+    attempted: 0,
+    submissions: 0
+  });
+
+  useEffect(() => {
+    if (!contestId) return;
+    fetchContestDetails();
+  }, [contestId]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -86,16 +106,86 @@ export default function ContestPage() {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    if (activeTab === 'Leaderboard') {
+      fetchLeaderboardData();
+    }
+  }, [activeTab, leaderboardPage]);
+
+  useEffect(() => {
+    // Set up leaderboard update interval (15 minutes)
+    const updateInterval = setInterval(() => {
+      if (activeTab === 'Leaderboard') {
+        handleUpdateLeaderboard();
+      }
+    }, 15 * 60 * 1000); // 15 minutes in milliseconds
+
+    return () => clearInterval(updateInterval);
+  }, [activeTab]);
+
+  const fetchContestDetails = async () => {
+    try {
+      const response = await contestApi.getContestDetails(contestId);
+      if (response.success && response.data) {
+        const data = response.data as unknown as ContestResponse;
+        const contestData: ContestData = {
+          id: data.id,
+          name: data.name,
+          startTime: data.startDate,
+          endTime: data.endDate,
+          description: data.description,
+          problems: data.questions || []
+        };
+        setContest(contestData);
+        setProblems(contestData.problems.map(p => ({
+          id: p.id,
+          title: p.title,
+          rating: p.rating,
+          score: p.score,
+          status: null
+        })));
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to fetch contest details');
+    }
+  };
+
+  const fetchLeaderboardData = async () => {
+    try {
+      const result = await dispatch(fetchLeaderboard({ 
+        contestId, 
+        page: leaderboardPage 
+      })).unwrap();
+      
+      setLeaderboardData(result.leaderboard);
+      setTotalPages(result.pagination.pages);
+    } catch (error) {
+      toast.error('Failed to fetch leaderboard data');
+    }
+  };
+
+  const handleUpdateLeaderboard = async () => {
+    try {
+      await dispatch(updateLeaderboard(contestId)).unwrap();
+      fetchLeaderboardData(); // Refresh the leaderboard data
+    } catch (error) {
+      toast.error('Failed to update leaderboard');
+    }
+  };
+
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')} : ${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   const handleSolveProblem = (problemId: string) => {
-    if (params?.contestId) {
-      router.push(`/contest/${params.contestId}/problem/${problemId}`);
-    }
+    router.push(`/problem/${problemId}`);
+  };
+
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    setLeaderboardPage(1); // Reset to first page when searching
   };
 
   const renderTabContent = () => {
@@ -105,9 +195,9 @@ export default function ContestPage() {
       case 'Leaderboard':
         return (
           <Leaderboard 
-            leaderboard={leaderboard} 
+            leaderboard={leaderboardData} 
             searchQuery={searchQuery} 
-            onSearchChange={setSearchQuery} 
+            onSearchChange={handleSearchChange} 
           />
         );
       case 'My Submissions':
@@ -117,11 +207,15 @@ export default function ContestPage() {
     }
   };
 
+  if (!contest) {
+    return <div className="min-h-screen bg-[#10141D] text-white flex items-center justify-center">Loading...</div>;
+  }
+
   return (
     <div className="min-h-screen bg-[#10141D] text-white">
       <div className="flex flex-col h-full">
         <div className="flex items-center justify-between p-8">
-          <h1 className="text-2xl font-bold">Contest Name</h1>
+          <h1 className="text-2xl font-bold">{contest.name}</h1>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Timer size={24} className={timeLeft <= 300 ? 'text-red-500 animate-pulse' : ''} />
@@ -135,29 +229,25 @@ export default function ContestPage() {
           </div>
         </div>
 
-        <div className="flex px-8 gap-8">
-          <div className="w-[200px] rounded-lg h-fit">
-            {(['Problem Set', 'Leaderboard', 'My Submissions'] as TabType[]).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`w-full text-left px-4 py-2 rounded-lg text-lg transition-colors ${
-                  activeTab === tab 
-                    ? 'text-white bg-[#282C33] rounded-lg' 
-                    : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-
+        <div className="flex gap-8 px-8">
           <div className="flex-1">
-            <div className="rounded-lg p">
-              {renderTabContent()}
+            <div className="flex gap-8 mb-8">
+              {(['Problem Set', 'Leaderboard', 'My Submissions'] as TabType[]).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`pb-2 ${
+                    activeTab === tab
+                      ? 'text-white border-b-2 border-white'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
             </div>
+            {renderTabContent()}
           </div>
-
           <ContestInsights insights={insights} />
         </div>
       </div>

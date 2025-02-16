@@ -98,4 +98,38 @@ export interface AddQuestionPayload {
 export interface DeleteQuestionPayload {
   contestId: string;
   questionId: string;
+}
+
+export interface DeleteQuestionResponse {
+  message: string;
+  data: {
+    contestId: string;
+    questionId: string;
+    deletedAt: string;
+  };
+}
+
+export interface LeaderboardEntry {
+  rank: string;
+  username: string;
+  timeTaken: string;
+  score: number;
+  questionsSolved: number;
+}
+
+export interface LeaderboardPagination {
+  total: number;
+  pages: number;
+  currentPage: number;
+  perPage: number;
+}
+
+export interface LeaderboardResponse {
+  leaderboard: LeaderboardEntry[];
+  pagination: LeaderboardPagination;
+}
+
+export interface UpdateLeaderboardResponse {
+  message: string;
+  updatedUsers: number;
 } 
