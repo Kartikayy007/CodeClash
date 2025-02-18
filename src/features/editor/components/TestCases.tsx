@@ -41,7 +41,7 @@ const TestCases: React.FC<TestCasesProps> = ({
     if (output && !error) {
       const expectedOutput = testCases[selectedCase]?.output.trim();
       const actualOutput = output.trim();
-      
+
       setTestResults(prev => ({
         ...prev,
         [selectedCase]: {
@@ -73,7 +73,7 @@ const TestCases: React.FC<TestCasesProps> = ({
   }, [submissionResponse, testCases]);
 
   return (
-    <div className={`bg-[#1A1D24] rounded-lg flex flex-col ${className}`}>
+    <div className={`bg-[#1A1D24] rounded-lg flex flex-col h-full ${className}`}>
       <div className="flex items-center justify-between px-4 py-3 bg-[#1C202A] ">
         <div className="flex items-center gap-4">
           <h2 className="font-bold text-lg">Test Cases</h2>
@@ -87,16 +87,16 @@ const TestCases: React.FC<TestCasesProps> = ({
       </div>
 
       {!isCollapsed && (
-        <>
+        <div className="flex flex-col flex-1">
           <div className="h-12 flex gap-2 px-4 bg-[#1C202A]/50 overflow-x-auto">
             {testCases.map((_, index) => {
               const result = testResults[index];
               const isSelected = selectedCase === index;
-              const statusColor = result 
-                ? result.passed 
-                  ? 'bg-green-500/10 text-green-500 border-green-500' 
+              const statusColor = result
+                ? result.passed
+                  ? 'bg-green-500/10 text-green-500 border-green-500'
                   : 'bg-red-500/10 text-red-500 border-red-500'
-                : isSelected 
+                : isSelected
                   ? 'bg-white/10 text-white border-white'
                   : 'text-gray-500 border-[#232323] hover:border-gray-500';
 
@@ -108,7 +108,7 @@ const TestCases: React.FC<TestCasesProps> = ({
                 >
                   <span>Case {index + 1}</span>
                   {result && (
-                    result.passed 
+                    result.passed
                       ? <Check size={16} />
                       : <X size={16} />
                   )}
@@ -117,31 +117,30 @@ const TestCases: React.FC<TestCasesProps> = ({
             })}
           </div>
 
-          <div className="overflow-y-auto">
+          <div className="flex-1 overflow-y-auto">
             <div className="p-4 space-y-4">
-              <div className="bg-[#292C33] p-3 rounded-lg max-h-32 px-4 py-2">
+              <div className="bg-[#292C33] p-3 rounded-lg px-4 py-2">
                 <p className="text-white/60 mb-2 font-medium">Input:</p>
                 <pre className="text-white/90 font-mono text-sm max-h-[100px]">
                   {testCases[selectedCase]?.input}
                 </pre>
               </div>
 
-              <div className="bg-[#292C33] p-3 rounded-lg">
-              <p className="text-white/60 mb-2 font-medium">Output:</p>
-              <pre className="text-white/90 font-mono text-sm max-h-[100px]">{testCases[selectedCase]?.output}</pre>
+              <div className="bg-[#292C33] p-3 rounded-lg  px-4 py-2">
+                <p className="text-white/60 mb-2 font-medium">Output:</p>
+                <pre className="text-white/90 font-mono text-sm max-h-[100px]">{testCases[selectedCase]?.output}</pre>
               </div>
 
               {testResults[selectedCase]?.output && (
-                <div className={`bg-[#292C33] p-3 rounded-lg ${
-                  testResults[selectedCase].passed ? 'bg-green-500/10' : 'bg-red-500/10'
-                }`}>
+                <div className={`bg-[#292C33] px-4 py-2 rounded-lg ${testResults[selectedCase].passed ? 'bg-green-500/10' : 'bg-red-500/10'
+                  }`}>
                   <p className="text-white/60 mb-2 font-medium">Your Output:</p>
                   <pre className="font-mono text-sm max-h-[100px] overflow-y-auto">{testResults[selectedCase].output}</pre>
                 </div>
               )}
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

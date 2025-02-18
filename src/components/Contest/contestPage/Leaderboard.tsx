@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface LeaderboardEntry {
   rank: string;
@@ -12,17 +12,50 @@ interface LeaderboardProps {
   leaderboard: LeaderboardEntry[];
   searchQuery: string;
   onSearchChange: (query: string) => void;
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
 }
 
 const Leaderboard: React.FC<LeaderboardProps> = ({ 
   leaderboard, 
   searchQuery, 
-  onSearchChange 
+  onSearchChange,
+  currentPage,
+  totalPages,
+  onPageChange
 }) => {
+  const [nextUpdate, setNextUpdate] = useState(900); // 15 minutes in seconds
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNextUpdate((prev) => {
+        if (prev <= 1) {
+          // Reset timer to 15 minutes
+          return 900;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatUpdateTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   return (
     <div className="bg-[#1A1D24] rounded-lg p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold">Leaderboard</h2>
+        <div className="space-y-1">
+          <h2 className="text-xl font-semibold">Leaderboard</h2>
+          <p className="text-sm text-gray-400">
+            Next update in {formatUpdateTime(nextUpdate)}
+          </p>
+        </div>
         <div className="relative w-72">
           <input
             type="text"
@@ -40,49 +73,80 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
         </div>
       </div>
       
-      <div className="rounded-lg overflow-hidden">
-        <div className="grid grid-cols-5 bg-[#282C33] p-4 text-sm font-medium">
-          <div>Rank</div>
-          <div>Username</div>
-          <div>Time Taken</div>
-          <div>Score</div>
-          <div>Question Solved</div>
-        </div>
-        
-        <div className="space-y-2 mt-2">
-          {leaderboard.map((entry, index) => (
-            <div 
-              key={entry.rank}
-              className="grid grid-cols-5 p-4 items-center bg-[#1E2127] hover:bg-[#282C33] transition-colors"
-            >
-              <div className="flex items-center gap-2">
-                {index < 3 && (
-                  <img 
-                    src={index === 0 ? "/gold.svg" : index === 1 ? "/silver.svg" : "/bronze.svg"} 
-                    alt="medal" 
-                    className="w-5 h-5"
-                  />
-                )}
-                {entry.rank}
-              </div>
-              <div>{entry.username}</div>
-              <div>{entry.timeTaken}</div>
-              <div>{entry.score.toFixed(2)}</div>
-              <div>{entry.questionsSolved.toString().padStart(2, '0')}</div>
+      {leaderboard.length > 0 ? (
+        <>
+          <div className="rounded-lg overflow-hidden">
+            <div className="grid grid-cols-5 bg-[#282C33] p-4 text-sm font-medium">
+              <div>Rank</div>
+              <div>Username</div>
+              <div>Time Taken</div>
+              <div>Score</div>
+              <div>Question Solved</div>
             </div>
-          ))}
+            
+            <div className="space-y-2 mt-2">
+              {leaderboard.map((entry, index) => (
+                <div 
+                  key={entry.rank}
+                  className="grid grid-cols-5 p-4 items-center bg-[#1E2127] hover:bg-[#282C33] transition-colors"
+                >
+                  <div className="flex items-center gap-2">
+                    {index < 3 && (
+                      <img 
+                        src={index === 0 ? "/gold.svg" : index === 1 ? "/silver.svg" : "/bronze.svg"} 
+                        alt="medal" 
+                        className="w-5 h-5"
+                      />
+                    )}
+                    {entry.rank}
+                  </div>
+                  <div>{entry.username}</div>
+                  <div>{entry.timeTaken}</div>
+                  <div>{entry.score.toFixed(2)}</div>
+                  <div>{entry.questionsSolved.toString().padStart(2, '0')}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {totalPages > 0 && (
+            <div className="flex justify-center gap-2 mt-4 text-gray-400">
+              <button 
+                onClick={() => onPageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="hover:text-white disabled:opacity-50"
+              >
+                ←
+              </button>
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                const pageNum = i + 1;
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => onPageChange(pageNum)}
+                    className={pageNum === currentPage ? 'text-purple-500' : 'hover:text-white'}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+              <button 
+                onClick={() => onPageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="hover:text-white disabled:opacity-50"
+              >
+                →
+              </button>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="text-gray-400 text-center py-8">
+          No participants yet
         </div>
-        
-        <div className="flex justify-center gap-2 mt-4 text-gray-400">
-          <button className="hover:text-white">←</button>
-          <button className="text-purple-500">1</button>
-          <button className="hover:text-white">2</button>
-          <button className="hover:text-white">3</button>
-          <button className="hover:text-white">→</button>
-        </div>
-      </div>
+      )}
     </div>
   );
 };
 
-export default Leaderboard; 
+export default Leaderboard;

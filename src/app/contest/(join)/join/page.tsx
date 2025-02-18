@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import LabelButton from '@/components/ui/LabelButton';
 import Image from 'next/image';
+import { contestApi } from '@/features/contests/api/contestApi';
 
 export default function JoinContest() {
   const [contestCode, setContestCode] = useState('');
@@ -20,15 +21,16 @@ export default function JoinContest() {
     }
 
     try {
-      // In real implementation, validate contest code with API
-      // const response = await validateContestCode(contestCode);
-      // if (response.success) {
-      router.push(`/contest/join/${contestCode}`);
-      // } else {
-      //   setError('Invalid contest code');
-      // }
-    } catch (error) {
-      setError('Failed to join contest. Please try again.');
+      const contestResponse = await contestApi.getContestDetails(contestCode);
+      
+      if (contestResponse.contest) {
+        // Navigate to contest details page if contest exists
+        router.push(`/contest/join/${contestCode}`);
+      } else {
+        setError('Contest not found');
+      }
+    } catch (error: any) {
+      setError(error?.response?.data?.message || 'Contest not found');
     }
   };
 
