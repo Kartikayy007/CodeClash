@@ -16,7 +16,8 @@ const DescriptionForm: React.FC<DescriptionFormProps> = ({ formData, onChange })
           value={formData.description}
           onChange={onChange}
           rows={4}
-          className="w-full bg-transparent border-2 border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#C879EB]"
+          className="w-full bg-transparent border-2 border-white
+            focus:outline-none transition-all duration-500 rounded-lg px-4 py-2 text-white focus:border-[#C879EB]"
         />
       </div>
 
@@ -27,7 +28,8 @@ const DescriptionForm: React.FC<DescriptionFormProps> = ({ formData, onChange })
           value={formData.rules}
           onChange={onChange}
           rows={4}
-          className="w-full bg-transparent border-2 border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#C879EB]"
+          className="w-full bg-transparent border-2 border-white
+            focus:outline-none transition-all duration-500 rounded-lg px-4 py-2 text-white focus:border-[#C879EB]"
         />
       </div>
 
@@ -38,7 +40,8 @@ const DescriptionForm: React.FC<DescriptionFormProps> = ({ formData, onChange })
           value={formData.prizes}
           onChange={onChange}
           rows={4}
-          className="w-full bg-transparent border-2 border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#C879EB]"
+          className="w-full bg-transparent border-2 border-white
+            focus:outline-none transition-all duration-500 rounded-lg  px-4 py-2 text-white focus:border-[#C879EB]"
         />
       </div>
 
@@ -49,7 +52,8 @@ const DescriptionForm: React.FC<DescriptionFormProps> = ({ formData, onChange })
           value={formData.score}
           onChange={onChange}
           rows={4}
-          className="w-full bg-transparent border-2 border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#C879EB]"
+          className="w-full bg-transparent border-2 border-white
+            focus:outline-none transition-all duration-500  rounded-lg px-4 py-2 text-white focus:border-[#C879EB]"
         />
       </div>
     </form>
