@@ -71,6 +71,7 @@ const LabelButton = ({
   return (
     <button
       className={`
+        w-full
         relative
         px-3 
         sm:px-4 
