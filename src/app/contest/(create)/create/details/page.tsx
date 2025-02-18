@@ -225,7 +225,7 @@ const Details = () => {
         score: formData.score,
         organizationName: formData.organizationName  
       });
-      console.log('Response:', response);
+      
       setInitialFormData(formData); // Update initial state
       setIsDirty(false); // Reset dirty state
       toast.success('Contest updated successfully!');
