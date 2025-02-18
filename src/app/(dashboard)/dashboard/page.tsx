@@ -47,28 +47,35 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="flex justify-end gap-4 mb-8">
-        <PlayButton />
-        <LabelButton variant='filled' onClick={() => router.push('/contest/join')}>
-          Play Contest
-        </LabelButton>
-      </div>
+    <div className="min-h-screen bg-background ">
+      
 
       <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-4 ">
-        <div className="grid grid-rows-[auto_1fr] gap-4 lg:-mt-20">
+        <div className="grid grid-rows-[auto_1fr] gap-4 ">
           <UserStats />
           <Leaderboard className="min-h-[400px]" />
         </div>
 
-        <div className="grid grid-rows-[auto_1fr] gap-4 lg:-mt-20">
+        <div className="grid grid-rows-[auto_1fr] gap-4 ">
           <RecentMatches />
           <RecentContests className="min-h-[400px]" />
         </div>
 
-        <div className="grid grid-rows-[1fr] gap-4">
-          <PerformanceInsights className="min-h-[calc(100%)]" />
-          <ManageContest />
+        <div className=" grid gap-4" style={{gridTemplateRows: '0.56fr 1fr 1fr'}}>
+      <div className="flex justify-center gap-4 h-fit">
+        <div className='w-[50%]'>
+
+         <PlayButton />
+        </div>
+        <div className='w-[50%]'>
+
+         <LabelButton variant='filled'>
+          Play Contest
+         </LabelButton>
+        </div>
+      </div>
+          <PerformanceInsights className="min-h-[calc(100%)] mt-[-125px]" />
+          <ManageContest/>
         </div>
       </div>
     </div>
