@@ -38,7 +38,6 @@ export default function Dashboard() {
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (token && !socketService.isConnected()) {
-       ('🔌 Connecting socket from dashboard');
       socketService.connect(token);
     }
 
@@ -47,10 +46,10 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background ">
+    <div className="min-h-screen bg-background">
       
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-4 ">
+      <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-4">
         <div className="grid grid-rows-[auto_1fr] gap-4 ">
           <UserStats />
           <Leaderboard className="min-h-[400px]" />
@@ -69,7 +68,7 @@ export default function Dashboard() {
         </div>
         <div className='w-[50%]'>
 
-         <LabelButton variant='filled'>
+         <LabelButton variant='filled' onClick={() => router.push('/contest/join')}>
           Play Contest
          </LabelButton>
         </div>
