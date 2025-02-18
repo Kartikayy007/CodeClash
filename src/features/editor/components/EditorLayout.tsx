@@ -39,7 +39,7 @@ const EditorLayout = ({ questionData, matchId }: EditorLayoutProps) => {
   ] as const;
 
   return (
-    <div className="flex flex-col bg-[#10141D] text-white min-h-screen">
+    <div className="flex flex-col bg-[#10141D] text-white min-h-screen ">
       
       <Header />
       
@@ -54,10 +54,11 @@ const EditorLayout = ({ questionData, matchId }: EditorLayoutProps) => {
 
       
       <div className="flex-1 px-4 mb-4">
+        
         <div className={`flex gap-4 ${isDescriptionMaximized ? 'flex-col' : ''}`}>
           
           
-          <div className={`bg-[#1A1D24] overflow-hidden rounded-lg flex flex-col ${
+          <div className={`bg-[#1A1D24] overflow-scroll rounded-lg flex flex-col ${
             isDescriptionMaximized ? 'w-full' :
             isDescriptionCollapsed ? 'w-12' :
             isEditorMaximized ? 'hidden' : 'w-1/2'
@@ -91,25 +92,25 @@ const EditorLayout = ({ questionData, matchId }: EditorLayoutProps) => {
               </div>
             </div>
 
-            <div className={` overflow-y-scroll ${isDescriptionCollapsed ? 'hidden' : ''}`}>
+            <div className={`overflow-y-auto flex-1 ${isDescriptionCollapsed ? 'hidden' : ''}`}>
               {activeTab === 'description' ? (
-                <div className="h-full overflow-y-scroll">
+                <div className="h-full">
                   <Question problem={questionData} />
                 </div>
               ) : activeTab === 'submissions' && (
-                <div className="h-full overflow-y-auto">
+                <div className="h-full">
                   <SubmissionTab matchId={matchId} />
                 </div>
               )}
             </div>
           </div>
 
-          <div className={`flex flex-col gap-4 ${
+          <div className={`flex flex-col gap-4 fle ${
             isDescriptionMaximized ? 'hidden' :
             isDescriptionCollapsed ? 'w-[calc(100%-56px)]' :
             'w-1/2'
           }`}>
-            <div className={`transition-all duration-300`}>
+            <div className={`transition-all duration-300 h-1/2`}>
               <Editor
                 language={language as 'c' | 'cpp' | 'python' | 'java' | 'javascript'}
                 onLanguageChange={setLanguage}
@@ -117,7 +118,8 @@ const EditorLayout = ({ questionData, matchId }: EditorLayoutProps) => {
               />
             </div>
 
-            <div className={`transition-all duration-300 h-[10rem]`}>
+            {/* TestCases container */}
+            <div className={`transition-all duration-300 flex-1`}>
               <TestCases
                 testCases={questionData.testCases.filter(tc => !tc.isHidden)}
                 isCollapsed={isTestCaseCollapsed}

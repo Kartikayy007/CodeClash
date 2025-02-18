@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { socketService } from '@/lib/socket';
@@ -53,9 +53,6 @@ const BattleRoom = () => {
   const [isMaximized, setIsMaximized] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const battleState = useSelector((state: RootState) => state.battle);
-  // const matchId = battleState.matchId;
-  
-   ('🔍 Battle state:', battleState);
 
 
   const handleLanguageChange = (newLanguage: string) => {
@@ -85,7 +82,6 @@ const BattleRoom = () => {
     );
   }
 
-   ('battleState.matchId', battleState.matchId);
 
   return (
     <EditorLayout questionData={currentProblem} matchId={battleState.matchId as string}>
