@@ -116,11 +116,11 @@ int main() {
         </div>
       </div>
       <div className={`transform transition-all duration-300 ease-in-out origin-top ${
-        isCollapsed ? 'hidden' : 'h-[calc(100%-34px)]'
+        isCollapsed ? 'hidden' : 'h-full'
       } bg-[#1E1B2E] flex flex-col`}>
         <CodeMirror
           value={code || defaultCode[language]}
-          height="calc(100vh - 520px)" 
+          height="calc(100vh - 50vh)" 
           width="100%"
           theme="dark"
           style={{ flex: 1 }}
