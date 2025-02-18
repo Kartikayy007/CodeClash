@@ -1,14 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import NavbarPlain from '@/components/ui/NavbarPlain';
 import { Search, Edit, BarChart2, Trash } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 
 type ContestStatus = 'All' | 'Scheduled' | 'Ongoing' | 'Completed';
 
 interface Contest {
-  contestId: string;
   title: string;
   startTime: string;
   endTime: string;
@@ -17,13 +15,12 @@ interface Contest {
 }
 
 export default function ContestsPage() {
-  const router = useRouter();
   const [selectedStatus, setSelectedStatus] = useState<ContestStatus>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [contests, setContests] = useState<Contest[]>([]);
 
   useEffect(() => {
-    const fetchContests = async () => {
+    async function fetchContests() {
       const token = localStorage.getItem('accessToken');
       if (!token) {
         console.error('No access token found');
@@ -39,7 +36,8 @@ export default function ContestsPage() {
         });
 
         const data = await response.json();
-        console.log('Fetched Contests:', data); 
+        console.log('Fetched Contests:', data); // Debugging API response
+
         if (Array.isArray(data)) {
           setContests(data);
         } else if (data && data.contests && Array.isArray(data.contests)) {
@@ -50,7 +48,7 @@ export default function ContestsPage() {
       } catch (error) {
         console.error('Error fetching contests:', error);
       }
-    };
+    }
 
     fetchContests();
   }, []);
@@ -144,11 +142,10 @@ export default function ContestsPage() {
             </div>
 
             {filteredContests.length > 0 ? (
-              filteredContests.map((contest) => (
+              filteredContests.map((contest, index) => (
                 <div
-                  key={contest.contestId}
-                  className="grid grid-cols-4 p-4 text-white border-b border-gray-700 hover:bg-[#282C34] cursor-pointer"
-                  onClick={() => router.push(`/contest/statistics/${contest.contestId}`)}
+                  key={index}
+                  className="grid grid-cols-4 p-4 text-white border-b border-gray-700 hover:bg-[#282C34]"
                 >
                   <div>{contest.title}</div>
                   <div>{formatDate(contest.startTime)}</div>
