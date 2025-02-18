@@ -25,7 +25,18 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
     constraints: '',
     outputFormat: '',
     testCases: [
-      { input: '', output: '', sample: true, strength: 10 }
+      {
+        input: '',
+        output: '',
+        sample: true,
+        strength: 10
+      },
+      {
+        input: '',
+        output: '',
+        sample: true,
+        strength: 10
+      }
     ]
   });
   const [errors, setErrors] = useState<{ [key: string]: boolean }>({});
@@ -150,16 +161,42 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
   };
 
   const handleTestCaseChange = (index: number, field: keyof typeof formData.testCases[0], value: string | boolean | number) => {
-    setFormData(prev => ({
-      ...prev,
-      testCases: prev.testCases.map((tc, i) =>
-        i === index ? { ...tc, [field]: value } : tc
-      )
-    }));
+    setFormData(prev => {
+      // If the index is equal to the length, we're adding a new test case
+      if (index === prev.testCases.length) {
+        return {
+          ...prev,
+          testCases: [
+            ...prev.testCases,
+            {
+              input: '',
+              output: '',
+              sample: true,
+              strength: 10,
+              [field]: value
+            }
+          ]
+        };
+      }
+      // Otherwise, we're updating an existing test case
+      return {
+        ...prev,
+        testCases: prev.testCases.map((tc, i) =>
+          i === index ? { ...tc, [field]: value } : tc
+        )
+      };
+    });
     // Clear error for this test case when user makes changes
     if (errors[`testCase${index}`]) {
       setErrors(prev => ({ ...prev, [`testCase${index}`]: false }));
     }
+  };
+
+  const handleDeleteTestCase = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      testCases: prev.testCases.filter((_, i) => i !== index)
+    }));
   };
 
   return (
@@ -244,6 +281,7 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
               <TestCasesForm
                 testCases={formData.testCases}
                 onChange={handleTestCaseChange}
+                onDelete={handleDeleteTestCase}
                 errors={errors}
               />
             )}

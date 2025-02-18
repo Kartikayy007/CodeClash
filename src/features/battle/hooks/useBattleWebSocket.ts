@@ -54,7 +54,7 @@ export const useBattleWebSocket = () => {
   const dispatch = useDispatch();
 
   const onGameStart = async (data: GameStartData) => {
-    console.log('🎮 Game start handler called');
+     ('🎮 Game start handler called');
     
     if (!currentMatchId.current) {
       console.error('❌ No match ID available');
@@ -64,11 +64,11 @@ export const useBattleWebSocket = () => {
     } 
 
     try {
-      console.log('🚀 Navigating to:', `/battle/${currentMatchId.current}`);
+       ('🚀 Navigating to:', `/battle/${currentMatchId.current}`);
       
       const problemPromises = data.problems.map(problemId => fetchProblem(problemId));
       const problems = await Promise.all(problemPromises);
-      console.log('🎯 Fetched problems:', problems);
+       ('🎯 Fetched problems:', problems);
       
       const battleProblems = problems.map(problem => ({
         ...problem,
@@ -119,14 +119,14 @@ export const useBattleWebSocket = () => {
   };
 
   useEffect(() => {
-    console.log('🎮 Setting up battle websocket event listeners');
+     ('🎮 Setting up battle websocket event listeners');
     
     const onConnect = () => {
-      console.log('✅ Connected to socket');
+       ('✅ Connected to socket');
     };
 
     const onGameStateUpdate = (data: { userId: string; problemId: string; status: string }) => {
-      console.log('🎮 Game state update received in hook:', {
+       ('🎮 Game state update received in hook:', {
         data,
         matchId: currentMatchId.current,
         timestamp: new Date().toISOString()
@@ -137,18 +137,18 @@ export const useBattleWebSocket = () => {
         return;
       }
       const myId = store.getState().auth.user?.id;
-      console.log("myId", myId);
+       ("myId", myId);
       dispatch(updateProblemStatus({
         problemId: data.problemId,
         status: data.status as 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR',
         userId: data.userId,
         myId: myId as string
       }));
-      console.log('✅ Problem status updated in store');
+       ('✅ Problem status updated in store');
     };
 
     const onMatchFound = (data: MatchFoundData) => {
-      console.log('✅ Match found:', data);
+       ('✅ Match found:', data);
       setState(prev => ({
         ...prev,
         isSearching: false,
@@ -156,20 +156,20 @@ export const useBattleWebSocket = () => {
         hasStartedGame: false
       }));
       
-      console.log('🎯 Joining match:', data.matchId);
+       ('🎯 Joining match:', data.matchId);
       socketService.joinRoom(data.matchId);
     };
 
     const onMatchState = (response: MatchStateData) => {
-      console.log('📊 Match state received in PlayButton:', response);
+       ('📊 Match state received in PlayButton:', response);
       currentMatchId.current = response.matchId;
 
       if (response.status) {
-        console.log('✅ Successfully joined match, starting game');
-        console.log('🎮 Starting game with matchId:', response.matchId);
+         ('✅ Successfully joined match, starting game');
+         ('🎮 Starting game with matchId:', response.matchId);
         socketService.startGame(response.matchId);
       } else {
-        console.log('❌ Match state received but status not true:', response);
+         ('❌ Match state received but status not true:', response);
       }
     };
 
@@ -218,7 +218,7 @@ export const useBattleWebSocket = () => {
     socketService.on('auth_error', onAuthError);
 
     return () => {
-      console.log('🧹 Cleaning up battle websocket event listeners');
+       ('🧹 Cleaning up battle websocket event listeners');
       socketService.off('connect', onConnect);
       socketService.off('match_found', onMatchFound);
       socketService.off('match_state', onMatchState);
@@ -245,17 +245,17 @@ export const useBattleWebSocket = () => {
     }
 
     setState(prev => ({ ...prev, isSearching: true, error: null }));
-    console.log('🎮 Starting matchmaking...');
+     ('🎮 Starting matchmaking...');
     
     if (!socketService.isConnected()) {
-      console.log('🔌 Connecting socket from battle hook');
+       ('🔌 Connecting socket from battle hook');
       socketService.connect(token);
       socketService.on('connect', () => {
-        console.log('✅ Socket connected, starting matchmaking');
+         ('✅ Socket connected, starting matchmaking');
         socketService.joinMatchmaking(mode);
       });
     } else {
-      console.log('✅ Socket already connected, starting matchmaking');
+       ('✅ Socket already connected, starting matchmaking');
       socketService.joinMatchmaking(mode);
     }
   };

@@ -52,7 +52,7 @@ export default function AccountSettings() {
       await settingsApi.changeUsername({
         username: data.username
       });
-      console.log('Username changed successfully');
+       ('Username changed successfully');
       toast.success('Username changed successfully', 'Username changed successfully');
       setIsProfileModalOpen(false);
       usernameForm.reset();
@@ -66,7 +66,7 @@ export default function AccountSettings() {
       await settingsApi.deleteAccount();
       toast.success('Account deleted successfully', 'Account deleted successfully');
       localStorage.removeItem('accessToken');
-      console.log('Account deleted successfully');  
+       ('Account deleted successfully');  
       // router.push('/login');
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to delete account', 'Failed to delete account');

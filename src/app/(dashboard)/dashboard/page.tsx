@@ -38,7 +38,7 @@ export default function Dashboard() {
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (token && !socketService.isConnected()) {
-      console.log('🔌 Connecting socket from dashboard');
+       ('🔌 Connecting socket from dashboard');
       socketService.connect(token);
     }
 

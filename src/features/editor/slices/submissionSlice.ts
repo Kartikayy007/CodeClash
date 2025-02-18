@@ -126,7 +126,7 @@ const submissionSlice = createSlice({
     },
     setLatestSubmission: (state, action: PayloadAction<any>) => {
       state.latestSubmission = action.payload;
-      console.log('Setting latest submission:', action.payload);
+       ('Setting latest submission:', action.payload);
     },
   },
   extraReducers: (builder) => {
