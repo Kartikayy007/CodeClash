@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Maximize2, Minimize2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Problem } from '@/features/editor/api/problems';
 import TopBar from './TopBar';
 import Header from './Header';
 import Question from './Question';
-import Submissions from './submissionTab/Submissions';
+// import Submissions from './submissionTab/Submissions';
 import Editor from './Editor';
 import TestCases from './TestCases';
-import SubmissionDetails from './submissionTab/SubmissionDetails';
+// import SubmissionDetails from './submissionTab/SubmissionDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setCurrentProblemIndex } from '@/features/battle/slices/battleSlice';

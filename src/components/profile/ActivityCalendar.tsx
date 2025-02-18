@@ -30,7 +30,7 @@ const ActivityCalendar: React.FC<ActivityCalendarProps> = ({
     count: 0,
     level: 0
   }];
-
+console.log("visibleMonths", visibleMonths)
   const displayData = activityData.length > 0 ? activityData : defaultData;
 
   return (

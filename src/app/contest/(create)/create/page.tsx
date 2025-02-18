@@ -7,6 +7,13 @@ import Image from 'next/image';
 import { contestApi } from '@/features/contests/api/contestApi';
 import { toast } from 'react-hot-toast';
 
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
 export default function CreateContest() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -85,8 +92,9 @@ export default function CreateContest() {
       });
 
       router.push(`/contest/create/details?${params.toString()}`);
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to create contest');
+    } catch (error) {
+      const err = error as ApiError;
+      toast.error(err?.response?.data?.message || 'Failed to create contest');
     }
   };
 
