@@ -34,7 +34,7 @@ export const contestApi = {
   registerForContest: async (contestId: string): Promise<RegisterContestResponse> => {
     const token = localStorage.getItem('accessToken');
     const response = await api.post<RegisterContestResponse>(
-      `${BASE_URL}/api/v1/contest/${contestId}/register`,
+      `${BASE_URL}/api/v1/contest/${contestId}/join`,
       {},
       {
         headers: {

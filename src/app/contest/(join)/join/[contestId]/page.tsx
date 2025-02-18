@@ -7,7 +7,8 @@ import LabelButton from '@/components/ui/LabelButton';
 import { ArrowLeft } from 'lucide-react';
 import { Contest } from '@/features/contests/types/contest.types';
 import { contestApi } from '@/features/contests/api/contestApi';
-import { toast } from '@/providers/toast-config';
+import toast from 'react-hot-toast';
+import Timer from '@/components/Contest/joinContest/Timer';
 
 type TabType = 'Description' | 'Rules' | 'Score' | 'Prizes';
 
@@ -51,13 +52,13 @@ export default function ContestDetails() {
       try {
         setLoading(true);
         const response = await contestApi.getContestDetails(contestId);
-        
+        toast.success(response.message);
         if (response.contest) {
           setContest(response.contest);
         }
       } catch (error) {
         console.error('Error fetching contest details:', error);
-        toast.error('Failed to fetch contest details', 'fetch-error');
+        toast.error('Failed to fetch contest details');
       } finally {
         setLoading(false);
       }
@@ -68,21 +69,23 @@ export default function ContestDetails() {
 
   const handleRegister = async () => {
     if (!contestId) return;
-
+  
     try {
       setRegistering(true);
       const response = await contestApi.registerForContest(contest.id);
-      if (response.success) {
-        toast.success('Successfully registered for the contest', 'register-success');
-        // Refresh contest details to update registration status
+      
+      if (response.data) {
+        toast.success(response.message || 'Successfully joined the contest');
+        
         const updatedDetails = await contestApi.getContestDetails(contestId);
         if (updatedDetails.contest) {
           setContest(updatedDetails.contest);
         }
       }
-    } catch (error) {
-      console.error('Error registering for contest:', error);
-      toast.error('Failed to register for the contest', 'register-error');
+    } catch (error: unknown) {
+      const errorMessage = 'Failed to join the contest';
+      console.error(errorMessage, error);
+      toast.error(errorMessage);
     } finally {
       setRegistering(false);
     }
@@ -93,12 +96,15 @@ export default function ContestDetails() {
       case 'Description':
         return (
           <div className="text-gray-300 whitespace-pre-wrap">
-            {contest.description}
+            {contest.description || 'No description provided for this contest.'}
           </div>
         );
       case 'Rules':
         return (
           <div className="space-y-2 text-gray-300">
+            <div>
+              <p className="font-medium">Rules</p>
+            </div>
             {contest.rules ? contest.rules.split('\n').map((rule, index) => (
               <p key={index}>{index + 1}. {rule}</p>
             )) : (
@@ -110,20 +116,8 @@ export default function ContestDetails() {
         return (
           <div className="space-y-4 text-gray-300">
             <div>
-              <h3 className="text-lg font-medium mb-2">Problem Levels:</h3>
-              <ul className="list-disc pl-5 space-y-2">
-                <li>Easy: 10 points</li>
-                <li>Medium: 30 points</li>
-                <li>Hard: 50 points</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-medium mb-2">Tie-breaker:</h3>
-              <p>In case of a tie, the participant who solves the problems in the least amount of time will be declared the winner.</p>
-            </div>
-            <div>
-              <h3 className="text-lg font-medium mb-2">Bonus Points:</h3>
-              <p>Additional points for submitting solutions early (1 point per 10 minutes saved).</p>
+              <p className="font-medium">Scoring</p>
+              <p>{contest.score || 'No scoring system specified'}</p>
             </div>
           </div>
         );
@@ -132,28 +126,7 @@ export default function ContestDetails() {
           <div className="space-y-6">
             <div className="flex items-center gap-4">
               <Image src="/gold.svg" alt="1st Prize" width={40} height={40} />
-              <div>
-                <p className="font-medium">1st Place</p>
-                <p className="text-gray-400">{contest.prizes || 'No prize specified'}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <Image src="/silver.svg" alt="2nd Prize" width={40} height={40} />
-              <div>
-                <p className="font-medium">2nd Place</p>
-                <p className="text-gray-400">Cash prize of $300 and a certificate of merit.</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <Image src="/bronze.svg" alt="3rd Prize" width={40} height={40} />
-              <div>
-                <p className="font-medium">3rd Place</p>
-                <p className="text-gray-400">Cash prize of $150 and a certificate of merit.</p>
-              </div>
-            </div>
-            <div className="pt-4 border-t border-gray-700">
-              <p className="text-gray-400">⭐ Top 10 Participants: Exclusive goodies and participation certificates.</p>
-              <p className="text-gray-400 mt-2">🎯 Early Bird Special: A special prize for the first participant to submit all correct solutions.</p>
+              {contest.prizes || 'No prize specified Prices will be announced soon.'}
             </div>
           </div>
         );
@@ -181,13 +154,25 @@ export default function ContestDetails() {
             <ArrowLeft size={20} />
             <span>Back</span>
           </button>
+          
           <div className='bg-[#1A1D24] w-1/2 rounded-lg px-18 py-8 flex justify-center items-center'>
-            <div className='text-center'>
+            <div className='text-center space-y-4'>
               <h1 className='text-2xl font-bold'>{contest.title}</h1>
-              <p className='text-gray-400'>{new Date(contest.startTime).toLocaleString()} to {new Date(contest.endTime).toLocaleString()}</p>
+              <p className='text-gray-400'>
+                {new Date(contest.startTime).toLocaleString()} to {new Date(contest.endTime).toLocaleString()}
+              </p>
               <p className='text-white text-center text-sm'>
                 {contest.creator.username}
               </p>
+              {contest.isRegistered && contest.status === 'UPCOMING' && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-400 mb-2">Contest starts in</p>
+                  <Timer 
+                    startTime={contest.startTime} 
+                    contestId={contest.id}
+                  />
+                </div>
+              )}
             </div>
           </div>
           <LabelButton
@@ -224,4 +209,4 @@ export default function ContestDetails() {
       </div>
     </div>
   );
-} 
+}
