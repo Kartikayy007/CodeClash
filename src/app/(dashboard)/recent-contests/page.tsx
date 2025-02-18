@@ -15,11 +15,11 @@ import LabelButton from '@/components/ui/LabelButton';
 export default function ContestsPage() {
   const [selectedStatus, setSelectedStatus] = useState<MatchStatus | 'All'>('All');
   const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage] = useState(1);
   const PAGE_SIZE = 12;
 
   const dispatch = useDispatch<AppDispatch>();
-  const { matches, loading, error, pagination } = useSelector((state: RootState) => state.matches);
+  const { matches, loading, error } = useSelector((state: RootState) => state.matches);
 
   useEffect(() => {
     dispatch(fetchMatches({

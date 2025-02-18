@@ -14,7 +14,7 @@ const UserPerformance = ({ user, onClose }) => {
 
   return (
     <div className="p-6 rounded-lg bg-[#10141D]">
-      <h2 className="text-xl font-bold mb-4 text-white">Analyzing {user.username}'s Performance</h2>
+      <h2 className="text-xl font-bold mb-4 text-white">Analyzing {user.username}&apos;s Performance</h2>
       <div className="text-white mb-4 flex justify-between px-4 py-4 bg-[#ffffff1d]">
         <p>Rank: {user.rank}</p>
         <p>Score: {user.score}</p>

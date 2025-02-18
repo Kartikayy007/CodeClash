@@ -58,7 +58,7 @@ const Submissions: React.FC<SubmissionsProps> = ({ onSelectSubmission }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { submissions, loading } = useSelector((state: RootState) => state.submissions);
   const { matchId } = useSelector((state: RootState) => state.battle);
-   (submissions);
+   console.log(submissions);
 
   useEffect(() => {
     if (matchId) {

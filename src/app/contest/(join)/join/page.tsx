@@ -6,6 +6,13 @@ import LabelButton from '@/components/ui/LabelButton';
 import Image from 'next/image';
 import { contestApi } from '@/features/contests/api/contestApi';
 
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
 export default function JoinContest() {
   const [contestCode, setContestCode] = useState('');
   const [error, setError] = useState('');
@@ -29,8 +36,9 @@ export default function JoinContest() {
       } else {
         setError('Contest not found');
       }
-    } catch (error: any) {
-      setError(error?.response?.data?.message || 'Contest not found');
+    } catch (error) {
+      const err = error as ApiError;
+      setError(err?.response?.data?.message || 'Contest not found');
     }
   };
 

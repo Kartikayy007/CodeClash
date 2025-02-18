@@ -1,5 +1,5 @@
-import { updateProblemStatus } from '@/features/battle/slices/battleSlice';
-import router from 'next/router';
+// import { updateProblemStatus } from '@/features/battle/slices/battleSlice';
+// import router from 'next/router';
 import { io, Socket } from 'socket.io-client';
 
 type GameMode = 'STANDARD' | 'BLITZ';
@@ -28,7 +28,7 @@ interface RoomState {
   status: 'WAITING' | 'IN_PROGRESS' | 'COMPLETED' | 'ABORTED';
 }
 
-type SocketEventCallback<T> = (data: T) => void;
+// type SocketEventCallback<T> = (data: T) => void;
 
 interface EventData {
   match_found: { matchId: string; players: string[] };
@@ -85,11 +85,11 @@ class SocketService {
 
   connect(token: string): void {
     if (this.socket?.connected) {
-       ('🔌 Socket already connected, skipping connection');
+       console.log("🔌 Socket already connected, skipping connection");
       return;
     }
 
-     ('🔌 Connecting to Socket.IO server...');
+     console.log("🔌 Connecting to Socket.IO server...");
     
     this.socket = io('https://goyalshivansh.me', {
       path: '/socket/',
@@ -117,12 +117,12 @@ class SocketService {
     if (!this.socket) return;
 
     this.socket.on('connect', () => {
-       ('✅ Socket connected successfully');
+       console.log("✅ Socket connected successfully");
       this.reconnectAttempts = 0;
     });
 
     this.socket.on('disconnect', (reason) => {
-       ('❌ Socket disconnected:', reason);
+       console.log("❌ Socket disconnected:", reason);
     });
 
     this.socket.on('connect_error', (error) => {
@@ -137,7 +137,7 @@ class SocketService {
 
     // Game state update event
     this.socket.on('game_state_update', (data) => {
-       ('🎮 Game state update received in socket:', data);
+       console.log("🎮 Game state update received in socket:", data);
       const listeners = this.eventListeners.get('game_state_update');
       if (listeners) {
         listeners.forEach(listener => listener(data));
@@ -146,7 +146,7 @@ class SocketService {
 
     // Handle other socket events
     this.socket.onAny((eventName, ...args) => {
-       (`📡 Socket event received: ${eventName}`, args);
+       console.log("📡 Socket event received:", eventName, args);
       const listeners = this.eventListeners.get(eventName as keyof EventData);
       if (listeners) {
         listeners.forEach(listener => listener(...args));
@@ -185,7 +185,7 @@ class SocketService {
       this.socket.disconnect();
       this.socket = null;
       this.eventListeners.clear();
-       ('🔌 Socket disconnected manually');
+       console.log("🔌 Socket disconnected manually");
     }
   }
 
@@ -194,16 +194,16 @@ class SocketService {
       console.error('❌ Cannot join matchmaking: Socket not connected');
       return;
     }
-     ('🎮 Joining matchmaking queue:', mode);
+     console.log("🎮 Joining matchmaking queue:", mode);
     this.socket.emit('join_matchmaking', { mode });
     this.on('match_found', (data) => {
-       ('🎮 Match found:', data);
+       console.log("🎮 Match found:", data);
     });
   }
 
   leaveMatchmaking(): void {
     if (this.socket?.connected) {
-       ('🚪 Leaving matchmaking queue');
+       console.log("🚪 Leaving matchmaking queue");
       this.socket.emit('leave_matchmaking', {});
     }
   }
@@ -213,7 +213,7 @@ class SocketService {
       console.error('❌ Cannot join room: Socket not connected');
       return;
     }
-     ('🎯 Joining match:', matchId);
+     console.log("🎯 Joining match:", matchId);
     this.currentmatchId = matchId;
     this.socket.emit('join_match', matchId);
   }
@@ -227,19 +227,19 @@ class SocketService {
       console.error('❌ Match ID mismatch:', { current: this.currentmatchId, received: matchId });
       return;
     }
-     ('🎬 Starting game:', matchId);
+     console.log("🎬 Starting game:", matchId);
     this.socket.emit('start_game', matchId);
   }
 
   getGameState(matchId: string): void {
     if (!this.socket?.connected) return;
-     ('📊 Getting game state:', matchId);
+     console.log("📊 Getting game state:", matchId);
     this.socket.emit('get_game_state', { matchId });
   }
 
   rejoinRoom(matchId: string): void {
     if (!this.socket?.connected) return;
-     ('🔄 Rejoining room:', matchId);
+     console.log("🔄 Rejoining room:", matchId);
     this.socket.emit('rejoin_room', { matchId });
   }
 }

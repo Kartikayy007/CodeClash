@@ -1,4 +1,4 @@
-import ContestRow from './ContestRow';
+// import ContestRow from './ContestRow';
 
 interface Contest {
   name: string;

@@ -24,7 +24,7 @@ export default function MatchesPage() {
   const PAGE_SIZE = 12;
 
   const dispatch = useDispatch<AppDispatch>();
-  const { matches, loading, error, winsCount, lossesCount, totalMatches, pagination } = useSelector((state: RootState) => state.matches);
+  const { matches, loading, error, winsCount, totalMatches, pagination } = useSelector((state: RootState) => state.matches);
 
   useEffect(() => {
     dispatch(fetchMatches({

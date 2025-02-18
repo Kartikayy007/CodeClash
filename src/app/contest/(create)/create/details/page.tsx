@@ -14,6 +14,33 @@ import PreviewContest from '@/components/Contest/PreviewContest/PreviewContest';
 import { initializeForm } from '@/features/contests/slices/createContestSlice';
 import { useDispatch } from 'react-redux';
 
+interface ApiError {
+  response: {
+    data: {
+      message: string;
+    };
+  };
+}
+
+interface QuestionResponse {
+  id: string;
+  title: string;
+  description: string;
+  inputFormat: string;
+  difficulty: string;
+  outputFormat: string;
+  constraints: string;
+  score: number;
+  rating: number;
+  testCases: Array<TestCase>;
+}
+
+interface TestCase {
+  input: string;
+  output: string;
+  isHidden: boolean;
+}
+
 interface Problem {
   id?: string;
   name: string;
@@ -111,7 +138,7 @@ const Details = () => {
 
         // Set problems if they exist
         if (Array.isArray(contestData.questions)) {
-          setProblems(contestData.questions.map((q: any) => ({
+          setProblems((contestData.questions as QuestionResponse[]).map((q: QuestionResponse) => ({
             id: q.id,
             name: q.title || '',
             title: q.title || '',
@@ -122,7 +149,7 @@ const Details = () => {
             inputFormat: q.inputFormat || '',
             constraints: q.constraints || '',
             outputFormat: q.outputFormat || '',
-            testCases: Array.isArray(q.testCases) ? q.testCases.map((tc: any) => ({
+            testCases: Array.isArray(q.testCases) ? q.testCases.map((tc: TestCase) => ({
               input: tc.input || '',
               output: tc.output || '',
               sample: !tc.isHidden,
@@ -198,12 +225,13 @@ const Details = () => {
         score: formData.score,
         organizationName: formData.organizationName  
       });
-      
+      console.log('Response:', response);
       setInitialFormData(formData); // Update initial state
       setIsDirty(false); // Reset dirty state
       toast.success('Contest updated successfully!');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to update contest');
+    } catch (error) {
+      const err = error as ApiError;
+      toast.error(err?.response?.data?.message || 'Failed to update contest');
     }
   };
 
@@ -239,8 +267,9 @@ const Details = () => {
       });
 
       setProblems(prev => prev.filter((_, i) => i !== index));
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to delete problem');
+    } catch (error) {
+      const err = error as ApiError;
+      toast.error(err?.response?.data?.message || 'Failed to delete problem');
     }
   };
 
@@ -274,8 +303,9 @@ const Details = () => {
 
       setProblems(prev => [...prev, problemData]);
       toast.success('Problem added successfully!');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to add problem');
+    } catch (error) {
+      const err = error as ApiError;
+      toast.error(err?.response?.data?.message || 'Failed to add problem');
     }
   };
 

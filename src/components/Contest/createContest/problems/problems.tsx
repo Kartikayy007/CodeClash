@@ -3,13 +3,20 @@
 import React, { useState } from 'react';
 import Modal from '@/components/ui/Modal';
 import LabelButton from '@/components/ui/LabelButton';
-import { Copy, Pencil, Trash, Plus } from 'lucide-react';
+import {  Pencil, Trash } from 'lucide-react';
 import CreateProblem from './createProblem';
 import Image from 'next/image';
 import LibProblems from './problemLibrary/libProblems';
 import { Problem } from '@/types/problem.types';
 import { toast } from 'react-hot-toast';
 
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
 interface ProblemsProps {
   problems: Problem[];
   onAddProblem: () => void;
@@ -73,8 +80,9 @@ const Problems: React.FC<ProblemsProps> = ({
         try {
           await onDeleteProblem(selectedProblemIndex);
           toast.success('Problem deleted successfully');
-        } catch (error: any) {
-          toast.error(error.message || 'Failed to delete problem');
+        } catch (error) {
+          const err = error as ApiError;
+          toast.error(err?.response?.data?.message || 'Failed to delete problem');
         }
       }
       setShowDeleteConfirm(false);
@@ -157,7 +165,7 @@ const Problems: React.FC<ProblemsProps> = ({
               <h1 className="text-white text-2xl font-bold">
                 No Problems added!
               </h1>
-              <p className="text-gray-400 mt-4">No You haven't added any problems to this contest yet. Start by adding one now!.</p>
+              <p className="text-gray-400 mt-4">No You haven&apos;t added any problems to this contest yet. Start by adding one now!.</p>
             </div>
           ) : (
             <div className="bg-[#1A1D24] rounded-lg overflow-hidden">
