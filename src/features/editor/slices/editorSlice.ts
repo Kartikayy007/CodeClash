@@ -60,15 +60,15 @@ export const submitCode = createAsyncThunk<
   { rejectValue: string }
 >('editor/submitCode', async (data, { rejectWithValue, dispatch }) => {
   try {
-     ('🚀 Starting code submission:', data);
+     console.log("🚀 Starting code submission:", data);
     dispatch(setActiveTab('submissions'));
     
     const response = await submitCodeApi(data);
-     ('✅ Submission API response:', response);
+     console.log("✅ Submission API response:", response);
     return response;
   } catch (error: unknown) {
     const axiosError = error as AxiosError<ErrorResponse>;
-     ('❌ Submission error:', axiosError.response?.data);
+     console.log("❌ Submission error:", axiosError.response?.data);
     return rejectWithValue(
       axiosError.response?.data?.message || 'Failed to submit code'
     );
@@ -135,7 +135,7 @@ const editorSlice = createSlice({
         state.output = null;
       })
       .addCase(submitCode.pending, (state) => {
-         ('⏳ Submission pending, setting initial state');
+         console.log("⏳ Submission pending, setting initial state");
         state.isSubmitting = true;
         state.submissionResponse = {
           submissionId: '',
@@ -145,11 +145,11 @@ const editorSlice = createSlice({
           executionTime: 0,
           failedTestCase: null
         };
-         ('🔄 Current submission state:', state.submissionResponse);
+         console.log("🔄 Current submission state:", state.submissionResponse);
         state.error = null;
       })
       .addCase(submitCode.fulfilled, (state, action) => {
-         ('✨ Submission fulfilled, updating state with:', action.payload);
+         console.log("✨ Submission fulfilled, updating state with:", action.payload);
         state.isSubmitting = false;
         if (action.payload) {
           state.submissionResponse = {
@@ -160,11 +160,11 @@ const editorSlice = createSlice({
             executionTime: action.payload.executionTime,
             failedTestCase: action.payload.failedTestCase,
           };
-           ('📊 Updated submission state:', state.submissionResponse);
+                 console.log("📊 Updated submission state:", state.submissionResponse);
         }
       })
       .addCase(submitCode.rejected, (state, action) => {
-         ('💥 Submission rejected:', action.payload);
+          console.log("💥 Submission rejected:", action.payload);
         state.isSubmitting = false;
         state.error = action.payload || 'Failed to submit code';
         state.submissionResponse = null;

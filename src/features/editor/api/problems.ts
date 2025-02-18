@@ -34,6 +34,6 @@ export async function fetchProblem(problemId: string): Promise<Problem> {
       Authorization: `Bearer ${token}`
     }
   });
-   ('🎯 Fetched problem:', response.data);
+  console.log("🎯 Fetched problem:", response.data);
   return response.data.data;
 }

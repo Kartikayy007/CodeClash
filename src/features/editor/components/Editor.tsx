@@ -24,7 +24,7 @@ const CodeEditor = ({
   className = '',
 }: EditorProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { code, output, error } = useSelector((state: RootState) => state.editor);
+  const { code } = useSelector((state: RootState) => state.editor);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
 

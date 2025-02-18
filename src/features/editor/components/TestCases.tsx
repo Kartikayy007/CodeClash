@@ -1,22 +1,22 @@
 import React from 'react';
 import { ChevronUp, ChevronDown, Check, X } from 'lucide-react';
 import { TestCase } from '@/features/editor/api/problems';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/store/store';
+import { useSelector } from 'react-redux';
+import {  RootState } from '@/store/store';
 
 interface TestCaseResult {
   passed: boolean;
   output: string | null;
 }
 
-interface SubmissionResponse {
-  submissionId: string;
-  status: string;
-  testCasesPassed: number;
-  totalTestCases: number;
-  executionTime: number;
-  failedTestCase: string | null;
-}
+// interface SubmissionResponse {
+//   submissionId: string;
+//   status: string;
+//   testCasesPassed: number;
+//   totalTestCases: number;
+//   executionTime: number;
+//   failedTestCase: string | null;
+// }
 
 interface TestCasesProps {
   testCases: TestCase[];
@@ -31,9 +31,9 @@ const TestCases: React.FC<TestCasesProps> = ({
   onCollapse,
   className = ''
 }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { code, language, isRunning, output, error, submissionResponse } = useSelector((state: RootState) => state.editor);
-  const { matchId } = useSelector((state: RootState) => state.battle);
+  // const dispatch = useDispatch<AppDispatch>();
+  const {  output, error, submissionResponse } = useSelector((state: RootState) => state.editor);
+  // const { matchId } = useSelector((state: RootState) => state.battle);
   const [selectedCase, setSelectedCase] = React.useState(0);
   const [testResults, setTestResults] = React.useState<Record<number, TestCaseResult>>({});
 

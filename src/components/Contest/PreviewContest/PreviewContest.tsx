@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import LabelButton from '@/components/ui/LabelButton';
-import { Timer } from 'lucide-react';
+// import { useRouter } from 'next/navigation';
+// import LabelButton from '@/components/ui/LabelButton';
+// import { Timer } from 'lucide-react';
 import ProblemSet from '@/components/Contest/PreviewContest/ProblemSet';
-import Leaderboard from '@/components/Contest/contestPage/Leaderboard';
-import MySubmissions from '@/components/Contest/contestPage/MySubmissions';
+// import Leaderboard from '@/components/Contest/contestPage/Leaderboard';
+// import MySubmissions from '@/components/Contest/contestPage/MySubmissions';
 import ContestInsights from '@/components/Contest/contestPage/ContestInsights';
 
 interface Problem {
@@ -27,13 +27,13 @@ interface ContestInsights {
   submissions: number;
 }
 
-interface LeaderboardEntry {
-  rank: string;
-  username: string;
-  timeTaken: string;
-  score: number;
-  questionsSolved: number;
-}
+// interface LeaderboardEntry {
+//   rank: string;
+//   username: string;
+//   timeTaken: string;
+//   score: number;
+//   questionsSolved: number;
+// }
 
 type TabType = 'Problem Set' | 'Leaderboard' | 'My Submissions';
 
@@ -70,10 +70,10 @@ interface PreviewContestProps {
 }
 
 export default function PreviewContest({ contest }: PreviewContestProps) {
-  const router = useRouter();
+  // const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>('Problem Set');
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
-  const [searchQuery, setSearchQuery] = useState('');
+  // const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
+  // const [searchQuery, setSearchQuery] = useState('');
 
   // Placeholder data for preview
   const problems: Problem[] = contest.problems.map(p => ({
@@ -94,36 +94,36 @@ export default function PreviewContest({ contest }: PreviewContestProps) {
     submissions: 0
   };
 
-  const leaderboard: LeaderboardEntry[] = [
-    {
-      rank: "1",
-      username: "User1",
-      timeTaken: "00:30:00",
-      score: 100,
-      questionsSolved: 2
-    },
-    {
-      rank: "2",
-      username: "User2",
-      timeTaken: "00:45:00",
-      score: 75,
-      questionsSolved: 1
-    }
-  ];
+  // const leaderboard: LeaderboardEntry[] = [
+  //   {
+  //     rank: "1",
+  //     username: "User1",
+  //     timeTaken: "00:30:00",
+  //     score: 100,
+  //     questionsSolved: 2
+  //   },
+  //   {
+  //     rank: "2",
+  //     username: "User2",
+  //     timeTaken: "00:45:00",
+  //     score: 75,
+  //     questionsSolved: 1
+  //   }
+  // ];
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
+  // const formatTime = (seconds: number) => {
+  //   const mins = Math.floor(seconds / 60);
+  //   const secs = seconds % 60;
+  //   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  // };
 
   const handleSolveProblem = (problemId: string) => {
     console.log('Solve problem clicked:', problemId);
   };
 
-  const handleSearchChange = (query: string) => {
-    setSearchQuery(query);
-  };
+  // const handleSearchChange = (query: string) => {
+  //   setSearchQuery(query);
+  // };
 
   const renderTabContent = () => {
     switch (activeTab) {

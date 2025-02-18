@@ -5,7 +5,7 @@ import { clearSelectedSubmission } from '@/features/editor/slices/submissionSlic
 import Submissions from './Submissions';
 import SubmissionDetails from './SubmissionDetails';
 
-const SubmissionTab: React.FC<{ matchId: string }> = ({ matchId }) => {
+const SubmissionTab: React.FC<{ matchId: string }> = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [selectedSubmissionId, setSelectedSubmissionId] = useState<string | null>(null);
   const { submissionResponse } = useSelector((state: RootState) => state.editor);

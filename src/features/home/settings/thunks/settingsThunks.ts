@@ -8,14 +8,23 @@ import {
   DeleteAccountResponse 
 } from '../types/settings.types';
 
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
+
 export const changePassword = createAsyncThunk<SettingsResponse, ChangePasswordPayload>(
   'settings/changePassword',
   async (data, { rejectWithValue }) => {
     try {
       const response = await settingsApi.changePassword(data);
       return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to change password');
+    } catch (error) {
+      const err = error as ApiError;
+      return rejectWithValue(err.response?.data?.message || 'Failed to change password');
     }
   }
 );
@@ -26,8 +35,9 @@ export const changeUsername = createAsyncThunk<SettingsResponse, ChangeUsernameP
     try {
       const response = await settingsApi.changeUsername(data);
       return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to change username');
+    } catch (error) {
+      const err = error as ApiError;
+      return rejectWithValue(err.response?.data?.message || 'Failed to change username');
     }
   }
 );
@@ -41,8 +51,9 @@ export const deleteAccount = createAsyncThunk<DeleteAccountResponse, void>(
         localStorage.removeItem('accessToken');
       }
       return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to delete account');
+      } catch (error) {
+        const err = error as ApiError;
+      return rejectWithValue(err.response?.data?.message || 'Failed to delete account');
     }
   }
 );
@@ -56,8 +67,9 @@ export const logoutAllDevices = createAsyncThunk<LogoutResponse, void>(
         localStorage.removeItem('accessToken');
       }
       return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to logout from all devices');
+    } catch (error) {
+      const err = error as ApiError;
+      return rejectWithValue(err.response?.data?.message || 'Failed to logout from all devices');
     }
   }
 ); 

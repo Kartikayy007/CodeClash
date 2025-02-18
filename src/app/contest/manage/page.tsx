@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import NavbarPlain from '@/components/ui/NavbarPlain';
-import { Search, Home, Settings, Edit, BarChart2, Trash } from 'lucide-react';
-import Link from 'next/link';
+import { Search, Edit, BarChart2, Trash } from 'lucide-react';
+// import Link from 'next/link';
 
 type ContestStatus = 'All' | 'Scheduled' | 'Ongoing' | 'Completed';
 

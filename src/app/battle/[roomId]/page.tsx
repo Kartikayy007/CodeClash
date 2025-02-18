@@ -1,57 +1,57 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useParams } from 'next/navigation';
-import { useDispatch, useSelector } from 'react-redux';
+// import { useParams } from 'next/navigation';
+import { useSelector } from 'react-redux';
 import { socketService } from '@/lib/socket';
 import EditorLayout from '@/features/editor/components/EditorLayout';
 import Editor from '@/features/editor/components/Editor';
 import { RootState } from '@/store/store';
-import { useRouter } from 'next/navigation';
-import { Problem } from '@/features/editor/api/problems';
+// import { useRouter } from 'next/navigation';
+// import { Problem } from '@/features/editor/api/problems';
 
 type Language = 'cpp' | 'c' | 'python' | 'java' | 'javascript';
 
-interface Player {
-  id: string;
-  name: string;
-  isReady: boolean;
-  code: string;
-  language: string;
-  output: string;
-  error: string;
-  score: number;
-  problemsSolved: number;
-  solvedProblems: Record<string, any>;
-}
+// interface Player {
+//   id: string;
+//   name: string;
+//   isReady: boolean;
+//   code: string;
+//   language: string;
+//   output: string;
+//   error: string;
+//   score: number;
+//   problemsSolved: number;
+//   solvedProblems: Record<string, any>;
+// }
 
-type BattleStatus = 'waiting' | 'in-progress' | 'completed';
+// type BattleStatus = 'waiting' | 'in-progress' | 'completed';
 
-interface MatchStateData {
-  matchId: string;
-  players: Player[];
-  status: BattleStatus;
-  problems?: Problem[];
-}
+// interface MatchStateData {
+//   matchId: string;
+//   players: Player[];
+//   status: BattleStatus;
+//   problems?: Problem[];
+// }
 
-interface GameStartData {
-  problems: string[];
-  gameState: {
-    userId: string;
-    problemsSolved: number;
-    solvedProblems: Record<string, any>;
-  }[];
-}
+// interface GameStartData {
+//   problems: string[];
+//   gameState: {
+//     userId: string;
+//     problemsSolved: number;
+//     solvedProblems: Record<string, any>;
+//   }[];
+// }
 
 const BattleRoom = () => {
-  const params = useParams<{ matchId: string }>();
+  // const params = useParams<{ matchId: string }>();
   // const matchId = params?.matchId;
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const token = localStorage.getItem('accessToken');
+  // const dispatch = useDispatch();
+  // const router = useRouter();
+  // const token = localStorage.getItem('accessToken');
   const [language, setLanguage] = useState<Language>('cpp');
   const [isMaximized, setIsMaximized] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
   const battleState = useSelector((state: RootState) => state.battle);
 
 

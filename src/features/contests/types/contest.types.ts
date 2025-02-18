@@ -1,4 +1,4 @@
-import { StaticImageData } from "next/image";
+// import { StaticImageData } from "next/image";
 
 export interface Contest {
   id: string;

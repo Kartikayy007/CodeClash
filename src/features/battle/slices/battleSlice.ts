@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { store } from '@/store/store';
 interface Problem {
   id: string;
   title: string;
@@ -146,7 +145,7 @@ const battleSlice = createSlice({
       myId: string;
     }>) => {
       const { problemId, status, userId, myId } = action.payload;
-       ("updateProblemStatus", action.payload);
+       console.log("updateProblemStatus", action.payload);
       // Update the problem status in the global problemStatuses
       if (!state.problemStatuses[problemId]) {
         state.problemStatuses[problemId] = {};
@@ -155,14 +154,14 @@ const battleSlice = createSlice({
         status,
         timestamp: Date.now()
       };
-       ("state.problemStatuses", state.problemStatuses[problemId]);
+       console.log("state.problemStatuses", state.problemStatuses[problemId]);
       const player = userId === state.player1?.id ? state.player1 : 
       userId === state.player2?.id ? state.player2 : null;
       // Update the player's solved problems
       if(myId === userId){
-         ("me");
+         console.log("me");
       }else{
-         ("opponent");
+         console.log("opponent");
       }
 
       if (player) {
@@ -174,7 +173,7 @@ const battleSlice = createSlice({
           timestamp: Date.now()
         };
       }
-       ("player.solvedProblems", player?.solvedProblems[problemId]);
+        console.log("player.solvedProblems", player?.solvedProblems[problemId]);
     },
     updateMultipleProblemStatuses: (state, action: PayloadAction<Array<{
       problemId: string;

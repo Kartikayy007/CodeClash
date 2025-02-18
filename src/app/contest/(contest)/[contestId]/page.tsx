@@ -11,15 +11,21 @@ import ProblemSet from '@/components/Contest/PreviewContest/ProblemSet';
 import Leaderboard from '@/components/Contest/contestPage/Leaderboard';
 import MySubmissions from '@/components/Contest/contestPage/MySubmissions';
 import ContestInsights from '@/components/Contest/contestPage/ContestInsights';
-
+interface ApiError {
+  response: {
+    data: {
+      message: string;
+    };
+  };
+}
 type TabType = 'Problem Set' | 'Leaderboard' | 'My Submissions';
 
 
-const dummyLeaderboard = [
-  { rank: 1, username: 'JohnDoe', score: 450, solved: 3, time: '01:30:45' },
-  { rank: 2, username: 'AliceSmith', score: 350, solved: 2, time: '01:45:22' },
-  { rank: 3, username: 'BobJohnson', score: 250, solved: 2, time: '02:15:10' },
-];
+// const dummyLeaderboard = [
+//   { rank: 1, username: 'JohnDoe', score: 450, solved: 3, time: '01:30:45' },
+//   { rank: 2, username: 'AliceSmith', score: 350, solved: 2, time: '01:45:22' },
+//   { rank: 3, username: 'BobJohnson', score: 250, solved: 2, time: '02:15:10' },
+// ];
 
 const dummyInsights = {
   rank: 2,
@@ -105,7 +111,8 @@ export default function ContestPage() {
         setLeaderboard(response.leaderboard);
         setTotalPages(response.pagination.pages);
       } catch (error) {
-        toast.error('Failed to fetch leaderboard');
+        const err = error as ApiError;
+        toast.error(err?.response?.data?.message || 'Failed to fetch leaderboard');
       }
     };
 

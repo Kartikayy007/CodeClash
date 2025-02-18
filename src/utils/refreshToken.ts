@@ -6,7 +6,7 @@ export const handleTokenRefresh = async () => {
     const result = await store.dispatch(refreshToken()).unwrap();
     return result.success;
   } catch (error) {
-     (error);
+     console.log(error);
     return false;
   }
 }; 

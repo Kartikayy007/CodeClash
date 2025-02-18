@@ -23,15 +23,15 @@ interface PerformanceInsightsProps {
 
 const PerformanceInsights: React.FC<PerformanceInsightsProps> = ({ className = '' }) => {
   const [trendData, setTrendData] = useState<WinTrendData[]>([]);
-  const [winStreak, setWinStreak] = useState(0);
-  const [maxWinStreak, setMaxWinStreak] = useState(0);
+  const [, setWinStreak] = useState(0);
+  const [, setMaxWinStreak] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const stats = [
-    { label: 'Win Streak', value: winStreak },
-    { label: 'Max Win Streak', value: maxWinStreak },
-    { label: 'Contest Participation', value: trendData.reduce((acc, curr) => acc + curr.wins + curr.losses, 0) },
-  ];
+  // const stats = [
+  //   { label: 'Win Streak', value: winStreak },
+  //   { label: 'Max Win Streak', value: maxWinStreak },
+  //   { label: 'Contest Participation', value: trendData.reduce((acc, curr) => acc + curr.wins + curr.losses, 0) },
+  // ];
 
   useEffect(() => {
     const fetchWinTrend = async () => {

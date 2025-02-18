@@ -94,18 +94,18 @@ const MySubmissions: React.FC = () => {
     }
   ];
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'Passed':
-        return <Check className="w-4 h-4 text-green-500" />;
-      case 'TLE':
-        return <Clock className="w-4 h-4 text-yellow-500" />;
-      case 'Wrong Answer':
-        return <X className="w-4 h-4 text-red-500" />;
-      default:
-        return <AlertTriangle className="w-4 h-4 text-gray-500" />;
-    }
-  };
+  // const getStatusIcon = (status: string) => {
+  //   switch (status) {
+  //     case 'Passed':
+  //       return <Check className="w-4 h-4 text-green-500" />;
+  //     case 'TLE':
+  //       return <Clock className="w-4 h-4 text-yellow-500" />;
+  //     case 'Wrong Answer':
+  //       return <X className="w-4 h-4 text-red-500" />;
+  //     default:
+  //       return <AlertTriangle className="w-4 h-4 text-gray-500" />;
+  //   }
+  // };
 
   return (
     <div className="bg-[#1A1D24] rounded-lg p-6">

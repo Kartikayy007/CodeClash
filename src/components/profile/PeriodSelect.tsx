@@ -9,7 +9,7 @@ interface PeriodSelectProps {
       <div className="relative">
         <select 
           value={selectedPeriod}
-          onChange={(e) => setSelectedPeriod(e.target.value as any)}
+          onChange={(e) => setSelectedPeriod(e.target.value as 'Current' | 'Year' | 'All')}
           className="bg-[#282C34] text-white px-6 py-3 pr-12 rounded text-lg appearance-none cursor-pointer"
         >
           <option value="Current">Current</option>
