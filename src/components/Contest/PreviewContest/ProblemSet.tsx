@@ -6,7 +6,8 @@ interface Problem {
   title: string;
   rating: number;
   score: number;
-  status: 'SOLVED' | 'UNSOLVED' | null;
+  difficulty: string;
+  status?: 'SOLVED' | 'UNSOLVED' | null;
 }
 
 interface ProblemSetProps {
@@ -25,12 +26,19 @@ const ProblemSet: React.FC<ProblemSetProps> = ({ problems, onSolveProblem }) => 
               key={problem.id}
               className="flex items-center justify-between bg-[#282C33] rounded-lg p-4"
             >
-              <div>
-                <h3 className="text-lg">{problem.title}</h3>
-                <div className="flex gap-8 text-sm text-gray-400">
+              <div className="flex-1">
+                <h3 className="text-lg font-medium">{problem.title}</h3>
+                <div className="flex gap-8 text-sm text-gray-400 mt-1">
                   <span>Rating: {problem.rating}</span>
                   <span>Score: {problem.score}</span>
-                </div>  
+                  <span className={`${
+                    problem.difficulty === 'EASY' ? 'text-green-400' :
+                    problem.difficulty === 'MEDIUM' ? 'text-yellow-400' :
+                    'text-red-400'
+                  }`}>
+                    {problem.difficulty}
+                  </span>
+                </div>
               </div>
               <LabelButton
                 variant={problem.status === 'SOLVED' ? 'light' : 'filled'}
@@ -44,7 +52,7 @@ const ProblemSet: React.FC<ProblemSetProps> = ({ problems, onSolveProblem }) => 
         </div>
       ) : (
         <div className="text-gray-400 text-center py-8">
-          Add Problems to the Contest
+          No problems available in this contest
         </div>
       )}
     </div>
