@@ -2,21 +2,34 @@ import { StaticImageData } from "next/image";
 
 export interface Contest {
   id: string;
-  banner: StaticImageData;
-  name: string;
-  startDate: string;
-  endDate: string;
-  duration: string;
+  title: string;
   description: string;
-  organizer: string;
-  participants: number;
-  rules: string[];
-  prizes: {
-    first: string;
-    second: string;
-    third: string;
-  };
+  startTime: string;
+  endTime: string;
+  isPublic: boolean;
   status: 'UPCOMING' | 'ONGOING' | 'COMPLETED';
+  createdAt: string;
+  organizationName: string | null;
+  rules: string | null;
+  prizes: string | null;
+  score: string | null;
+  creator: {
+    id: string;
+    username: string;
+    rating: number;
+  };
+  isRegistered: boolean;
+  isCreator: boolean;
+  userStats: null | any;
+  participantCount: number;
+  questionCount: number;
+  questions: Array<{
+    id: string;
+    title: string;
+    difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+    rating: number;
+    score: number;
+  }>;
 }
 
 export interface CreateContestPayload {
@@ -44,9 +57,8 @@ export interface CreateContestResponse {
 }
 
 export interface ContestResponse {
-  success: boolean;
   message: string;
-  data?: Contest;
+  contest: Contest;
 }
 
 export interface ValidateContestCodeResponse {

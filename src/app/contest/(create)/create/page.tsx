@@ -15,11 +15,49 @@ export default function CreateContest() {
     startTime: '',
     endDate: '',
     endTime: '',
-    description: 'This is a test description'
+    description: ''
   });
+
+  // Get today's date for validation
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayStr = today.toISOString().split('T')[0];
+
+  // Get minimum time for start time if date is today
+  const getMinStartTime = (date: string) => {
+    if (date === todayStr) {
+      const now = new Date();
+      return now.toTimeString().slice(0, 5); // Returns HH:mm format
+    }
+    return "00:00";
+  };
+
+  // Get minimum time for end time based on start date and time
+  const getMinEndTime = () => {
+    if (formData.endDate === formData.startDate) {
+      return formData.startTime;
+    }
+    return "00:00";
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+
+    // Additional validation for end date/time
+    if (name === 'endDate') {
+      const startDate = new Date(formData.startDate);
+      const endDate = new Date(value);
+      if (endDate < startDate) {
+        return; // Don't allow end date before start date
+      }
+    }
+
+    if (name === 'endTime' && formData.endDate === formData.startDate) {
+      if (value < formData.startTime) {
+        return; // Don't allow end time before start time on the same day
+      }
+    }
+
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -40,7 +78,16 @@ export default function CreateContest() {
       });
 
       toast.success('Contest created successfully!');
-      router.push(`/contest/create/details?contestId=${response.contest.id}`);
+      
+      // Create URL with only necessary contest details
+      const params = new URLSearchParams({
+        contestId: response.contest.id,
+        title: response.contest.title,
+        startTime: response.contest.startTime,
+        endTime: response.contest.endTime
+      });
+
+      router.push(`/contest/create/details?${params.toString()}`);
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to create contest');
     }
@@ -107,6 +154,7 @@ export default function CreateContest() {
                   name="startDate"
                   value={formData.startDate}
                   onChange={handleInputChange}
+                  min={todayStr}
                   required
                   className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                     focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
@@ -119,6 +167,7 @@ export default function CreateContest() {
                   name="startTime"
                   value={formData.startTime}
                   onChange={handleInputChange}
+                  min={getMinStartTime(formData.startDate)}
                   required
                   className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                     focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
@@ -134,6 +183,7 @@ export default function CreateContest() {
                   name="endDate"
                   value={formData.endDate}
                   onChange={handleInputChange}
+                  min={formData.startDate || todayStr}
                   required
                   className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                     focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
@@ -146,6 +196,7 @@ export default function CreateContest() {
                   name="endTime"
                   value={formData.endTime}
                   onChange={handleInputChange}
+                  min={getMinEndTime()}
                   required
                   className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                     focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"

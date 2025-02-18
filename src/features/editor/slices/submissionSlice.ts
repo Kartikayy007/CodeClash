@@ -76,12 +76,12 @@ const initialState: SubmissionState = {
 };
 
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-  const token = localStorage.getItem('accessToken');
-
-export const fetchSubmissions = createAsyncThunk(
-  'submissions/fetchAll',
-  async ({ page, limit }: { page: number; limit: number }) => {
-    const response = await axios.get(`${BASE_URL}/api/v1/user/submissions?page=${page}&limit=${limit}`, {
+  
+  export const fetchSubmissions = createAsyncThunk(
+    'submissions/fetchAll',
+    async ({ page, limit }: { page: number; limit: number }) => {
+      const token = localStorage.getItem('accessToken');
+      const response = await axios.get(`${BASE_URL}/api/v1/user/submissions?page=${page}&limit=${limit}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -93,6 +93,7 @@ export const fetchSubmissions = createAsyncThunk(
 export const fetchSubmissionById = createAsyncThunk(
   'submissions/fetchById',
   async (submissionId: string) => {
+    const token = localStorage.getItem('accessToken');
     const response = await axios.get(`${BASE_URL}/api/v1/user/submissions/${submissionId}`, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -105,6 +106,7 @@ export const fetchSubmissionById = createAsyncThunk(
 export const fetchSubmissionsByMatchId = createAsyncThunk(
   'submissions/fetchByMatchId',
   async (matchId: string) => {
+    const token = localStorage.getItem('accessToken');
     const response = await axios.get(`${BASE_URL}/api/v1/user/submissions/match/${matchId}`, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -126,7 +128,6 @@ const submissionSlice = createSlice({
     },
     setLatestSubmission: (state, action: PayloadAction<any>) => {
       state.latestSubmission = action.payload;
-       ('Setting latest submission:', action.payload);
     },
   },
   extraReducers: (builder) => {

@@ -118,7 +118,6 @@ export default function PreviewContest({ contest }: PreviewContestProps) {
   };
 
   const handleSolveProblem = (problemId: string) => {
-    // In preview mode, just log the action
     console.log('Solve problem clicked:', problemId);
   };
 
@@ -132,14 +131,20 @@ export default function PreviewContest({ contest }: PreviewContestProps) {
         return <ProblemSet problems={problems} onSolveProblem={handleSolveProblem} />;
       case 'Leaderboard':
         return (
-          <Leaderboard 
-            leaderboard={leaderboard} 
-            searchQuery={searchQuery} 
-            onSearchChange={handleSearchChange} 
-          />
+          <div>
+            <h1 className='text-2xl font-bold text-center'>
+              Leaderboard will be shown here
+            </h1>
+          </div>
         );
       case 'My Submissions':
-        return <MySubmissions />;
+        return (
+          <div>
+            <h1 className='text-2xl font-bold text-center'>
+              My Submissions will be shown here
+            </h1>
+          </div>
+        );
       default:
         return null;
     }
@@ -148,41 +153,27 @@ export default function PreviewContest({ contest }: PreviewContestProps) {
   return (
     <div className="min-h-screen bg-[#10141D] text-white">
       <div className="flex flex-col h-full">
-        <div className="flex items-center justify-between p-8">
-          <h1 className="text-2xl font-bold">{contest.name}</h1>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Timer size={24} className={timeLeft <= 300 ? 'text-red-500 animate-pulse' : ''} />
-              <span className={`text-2xl font-bold ${timeLeft <= 300 ? 'text-red-500' : ''}`}>
-                {formatTime(timeLeft)}
-              </span>
-            </div>
-            <LabelButton variant="red" onClick={() => router.push('/dashboard')}>
-              END
-            </LabelButton>
-          </div>
-        </div>
 
-        <div className="flex gap-8 px-8">
+        <div className="flex px-8 gap-8">
+          <div className="w-[200px] rounded-lg h-fit">
+            {(['Problem Set', 'Leaderboard', 'My Submissions'] as TabType[]).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`w-full text-left px-4 py-2 rounded-lg text-lg transition-colors ${
+                  activeTab === tab 
+                    ? 'text-white bg-[#282C33] rounded-lg' 
+                    : 'text-gray-400 hover:text-white '
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
           <div className="flex-1">
-            <div className="flex gap-8 mb-8">
-              {(['Problem Set', 'Leaderboard', 'My Submissions'] as TabType[]).map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`pb-2 ${
-                    activeTab === tab
-                      ? 'text-white border-b-2 border-white'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
             {renderTabContent()}
           </div>
-          <ContestInsights insights={insights} />
+        <ContestInsights insights={insights} />
         </div>
       </div>
     </div>

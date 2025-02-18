@@ -9,6 +9,7 @@ import submissionReducer from '@/features/editor/slices/submissionSlice';
 import profileReducer from '@/features/home/profile/slices/profileSlice';
 import matchesReducer from '@/features/home/matches/slices/matchesSlice';
 import leaderboardReducer from '@/features/home/leaderboard/slices/leaderboardSlice';
+import createContestReducer from '@/features/contests/slices/createContestSlice';
 
 const battlePersistConfig = {
   key: 'battle',
@@ -22,8 +23,15 @@ const authPersistConfig = {
   whitelist: ['user']
 };
 
+const createContestPersistConfig = {
+  key: 'createContest',
+  storage,
+  whitelist: ['formData', 'problems']
+};
+
 const persistedBattleReducer = persistReducer(battlePersistConfig, battleReducer);
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
+const persistedCreateContestReducer = persistReducer(createContestPersistConfig, createContestReducer);
 
 const rootReducer = {
   auth: persistedAuthReducer,
@@ -33,22 +41,19 @@ const rootReducer = {
   profile: profileReducer,
   matches: matchesReducer,
   leaderboard: leaderboardReducer,
+  createContest: persistedCreateContestReducer
 };
 
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE', 'persist/REGISTER'],
-      },
+      serializableCheck: false
     }).concat(logger),
   devTools: process.env.NODE_ENV !== 'production',
 });
 
 export const persistor = persistStore(store);
-
- ("editor state", store.getState().editor);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

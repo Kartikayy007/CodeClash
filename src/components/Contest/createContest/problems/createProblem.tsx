@@ -264,7 +264,7 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
               </button>
               <div className="mt-8">
                 <LabelButton onClick={handleSubmit} className="w-full">
-                  Save Problem
+                  Add Question
                 </LabelButton>
               </div>
             </div>

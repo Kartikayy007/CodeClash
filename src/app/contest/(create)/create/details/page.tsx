@@ -11,6 +11,8 @@ import { ArrowLeft } from 'lucide-react';
 import { contestApi } from '@/features/contests/api/contestApi';
 import { toast } from 'react-hot-toast';
 import PreviewContest from '@/components/Contest/PreviewContest/PreviewContest';
+import { initializeForm } from '@/features/contests/slices/createContestSlice';
+import { useDispatch } from 'react-redux';
 
 interface Problem {
   id?: string;
@@ -58,42 +60,92 @@ const Details = () => {
   const [problems, setProblems] = useState<Problem[]>([]);
   const [showCreateProblem, setShowCreateProblem] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!searchParams) return;
-    
-    const name = searchParams.get('name') || '';
-    const startDate = searchParams.get('startDate') || '';
-    const startTime = searchParams.get('startTime') || '';
-    const endDate = searchParams.get('endDate') || '';
-    const endTime = searchParams.get('endTime') || '';
+    const fetchContestDetails = async () => {
+      const contestId = searchParams?.get('contestId');
+      if (!contestId) return;
 
-    setFormData(prev => ({
-      ...prev,
-      name,
-      startTime: {
-        date: startDate,
-        time: startTime
-      },
-      endTime: {
-        date: endDate,
-        time: endTime
+      try {
+        const response = await contestApi.getContestDetails(contestId);
+        console.log('Response:', response);
+        
+        if (!response.contest) {
+          throw new Error('No contest data received from API');
+        }
+
+        const contestData = response.contest;
+        console.log('Contest Data:', contestData);
+
+        const startTime = new Date(contestData.startTime);
+        const endTime = new Date(contestData.endTime);
+
+        if (!startTime.getTime() || !endTime.getTime()) {
+          throw new Error('Invalid date format received');
+        }
+
+        setFormData({
+          name: contestData.title || '',
+          startTime: {
+            date: startTime.toISOString().split('T')[0],
+            time: startTime.toTimeString().slice(0, 5)
+          },
+          endTime: {
+            date: endTime.toISOString().split('T')[0],
+            time: endTime.toTimeString().slice(0, 5)
+          },
+          organizationName: contestData.organizationName || '',
+          description: contestData.description || '',
+          rules: contestData.rules || '',
+          prizes: contestData.prizes || '',
+          score: contestData.score || ''
+        });
+
+        // Set problems if they exist
+        if (Array.isArray(contestData.questions)) {
+          setProblems(contestData.questions.map((q: any) => ({
+            id: q.id,
+            name: q.title || '',
+            title: q.title || '',
+            maxScore: Number(q.score) || 0,
+            score: Number(q.score) || 0,
+            rating: Number(q.rating) || 0,
+            description: q.description || '',
+            inputFormat: q.inputFormat || '',
+            constraints: q.constraints || '',
+            outputFormat: q.outputFormat || '',
+            testCases: Array.isArray(q.testCases) ? q.testCases.map((tc: any) => ({
+              input: tc.input || '',
+              output: tc.output || '',
+              sample: !tc.isHidden,
+              strength: 1
+            })) : []
+          })));
+        }
+
+        // Dispatch to Redux store
+        dispatch(initializeForm({
+          name: contestData.title,
+          description: contestData.description,
+          startTime: {
+            date: startTime.toISOString().split('T')[0],
+            time: startTime.toTimeString().slice(0, 5)
+          },
+          endTime: {
+            date: endTime.toISOString().split('T')[0],
+            time: endTime.toTimeString().slice(0, 5)
+          }
+        }));
+
+      } catch (error) {
+        console.error('Error fetching contest details:', error);
+        toast.error(error instanceof Error ? error.message : 'Failed to fetch contest details');
       }
-    }));
-  }, [searchParams]);
+    };
 
-  useEffect(() => {
-    setFormData({
-      name: '',
-      startTime: { date: '', time: '' },
-      endTime: { date: '', time: '' },
-      organizationName: '',
-      description: '',
-      rules: '',
-      prizes: '',
-      score: ''
-    });
-  }, []);
+    fetchContestDetails();
+  }, [searchParams, dispatch]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -332,10 +384,9 @@ const Details = () => {
           <div className="flex items-center gap-8">
             <button 
               onClick={() => router.back()}
-              className="text-white hover:text-gray-300 pb-2 flex items-center gap-2"
+              className="text-white hover:text-gray-300 pb-2 flex items-center gap-2 "
             >
               <ArrowLeft className="w-4 h-4" />
-              {formData.name}
             </button>
             <button 
               onClick={() => setActiveTab('details')}
