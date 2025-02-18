@@ -12,71 +12,77 @@ import { toast } from '@/providers/toast-config';
 type TabType = 'Description' | 'Rules' | 'Score' | 'Prizes';
 
 export default function ContestDetails() {
-  const params = useParams<{ contestId: string }>();
+  const params = useParams();
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [registering, setRegistering] = useState(false);
+  const contestId = params?.contestId as string;
   const [activeTab, setActiveTab] = useState<TabType>('Description');
   const [contest, setContest] = useState<Contest>({
     id: '',
-    name: 'Code Clash: Battle of the Brains',
-    startDate: '22 Jan, 2024 11:00 pm',
-    endDate: '23 Jan, 2024 12:00 pm',
-    banner: "",
-    duration: '2 hours',
-    description: 'Compete with the best minds in the ultimate coding showdown! The Competitive Programming Contest challenges participants to solve algorithmic problems within a limited timeframe. This is your chance to showcase your problem-solving skills, logical thinking, and coding expertise. Whether you\'re a beginner or a pro, this contest will push your limits and ignite your passion for coding.',
-    organizer: 'organizer name',
-    participants: 50,
-    rules: [
-      'Eligibility: Open to all individuals with basic programming knowledge.',
-      'Time Limit: Contest duration is 2-3 hours.',
-      'Languages Allowed: Participants can use any of the following programming languages: Python, C++, Java, or JavaScript.',
-      'Scoring System: Problems are scored based on their difficulty levels. Partial points are awarded for partially correct solutions.',
-      'Prohibited Activities: Plagiarism or use of any unfair means will lead to disqualification.',
-      'Submission: Submit your solutions directly on the platform before the timer runs out.',
-      'Technical Issues: No extra time will be provided for personal technical issues, so ensure your system is set up correctly before the contest begins.',
-      'Final Decision: Judges\' decisions are final and binding.'
-    ],
-    prizes: {
-      first: 'Cash prize of $500, a trophy, and a certificate of excellence.',
-      second: 'Cash prize of $300 and a certificate of merit.',
-      third: 'Cash prize of $150 and a certificate of merit.'
+    title: '',
+    description: '',
+    startTime: '',
+    endTime: '',
+    isPublic: true,
+    status: 'UPCOMING',
+    createdAt: '',
+    organizationName: null,
+    rules: null,
+    prizes: null,
+    score: null,
+    creator: {
+      id: '',
+      username: '',
+      rating: 0
     },
-    status: 'UPCOMING'
+    isRegistered: false,
+    isCreator: false,
+    userStats: null,
+    participantCount: 0,
+    questionCount: 0,
+    questions: []
   });
+  const [loading, setLoading] = useState(true);
+  const [registering, setRegistering] = useState(false);
 
   useEffect(() => {
     const fetchContestDetails = async () => {
+      if (!contestId) return;
+      
       try {
         setLoading(true);
-        const response = await contestApi.getContestDetails(params.contestId);
-        if (response.success && response.data) {
-          setContest(response.data);
+        const response = await contestApi.getContestDetails(contestId);
+        
+        if (response.contest) {
+          setContest(response.contest);
         }
       } catch (error) {
-        toast.error('Failed to fetch contest details', { id: 'fetch-error' });
         console.error('Error fetching contest details:', error);
+        toast.error('Failed to fetch contest details', 'fetch-error');
       } finally {
         setLoading(false);
       }
     };
 
-    if (params.contestId) {
-      fetchContestDetails();
-    }
-  }, [params.contestId]);
+    fetchContestDetails();
+  }, [contestId]);
 
   const handleRegister = async () => {
+    if (!contestId) return;
+
     try {
       setRegistering(true);
       const response = await contestApi.registerForContest(contest.id);
       if (response.success) {
-        toast.success('Successfully registered for the contest', { id: 'register-success' });
-        // Redirect to contest dashboard or confirmation page
+        toast.success('Successfully registered for the contest', 'register-success');
+        // Refresh contest details to update registration status
+        const updatedDetails = await contestApi.getContestDetails(contestId);
+        if (updatedDetails.contest) {
+          setContest(updatedDetails.contest);
+        }
       }
     } catch (error) {
-      toast.error('Failed to register for the contest', { id: 'register-error' });
       console.error('Error registering for contest:', error);
+      toast.error('Failed to register for the contest', 'register-error');
     } finally {
       setRegistering(false);
     }
@@ -93,9 +99,11 @@ export default function ContestDetails() {
       case 'Rules':
         return (
           <div className="space-y-2 text-gray-300">
-            {contest.rules.map((rule, index) => (
+            {contest.rules ? contest.rules.split('\n').map((rule, index) => (
               <p key={index}>{index + 1}. {rule}</p>
-            ))}
+            )) : (
+              <p>No rules specified for this contest.</p>
+            )}
           </div>
         );
       case 'Score':
@@ -126,21 +134,21 @@ export default function ContestDetails() {
               <Image src="/gold.svg" alt="1st Prize" width={40} height={40} />
               <div>
                 <p className="font-medium">1st Place</p>
-                <p className="text-gray-400">{contest.prizes.first}</p>
+                <p className="text-gray-400">{contest.prizes || 'No prize specified'}</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
               <Image src="/silver.svg" alt="2nd Prize" width={40} height={40} />
               <div>
                 <p className="font-medium">2nd Place</p>
-                <p className="text-gray-400">{contest.prizes.second}</p>
+                <p className="text-gray-400">Cash prize of $300 and a certificate of merit.</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
               <Image src="/bronze.svg" alt="3rd Prize" width={40} height={40} />
               <div>
                 <p className="font-medium">3rd Place</p>
-                <p className="text-gray-400">{contest.prizes.third}</p>
+                <p className="text-gray-400">Cash prize of $150 and a certificate of merit.</p>
               </div>
             </div>
             <div className="pt-4 border-t border-gray-700">
@@ -174,17 +182,17 @@ export default function ContestDetails() {
             <span>Back</span>
           </button>
           <div className='bg-[#1A1D24] w-1/2 rounded-lg px-18 py-8 flex justify-center items-center'>
-            <div>
-              <h1 className='text-2xl font-bold'>{contest.name}</h1>
-              <p className='text-gray-400'>{contest.startDate} to {contest.endDate}</p>
+            <div className='text-center'>
+              <h1 className='text-2xl font-bold'>{contest.title}</h1>
+              <p className='text-gray-400'>{new Date(contest.startTime).toLocaleString()} to {new Date(contest.endTime).toLocaleString()}</p>
               <p className='text-white text-center text-sm'>
-                {contest.organizer}
+                {contest.creator.username}
               </p>
             </div>
           </div>
-          <LabelButton 
-            onClick={handleRegister} 
-            disabled={registering || contest.status !== 'UPCOMING'}
+          <LabelButton
+            onClick={handleRegister}
+            disabled={registering || contest.status !== 'UPCOMING' || contest.isRegistered}
           >
             {registering ? 'Registering...' : 'Register'}
           </LabelButton>
@@ -197,9 +205,9 @@ export default function ContestDetails() {
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`w-full text-left px-4 py-2 rounded-lg text-lg transition-colors ${
-                  activeTab === tab 
+                  activeTab === tab
                     ? 'text-white bg-[#282C33] rounded-lg' 
-                    : 'text-gray-400 hover:text-white '
+                    : 'text-gray-400 hover:text-white'
                 }`}
               >
                 {tab}
@@ -208,11 +216,10 @@ export default function ContestDetails() {
           </div>
 
           <div className="flex-1">
-            <div className=" rounded-lg p-8">
+            <div className="bg-[#1A1D24] rounded-lg p-8">
               {renderTabContent()}
             </div>
           </div>
-
         </div>
       </div>
     </div>
