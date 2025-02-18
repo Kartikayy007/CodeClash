@@ -61,17 +61,17 @@ export default function Dashboard() {
           <RecentContests className="min-h-[400px]" />
         </div>
 
-        <div className="grid">
-      <div className="flex justify-center gap-4 ">
+        <div className=" grid gap-4" style={{gridTemplateRows: '0.56fr 1fr 1fr'}}>
+      <div className="flex justify-center gap-4 h-fit">
         <div className='w-[50%]'>
 
-        <PlayButton />
+         <PlayButton />
         </div>
         <div className='w-[50%]'>
 
-        <LabelButton variant='filled'>
+         <LabelButton variant='filled'>
           Play Contest
-        </LabelButton>
+         </LabelButton>
         </div>
       </div>
           <PerformanceInsights className="min-h-[calc(100%)] mt-[-125px]" />
