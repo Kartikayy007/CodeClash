@@ -11,6 +11,14 @@ import { settingsApi } from '@/features/home/settings/apis/settingsApi';
 import { toast } from "@/providers/toast-config"
 import { useRouter } from 'next/navigation';
 import { ToastProvider } from '@/providers/ToastProvider';
+
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
 export default function AccountSettings() {
   const router = useRouter();
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -34,7 +42,7 @@ export default function AccountSettings() {
   });
 
   const handlePasswordSubmit = async (data: SettingsPasswordFormData) => {
-    try {
+    try { 
       await settingsApi.changePassword({
         oldPassword: data.password,
         newPassword: data.Newpassword
@@ -42,8 +50,9 @@ export default function AccountSettings() {
       toast.success('Password changed successfully', 'Password changed successfully');
       setIsPasswordModalOpen(false);
       passwordForm.reset();
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to change password', 'Failed to change password');
+    } catch (error) {
+      const err = error as ApiError;
+      toast.error(err?.response?.data?.message || 'Failed to change password', 'Failed to change password');
     }
   };
 
@@ -56,8 +65,9 @@ export default function AccountSettings() {
       toast.success('Username changed successfully', 'Username changed successfully');
       setIsProfileModalOpen(false);
       usernameForm.reset();
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to change username', 'Failed to change username');
+    } catch (error) {
+      const err = error as ApiError;
+      toast.error(err?.response?.data?.message || 'Failed to change username', 'Failed to change username');
     }
   };
 
@@ -68,8 +78,9 @@ export default function AccountSettings() {
       localStorage.removeItem('accessToken');
        ('Account deleted successfully');  
       // router.push('/login');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to delete account', 'Failed to delete account');
+    } catch (error) {
+      const err = error as ApiError;
+      toast.error(err?.response?.data?.message || 'Failed to delete account', 'Failed to delete account');
     }
   };
 
@@ -78,8 +89,9 @@ export default function AccountSettings() {
       await settingsApi.logoutAllDevices();
       localStorage.removeItem('accessToken');
       router.push('/login');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to logout', 'Failed to logout');
+    } catch (error) {
+      const err = error as ApiError;
+      toast.error(err?.response?.data?.message || 'Failed to logout', 'Failed to logout');
     }
   };
 

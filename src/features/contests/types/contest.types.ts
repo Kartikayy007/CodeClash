@@ -1,4 +1,4 @@
-import { StaticImageData } from "next/image";
+// import { StaticImageData } from "next/image";
 
 export interface Contest {
   id: string;
@@ -78,13 +78,14 @@ export interface RegisterContestResponse {
 }
 
 export interface UpdateContestPayload {
-  title?: string;
-  description?: string;
-  startTime?: string;
-  endTime?: string;
-  rules?: string;
-  prizes?: string;
-  score?: string;
+  title: string;
+  description: string;
+  startTime: string;
+  endTime: string;
+  rules: string;
+  prizes: string;
+  score: string;
+  organizationName: string;
 }
 
 export interface AddQuestionPayload {
@@ -144,4 +145,4 @@ export interface LeaderboardResponse {
 export interface UpdateLeaderboardResponse {
   message: string;
   updatedUsers: number;
-} 
+}

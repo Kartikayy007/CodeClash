@@ -20,7 +20,7 @@ const runCode = async (data: RunCodePayload): Promise<RunCodeResponse> => {
 
 const submitCode = async (data: SubmitCodePayload): Promise<SubmitCodeResponse> => {
   const token = localStorage.getItem('accessToken');
-   ('Submitting code with data:', data);
+   console.log("Submitting code with data:", data);
   const response = await api.post<SubmitCodeResponse>(
     `${BASE_URL}/api/v1/match/submit`,
     data,
@@ -31,7 +31,7 @@ const submitCode = async (data: SubmitCodePayload): Promise<SubmitCodeResponse> 
       },
     }
   );
-   ('Submit response:', response.data);
+   console.log("Submit response:", response.data);
   return response.data;
 };
 

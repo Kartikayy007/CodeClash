@@ -27,9 +27,9 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
   const { code, language, isRunning, isSubmitting } = useSelector((state: RootState) => state.editor);
   const { player1, player2, problems, currentProblemIndex } = useSelector((state: RootState) => state.battle);
   const userId = useSelector((state: RootState) => state.auth.user?.id);
-   ("userId", userId);
+   console.log("userId", userId);
 
-   ('🔍 Current state:', {
+   console.log("🔍 Current state:", {
     userId,
     player1,
     player2,
@@ -41,20 +41,20 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
   const currentPlayer = player1?.id === userId ? player1 : player2;
   const opponentPlayer = player1?.id === userId ? player2 : player1;
 
-   ('👥 Players:', {
+   console.log("👥 Players:", {
     currentPlayer,
     opponentPlayer
   });
 
   useEffect(() => {
     const handleGameStateUpdate = (data: GameStateUpdate | GameStateUpdate[]) => {
-       ('🎮 Game state update received in TopBar:', data);
+        console.log("🎮 Game state update received in TopBar:", data);
       const myId = store.getState().auth.user?.id;
       if (Array.isArray(data)) {
-         ('📊 Updating multiple problem statuses:', data);
+         console.log("📊 Updating multiple problem statuses:", data);
         dispatch(updateMultipleProblemStatuses(data));
       } else {
-         ('📊 Updating single problem status:', data);
+         console.log("📊 Updating single problem status:", data);
         dispatch(updateProblemStatus({...data, myId: myId as string}));
       }
     };
@@ -68,7 +68,7 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
 
   const handleRunCode = () => {
     const currentProblem = problems[currentProblemIndex];
-     ('▶️ Running code for problem:', {
+     console.log("▶️ Running code for problem:", {
       currentProblem,
       code,
       language,
@@ -90,7 +90,7 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
 
   const handleSubmitCode = () => {
     const currentProblem = problems[currentProblemIndex];
-     ('📤 Submitting code:', {
+     console.log("📤 Submitting code:", {
       currentProblem,
       code,
       language,
@@ -110,10 +110,10 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
       matchId: matchId,
       questionId: currentProblem.id
     })).then((action) => {
-       ('📥 Submit code response:', action);
+       console.log("📥 Submit code response:", action);
       if (submitCode.fulfilled.match(action)) {
         const status = action.payload.data?.status;
-         ('✅ Submission status:', status);
+         console.log("✅ Submission status:", status);
         if (status === 'ACCEPTED') {
           toast.success('All test cases passed!');
         } else if (status) {
@@ -124,7 +124,7 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
   };
 
   const handleProblemClick = (index: number) => {
-     ('🔄 Changing problem to index:', index);
+     console.log("🔄 Changing problem to index:", index);
     if (onProblemChange) {
       onProblemChange(index);
     } else {
@@ -134,16 +134,16 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
 
   const getUserProblemStatusColor = (index: number) => {
     const problem = problems[index];
-     ("currentPlayer", currentPlayer);
+     console.log("currentPlayer", currentPlayer);
     if (!problem || !currentPlayer?.solvedProblems){
       if(currentProblemIndex === index) {
         return "border-blue-500 bg-blue-500/10 text-blue-500";
       }
       return '';
     }
-     ("currentPlayer.solvedProblems", currentPlayer.solvedProblems);
+      console.log("currentPlayer.solvedProblems", currentPlayer.solvedProblems);
     const status = currentPlayer.solvedProblems[problem.id]?.status;
-     ('🎨 User problem status:', {
+     console.log("🎨 User problem status:", {
       problemId: problem.id,
       status,
       userId: currentPlayer.id
@@ -161,12 +161,12 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
 
   const getOpponentProblemStatusColor = (index: number) => {
     const problem = problems[index];
-     ("opponentPlayer", opponentPlayer);
+     console.log("opponentPlayer", opponentPlayer);
     if (!problem || !opponentPlayer?.solvedProblems) return '';
-     (problem.id, opponentPlayer.solvedProblems);
+     console.log(problem.id, opponentPlayer.solvedProblems);
     const status = opponentPlayer.solvedProblems[problem.id]?.status;
-     ("opponentPlayer.solvedProblems", opponentPlayer.solvedProblems);
-     ('🎨 Opponent problem status:', {
+     console.log("opponentPlayer.solvedProblems", opponentPlayer.solvedProblems);
+     console.log("🎨 Opponent problem status:", {
       problemId: problem.id,
       status,
       userId: opponentPlayer?.id

@@ -48,7 +48,6 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
       ...prev,
       [name]: value
     }));
-    // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: false }));
     }
@@ -140,7 +139,6 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      // Convert form data to Problem type
       const problemData: Problem = {
         name: formData.name,
         maxScore: parseInt(formData.maxScore),
@@ -162,7 +160,6 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
 
   const handleTestCaseChange = (index: number, field: keyof typeof formData.testCases[0], value: string | boolean | number) => {
     setFormData(prev => {
-      // If the index is equal to the length, we're adding a new test case
       if (index === prev.testCases.length) {
         return {
           ...prev,
@@ -178,7 +175,6 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
           ]
         };
       }
-      // Otherwise, we're updating an existing test case
       return {
         ...prev,
         testCases: prev.testCases.map((tc, i) =>
@@ -186,7 +182,6 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
         )
       };
     });
-    // Clear error for this test case when user makes changes
     if (errors[`testCase${index}`]) {
       setErrors(prev => ({ ...prev, [`testCase${index}`]: false }));
     }

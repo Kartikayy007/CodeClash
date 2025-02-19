@@ -14,6 +14,33 @@ import PreviewContest from '@/components/Contest/PreviewContest/PreviewContest';
 import { initializeForm } from '@/features/contests/slices/createContestSlice';
 import { useDispatch } from 'react-redux';
 
+interface ApiError {
+  response: {
+    data: {
+      message: string;
+    };
+  };
+}
+
+interface QuestionResponse {
+  id: string;
+  title: string;
+  description: string;
+  inputFormat: string;
+  difficulty: string;
+  outputFormat: string;
+  constraints: string;
+  score: number;
+  rating: number;
+  testCases: Array<TestCase>;
+}
+
+interface TestCase {
+  input: string;
+  output: string;
+  isHidden: boolean;
+}
+
 interface Problem {
   id?: string;
   name: string;
@@ -58,9 +85,12 @@ const Details = () => {
   });
 
   const [problems, setProblems] = useState<Problem[]>([]);
-  const [showCreateProblem, setShowCreateProblem] = useState(false);
+  const [, setShowCreateProblem] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const dispatch = useDispatch();
+
+  const [isDirty, setIsDirty] = useState(false);
+  const [initialFormData, setInitialFormData] = useState<ContestDetails | null>(null);
 
   useEffect(() => {
     const fetchContestDetails = async () => {
@@ -85,7 +115,7 @@ const Details = () => {
           throw new Error('Invalid date format received');
         }
 
-        setFormData({
+        const formattedData = {
           name: contestData.title || '',
           startTime: {
             date: startTime.toISOString().split('T')[0],
@@ -100,11 +130,15 @@ const Details = () => {
           rules: contestData.rules || '',
           prizes: contestData.prizes || '',
           score: contestData.score || ''
-        });
+        };
+
+        setFormData(formattedData);
+        setInitialFormData(formattedData); // Store initial state
+        setIsDirty(false); // Reset dirty state
 
         // Set problems if they exist
         if (Array.isArray(contestData.questions)) {
-          setProblems(contestData.questions.map((q: any) => ({
+          setProblems((contestData.questions as QuestionResponse[]).map((q: QuestionResponse) => ({
             id: q.id,
             name: q.title || '',
             title: q.title || '',
@@ -115,7 +149,7 @@ const Details = () => {
             inputFormat: q.inputFormat || '',
             constraints: q.constraints || '',
             outputFormat: q.outputFormat || '',
-            testCases: Array.isArray(q.testCases) ? q.testCases.map((tc: any) => ({
+            testCases: Array.isArray(q.testCases) ? q.testCases.map((tc: TestCase) => ({
               input: tc.input || '',
               output: tc.output || '',
               sample: !tc.isHidden,
@@ -124,7 +158,6 @@ const Details = () => {
           })));
         }
 
-        // Dispatch to Redux store
         dispatch(initializeForm({
           name: contestData.title,
           description: contestData.description,
@@ -149,36 +182,37 @@ const Details = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    let newFormData: ContestDetails;
+
     if (name.includes('.')) {
       const [parent, child] = name.split('.');
-      setFormData(prev => {
-        const parentObj = prev[parent as keyof ContestDetails];
-        if (typeof parentObj === 'object' && parentObj !== null) {
-          return {
-            ...prev,
-            [parent]: {
-              ...parentObj,
-              [child]: value
-            }
-          };
+      newFormData = {
+        ...formData,
+        [parent]: {
+          ...(formData[parent as keyof ContestDetails] as any),
+          [child]: value
         }
-        return prev;
-      });
+      };
     } else {
-      setFormData(prev => ({
-        ...prev,
+      newFormData = {
+        ...formData,
         [name]: value
-      }));
+      };
+    }
+
+    setFormData(newFormData);
+    
+    // Check if form is dirty by comparing with initial data
+    if (initialFormData) {
+      const isDifferent = JSON.stringify(newFormData) !== JSON.stringify(initialFormData);
+      setIsDirty(isDifferent);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const contestId = searchParams?.get('contestId');
-    if (!contestId) {
-      toast.error('Contest ID not found');
-      return;
-    }
+    if (!contestId || !isDirty) return;
 
     try {
       const response = await contestApi.updateContest(contestId, {
@@ -188,12 +222,16 @@ const Details = () => {
         endTime: `${formData.endTime.date} ${formData.endTime.time}:00`,
         rules: formData.rules,
         prizes: formData.prizes,
-        score: formData.score
+        score: formData.score,
+        organizationName: formData.organizationName  
       });
-
+      
+      setInitialFormData(formData); // Update initial state
+      setIsDirty(false); // Reset dirty state
       toast.success('Contest updated successfully!');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to update contest');
+    } catch (error) {
+      const err = error as ApiError;
+      toast.error(err?.response?.data?.message || 'Failed to update contest');
     }
   };
 
@@ -229,8 +267,9 @@ const Details = () => {
       });
 
       setProblems(prev => prev.filter((_, i) => i !== index));
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to delete problem');
+    } catch (error) {
+      const err = error as ApiError;
+      toast.error(err?.response?.data?.message || 'Failed to delete problem');
     }
   };
 
@@ -240,7 +279,7 @@ const Details = () => {
       toast.error('Contest ID not found');
       return;
     }
-
+    console.log('Problem Data:', problemData);
     try {
       await contestApi.addQuestion({
         contestId,
@@ -264,8 +303,9 @@ const Details = () => {
 
       setProblems(prev => [...prev, problemData]);
       toast.success('Problem added successfully!');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to add problem');
+    } catch (error) {
+      const err = error as ApiError;
+      toast.error(err?.response?.data?.message || 'Failed to add problem');
     }
   };
 
@@ -294,7 +334,7 @@ const Details = () => {
                       : 'text-gray-400 hover:text-white'
                   }`}
                 >
-                  Description
+                  Contest Description
                 </button>
               </div>
             </div>
@@ -307,7 +347,7 @@ const Details = () => {
                 </>
               ) : (
                 <>
-                  <h2 className="text-white text-lg mb-6">Description</h2>
+                  <h2 className="text-white text-lg mb-6">Contest Description</h2>
                   <DescriptionForm formData={formData} onChange={handleInputChange} />
                 </>
               )}
@@ -393,7 +433,7 @@ const Details = () => {
               className={`pb-2 ${
                 activeTab === 'details' 
                   ? 'text-[#C879EB] border-b-2 border-[#C879EB]' 
-                  : 'text-gray-400 hover:text-white'
+                  : 'text-white hover:text-gray-400 transition-all duration-200'
               }`}
             >
               Details
@@ -403,7 +443,7 @@ const Details = () => {
               className={`pb-2 ${
                 activeTab === 'problems' 
                   ? 'text-[#C879EB] border-b-2 border-[#C879EB]' 
-                  : 'text-gray-400 hover:text-white'
+                  : 'text-white hover:text-gray-400 transition-all duration-200'
               }`}
             >
               Problems
@@ -413,7 +453,7 @@ const Details = () => {
               className={`pb-2 ${
                 activeTab === 'settings' 
                   ? 'text-[#C879EB] border-b-2 border-[#C879EB]' 
-                  : 'text-gray-400 hover:text-white'
+                  : 'text-white hover:text-gray-400 transition-all duration-200'
               }`}
             >
               Settings
@@ -427,7 +467,11 @@ const Details = () => {
             >
               Live Preview
             </LabelButton>
-            <LabelButton onClick={handleSubmit}>
+            <LabelButton 
+              onClick={handleSubmit}
+              disabled={!isDirty}
+              className={!isDirty ? 'opacity-50 cursor-not-allowed' : ''}
+            >
               Save Changes
             </LabelButton>
           </div>

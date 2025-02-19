@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Search } from 'lucide-react';
 import LabelButton from '@/components/ui/LabelButton';
-import { Problem } from '@/types/problem.types';
+import { fetchProblem, fetchProblemList, Problem, ProblemPreview } from '@/features/editor/api/problems';
+import toast from 'react-hot-toast';
+import ProblemDetailModal from './ProblemDetailModal';
 
 interface LibProblemsProps {
   onBack: () => void;
@@ -14,45 +16,109 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [selectedProblems, setSelectedProblems] = useState<Set<string>>(new Set());
+  const [problems, setProblems] = useState<ProblemPreview[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [selectedProblemDetails, setSelectedProblemDetails] = useState<{ [key: string]: Problem }>({});
+  const [viewingProblem, setViewingProblem] = useState<Problem | null>(null);
+  const [loadingProblemDetail, setLoadingProblemDetail] = useState(false);
 
-  const problems: Problem[] = [
-    {
-      id: '1',
-      name: 'Two Sum',
-      maxScore: 100,
-      rating: 800,
-      description: 'Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.',
-      inputFormat: 'First line contains n and target...',
-      constraints: '2 <= nums.length <= 104\n-109 <= nums[i] <= 109',
-      outputFormat: 'Return indices of the two numbers such that they add up to target.',
-      testCases: []
-    },
-    {
-      id: '2',
-      name: 'Insert Linked List',
-      maxScore: 100,
-      rating: 1200,
-      description: 'Insert a node into a sorted linked list...',
-      inputFormat: 'First line contains n...',
-      constraints: '1 <= n <= 1000',
-      outputFormat: 'Return the head of the modified linked list.',
-      testCases: []
+  const [ratingFilter, setRatingFilter] = useState('all');
+  const [customRating, setCustomRating] = useState({ from: '', to: '' });
+
+  useEffect(() => {
+    fetchProblems();
+  }, [currentPage]);
+
+  const fetchProblems = async () => {
+    try {
+      setLoading(true);
+      const response = await fetchProblemList(currentPage, 10);
+      setProblems(response.data.questions);
+      setTotalPages(response.data.meta.totalPages);
+    } catch (error) {
+      toast.error('Failed to fetch problems');
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
-  const handleToggleSelect = (problemId: string) => {
+  const handleToggleSelect = async (problemId: string) => {
     const newSelected = new Set(selectedProblems);
+    
     if (newSelected.has(problemId)) {
       newSelected.delete(problemId);
     } else {
+      if (!selectedProblemDetails[problemId]) {
+        try {
+          const problemDetail = await fetchProblem(problemId);
+          setSelectedProblemDetails(prev => ({
+            ...prev,
+            [problemId]: problemDetail
+          }));
+        } catch (error) {
+          toast.error('Failed to fetch problem details');
+          return;
+        }
+      }
       newSelected.add(problemId);
     }
+    
     setSelectedProblems(newSelected);
   };
 
   const handleAddSelected = () => {
-    const selectedProblemsList = problems.filter(p => selectedProblems.has(p.id || ''));
+    const selectedProblemsList = Array.from(selectedProblems).map(id => selectedProblemDetails[id]);
     onAddProblems(selectedProblemsList);
+  };
+
+  const handleProblemClick = async (problemId: string) => {
+    setLoadingProblemDetail(true);
+    setViewingProblem(null); 
+
+    try {
+      if (selectedProblemDetails[problemId]) {
+        setViewingProblem(selectedProblemDetails[problemId]);
+      } else {
+        const problemDetail = await fetchProblem(problemId);
+        setSelectedProblemDetails(prev => ({
+          ...prev,
+          [problemId]: problemDetail
+        }));
+        setViewingProblem(problemDetail);
+      }
+    } catch (error) {
+      toast.error('Failed to fetch problem details');
+    } finally {
+      setLoadingProblemDetail(false);
+    }
+  };
+
+  const getFilteredProblems = (problems: ProblemPreview[]) => {
+    return problems.filter(problem => {
+      if (searchQuery && !problem.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false;
+      }
+
+      switch (ratingFilter) {
+        case 'less1000':
+          return problem.rating < 1000;
+        case 'greater1000':
+          return problem.rating >= 1000;
+        case 'greater1500':
+          return problem.rating >= 1500;
+        case 'custom':
+          const from = parseInt(customRating.from);
+          const to = parseInt(customRating.to);
+          if (!isNaN(from) && !isNaN(to)) {
+            return problem.rating >= from && problem.rating <= to;
+          }
+          return true;
+        default:
+          return true;
+      }
+    });
   };
 
   return (
@@ -113,35 +179,71 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
                 <h3 className="text-gray-400 mb-2">Rating</h3>
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-gray-400 hover:text-white cursor-pointer">
-                    <input type="radio" name="rating" value="all" defaultChecked />
+                    <input 
+                      type="radio" 
+                      name="rating" 
+                      value="all" 
+                      checked={ratingFilter === 'all'}
+                      onChange={(e) => setRatingFilter(e.target.value)}
+                    />
                     <span>All</span>
                   </label>
                   <label className="flex items-center gap-2 text-gray-400 hover:text-white cursor-pointer">
-                    <input type="radio" name="rating" value="less1000" />
+                    <input 
+                      type="radio" 
+                      name="rating" 
+                      value="less1000"
+                      checked={ratingFilter === 'less1000'}
+                      onChange={(e) => setRatingFilter(e.target.value)}
+                    />
                     <span>less than 1000</span>
                   </label>
                   <label className="flex items-center gap-2 text-gray-400 hover:text-white cursor-pointer">
-                    <input type="radio" name="rating" value="greater1000" />
+                    <input 
+                      type="radio" 
+                      name="rating" 
+                      value="greater1000"
+                      checked={ratingFilter === 'greater1000'}
+                      onChange={(e) => setRatingFilter(e.target.value)}
+                    />
                     <span>greater than 1000</span>
                   </label>
                   <label className="flex items-center gap-2 text-gray-400 hover:text-white cursor-pointer">
-                    <input type="radio" name="rating" value="greater1500" />
+                    <input 
+                      type="radio" 
+                      name="rating" 
+                      value="greater1500"
+                      checked={ratingFilter === 'greater1500'}
+                      onChange={(e) => setRatingFilter(e.target.value)}
+                    />
                     <span>greater than 1500</span>
                   </label>
                   <label className="flex items-center gap-2 text-gray-400 hover:text-white cursor-pointer">
-                    <input type="radio" name="rating" value="custom" />
+                    <input 
+                      type="radio" 
+                      name="rating" 
+                      value="custom"
+                      checked={ratingFilter === 'custom'}
+                      onChange={(e) => setRatingFilter(e.target.value)}
+                    />
                     <span>Custom</span>
                   </label>
                   <div className="flex gap-2 mt-2">
                     <input
                       type="number"
                       placeholder="from"
-                      className="w-20 px-2 py-1 bg-[#1A1D24] rounded border border-gray-700"
+                      value={customRating.from}
+                      onChange={(e) => setCustomRating(prev => ({ ...prev, from: e.target.value }))}
+                      disabled={ratingFilter !== 'custom'}
+                      className="w-20 px-2 py-1 bg-[#1A1D24] rounded border border-gray-700 disabled:opacity-50"
                     />
                     <input
                       type="number"
                       placeholder="to"
-                      className="w-20 px-2 py-1 bg-[#1A1D24] rounded border border-gray-700"
+                      value={customRating.to}
+                      onChange={(e) => setCustomRating(prev => ({ ...prev, to: e.target.value }))}
+                      disabled={ratingFilter !== 'custom'}
+                      className="w-20 px-2 py-1 bg-[#1A1D24] rounded border border-gray-700 disabled:opacity-50"
                     />
                   </div>
                 </div>
@@ -158,24 +260,61 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
               </div>
 
               <div className="divide-y divide-gray-700">
-                {problems.map((problem) => (
-                  <div key={problem.id} className="grid grid-cols-3 p-4 items-center">
-                    <div className="text-center">
-                      <input
-                        type="checkbox"
-                        checked={selectedProblems.has(problem.id)}
-                        onChange={() => handleToggleSelect(problem.id)}
-                        className="form-checkbox"
-                      />
+                {loading ? (
+                  <div className="p-4 text-center text-gray-400">Loading problems...</div>
+                ) : (
+                  getFilteredProblems(problems).map((problem) => (
+                    <div key={problem.id} className="grid grid-cols-3 p-4 items-center">
+                      <div className="text-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedProblems.has(problem.id)}
+                          onChange={() => handleToggleSelect(problem.id)}
+                          className="form-checkbox"
+                        />
+                      </div>
+                      <div 
+                        className="text-center cursor-pointer hover:text-purple-400"
+                        onClick={() => handleProblemClick(problem.id)}
+                      >
+                        {problem.title}
+                      </div>
+                      <div className="text-center">{problem.rating}</div>
                     </div>
-                    <div className="text-center">{problem.name}</div>
-                    <div className="text-center">{problem.rating}</div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
+
+              {totalPages > 1 && (
+                <div className="flex justify-center gap-2 p-4 border-t border-gray-700">
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                      key={i + 1}
+                      onClick={() => setCurrentPage(i + 1)}
+                      className={`px-3 py-1 rounded ${
+                        currentPage === i + 1
+                          ? 'bg-purple-500 text-white'
+                          : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
+        {(viewingProblem || loadingProblemDetail) && (
+          <ProblemDetailModal
+            problem={viewingProblem}
+            isLoading={loadingProblemDetail}
+            onClose={() => {
+              setViewingProblem(null);
+              setLoadingProblemDetail(false);
+            }}
+          />
+        )}
       </div>
     </div>
   );

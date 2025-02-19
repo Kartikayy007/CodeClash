@@ -134,7 +134,7 @@ const CustomOtp = () => {
   const onSubmit = async (data: OTPFormValues) => {
     try {
       setValidationState('idle');
-       (data.pin.length)
+       console.log("data.pin.length", data.pin.length)
       
       if (data.pin.length < 4) {
         toast.error(

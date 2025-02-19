@@ -39,7 +39,7 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({ formData, onChange 
           onChange={onChange}
           required
           className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-white 
-            focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
+            focus:outline-none transition-all duration-500 text-sm sm:text-base text-white focus:border-[#C879EB]"
         />
       </div>
 
@@ -54,7 +54,7 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({ formData, onChange 
             min={todayStr}
             required
             className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-white
-              focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
+              focus:outline-none transition-all duration-500 text-sm sm:text-base text-white focus:border-[#C879EB]"
           />
         </div>
         <div className="form-item">
@@ -67,7 +67,7 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({ formData, onChange 
             min={formData.startTime.date === todayStr ? getMinStartTime(formData.startTime.date) : undefined}
             required
             className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-white 
-              focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
+              focus:outline-none transition-all duration-500 text-sm sm:text-base text-white focus:border-[#C879EB]"
           />
         </div>
       </div>
@@ -83,7 +83,7 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({ formData, onChange 
             min={formData.startTime.date || todayStr}
             required
             className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-white 
-              focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
+              focus:outline-none transition-all duration-500 text-sm sm:text-base text-white focus:border-[#C879EB]"
           />
         </div>
         <div className="form-item">
@@ -96,7 +96,7 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({ formData, onChange 
             min={getMinEndTime()}
             required
             className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-white
-              focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
+              focus:outline-none transition-all duration-500 text-sm sm:text-base text-white focus:border-[#C879EB]"
           />
         </div>
       </div>
@@ -109,7 +109,7 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({ formData, onChange 
           value={formData.organizationName}
           onChange={onChange}
           className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-white
-            focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
+            focus:outline-none transition-all duration-500 text-sm sm:text-base text-white focus:border-[#C879EB]"
         />
       </div>
     </div>

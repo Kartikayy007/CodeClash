@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Language } from '../types/editor.types';
+// import { Language } from '../types/editor.types';
 
-interface Question {
-  title: string;
-  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
-}
+// interface Question {
+//   title: string;
+//   difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+// }
 
 interface Match {
   id: string;

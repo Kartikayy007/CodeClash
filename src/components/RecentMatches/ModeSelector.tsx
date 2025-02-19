@@ -1,6 +1,6 @@
 // components/ui/ModeSelector.tsx
 import React from 'react';
-import { Award, Clock, Zap } from 'lucide-react';
+// import { Award, Clock, Zap } from 'lucide-react';
 import { MatchMode } from '@/features/home/matches/types/matches.types';
 
 interface ModeSelectorProps {
