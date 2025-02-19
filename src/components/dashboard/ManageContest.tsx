@@ -3,8 +3,8 @@ import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
 
 interface Contest {
-  name: string;
-  participants: number;
+  title: string;
+  participantCount: number;
 }
 
 const ManageContest = () => {
@@ -53,7 +53,7 @@ const ManageContest = () => {
 
   return (
     <div className="w-full bg-[#1A1D24] rounded-lg p-6">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 flex-wrap">
         <h2 className="text-2xl font-medium text-white">Manage Contest</h2>
         <button 
           onClick={() => router.push('/contest/manage')}
@@ -65,7 +65,7 @@ const ManageContest = () => {
       </div>
 
       <div className="space-y-4">
-        {contests.slice(0, 2).map((contest, index) => ( // Show only the top 2 contests
+        {contests.slice(0, 2).map((contest, index) => (
           <div 
             key={index}
             className="bg-[#1E2127] rounded-lg p-4 hover:bg-[#282C34] transition-colors cursor-pointer"

@@ -71,7 +71,7 @@ export default function RecentContests({ className = '' }: RecentContestsProps) 
         >View All</Link>
       </div>
 
-      <div className="flex gap-3 mb-6">
+      <div className="flex gap-3 mb-6 flex-wrap">
         <button className="px-2 py-1 bg-[#3d3d3d] rounded text-sm font-medium">
           Participated
         </button>

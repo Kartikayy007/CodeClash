@@ -58,57 +58,46 @@ export default function LeaderboardPage() {
   }
 
   return (
-    <div>
-      <div className="p-12 bg-[#15171B] min-h-screen flex">
-        <div className='w-[70%]'>
-          <LeaderboardHeader />
-          <TopPlayers topPlayers={topPlayers} />
-          <PlayerList players={players} />
-          
-          {pagination.totalPages > 1 && (
-            <div className="flex justify-between items-center bg-[#1A1D24] rounded-lg p-4 mt-4">
-              <div className="text-gray-400">
-                Showing {((currentPage - 1) * PAGE_SIZE) + 1} to {Math.min(currentPage * PAGE_SIZE, pagination.totalCount)} of {pagination.totalCount} players
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={handlePreviousPage}
-                  disabled={currentPage === 1}
-                  className={`p-2 rounded-lg transition-colors ${
-                    currentPage === 1
-                      ? 'bg-[#292C33] text-gray-500 cursor-not-allowed'
-                      : 'bg-[#292C33] text-white hover:bg-[#31343C]'
-                  }`}
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                <div className="flex items-center px-4 bg-[#292C33] rounded-lg">
-                  <span className="text-white">Page {currentPage} of {pagination.totalPages}</span>
-                </div>
-                <button
-                  onClick={handleNextPage}
-                  disabled={currentPage === pagination.totalPages}
-                  className={`p-2 rounded-lg transition-colors ${
-                    currentPage === pagination.totalPages
-                      ? 'bg-[#292C33] text-gray-500 cursor-not-allowed'
-                      : 'bg-[#292C33] text-white hover:bg-[#31343C]'
-                  }`}
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </div>
+    <div className="min-h-screen bg-[#15171B]">
+      <div className="container mx-auto p-6">
+        <LeaderboardHeader />
+        <TopPlayers topPlayers={topPlayers} />
+        <PlayerList players={players} />
+        
+        {pagination.totalPages > 1 && (
+          <div className="flex justify-between items-center bg-[#1A1D24] rounded-lg p-4 mt-4">
+            <div className="text-gray-400">
+              Showing {((currentPage - 1) * PAGE_SIZE) + 1} to {Math.min(currentPage * PAGE_SIZE, pagination.totalCount)} of {pagination.totalCount} players
             </div>
-          )}
-        </div>
-
-        <div className="mt-8 gap-8 flex flex-col w-[30%] pl-[20px]">
-          <SearchInput 
-            searchQuery={searchQuery} 
-            setSearchQuery={setSearchQuery} 
-          />
-          <PlayerRankCard title="Current Rank" value={userRank} iconSrc="/current.svg" />
-          <PlayerRankCard title="Your Highest Rank" value={userRank} iconSrc="/highest.svg" />
-        </div>
+            <div className="flex gap-2">
+              <button
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                className={`p-2 rounded-lg transition-colors ${
+                  currentPage === 1
+                    ? 'bg-[#292C33] text-gray-500 cursor-not-allowed'
+                    : 'bg-[#292C33] text-white hover:bg-[#31343C]'
+                }`}
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <div className="flex items-center px-4 bg-[#292C33] rounded-lg">
+                <span className="text-white">Page {currentPage} of {pagination.totalPages}</span>
+              </div>
+              <button
+                onClick={handleNextPage}
+                disabled={currentPage === pagination.totalPages}
+                className={`p-2 rounded-lg transition-colors ${
+                  currentPage === pagination.totalPages
+                    ? 'bg-[#292C33] text-gray-500 cursor-not-allowed'
+                    : 'bg-[#292C33] text-white hover:bg-[#31343C]'
+                }`}
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

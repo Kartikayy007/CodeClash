@@ -43,7 +43,7 @@ export default function MatchesPage() {
     date: new Date(match.createdAt).toLocaleDateString()
   }));
 
-  const winRate = totalMatches > 0 ? Math.round((winsCount / totalMatches) * 10) : 0;
+  const winRate = totalMatches > 0 ? Math.round((winsCount / totalMatches) * 100) : 0;
   const currentStreak = 0; // This should come from API
   const longestStreak = 0; // This should come from API
 
@@ -80,7 +80,7 @@ export default function MatchesPage() {
       <div className="container mx-auto p-6">
         <ModeSelector selectedMode={selectedMode} setSelectedMode={setSelectedMode} />
         <div className="grid grid-cols-12 gap-8">
-          <div className="col-span-8 space-y-4">
+          <div className="col-span-12 md:col-span-8 space-y-4">
             <MatchTable matches={formatMatches} />
             
             {/* Pagination Controls */}
@@ -119,7 +119,7 @@ export default function MatchesPage() {
               </div>
             )}
           </div>
-          <div className="col-span-4 flex flex-col gap-5">
+          <div className="col-span-12 md:col-span-4 flex flex-col gap-5">
             <div className='flex justify-between'>
               <WinsOverview winRate={winRate} />
               <WinningMomentum 
