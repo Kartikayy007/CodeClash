@@ -1,24 +1,49 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 export default function RecentMatches() {
+  const [matches, setMatches] = useState<any[]>([])
   const matchTypes = ["All", "Standard", "Accuracy", "Speed"];
-  const matches = [
-    {
-      mode: "",
-      players: ["Player1", "You"],
-      result: "win",
-      duration: "15min",
-      date: "2 hours ago"
-    },
-    {
-      mode: "",
-      players: ["Player1", "You"],
-      result: "loss",
-      duration: "10min",
-      date: "12 Jan 2024"
-    }
-  ];
+
+  useEffect(() => {
+    const fetchRecentMatches = async () => {
+      const token = localStorage.getItem('accessToken');
+
+      if (!token) {
+        console.error('No access token found in local storage');
+        return;
+      }
+
+      try {
+        const response = await fetch('https://goyalshivansh.me/api/v1/user/recent-matches?page=1&limit=12', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Fetched recent matches data:', data);
+
+        if (data.success && Array.isArray(data.recentMatches)) {
+          setMatches(data.recentMatches);
+        } else {
+          console.error('Expected recentMatches array but got:', data);
+          setMatches([]);
+        }
+      } catch (error) {
+        console.error('Error fetching recent matches:', error);
+        setMatches([]);
+      }
+    };
+
+    fetchRecentMatches();
+  }, []);
 
   return (
     <div className="relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6">
@@ -51,7 +76,7 @@ export default function RecentMatches() {
       <div className="grid grid-cols-5 bg-white/10 rounded-lg px-4 py-2 mb-4 text-sm font-medium">
         <span>Mode</span>
         <span>Players</span>
-        <span>Result</span>
+        <span>Winner</span>
         <span>Duration</span>
         <span>Date</span>
       </div>
@@ -59,15 +84,19 @@ export default function RecentMatches() {
       <div className="space-y-2">
         {matches.map((match, index) => (
           <div key={index} className="grid grid-cols-5 bg-white/5 rounded-lg px-4 py-2">
-            <div className="w-4 h-4" />
+            <span className="text-base font-medium truncate">{match.mode}</span>
             <div className="flex flex-col">
-              {match.players.map((player, i) => (
-                <span key={i} className="text-base font-medium">{player}</span>
+              {match.players.map((player: { id: string; username: string }, i: number) => (
+                <span key={player.id} className="text-base font-medium truncate">{player.username}</span>
               ))}
             </div>
-            <div className="w-5 h-5" />
-            <span className="text-sm">{match.duration}</span>
-            <span className="text-sm">{match.date}</span>
+            <span className="text-base font-medium truncate">
+              {match.winnerId ? 
+                match.players.find((player: { id: string }) => player.id === match.winnerId)?.username || 'N/A' 
+                : 'N/A'}
+            </span>
+            <span className="text-sm truncate">{match.duration}</span>
+            <span className="text-sm truncate">{match.createdAt}</span>
           </div>
         ))}
       </div>
