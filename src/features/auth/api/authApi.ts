@@ -79,7 +79,6 @@ export const authApi = {
         },
       }
     );
-     ('refresh token response', response.data.data?.tokens.accessToken);
     localStorage.setItem('accessToken', response.data.data?.tokens.accessToken || '');
     return response.data;
   },

@@ -18,16 +18,13 @@ export default function CreateContest() {
     description: ''
   });
 
-  // Get today's date for validation
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const todayStr = today.toISOString().split('T')[0];
 
-  // Get minimum time for start time if date is today
   const getMinStartTime = (date: string) => {
     if (date === todayStr) {
       const now = new Date();
-      // Convert local time to UTC
       const utcHours = now.getUTCHours();
       const utcMinutes = now.getUTCMinutes();
       return `${utcHours.toString().padStart(2, '0')}:${utcMinutes.toString().padStart(2, '0')}`;
@@ -35,7 +32,6 @@ export default function CreateContest() {
     return "00:00";
   };
 
-  // Get minimum time for end time based on start date and time
   const getMinEndTime = () => {
     if (formData.endDate === formData.startDate) {
       return formData.startTime;
@@ -46,18 +42,17 @@ export default function CreateContest() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
-    // Additional validation for end date/time
     if (name === 'endDate') {
       const startDate = new Date(formData.startDate);
       const endDate = new Date(value);
       if (endDate < startDate) {
-        return; // Don't allow end date before start date
+        return; 
       }
     }
 
     if (name === 'endTime' && formData.endDate === formData.startDate) {
       if (value < formData.startTime) {
-        return; // Don't allow end time before start time on the same day
+        return; 
       }
     }
 
@@ -70,11 +65,9 @@ export default function CreateContest() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Create UTC date objects
       const startDateTime = new Date(`${formData.startDate}T${formData.startTime}:00`);
       const endDateTime = new Date(`${formData.endDate}T${formData.endTime}:00`);
 
-      // Format dates to ISO string (UTC)
       const response = await contestApi.createContest({
         title: formData.name,
         description: formData.description,
@@ -84,7 +77,6 @@ export default function CreateContest() {
 
       toast.success('Contest created successfully!');
       
-      // Create URL with UTC timestamps
       const params = new URLSearchParams({
         contestId: response.contest.id,
         title: response.contest.title,

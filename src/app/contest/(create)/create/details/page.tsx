@@ -250,7 +250,7 @@ const Details = () => {
       toast.error('Contest ID not found');
       return;
     }
-
+    console.log('Problem Data:', problemData);
     try {
       await contestApi.addQuestion({
         contestId,
