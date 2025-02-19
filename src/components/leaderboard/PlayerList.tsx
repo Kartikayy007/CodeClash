@@ -1,8 +1,11 @@
 import { LeaderboardPlayer } from '@/features/home/leaderboard/types/leaderboard.types';
+import { useEffect } from 'react';
+import Leaderboard from '../dashboard/Leaderboard';
 
 interface PlayerListProps {
   players: LeaderboardPlayer[];
 }
+
 
 const PlayerList = ({ players }: PlayerListProps) => (
   <div className="rounded-lg overflow-hidden text-center">
