@@ -132,12 +132,11 @@ export default function ContestPage() {
   };
 
   const handleSolveProblem = (problemId: string) => {
-    router.push(`/problem/${problemId}`);
+    router.push(`contest/problem/${problemId}`);
   };
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query);
-    // Reset to first page when searching
     setLeaderboardPage(1);
   };
 
@@ -156,7 +155,7 @@ export default function ContestPage() {
               rating: q.rating || 0,
               score: q.score || 0,
               difficulty: q.difficulty,
-              status: null // Update this based on user's submission status
+              status: null 
             })) || []}
             onSolveProblem={handleSolveProblem}
           />
@@ -199,7 +198,9 @@ export default function ContestPage() {
     <div className="min-h-screen bg-[#10141D] text-white">
       <div className="flex flex-col h-full">
         <div className="flex items-center justify-between p-8">
-          <h1 className="text-2xl font-bold">Sample Contest</h1>
+          <h1 className="text-2xl font-bold">
+            {contest.title}
+          </h1>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Timer size={24} className={timeLeft <= 300 ? 'text-red-500 animate-pulse' : ''} />

@@ -52,6 +52,15 @@ export default function ContestDetails() {
       try {
         setLoading(true);
         const response = await contestApi.getContestDetails(contestId);
+        if(response.contest.isRegistered === true && response.contest.status === 'ONGOING') {
+          router.push(`/contest/${contestId}`);
+        }
+        if(response.contest.isRegistered === false && response.contest.status === 'ONGOING') {
+          toast.error('Contest has already started');
+          setTimeout(() => {
+            router.push(`/contest/join`);
+          }, 1000);
+        }
         toast.success(response.message);
         if (response.contest) {
           setContest(response.contest);

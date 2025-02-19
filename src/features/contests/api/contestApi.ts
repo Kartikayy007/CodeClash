@@ -91,22 +91,23 @@ export const contestApi = {
   },
 
   deleteQuestion: async (data: DeleteQuestionPayload): Promise<DeleteQuestionResponse> => {
-    const token = localStorage.getItem('accessToken');
-    const params = new URLSearchParams();
-    params.append('contestId', data.contestId);
-    params.append('questionId', data.questionId);
+  const token = localStorage.getItem('accessToken');
+  const formData = new URLSearchParams();
+  formData.append('contestId', data.contestId);
+  formData.append('questionId', data.questionId);
 
-    const response = await api.delete<DeleteQuestionResponse>(
-      `${BASE_URL}/api/v1/contest/deleteQuestions?${params.toString()}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }
-    );
-    return response.data;
-  },
+  const response = await api.delete<DeleteQuestionResponse>(
+    `${BASE_URL}/api/v1/contest/deleteQuestions`,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: formData 
+    }
+  );
+  return response.data;
+},
 
   getLeaderboard: async (contestId: string, page: number = 1): Promise<LeaderboardResponse> => {
     const token = localStorage.getItem('accessToken');

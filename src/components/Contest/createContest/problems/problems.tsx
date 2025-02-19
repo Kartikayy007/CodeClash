@@ -20,14 +20,12 @@ interface ProblemsProps {
 
 const Problems: React.FC<ProblemsProps> = ({ 
   problems = [], 
-  onAddProblem, 
-  onCreateProblem, 
   onDeleteProblem,
   onSaveProblem 
 }) => {
   const [editingProblem, setEditingProblem] = useState<Problem | null>(null);
+  const [editedProblem, setEditedProblem] = useState<Problem | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedProblemIndex, setSelectedProblemIndex] = useState<number | null>(null);
   const [showCreateProblem, setShowCreateProblem] = useState(false);
   const [showLibrary, setShowLibrary] = useState(false);
@@ -35,7 +33,32 @@ const Problems: React.FC<ProblemsProps> = ({
 
   const handleEditClick = (problem: Problem) => {
     setEditingProblem(problem);
+    setEditedProblem({ ...problem }); // Create a copy for editing
     setIsEditModalOpen(true);
+  };
+
+  const handleEditInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEditedProblem(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        [name]: name === 'rating' || name === 'maxScore' ? parseInt(value) : value
+      };
+    });
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editedProblem) return;
+
+    try {
+      await onSaveProblem(editedProblem);
+      toast.success('Problem updated successfully');
+      setIsEditModalOpen(false);
+    } catch (error) {
+      toast.error('Failed to update problem');
+    }
   };
 
   const handleDeleteClick = (index: number) => {
@@ -182,14 +205,16 @@ const Problems: React.FC<ProblemsProps> = ({
         onClose={() => setIsEditModalOpen(false)}
         title="Edit Problem"
       >
-        <form className="space-y-6">
+          <form onSubmit={handleEditSubmit} className="space-y-6">
           <div className="form-group">
             <label className="text-[#D1D1D1] text-[14px] block mb-2">
               Problem Title
             </label>
             <input
               type="text"
-              value={editingProblem?.name || ''}
+              name="name"
+              value={editedProblem?.name || ''}
+              onChange={handleEditInputChange}
               className="w-full h-[45px] px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                 focus:outline-none transition-all duration-500 text-sm text-white placeholder:text-gray-400"
             />
@@ -202,7 +227,9 @@ const Problems: React.FC<ProblemsProps> = ({
               </label>
               <input
                 type="number"
-                value={editingProblem?.maxScore || ''}
+                name="maxScore"
+                value={editedProblem?.maxScore || ''}
+                onChange={handleEditInputChange}
                 className="w-full h-[45px] px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                   focus:outline-none transition-all duration-500 text-sm text-white placeholder:text-gray-400"
               />
@@ -214,7 +241,9 @@ const Problems: React.FC<ProblemsProps> = ({
               </label>
               <input
                 type="number"
-                value={editingProblem?.rating || ''}
+                name="rating"
+                value={editedProblem?.rating || ''}
+                onChange={handleEditInputChange}
                 className="w-full h-[45px] px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                   focus:outline-none transition-all duration-500 text-sm text-white placeholder:text-gray-400"
               />
@@ -227,7 +256,7 @@ const Problems: React.FC<ProblemsProps> = ({
               onClick={() => setIsEditModalOpen(false)}
               type="button"
             >
-              Change Question
+              Cancel
             </LabelButton>
             <LabelButton type="submit">
               Save Changes

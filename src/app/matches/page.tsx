@@ -39,8 +39,7 @@ export default function ContestsPage() {
         });
 
         const data = await response.json();
-        console.log('Fetched Contests:', data); // Debugging API response
-
+        console.log('Fetched Contests:', data); 
         if (Array.isArray(data)) {
           setContests(data);
         } else if (data && data.contests && Array.isArray(data.contests)) {

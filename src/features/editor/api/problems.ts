@@ -26,6 +26,26 @@ export interface Problem {
   testCases: TestCase[];
 }
 
+export interface ProblemPreview {
+  id: string;
+  title: string;
+  rating: number;
+  score: number;
+  createdAt: string;
+}
+
+export interface ProblemListResponse {
+  success: boolean;
+  data: {
+    questions: ProblemPreview[];
+    meta: {
+      total: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+    };
+  };
+}
 
 export async function fetchProblem(problemId: string): Promise<Problem> {
   const token = localStorage.getItem('accessToken');
@@ -34,6 +54,18 @@ export async function fetchProblem(problemId: string): Promise<Problem> {
       Authorization: `Bearer ${token}`
     }
   });
-   ('🎯 Fetched problem:', response.data);
   return response.data.data;
+}
+
+export async function fetchProblemList(page: number = 1, limit: number = 10): Promise<ProblemListResponse> {
+  const token = localStorage.getItem('accessToken');
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/contest/questions/all?page=${page}&limit=${limit}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+  return response.data;
 }
