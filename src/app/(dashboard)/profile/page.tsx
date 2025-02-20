@@ -46,7 +46,7 @@ const ProfilePage = () => {
         toast.error(error || 'Failed to fetch profile');
         router.push('/login');
       });
-  }, [dispatch]);
+  }, [dispatch, router]);
 
   if (loading) {
     return (

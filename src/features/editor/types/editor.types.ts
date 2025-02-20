@@ -61,6 +61,7 @@ export interface SubmitCodePayload {
   code: string;
   language: string;
   matchId: string;
+  questionId: string;
 }
 
 export interface SubmitCodeResponse {

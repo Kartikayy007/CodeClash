@@ -5,8 +5,19 @@ interface RecentContestsProps {
   className?: string;
 }
 
+interface Contest {
+  id: string;
+  title: string;
+  startTime: string;
+  endTime: string;
+  score: number;
+  participantCount: number;
+  hasReview: boolean;
+}
+
+
 export default function RecentContests({ className = '' }: RecentContestsProps) {
-  const [contests, setContests] = useState<any[]>([])
+  const [contests, setContests] = useState<Contest[]>([])
 
   useEffect(() => {
     const fetchContests = async () => {

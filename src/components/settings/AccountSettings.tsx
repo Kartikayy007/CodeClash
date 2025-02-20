@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Modal from '@/components/ui/Modal';
 import LabelButton from '@/components/ui/LabelButton';
 import CustomInput from '../CustomInput';
-import { useForm } from 'react-hook-form';
+import {  useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SettingsPasswordFormSchema, SettingsUsernameFormSchema } from '@/lib/schemas/authSchema';
 import { Form } from '@/components/ui/form';
@@ -11,6 +11,7 @@ import { settingsApi } from '@/features/home/settings/apis/settingsApi';
 import { toast } from "@/providers/toast-config"
 import { useRouter } from 'next/navigation';
 import { ToastProvider } from '@/providers/ToastProvider';
+import { z } from 'zod';
 
 interface ApiError {
   response?: {
@@ -25,7 +26,7 @@ export default function AccountSettings() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const passwordForm = useForm<SettingsPasswordFormData>({
+  const passwordForm = useForm<z.infer<typeof SettingsPasswordFormSchema>>({
     resolver: zodResolver(SettingsPasswordFormSchema),
     defaultValues: {
       password: '',
@@ -34,7 +35,7 @@ export default function AccountSettings() {
     }
   });
 
-  const usernameForm = useForm<SettingsUsernameFormData>({
+  const usernameForm = useForm<z.infer<typeof SettingsUsernameFormSchema>>({
     resolver: zodResolver(SettingsUsernameFormSchema),
     defaultValues: {
       username: ''
@@ -61,7 +62,6 @@ export default function AccountSettings() {
       await settingsApi.changeUsername({
         username: data.username
       });
-       ('Username changed successfully');
       toast.success('Username changed successfully', 'Username changed successfully');
       setIsProfileModalOpen(false);
       usernameForm.reset();
@@ -75,10 +75,9 @@ export default function AccountSettings() {
     try {
       await settingsApi.deleteAccount();
       toast.success('Account deleted successfully', 'Account deleted successfully');
-      localStorage.removeItem('accessToken');
-       ('Account deleted successfully');  
+      localStorage.removeItem('accessToken');  
       // router.push('/login');
-    } catch (error) {
+    } catch (error: unknown) {
       const err = error as ApiError;
       toast.error(err?.response?.data?.message || 'Failed to delete account', 'Failed to delete account');
     }

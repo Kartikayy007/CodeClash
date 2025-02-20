@@ -17,20 +17,45 @@ interface ApiError {
     };
   };
 }
+<<<<<<< HEAD
 interface ProblemsProps {
+=======
+
+interface ProblemComponentProps {
+>>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
   problems: Problem[];
   onAddProblem: () => void;
   onCreateProblem: () => void;
   onDeleteProblem: (index: number) => void;
-  onSaveProblem: (problem: Problem) => Promise<void>;
+  onSaveProblem: (problemData: {
+    name: string;
+    title: string;
+    maxScore: number;
+    score: number;
+    rating: number;
+    description: string;
+    inputFormat: string;
+    constraints: string;
+    outputFormat: string;
+    testCases: Array<{
+      input: string;
+      output: string;
+      sample: boolean;
+      strength: number;
+    }>;
+  }) => Promise<void>;
 }
 
-const Problems: React.FC<ProblemsProps> = ({ 
+const Problems: React.FC<ProblemComponentProps> = ({ 
   problems = [], 
   onDeleteProblem,
   onSaveProblem 
 }) => {
+<<<<<<< HEAD
   const [editingProblem, setEditingProblem] = useState<Problem | null>(null);
+=======
+  const [, setEditingProblem] = useState<Problem | null>(null);
+>>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
   const [editedProblem, setEditedProblem] = useState<Problem | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedProblemIndex, setSelectedProblemIndex] = useState<number | null>(null);
@@ -40,7 +65,11 @@ const Problems: React.FC<ProblemsProps> = ({
 
   const handleEditClick = (problem: Problem) => {
     setEditingProblem(problem);
+<<<<<<< HEAD
     setEditedProblem({ ...problem }); // Create a copy for editing
+=======
+    setEditedProblem({ ...problem }); 
+>>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
     setIsEditModalOpen(true);
   };
 
@@ -60,11 +89,30 @@ const Problems: React.FC<ProblemsProps> = ({
     if (!editedProblem) return;
 
     try {
+<<<<<<< HEAD
       await onSaveProblem(editedProblem);
       toast.success('Problem updated successfully');
       setIsEditModalOpen(false);
     } catch (error) {
       toast.error('Failed to update problem');
+=======
+      await onSaveProblem({
+        name: editedProblem.name,
+        title: editedProblem.name,
+        maxScore: editedProblem.maxScore,
+        score: 0,
+        rating: editedProblem.rating,
+        description: '',
+        inputFormat: '',
+        constraints: '',
+        outputFormat: '',
+        testCases: []
+      });
+      toast.success('Problem updated successfully');
+      setIsEditModalOpen(false);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to update problem');
+>>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
     }
   };
 
@@ -95,7 +143,18 @@ const Problems: React.FC<ProblemsProps> = ({
   };
 
   const handleSaveProblem = (data: Problem) => {
-    onSaveProblem(data);
+    onSaveProblem({
+      name: data.name,
+      title: data.name,
+      maxScore: data.maxScore,
+      score: 0,
+      rating: data.rating,
+      description: '',
+      inputFormat: '',
+      constraints: '',
+      outputFormat: '',
+      testCases: []
+    });
     setShowCreateProblem(false);
   };
 
@@ -109,7 +168,18 @@ const Problems: React.FC<ProblemsProps> = ({
 
   const handleAddProblems = (selectedProblems: Problem[]) => {
     selectedProblems.forEach(problem => {
-      onSaveProblem(problem);
+      onSaveProblem({
+        name: problem.name,
+        title: problem.name,
+        maxScore: problem.maxScore,
+        score: 0,
+        rating: problem.rating,
+        description: '',
+        inputFormat: '',
+        constraints: '',
+        outputFormat: '',
+        testCases: []
+      });
     });
     setShowLibrary(false);
   };

@@ -1,30 +1,43 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
-import { useRouter } from 'next/navigation';
+
+interface QueuePromise {
+  resolve: (value: unknown) => void;
+  reject: (error: unknown) => void;
+}
+
+interface TokenResponse {
+  success: boolean;
+  error?: string;
+  data?: {
+    tokens: {
+      accessToken: string;
+      refreshToken: string;
+    };
+  };
+}
 
 const api = axios.create();
 let isRefreshing = false;
-let failedQueue: any[] = [];
+let failedQueue: QueuePromise[] = [];
 
-const processQueue = (error: any = null) => {
+const processQueue = (error: unknown = null) => {
   failedQueue.forEach(prom => {
     if (error) {
       prom.reject(error);
     } else {
-      prom.resolve();
+      prom.resolve(api);
     }
   });
   failedQueue = [];
 };
 
 const redirectToLogin = () => {
-  // Use next/navigation for client-side routing
   if (typeof window !== 'undefined') {
-    const router = require('next/navigation').useRouter();
-    router.push('/auth/login');
+    window.location.href = '/login';
   }
 };
 
-const refreshTokenAndRetry = async (failedRequest: any) => {
+const refreshTokenAndRetry = async (failedRequest: InternalAxiosRequestConfig) => {
   try {
     if (isRefreshing) {
       return new Promise((resolve, reject) => {
@@ -61,7 +74,7 @@ const refreshTokenAndRetry = async (failedRequest: any) => {
     } else {
       throw new Error('Token refresh failed');
     }
-  } catch (error) {
+  } catch (error: unknown) {
     processQueue(error);
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
@@ -93,14 +106,14 @@ api.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    const originalRequest = error.config;
+    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
     
     if (!originalRequest || originalRequest._retry) {
       return Promise.reject(error);
     }
 
     if (error.response?.status === 401 || 
-        (error.response?.data as any)?.error === "Unauthorized") {
+        (error.response?.data as TokenResponse)?.error === "Unauthorized") {
       originalRequest._retry = true;
       return refreshTokenAndRetry(originalRequest);
     }
@@ -128,7 +141,7 @@ const setupTokenRefresh = () => {
           localStorage.setItem('refreshToken', data.data.tokens.refreshToken);
           api.defaults.headers.common['Authorization'] = `Bearer ${data.data.tokens.accessToken}`;
         }
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Failed to refresh token:', error);
       }
     }

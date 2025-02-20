@@ -1,11 +1,29 @@
 import React, { useState } from 'react';
 import SubmissionDetail from './SubmissionDetail';
+import { LeaderboardEntry } from '@/features/contests/types/contest.types';
 
-const UserPerformance = ({ user, onClose }) => {
-  const [selectedSubmission, setSelectedSubmission] = useState(null); // State to manage selected submission
+interface ExtendedLeaderboardEntry extends LeaderboardEntry {
+  unsolved: number;
+  attempted: number;
+  submissions: Array<{
+    problemName: string;
+    language: string;
+    timeTaken: string;
+    status: string;
+    score: number;
+  }>;
+}
 
-  const handleSubmissionClick = (submission) => {
-    setSelectedSubmission(submission); // Set the selected submission
+interface UserPerformanceProps {
+  user: ExtendedLeaderboardEntry;
+  onClose: () => void;
+}
+
+const UserPerformance = ({ user, onClose }: UserPerformanceProps) => {
+  const [selectedSubmission, setSelectedSubmission] = useState<typeof user.submissions[0] | null>(null);
+
+  const handleSubmissionClick = (submission: typeof user.submissions[0]) => {
+    setSelectedSubmission(submission);
   };
 
   const handleCloseSubmissionDetail = () => {

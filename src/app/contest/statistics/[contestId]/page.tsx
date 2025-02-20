@@ -1,7 +1,12 @@
 'use client'
 import React, { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import {  useParams } from 'next/navigation';  // Change to useParams
 // import { Home, Settings } from 'lucide-react';
+=======
+import {  useParams } from 'next/navigation';  
+import Image from 'next/image';
+>>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
 import {
   ResponsiveContainer,
   BarChart,
@@ -14,6 +19,7 @@ import {
 import Sidebar from './Sidebar';
 import Leaderboard from './Leaderboard';
 
+<<<<<<< HEAD
 // interface Participant {
 //   name: string;
 //   score: number;
@@ -60,6 +66,23 @@ const CodingContestDashboard = () => {
   const { contestId } = useParams(); // Get contestId from route parameters
   const [contestData, setContestData] = useState<any>(null);  // State to store the fetched contest data
 
+=======
+interface ContestStatistics {
+  totalParticipants: number;
+  averageScore: number;
+  problemInsights: { name: string; value: number }[];
+  topPerformers: { name: string; score: number; position: number; avatar: string }[];
+  scoreDistribution: { range: string; count: number }[];
+}
+
+const CodingContestDashboard = () => {
+
+  const [active, setActive] = React.useState('overview'); // State to manage active option
+  // const router = useRouter();
+  const params = useParams();
+  const contestId = params?.contestId as string;
+  const [contestData, setContestData] = useState<ContestStatistics | null>(null);  
+>>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
   const handleLeaderboardClick = () => {
     console.log('Leaderboard clicked');
     setActive('leaderboard');
@@ -84,11 +107,11 @@ const CodingContestDashboard = () => {
   };
 
   useEffect(() => {
-    console.log(contestId); // Log contestId to check if it's being set correctly
+    console.log(contestId); 
 
     if (contestId) {
       const fetchContestData = async () => {
-        const token = localStorage.getItem('accessToken'); // Get the access token from local storage
+        const token = localStorage.getItem('accessToken'); 
         if (!token) {
           console.error('No access token found');
           return;
@@ -108,8 +131,8 @@ const CodingContestDashboard = () => {
           }
           const data = await response.json();
           console.log('Fetched Statistics:', data); 
-          setContestData(data);  // Store the data in the state
-        } catch (error) {
+          setContestData(data);  
+        } catch (error: unknown) {
           console.error('Error fetching contest data:', error);
         }
       };
@@ -122,7 +145,7 @@ const CodingContestDashboard = () => {
       <Sidebar 
         onLeaderboardClick={handleLeaderboardClick} 
         onOverviewClick={handleOverviewClick} 
-        active={active} 
+        active={active as 'overview' | 'leaderboard'} 
       />
 
       {/* Main Content */}
@@ -180,10 +203,12 @@ const CodingContestDashboard = () => {
                     {contestData?.topPerformers?.map((performer, index) => (
                       <div key={index} className="flex flex-col items-center mb-4">
                         <div className="relative">
-                          <img
+                          <Image
                             src={performer.avatar}
                             alt={performer.name}
                             className="w-16 h-16 rounded-full border-4 border-purple-700"
+                            width={20}
+                            height={20}
                           />
                           <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2">
                             <div className="bg-purple-700 px-4 py-1 rounded-md">

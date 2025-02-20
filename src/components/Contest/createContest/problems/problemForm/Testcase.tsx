@@ -31,7 +31,7 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({ testCases, onChange, onDe
         onChange(i, 'strength', newTestCase.strength);
       }
     }
-  }, []);
+  }, [onChange, testCases.length]); 
 
   const handleAddTestCase = (e: React.MouseEvent) => {
     e.preventDefault();

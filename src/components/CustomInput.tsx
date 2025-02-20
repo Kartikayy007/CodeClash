@@ -5,9 +5,8 @@ import { Control, Path } from 'react-hook-form';
 import Image from 'next/image';
 // import { z } from 'zod'
 // import { AuthFormSchema, ForgotPasswordFormSchema, GetStartedFormSchema, LoginFormSchema, RegisterFormSchema, ResetPasswordFormSchema } from '@/lib/schemas/authSchema';
-import { FormData } from '@/features/auth/types/form.types';
 
-interface CustomInputProps<T extends FormData> {
+interface CustomInputProps<T extends object> {
   control: Control<T>;
   name: Path<T>;
   label: string;
@@ -19,7 +18,7 @@ interface CustomInputProps<T extends FormData> {
   onBlur?: () => void;
 }
 
-const CustomInput = <T extends FormData>({
+const CustomInput = <T extends object>({
   control,
   name,
   label,

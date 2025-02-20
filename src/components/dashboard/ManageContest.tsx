@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
 
 interface Contest {
+  id: string;
   title: string;
   participantCount: number;
 }
@@ -65,7 +66,7 @@ const ManageContest = () => {
       </div>
 
       <div className="space-y-4">
-        {contests.slice(0, 2).map((contest, index) => (
+        {contests.slice(0, 2).map((contest, index) => ( // Show only the top 2 contests
           <div 
             key={index}
             className="bg-[#1E2127] rounded-lg p-4 hover:bg-[#282C34] transition-colors cursor-pointer"

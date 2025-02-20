@@ -60,7 +60,9 @@ const BattleRoom = () => {
     setLanguage(validLanguage);
     socketService.emit('code_update', {
       matchId: battleState.matchId as string,
-      language: validLanguage
+      language: validLanguage,
+      playerId: battleState.player1?.id,
+      code: battleState.player1?.code
     });
   };
 

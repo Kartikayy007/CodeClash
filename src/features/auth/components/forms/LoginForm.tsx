@@ -5,12 +5,12 @@ import Link from 'next/link'
 import CustomCheckbox from '@/components/ui/CustomCheckbox'
 // import { LoginFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
-import { FormData } from '@/features/auth/types/form.types';
+import { AuthFormData } from '@/features/auth/types/form.types';
 
 // type LoginFormData = z.infer<typeof LoginFormSchema>
 
 interface LoginFormProps {
-  control: Control<FormData>;
+  control: Control<AuthFormData>;
   isSubmitting: boolean;
   password: string;
 }

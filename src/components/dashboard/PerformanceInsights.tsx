@@ -105,7 +105,7 @@ const PerformanceInsights: React.FC<PerformanceInsightsProps> = ({ className = '
             showMark: true,
             color: '#C879EB',
             curve: 'linear',
-            valueFormatter: (value: number | null) => value > 0 ? 'W' : 'L',
+            valueFormatter: (value: number | null) => value === null ? '' : value > 0 ? 'W' : 'L',
           }]}
           width={400}
           height={220}

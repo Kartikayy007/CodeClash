@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { Match } from '@/features/home/matches/types/matches.types';
 
 export default function RecentMatches() {
-  const [matches, setMatches] = useState<any[]>([])
+  const [matches, setMatches] = useState<Match[]>([])
   const matchTypes = ["All", "Standard", "Accuracy", "Speed"];
 
   useEffect(() => {
@@ -86,7 +87,7 @@ export default function RecentMatches() {
           <div key={index} className="grid grid-cols-5 bg-white/5 rounded-lg px-4 py-2">
             <span className="text-base font-medium truncate">{match.mode}</span>
             <div className="flex flex-col">
-              {match.players.map((player: { id: string; username: string }, i: number) => (
+              {match.players.map((player: { id: string; username: string }) => (
                 <span key={player.id} className="text-base font-medium truncate">{player.username}</span>
               ))}
             </div>

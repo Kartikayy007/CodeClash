@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { z } from "zod";
-import { FieldErrors, useForm, UseFormReturn } from "react-hook-form";
+import { FieldErrors, useForm, UseFormReturn, Control } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { AuthFormSchema, RegisterFormSchema, LoginFormSchema, GetStartedFormSchema, ResetPasswordFormSchema, ForgotPasswordFormSchema } from '@/lib/schemas/authSchema';
@@ -235,7 +235,7 @@ const AuthForm = ({
         >
           {type === 'get-started' && (
             <GetStartedForm
-              control={form.control}
+              control={form.control as Control<z.infer<typeof GetStartedFormSchema>>}
               isSubmitting={isSubmitting}
             />
           )}
