@@ -42,30 +42,33 @@ export default function ContestsPage() {
   return (
     <div className="min-h-screen bg-[#15171B]">
       <div className="container mx-auto p-6">
-        <div className="flex items-center justify-between mb-8 flex-wrap">
-          <div className="relative w-full md:w-1/2">
-            <input
-              type="text"
-              placeholder="Search matches..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 bg-[#1A1D24] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 w-full"
-            />
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+        <div className='flex justify-end mb-8 flex-wrap'>
+          <div className='w-full md:w-[50%]'>
+            <div className="flex items-center justify-between mb-4 flex-col gap-5">
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  placeholder="Search matches..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 pr-4 py-2 bg-[#1A1D24] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 w-full"
+                />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              </div>
+              <LabelButton
+                variant="filled"
+                className="flex items-center gap-2  md:mt-0"
+                onClick={() => {/* Handle create contest */}}
+              >
+                <Plus size={20} />
+                Create Contest
+              </LabelButton>
+            </div>
           </div>
-          
-          <LabelButton
-            variant="filled"
-            className="flex items-center gap-2 mt-4 md:mt-0"
-            onClick={() => {/* Handle create contest */}}
-          >
-            <Plus size={20} />
-            Create Contest
-          </LabelButton>
         </div>
 
         <div className='flex flex-col md:flex-row'>
-          <div className="md:w-1/4">
+          <div className="md:w-1/4 mb-4 md:mb-0">
             <ContestFilters 
               selectedStatus={selectedStatus as "All" | "Scheduled" | "Ongoing" | "Completed"} 
               setSelectedStatus={setSelectedStatus as (status: "All" | "Scheduled" | "Ongoing" | "Completed") => void} 

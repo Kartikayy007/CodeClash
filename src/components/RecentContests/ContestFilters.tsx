@@ -5,7 +5,7 @@ interface ContestFiltersProps {
   
   const ContestFilters: React.FC<ContestFiltersProps> = ({ selectedStatus, setSelectedStatus }) => {
     return (
-      <div className="mb-6 w-[20%]">
+      <div className="mb-6 w-[100%]">
         <h2 className="text-white mb-4 flex items-center gap-2">
           <span className="text-lg">Filters</span>
         </h2>

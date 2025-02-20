@@ -16,21 +16,20 @@ const TopPlayers = ({ topPlayers }: TopPlayersProps) => {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-4 mb-8 relative">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 relative">
       {topPlayers.slice(0, 3).map((player, index) => {
         const displayIndex = getDisplayIndex(index);
         return (
           <div 
             key={player.id} 
-        className={`bg-[#212733] rounded-lg p-4 flex items-center gap-4 mt-8 ${
-          index === 0 ? 'shadow-lg mb-6 mt-0' : ''
-        } transition-all duration-200 hover:scale-[1.05] hover:shadow-xl cursor-pointer hover:bg-[#282C34]`}
-          
+            className={`bg-[#212733] rounded-lg p-4 flex items-center gap-4 sm:mt-8 ${
+              index === 0 ? 'shadow-lg sm:mb-6 mt-0' : ''
+            } transition-all duration-200 hover:scale-[1.05] hover:shadow-xl cursor-pointer hover:bg-[#282C34]`}
             style={{
               order: displayIndex
             }}
           >
-            <div className="relative w-12 h-12">
+            <div className="hidden md:block relative w-12 h-12">
               <Image
                 src={`/${index === 0 ? 'gold' : index === 1 ? 'silver' : 'bronze'}.svg`}
                 alt={`${index === 0 ? 'Gold' : index === 1 ? 'Silver' : 'Bronze'} Medal`}
