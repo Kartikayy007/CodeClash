@@ -189,7 +189,7 @@ const Details = () => {
       newFormData = {
         ...formData,
         [parent]: {
-          ...(formData[parent as keyof ContestDetails] as any),
+          ...(formData[parent as keyof ContestDetails] as Record<string, string>),
           [child]: value
         }
       };
@@ -215,7 +215,7 @@ const Details = () => {
     if (!contestId || !isDirty) return;
 
     try {
-      const response = await contestApi.updateContest(contestId, {
+      await contestApi.updateContest(contestId, {
         title: formData.name,
         description: formData.description,
         startTime: `${formData.startTime.date} ${formData.startTime.time}:00`,
@@ -226,8 +226,8 @@ const Details = () => {
         organizationName: formData.organizationName  
       });
       
-      setInitialFormData(formData); // Update initial state
-      setIsDirty(false); // Reset dirty state
+      setInitialFormData(formData); 
+      setIsDirty(false);
       toast.success('Contest updated successfully!');
     } catch (error) {
       const err = error as ApiError;

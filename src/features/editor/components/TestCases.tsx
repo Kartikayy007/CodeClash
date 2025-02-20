@@ -9,19 +9,11 @@ interface TestCaseResult {
   output: string | null;
 }
 
-// interface SubmissionResponse {
-//   submissionId: string;
-//   status: string;
-//   testCasesPassed: number;
-//   totalTestCases: number;
-//   executionTime: number;
-//   failedTestCase: string | null;
-// }
 
 interface TestCasesProps {
   testCases: TestCase[];
   isCollapsed: boolean;
-  onCollapse: (collapsed: boolean) => void;
+  onCollapse: (value: boolean) => void;
   className?: string;
 }
 
@@ -31,9 +23,7 @@ const TestCases: React.FC<TestCasesProps> = ({
   onCollapse,
   className = ''
 }) => {
-  // const dispatch = useDispatch<AppDispatch>();
   const {  output, error, submissionResponse } = useSelector((state: RootState) => state.editor);
-  // const { matchId } = useSelector((state: RootState) => state.battle);
   const [selectedCase, setSelectedCase] = React.useState(0);
   const [testResults, setTestResults] = React.useState<Record<number, TestCaseResult>>({});
 

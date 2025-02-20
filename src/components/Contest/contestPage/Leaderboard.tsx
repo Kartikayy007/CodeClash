@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface LeaderboardEntry {
   rank: string;
@@ -92,10 +93,12 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
                 >
                   <div className="flex items-center gap-2">
                     {index < 3 && (
-                      <img 
+                      <Image 
                         src={index === 0 ? "/gold.svg" : index === 1 ? "/silver.svg" : "/bronze.svg"} 
                         alt="medal" 
                         className="w-5 h-5"
+                        width={20}
+                        height={20}
                       />
                     )}
                     {entry.rank}

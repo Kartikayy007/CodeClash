@@ -1,5 +1,5 @@
 import React from 'react';
-import Leaderboard from '../components/dashboard/leaderboard';
+import Leaderboard from '@/components/dashboard/Leaderboard';
 
 const Dashboard = () => {
   return (

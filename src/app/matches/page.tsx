@@ -2,8 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import NavbarPlain from '@/components/ui/NavbarPlain';
-import { Search, Edit, BarChart2, Trash } from 'lucide-react';
+import { Search, Edit, BarChart2, Trash, Share } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import ShareContestModal from '@/components/Contest/ShareContestModal';
 
 type ContestStatus = 'All' | 'Scheduled' | 'Ongoing' | 'Completed';
 
@@ -21,6 +22,8 @@ export default function ContestsPage() {
   const [selectedStatus, setSelectedStatus] = useState<ContestStatus>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [contests, setContests] = useState<Contest[]>([]);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [selectedContest, setSelectedContest] = useState<Contest | null>(null);
 
   useEffect(() => {
     const fetchContests = async () => {
@@ -39,7 +42,7 @@ export default function ContestsPage() {
         });
 
         const data = await response.json();
-        console.log('Fetched Contests:', data); // Debugging API response
+        console.log('Fetched Contests:', data); 
 
         if (Array.isArray(data)) {
           setContests(data);
@@ -83,6 +86,12 @@ export default function ContestsPage() {
       contest.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
+
+  const handleShareClick = (e: React.MouseEvent, contest: Contest) => {
+    e.stopPropagation(); // Prevent row click event
+    setSelectedContest(contest);
+    setShareModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-[#15171B]">
@@ -157,6 +166,12 @@ export default function ContestsPage() {
                   <div className="flex items-center justify-between">
                     <span>{contest.participantCount}</span>
                     <div className="flex gap-4">
+                      <button
+                        onClick={(e) => handleShareClick(e, contest)}
+                        className="text-gray-400 hover:text-white"
+                      >
+                        <Share size={18} />
+                      </button>
                       <button className="text-gray-400 hover:text-white">
                         <Edit size={18} />
                       </button>
@@ -176,6 +191,17 @@ export default function ContestsPage() {
           </div>
         </div>
       </div>
+      {selectedContest && (
+        <ShareContestModal
+          isOpen={shareModalOpen}
+          onClose={() => {
+            setShareModalOpen(false);
+            setSelectedContest(null);
+          }}
+          contestId={selectedContest.contestId}
+          contestTitle={selectedContest.title}
+        />
+      )}
     </div>
   );
 }

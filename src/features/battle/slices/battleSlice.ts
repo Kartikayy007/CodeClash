@@ -1,17 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-interface Problem {
-  id: string;
-  title: string;
-  difficulty: string;
-  description: string[];
-  constraints: string[];
-  examples: {
-    id: number;
-    input: string;
-    output: string;
-    explanation?: string;
-  }[];
-}
+import { Problem } from '@/lib/socket';
 
 interface Player {
   id: string;
@@ -151,7 +139,7 @@ const battleSlice = createSlice({
         state.problemStatuses[problemId] = {};
       }
       state.problemStatuses[problemId][userId] = {
-        status,
+        status: status as 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR',
         timestamp: Date.now()
       };
        console.log("state.problemStatuses", state.problemStatuses[problemId]);
@@ -181,10 +169,11 @@ const battleSlice = createSlice({
       userId: string;
     }>>) => {
       action.payload.forEach(({ problemId, status, userId }) => {
-        // Update global problem status
-        state.problemStatuses[problemId] = {
-          status,
-          userId,
+        if (!state.problemStatuses[problemId]) {
+          state.problemStatuses[problemId] = {};
+        }
+        state.problemStatuses[problemId][userId] = {
+          status: status as 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR',
           timestamp: Date.now()
         };
 

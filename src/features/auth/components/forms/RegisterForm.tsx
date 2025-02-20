@@ -5,12 +5,12 @@ import CustomCheckbox from '@/components/ui/CustomCheckbox'
 import LabelButton from '@/components/ui/LabelButton'
 // import { RegisterFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
-import { FormData } from '@/features/auth/types/form.types';
+import { AuthFormData } from '@/features/auth/types/form.types';
 
 // type RegisterFormData = z.infer<typeof RegisterFormSchema>
 
 interface RegisterFormProps {
-  control: Control<FormData>;
+  control: Control<AuthFormData>;
   isSubmitting: boolean;
   password: string;
 }

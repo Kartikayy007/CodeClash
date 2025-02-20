@@ -9,12 +9,13 @@ import ProblemSet from '@/components/Contest/PreviewContest/ProblemSet';
 // import MySubmissions from '@/components/Contest/contestPage/MySubmissions';
 import ContestInsights from '@/components/Contest/contestPage/ContestInsights';
 
-interface Problem {
+interface PreviewProblem {
   id: string;
   title: string;
   rating: number;
   score: number;
   status: 'SOLVED' | 'UNSOLVED' | null;
+  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
 }
 
 interface ContestInsights {
@@ -76,12 +77,13 @@ export default function PreviewContest({ contest }: PreviewContestProps) {
   // const [searchQuery, setSearchQuery] = useState('');
 
   // Placeholder data for preview
-  const problems: Problem[] = contest.problems.map(p => ({
+  const problems: PreviewProblem[] = contest.problems.map(p => ({
     id: p.id || crypto.randomUUID(),
     title: p.name,
     rating: p.rating,
     score: p.score,
-    status: null
+    status: null,
+    difficulty: p.rating < 1000 ? 'EASY' : p.rating < 2000 ? 'MEDIUM' : 'HARD'
   }));
 
   const insights: ContestInsights = {

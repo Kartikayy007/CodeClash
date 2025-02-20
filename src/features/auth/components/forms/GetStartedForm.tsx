@@ -1,14 +1,13 @@
 import CustomInput from '@/components/CustomInput'
 import LabelButton from '@/components/ui/LabelButton'
 import { Control } from 'react-hook-form'
-// import { GetStartedFormSchema } from '@/lib/schemas/authSchema'
-// import { z } from 'zod'
-import { FormData } from '@/features/auth/types/form.types';
+import { z } from 'zod'
+import { GetStartedFormSchema } from '@/lib/schemas/authSchema'
+import { AuthFormData } from '../../types/form.types'
 
-// type GetStartedFormData = z.infer<typeof GetStartedFormSchema>
 
 interface GetStartedFormProps {
-  control: Control<FormData>;
+  control: Control<z.infer<typeof GetStartedFormSchema>>;
   isSubmitting: boolean;
 }
 
@@ -18,7 +17,7 @@ export default function GetStartedForm({ control, isSubmitting }: GetStartedForm
       <CustomInput
         name="email"
         label="Email"
-        control={control}
+        control={control as Control<AuthFormData>}
         placeholder=""
       />
       <LabelButton

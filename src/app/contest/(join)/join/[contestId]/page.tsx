@@ -74,7 +74,7 @@ export default function ContestDetails() {
     };
 
     fetchContestDetails();
-  }, [contestId]);
+  }, [contestId, router]);
 
   const handleRegister = async () => {
     if (!contestId) return;

@@ -1,15 +1,16 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ArrowLeft, Search } from 'lucide-react';
 import LabelButton from '@/components/ui/LabelButton';
 import { fetchProblem, fetchProblemList, Problem, ProblemPreview } from '@/features/editor/api/problems';
 import toast from 'react-hot-toast';
 import ProblemDetailModal from './ProblemDetailModal';
+import { Problem as ContestProblem } from '@/types/problem.types';
 
 interface LibProblemsProps {
   onBack: () => void;
-  onAddProblems: (selectedProblems: Problem[]) => void;
+  onAddProblems: (selectedProblems: ContestProblem[]) => void;
 }
 
 const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
@@ -27,22 +28,22 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
   const [ratingFilter, setRatingFilter] = useState('all');
   const [customRating, setCustomRating] = useState({ from: '', to: '' });
 
-  useEffect(() => {
-    fetchProblems();
-  }, [currentPage]);
-
-  const fetchProblems = async () => {
+  const fetchProblems = React.useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetchProblemList(currentPage, 10);
       setProblems(response.data.questions);
       setTotalPages(response.data.meta.totalPages);
-    } catch (error) {
-      toast.error('Failed to fetch problems');
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to fetch problems');
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage]);
+
+  React.useEffect(() => {
+    fetchProblems();
+  }, [fetchProblems, currentPage]);
 
   const handleToggleSelect = async (problemId: string) => {
     const newSelected = new Set(selectedProblems);
@@ -57,8 +58,8 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
             ...prev,
             [problemId]: problemDetail
           }));
-        } catch (error) {
-          toast.error('Failed to fetch problem details');
+        } catch (error: unknown) {
+          toast.error(error instanceof Error ? error.message : 'Failed to fetch problem details');
           return;
         }
       }
@@ -69,7 +70,26 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
   };
 
   const handleAddSelected = () => {
-    const selectedProblemsList = Array.from(selectedProblems).map(id => selectedProblemDetails[id]);
+    const selectedProblemsList = Array.from(selectedProblems).map(id => {
+      const problem = selectedProblemDetails[id];
+      return {
+        name: problem.title,
+        title: problem.title,
+        maxScore: 100,
+        score: 0,
+        rating: problem.rating,
+        description: problem.description,
+        inputFormat: problem.inputFormat,
+        constraints: problem.constraints,
+        outputFormat: problem.outputFormat,
+        testCases: problem.testCases.map(tc => ({
+          input: tc.input,
+          output: tc.output,
+          sample: !tc.isHidden,
+          strength: 1
+        }))
+      };
+    });
     onAddProblems(selectedProblemsList);
   };
 
@@ -88,8 +108,8 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
         }));
         setViewingProblem(problemDetail);
       }
-    } catch (error) {
-      toast.error('Failed to fetch problem details');
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to fetch problem details');
     } finally {
       setLoadingProblemDetail(false);
     }
@@ -307,7 +327,7 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
         </div>
         {(viewingProblem || loadingProblemDetail) && (
           <ProblemDetailModal
-            problem={viewingProblem}
+            problem={viewingProblem ?? undefined}
             isLoading={loadingProblemDetail}
             onClose={() => {
               setViewingProblem(null);

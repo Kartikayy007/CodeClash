@@ -1,11 +1,11 @@
 import React from 'react';
-import { Problem } from '@/features/editor/api/problems';
+import { Problem as SocketProblem } from '@/lib/socket';
 
 interface QuestionProps {
-  problem: Problem;
+  problem: SocketProblem;
 }
 
-const Question: React.FC<QuestionProps> = ({ problem }) => {
+const Question = ({ problem }: QuestionProps) => {
   return (
     <div className="h-full">
       <div className="px-6 space-y-8">

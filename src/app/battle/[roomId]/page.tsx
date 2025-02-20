@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 // import { useParams } from 'next/navigation';
 import { useSelector } from 'react-redux';
-import { socketService } from '@/lib/socket';
+import {  socketService } from '@/lib/socket';
 import EditorLayout from '@/features/editor/components/EditorLayout';
 import Editor from '@/features/editor/components/Editor';
 import { RootState } from '@/store/store';
@@ -60,7 +60,9 @@ const BattleRoom = () => {
     setLanguage(validLanguage);
     socketService.emit('code_update', {
       matchId: battleState.matchId as string,
-      language: validLanguage
+      language: validLanguage,
+      playerId: battleState.player1?.id,
+      code: battleState.player1?.code
     });
   };
 
