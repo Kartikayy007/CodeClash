@@ -3,8 +3,9 @@ import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
 
 interface Contest {
-  name: string;
-  participants: number;
+  id: string;
+  title: string;
+  participantCount: number;
 }
 
 const ManageContest = () => {

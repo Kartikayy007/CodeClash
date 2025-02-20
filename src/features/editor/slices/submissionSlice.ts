@@ -75,6 +75,14 @@ const initialState: SubmissionState = {
   error: null
 };
 
+interface LatestSubmission {
+  submissionId: string;
+  status: string;
+  testCasesPassed: number;
+  totalTestCases: number;
+  executionTime: number;
+  failedTestCase: string | null;
+}
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
   
   export const fetchSubmissions = createAsyncThunk(
@@ -126,7 +134,7 @@ const submissionSlice = createSlice({
     setPage: (state, action: PayloadAction<number>) => {
       state.pagination.currentPage = action.payload;
     },
-    setLatestSubmission: (state, action: PayloadAction<any>) => {
+    setLatestSubmission: (state, action: PayloadAction<LatestSubmission>) => {
       state.latestSubmission = action.payload;
     },
   },

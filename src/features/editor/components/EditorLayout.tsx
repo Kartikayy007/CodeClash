@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Maximize2, Minimize2, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Problem } from '@/features/editor/api/problems';
+import {  Problem as SocketProblem } from '@/lib/socket';
 import TopBar from './TopBar';
 import Header from './Header';
 import Question from './Question';
@@ -13,10 +13,12 @@ import { RootState } from '@/store/store';
 import { setCurrentProblemIndex } from '@/features/battle/slices/battleSlice';
 import { setActiveTab } from '@/features/editor/slices/editorSlice';
 import SubmissionTab from './submissionTab/SubmissionTab';
+import { TestCase } from '../api/problems';
 
 interface EditorLayoutProps {
-  questionData: Problem;
+  questionData: SocketProblem;
   matchId: string;
+  children: React.ReactNode;
 }
 
 const EditorLayout = ({ questionData, matchId }: EditorLayoutProps) => {
@@ -121,7 +123,7 @@ const EditorLayout = ({ questionData, matchId }: EditorLayoutProps) => {
             {/* TestCases container */}
             <div className={`transition-all duration-300 flex-1`}>
               <TestCases
-                testCases={questionData.testCases.filter(tc => !tc.isHidden)}
+                testCases={questionData.testCases as TestCase[]}
                 isCollapsed={isTestCaseCollapsed}
                 onCollapse={setIsTestCaseCollapsed}
                 className={isEditorMaximized ? 'hidden' : ''}

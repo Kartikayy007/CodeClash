@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import {  useParams } from 'next/navigation';  // Change to useParams
-// import { Home, Settings } from 'lucide-react';
+import {  useParams } from 'next/navigation';  
+import Image from 'next/image';
 import {
   ResponsiveContainer,
   BarChart,
@@ -14,52 +14,21 @@ import {
 import Sidebar from './Sidebar';
 import Leaderboard from './Leaderboard';
 
-// interface Participant {
-//   name: string;
-//   score: number;
-//   avatar: string;
-// }
-
-// interface ProblemData {
-//   name: string;
-//   value: number;
-// }
-
-// interface ScoreDistribution {
-//   range: string;
-//   count: number;
-// }
+interface ContestStatistics {
+  totalParticipants: number;
+  averageScore: number;
+  problemInsights: { name: string; value: number }[];
+  topPerformers: { name: string; score: number; position: number; avatar: string }[];
+  scoreDistribution: { range: string; count: number }[];
+}
 
 const CodingContestDashboard = () => {
-  // const problemData: ProblemData[] = [
-  //   { name: 'Q1', value: 48 },
-  //   { name: 'Q2', value: 38 },
-  //   { name: 'Q3', value: 40 },
-  //   { name: 'Q4', value: 36 },
-  //   { name: 'Q5', value: 24 },
-  //   { name: 'Q6', value: 32 },
-  //   { name: 'Q7', value: 20 },
-  // ];
-
-  // const scoreDistribution: ScoreDistribution[] = [
-  //   { range: '0-20', count: 4 },
-  //   { range: '21-40', count: 12 },
-  //   { range: '41-60', count: 6 },
-  //   { range: '61-80', count: 20 },
-  //   { range: '81-100', count: 8 },
-  // ];
-
-  // const topPerformers = [
-  //   { name: 'Abcdefgh', score: 120.00, position: 1, avatar: '/first.svg' },
-  //   { name: 'Abcdefgh', score: 100.00, position: 2, avatar: '/second.svg' },
-  //   { name: 'Abcdefgh', score: 80.00, position: 3, avatar: '/third.svg' },
-  // ];
 
   const [active, setActive] = React.useState('overview'); // State to manage active option
   // const router = useRouter();
-  const { contestId } = useParams(); // Get contestId from route parameters
-  const [contestData, setContestData] = useState<any>(null);  // State to store the fetched contest data
-
+  const params = useParams();
+  const contestId = params?.contestId as string;
+  const [contestData, setContestData] = useState<ContestStatistics | null>(null);  
   const handleLeaderboardClick = () => {
     console.log('Leaderboard clicked');
     setActive('leaderboard');
@@ -84,11 +53,11 @@ const CodingContestDashboard = () => {
   };
 
   useEffect(() => {
-    console.log(contestId); // Log contestId to check if it's being set correctly
+    console.log(contestId); 
 
     if (contestId) {
       const fetchContestData = async () => {
-        const token = localStorage.getItem('accessToken'); // Get the access token from local storage
+        const token = localStorage.getItem('accessToken'); 
         if (!token) {
           console.error('No access token found');
           return;
@@ -108,8 +77,8 @@ const CodingContestDashboard = () => {
           }
           const data = await response.json();
           console.log('Fetched Statistics:', data); 
-          setContestData(data);  // Store the data in the state
-        } catch (error) {
+          setContestData(data);  
+        } catch (error: unknown) {
           console.error('Error fetching contest data:', error);
         }
       };
@@ -122,7 +91,7 @@ const CodingContestDashboard = () => {
       <Sidebar 
         onLeaderboardClick={handleLeaderboardClick} 
         onOverviewClick={handleOverviewClick} 
-        active={active} 
+        active={active as 'overview' | 'leaderboard'} 
       />
 
       {/* Main Content */}
@@ -180,10 +149,12 @@ const CodingContestDashboard = () => {
                     {contestData?.topPerformers?.map((performer, index) => (
                       <div key={index} className="flex flex-col items-center mb-4">
                         <div className="relative">
-                          <img
+                          <Image
                             src={performer.avatar}
                             alt={performer.name}
                             className="w-16 h-16 rounded-full border-4 border-purple-700"
+                            width={20}
+                            height={20}
                           />
                           <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2">
                             <div className="bg-purple-700 px-4 py-1 rounded-md">

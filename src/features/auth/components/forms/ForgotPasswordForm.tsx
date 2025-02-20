@@ -3,13 +3,13 @@ import CustomInput from '@/components/CustomInput'
 import LabelButton from '@/components/ui/LabelButton'
 // import { ForgotPasswordFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
-import { FormData } from '@/features/auth/types/form.types'
+import { AuthFormData } from '@/features/auth/types/form.types'
 
 
 // type ForgotPasswordFormData = z.infer<typeof ForgotPasswordFormSchema>;
 
 interface ForgotPasswordFormProps {
-  control: Control<FormData>;
+  control: Control<AuthFormData>;
   isSubmitting: boolean;
   resetLinkSent: boolean;
   timeLeft: number;

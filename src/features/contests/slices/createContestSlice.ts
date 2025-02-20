@@ -26,6 +26,17 @@ interface CreateContestState {
   isDirty: boolean;
 }
 
+interface FormFieldUpdate {
+  name: Exclude<keyof FormData, 'startTime' | 'endTime'>;
+  value: string;
+}
+
+interface TimeFieldUpdate {
+  name: 'startTime' | 'endTime';
+  field: 'date' | 'time';
+  value: string;
+}
+
 const initialState: CreateContestState = {
   formData: {
     name: '',
@@ -54,9 +65,14 @@ const createContestSlice = createSlice({
   name: 'createContest',
   initialState,
   reducers: {
-    updateFormField: (state, action: PayloadAction<{ name: string; value: string }>) => {
+    updateFormField: (state, action: PayloadAction<FormFieldUpdate>) => {
       const { name, value } = action.payload;
-      (state.formData as any)[name] = value;
+      state.formData[name] = value;
+      state.isDirty = true;
+    },
+    updateTimeField: (state, action: PayloadAction<TimeFieldUpdate>) => {
+      const { name, field, value } = action.payload;
+      state.formData[name][field] = value;
       state.isDirty = true;
     },
     setActiveTab: (state, action: PayloadAction<'details' | 'problems' | 'settings'>) => {
@@ -96,6 +112,7 @@ const createContestSlice = createSlice({
 
 export const {
   updateFormField,
+  updateTimeField,
   setActiveTab,
   setActiveSection,
   addProblem,

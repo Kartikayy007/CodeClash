@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
+
+interface UserProfile {
+  data: {
+    username: string;
+    email: string;
+    maxWinStreak: number;
+    losses: number;
+    totalMatches: number;
+  };
+}
 
 export default function UserStats() {
-  const [userProfile, setUserProfile] = useState<any>(null); // State for user profile data
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null); 
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const token = localStorage.getItem('accessToken'); // Adjust the key as necessary
+      const token = localStorage.getItem('accessToken'); 
 
       if (!token) {
         console.error('No access token found in local storage');
@@ -30,18 +39,17 @@ export default function UserStats() {
         console.log('Fetched user profile data:', data.data); // Log the full response
 
         if (data.success) {
-          console.log('Setting user profile:'); // Log the user data before setting
+          console.log('Setting user profile:'); 
           setUserProfile(data);
           
         } else {
           console.error('Failed to fetch user profile:', data);
-          setUserProfile(null); // Reset state on failure
+          setUserProfile(null); 
         }
       } catch (error) {
         console.error('Error fetching user profile:', error);
         setUserProfile(null); // Reset state on error
       }
-      console.log('name:',userProfile.username)
     };
 
     fetchUserProfile();

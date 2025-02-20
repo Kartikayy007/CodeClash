@@ -1,6 +1,12 @@
 import React from 'react';
 
-const Sidebar = ({ onLeaderboardClick, onOverviewClick, active }) => {
+interface SidebarProps {
+  onLeaderboardClick: () => void;
+  onOverviewClick: () => void;
+  active: 'overview' | 'leaderboard';
+}
+
+const Sidebar = ({ onLeaderboardClick, onOverviewClick, active }: SidebarProps) => {
   return (
     <div className="w-64 bg-[#10141D] text-white">
       <div className="p-4">

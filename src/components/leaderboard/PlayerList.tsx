@@ -1,6 +1,4 @@
 import { LeaderboardPlayer } from '@/features/home/leaderboard/types/leaderboard.types';
-import { useEffect } from 'react';
-import Leaderboard from '../dashboard/Leaderboard';
 
 interface PlayerListProps {
   players: LeaderboardPlayer[];

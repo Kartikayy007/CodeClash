@@ -1,5 +1,4 @@
 import React from 'react';
-import { Check, X, AlertTriangle, Clock } from 'lucide-react';
 
 interface Submission {
   id: string;

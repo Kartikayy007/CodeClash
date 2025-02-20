@@ -20,7 +20,17 @@ export interface Contest {
   };
   isRegistered: boolean;
   isCreator: boolean;
-  userStats: null | any;
+  userStats: null | {
+    rank: number;
+    score: number;
+    timeTaken: string;
+    questionsSolved: number;
+    submissions: Array<{
+      questionId: string;
+      status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
+      submittedAt: string;
+    }>;
+  };
   participantCount: number;
   questionCount: number;
   questions: Array<{
@@ -52,7 +62,13 @@ export interface CreateContestResponse {
     createdAt: string;
     updatedAt: string;
     creatorId: string;
-    questions: any[];
+    questions: Array<{
+      id: string;
+      title: string;
+      description: string;
+      inputFormat: string;
+      outputFormat: string;
+    }>;
   };
 }
 
@@ -143,6 +159,7 @@ export interface LeaderboardResponse {
 }
 
 export interface UpdateLeaderboardResponse {
+  success: boolean;
   message: string;
   updatedUsers: number;
 }

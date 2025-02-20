@@ -1,8 +1,6 @@
-// import { updateProblemStatus } from '@/features/battle/slices/battleSlice';
-// import router from 'next/router';
 import { io, Socket } from 'socket.io-client';
 
-type GameMode = 'STANDARD' | 'BLITZ';
+type GameMode = 'STANDARD' | 'SPEED' | 'ACCURACY';
 
 interface Player {
   id: string;
@@ -12,11 +10,20 @@ interface Player {
   isReady: boolean;
 }
 
-interface Problem {
+export interface Problem {
   id: string;
   title: string;
   description: string;
+  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+  inputFormat: string;
+  outputFormat: string;
+  constraints: string;
   testCases: Array<{ input: string; output: string }>;
+  sampleInput?: string;
+  sampleOutput?: string;
+  rating: number;
+  timeLimit: number;
+  memoryLimit: number;
 }
 
 interface RoomState {
@@ -49,7 +56,10 @@ interface EventData {
     gameState: Array<{
       userId: string;
       problemsSolved: number;
-      solvedProblems: Record<string, any>;
+      solvedProblems: Record<string, {
+        status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
+        submittedAt: number;
+      }>;
     }>;
   };
   game_error: { message: string };
@@ -68,7 +78,12 @@ interface EventData {
   };
 
   player_disconnected: { playerId: string };
-  code_update: { matchId: string; playerId?: string; code?: string; language?: string };
+  code_update: { 
+    matchId: string; 
+    playerId: string | undefined; 
+    code: string | undefined; 
+    language: string | undefined;
+  };
   code_result: { playerId: string; output: string; error: string };
   connect: Record<string, never>;
   disconnect: { reason: string };
@@ -78,7 +93,7 @@ interface EventData {
 
 class SocketService {
   private socket: Socket | null = null;
-  private eventListeners: Map<keyof EventData, Set<(data: any) => void>> = new Map();
+  private eventListeners: Map<keyof EventData, Set<(data: EventData[keyof EventData]) => void>> = new Map();
   private currentmatchId: string | null = null;
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
@@ -89,7 +104,6 @@ class SocketService {
       return;
     }
 
-     console.log("🔌 Connecting to Socket.IO server...");
     
     this.socket = io('https://goyalshivansh.me', {
       path: '/socket/',
@@ -107,7 +121,7 @@ class SocketService {
     });
 
     if (typeof window !== 'undefined') {
-      (window as any).__socketInstance = this.socket;
+      (window as unknown as Window & { __socketInstance: Socket | null }).__socketInstance = this.socket;
     }
 
     this.setupEventListeners();
@@ -149,7 +163,7 @@ class SocketService {
        console.log("📡 Socket event received:", eventName, args);
       const listeners = this.eventListeners.get(eventName as keyof EventData);
       if (listeners) {
-        listeners.forEach(listener => listener(...args));
+        listeners.forEach(listener => listener(args[0] as EventData[keyof EventData]));
       }
     });
   }
@@ -158,11 +172,11 @@ class SocketService {
     if (!this.eventListeners.has(event)) {
       this.eventListeners.set(event, new Set());
     }
-    this.eventListeners.get(event)?.add(callback);
+    (this.eventListeners.get(event) as Set<(data: EventData[K]) => void>).add(callback);
   }
 
   off<K extends keyof EventData>(event: K, callback: (data: EventData[K]) => void): void {
-    const listeners = this.eventListeners.get(event);
+    const listeners = this.eventListeners.get(event) as Set<(data: EventData[K]) => void>;
     if (listeners) {
       listeners.delete(callback);
     }

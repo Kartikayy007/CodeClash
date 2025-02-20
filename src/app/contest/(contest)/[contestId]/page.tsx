@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { contestApi } from '@/features/contests/api/contestApi';
 import toast from 'react-hot-toast';
-import { Contest } from '@/features/contests/types/contest.types';
+import { Contest, LeaderboardEntry } from '@/features/contests/types/contest.types';
 import LabelButton from '@/components/ui/LabelButton';
 import { Timer } from 'lucide-react';
 import ProblemSet from '@/components/Contest/PreviewContest/ProblemSet';
@@ -74,8 +74,9 @@ export default function ContestPage() {
             setTimeLeft(timeLeftInSeconds > 0 ? timeLeftInSeconds : 0);
           }
         }
-      } catch (error: any) {
-        toast.error(error?.response?.data?.message || 'Failed to fetch contest details');
+      } catch (error: ApiError | unknown) {
+        const err = error as ApiError;
+        toast.error(err?.response?.data?.message || 'Failed to fetch contest details');
         router.push('/dashboard');
       } finally {
         setLoading(false);
