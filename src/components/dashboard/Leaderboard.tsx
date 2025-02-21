@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import PlayerList from '../leaderboard/PlayerList';
@@ -9,7 +7,7 @@ interface LeaderboardProps {
   className?: string;
 }
 
-const Leaderboard = ({ className = '' }: LeaderboardProps) => {
+export default function Leaderboard({ className = '' }: LeaderboardProps) {
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardPlayer[]>([]);
   const router = useRouter();
 
@@ -66,6 +64,4 @@ const Leaderboard = ({ className = '' }: LeaderboardProps) => {
       <PlayerList players={leaderboardData.slice(0, 7)} />
     </div>
   );
-};
-
-export default Leaderboard;
+}
