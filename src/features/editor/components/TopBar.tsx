@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import LabelButton from '@/components/ui/LabelButton';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,6 +7,7 @@ import { runCode, submitCode, setActiveTab } from '@/features/editor/slices/edit
 import { setCurrentProblemIndex, updateProblemStatus, updateMultipleProblemStatuses } from '@/features/battle/slices/battleSlice';
 import { socketService } from '@/lib/socket';
 import toast from 'react-hot-toast';
+import { setGameEnd } from '@/features/battle/slices/gameEndSlice';
 
 interface TopBarProps {
   matchId: string;
@@ -37,7 +38,6 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
     problems
   });
 
-  // Determine current player and opponent
   const currentPlayer = player1?.id === userId ? player1 : player2;
   const opponentPlayer = player1?.id === userId ? player2 : player1;
 
@@ -88,6 +88,58 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
     }));
   };
 
+  const checkGameCompletion = useCallback(() => {
+    if (!currentPlayer?.solvedProblems || !problems.length) return;
+
+    console.log("🎮 Checking game completion:", {
+      currentPlayer,
+      opponentPlayer,
+      problems
+    });
+
+    const currentPlayerAccepted = Object.values(currentPlayer.solvedProblems)
+      .filter(problem => problem.status === 'ACCEPTED').length;
+    
+    const opponentAccepted = Object.values(opponentPlayer?.solvedProblems || {})
+      .filter(problem => problem.status === 'ACCEPTED').length;
+
+    console.log("📊 Solved problems count:", {
+      currentPlayerAccepted,
+      opponentAccepted,
+      totalProblems: problems.length
+    });
+
+    if (currentPlayerAccepted === problems.length || opponentAccepted === problems.length) {
+      const winner = currentPlayerAccepted === problems.length ? currentPlayer.id : opponentPlayer?.id;
+      const loser = winner === currentPlayer.id ? opponentPlayer?.id : currentPlayer.id;
+
+      if (!winner || !loser) return;
+
+      const ratingChanges: { [key: string]: number } = {
+        [winner]: 24,
+        [loser]: -24
+      };
+
+      console.log("🏆 Game completed!", {
+        winner,
+        ratingChanges
+      });
+
+      dispatch(setGameEnd({
+        winnerId: winner,
+        ratingChanges
+      }));
+    }
+  }, [currentPlayer, opponentPlayer, problems, dispatch]);
+
+  useEffect(() => {
+    checkGameCompletion();
+  }, [
+    currentPlayer?.solvedProblems,
+    opponentPlayer?.solvedProblems,
+    checkGameCompletion
+  ]);
+
   const handleSubmitCode = () => {
     const currentProblem = problems[currentProblemIndex];
      console.log("📤 Submitting code:", {
@@ -115,6 +167,7 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
         const status = action.payload.status;
         if (status === 'ACCEPTED') {
           toast.success('All test cases passed!');
+          checkGameCompletion();
         } else if (status) {
           toast.error(`Submission failed: ${status}`);
         }
@@ -160,7 +213,6 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
 
   const getOpponentProblemStatusColor = (index: number) => {
     const problem = problems[index];
-     console.log("opponentPlayer", opponentPlayer);
     if (!problem || !opponentPlayer?.solvedProblems) return '';
      console.log(problem.id, opponentPlayer.solvedProblems);
     const status = opponentPlayer.solvedProblems[problem.id]?.status;

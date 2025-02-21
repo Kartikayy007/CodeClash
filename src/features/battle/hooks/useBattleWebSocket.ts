@@ -6,6 +6,8 @@ import { useDispatch } from 'react-redux';
 import { setProblems, setStatus, setPlayer1, setPlayer2, setMatchId, updateProblemStatus } from '@/features/battle/slices/battleSlice';
 import { store } from '@/store/store';
 import type { Problem as SocketProblem } from '@/lib/socket';
+import { setGameEnd } from '../slices/gameEndSlice';
+import toast from 'react-hot-toast';
 
 interface MatchFoundData {
   matchId: string;
@@ -191,10 +193,6 @@ export const useBattleWebSocket = () => {
       setTimeout(() => router.push('/'), 3000);
     };
 
-    const onGameError = (data: ErrorData) => {
-      console.error('❌ Game error:', data);
-      setState(prev => ({ ...prev, error: data.message }));
-    };
 
     const onMatchmakingError = (data: ErrorData) => {
       console.error('❌ Matchmaking error:', data);
@@ -211,8 +209,48 @@ export const useBattleWebSocket = () => {
       setState(prev => ({ ...prev, error: data.message }));
     };
 
+    const handleGameEnd = (data: { winner: string; ratingChanges: { [userId: string]: number } }) => {
+      console.log("🏆 Game End Event Received in hook:", data);
+      
+      try {
+        const myId = store.getState().auth.user?.id;
+        console.log("Current user ID:", myId);
+        
+        if (!data || !data.winner || !data.ratingChanges) {
+          console.error("Invalid game end data received:", data);
+          return;
+        }
 
+        // Dispatch action synchronously
+        store.dispatch(setGameEnd({
+          winnerId: data.winner,
+          ratingChanges: data.ratingChanges
+        }));
 
+        const isWinner = myId === data.winner;
+        const myRatingChange = data.ratingChanges[myId || ''] || 0;
+
+        console.log("Game End Details:", {
+          myId,
+          isWinner,
+          myRatingChange,
+          fullData: data,
+          currentState: store.getState().gameEnd
+        });
+
+        if (isWinner) {
+          toast.success(`Victory! Rating +${myRatingChange}`);
+        } else {
+          toast.error(`Defeat! Rating ${myRatingChange}`);
+        }
+
+      } catch (error) {
+        console.error("Error handling game end:", error);
+      }
+    };
+
+    
+    socketService.on('game_end', handleGameEnd);
     socketService.on('game_state_update', onGameStateUpdate);
     socketService.on('connect', onConnect);
     socketService.on('match_found', onMatchFound);
@@ -220,7 +258,6 @@ export const useBattleWebSocket = () => {
     socketService.on('game_start', onGameStart);
     socketService.on('match_error', onMatchError);
     socketService.on('match_aborted', onMatchAborted);
-    socketService.on('game_error', onGameError);
     socketService.on('matchmaking_error', onMatchmakingError);
     socketService.on('auth_error', onAuthError);
 
@@ -232,10 +269,10 @@ export const useBattleWebSocket = () => {
       socketService.off('game_start', onGameStart);
       socketService.off('match_error', onMatchError);
       socketService.off('match_aborted', onMatchAborted);
-      socketService.off('game_error', onGameError);
       socketService.off('matchmaking_error', onMatchmakingError);
       socketService.off('auth_error', onAuthError);
       socketService.off('game_state_update', onGameStateUpdate);
+      socketService.off('game_end', handleGameEnd);
 
       if (!window.location.pathname.includes('/battle') && socketService.isConnected()) {
         socketService.leaveMatchmaking();

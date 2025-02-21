@@ -10,6 +10,7 @@ import profileReducer from '@/features/home/profile/slices/profileSlice';
 import matchesReducer from '@/features/home/matches/slices/matchesSlice';
 import leaderboardReducer from '@/features/home/leaderboard/slices/leaderboardSlice';
 import createContestReducer from '@/features/contests/slices/createContestSlice';
+import gameEndReducer from '@/features/battle/slices/gameEndSlice';
 
 const battlePersistConfig = {
   key: 'battle',
@@ -41,7 +42,8 @@ const rootReducer = {
   profile: profileReducer,
   matches: matchesReducer,
   leaderboard: leaderboardReducer,
-  createContest: persistedCreateContestReducer
+  createContest: persistedCreateContestReducer,
+  gameEnd: gameEndReducer
 };
 
 export const store = configureStore({

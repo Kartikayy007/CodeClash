@@ -14,6 +14,7 @@ import { setCurrentProblemIndex } from '@/features/battle/slices/battleSlice';
 import { setActiveTab } from '@/features/editor/slices/editorSlice';
 import SubmissionTab from './submissionTab/SubmissionTab';
 import { TestCase } from '../api/problems';
+import { GameEndModal } from '@/features/battle/components/GameEndModal';
 
 interface EditorLayoutProps {
   questionData: SocketProblem;
@@ -134,6 +135,7 @@ const EditorLayout = ({ questionData, matchId }: EditorLayoutProps) => {
 
         </div>
       </div>
+      <GameEndModal />
     </div>
   );
 };

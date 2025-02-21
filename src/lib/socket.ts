@@ -35,7 +35,6 @@ interface RoomState {
   status: 'WAITING' | 'IN_PROGRESS' | 'COMPLETED' | 'ABORTED';
 }
 
-// type SocketEventCallback<T> = (data: T) => void;
 
 interface EventData {
   match_found: { matchId: string; players: string[] };
@@ -51,7 +50,7 @@ interface EventData {
   match_error: { message: string };
   match_aborted: { message: string };
 
-  game_start: { 
+  game_start: {
     problems: string[];
     gameState: Array<{
       userId: string;
@@ -63,25 +62,27 @@ interface EventData {
     }>;
   };
   game_error: { message: string };
-  game_state: { 
-    timeLeft: number; 
-    status: RoomState['status'] 
+  game_state: {
+    timeLeft: number;
+    status: RoomState['status']
   };
-  game_state_update: { 
+  game_state_update: {
     userId: string;
     problemId: string;
     status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
   };
-  game_end: { 
-    player1: Player; 
-    player2: Player 
+  game_end: {
+    winner: string;
+    ratingChanges: {
+      [userId: string]: number;
+    };
   };
 
   player_disconnected: { playerId: string };
-  code_update: { 
-    matchId: string; 
-    playerId: string | undefined; 
-    code: string | undefined; 
+  code_update: {
+    matchId: string;
+    playerId: string | undefined;
+    code: string | undefined;
     language: string | undefined;
   };
   code_result: { playerId: string; output: string; error: string };
@@ -100,11 +101,11 @@ class SocketService {
 
   connect(token: string): void {
     if (this.socket?.connected) {
-       console.log("🔌 Socket already connected, skipping connection");
+      console.log("🔌 Socket already connected, skipping connection");
       return;
     }
 
-    
+
     this.socket = io('https://goyalshivansh.me', {
       path: '/socket/',
       transports: ['websocket'],
@@ -131,41 +132,64 @@ class SocketService {
     if (!this.socket) return;
 
     this.socket.on('connect', () => {
-       console.log("✅ Socket connected successfully");
+      console.log("✅ Socket connected successfully");
       this.reconnectAttempts = 0;
     });
 
     this.socket.on('disconnect', (reason) => {
-       console.log("❌ Socket disconnected:", reason);
+      console.log("❌ Socket disconnected:", reason);
     });
 
     this.socket.on('connect_error', (error) => {
       console.error('❌ Socket connection error:', error);
       this.reconnectAttempts++;
-      
+
       if (this.reconnectAttempts >= this.maxReconnectAttempts) {
         console.error('🚫 Max reconnection attempts reached');
         this.socket?.disconnect();
       }
     });
 
-    // Game state update event
+    this.socket.on('game_end', (data) => {
+      console.log("🎮 Game end received in socket service:", data);
+      try {
+        const listeners = this.eventListeners.get('game_end');
+        if (listeners) {
+          console.log("🎯 Notifying game_end listeners:", listeners.size);
+          listeners.forEach(listener => {
+            try {
+              listener(data);
+            } catch (error) {
+              console.error("Error in game_end listener:", error);
+            }
+          });
+        } else {
+          console.warn("⚠️ No listeners registered for game_end event");
+        }
+      } catch (error) {
+        console.error("Error handling game_end event:", error);
+      }
+    });
+
     this.socket.on('game_state_update', (data) => {
-       console.log("🎮 Game state update received in socket:", data);
+      console.log("🎮 Game state update received in socket:", data);
       const listeners = this.eventListeners.get('game_state_update');
       if (listeners) {
         listeners.forEach(listener => listener(data));
       }
     });
 
-    // Handle other socket events
     this.socket.onAny((eventName, ...args) => {
-       console.log("📡 Socket event received:", eventName, args);
+      console.log("📡 Socket event received:", eventName, args);
       const listeners = this.eventListeners.get(eventName as keyof EventData);
       if (listeners) {
         listeners.forEach(listener => listener(args[0] as EventData[keyof EventData]));
       }
     });
+
+    this.socket.removeAllListeners('game_end');
+
+    
   }
 
   on<K extends keyof EventData>(event: K, callback: (data: EventData[K]) => void): void {
@@ -199,7 +223,7 @@ class SocketService {
       this.socket.disconnect();
       this.socket = null;
       this.eventListeners.clear();
-       console.log("🔌 Socket disconnected manually");
+      console.log("🔌 Socket disconnected manually");
     }
   }
 
@@ -208,16 +232,16 @@ class SocketService {
       console.error('❌ Cannot join matchmaking: Socket not connected');
       return;
     }
-     console.log("🎮 Joining matchmaking queue:", mode);
+    console.log("🎮 Joining matchmaking queue:", mode);
     this.socket.emit('join_matchmaking', { mode });
     this.on('match_found', (data) => {
-       console.log("🎮 Match found:", data);
+      console.log("🎮 Match found:", data);
     });
   }
 
   leaveMatchmaking(): void {
     if (this.socket?.connected) {
-       console.log("🚪 Leaving matchmaking queue");
+      console.log("🚪 Leaving matchmaking queue");
       this.socket.emit('leave_matchmaking', {});
     }
   }
@@ -227,7 +251,7 @@ class SocketService {
       console.error('❌ Cannot join room: Socket not connected');
       return;
     }
-     console.log("🎯 Joining match:", matchId);
+    console.log("🎯 Joining match:", matchId);
     this.currentmatchId = matchId;
     this.socket.emit('join_match', matchId);
   }
@@ -241,19 +265,19 @@ class SocketService {
       console.error('❌ Match ID mismatch:', { current: this.currentmatchId, received: matchId });
       return;
     }
-     console.log("🎬 Starting game:", matchId);
+    console.log("🎬 Starting game:", matchId);
     this.socket.emit('start_game', matchId);
   }
 
   getGameState(matchId: string): void {
     if (!this.socket?.connected) return;
-     console.log("📊 Getting game state:", matchId);
+    console.log("📊 Getting game state:", matchId);
     this.socket.emit('get_game_state', { matchId });
   }
 
   rejoinRoom(matchId: string): void {
     if (!this.socket?.connected) return;
-     console.log("🔄 Rejoining room:", matchId);
+    console.log("🔄 Rejoining room:", matchId);
     this.socket.emit('rejoin_room', { matchId });
   }
 }
