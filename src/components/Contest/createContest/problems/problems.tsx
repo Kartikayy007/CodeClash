@@ -126,7 +126,7 @@ const Problems: React.FC<ProblemComponentProps> = ({
     try {
       await onSaveProblem({
         name: data.name,
-        title: data.name,
+        title: data.name, 
         maxScore: data.maxScore || 0,
         score: data.maxScore || 0,
         rating: data.rating || 1000,
