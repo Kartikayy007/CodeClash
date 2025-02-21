@@ -7,11 +7,15 @@ import LabelButton from '@/components/ui/LabelButton';
 interface TopbarProps {
   onRun: () => void;
   onSubmit: () => void;
+  isRunning?: boolean;
+  isSubmitting?: boolean;
 }
 
 const Topbar = ({
   onRun,
-  onSubmit
+  onSubmit,
+  isRunning = false,
+  isSubmitting = false
 }: TopbarProps) => {
   return (
     <div className="h-16 bg-[#1C202A] rounded-lg flex items-center justify-between px-4">
@@ -42,23 +46,24 @@ const Topbar = ({
       </div>
 
       <div className="flex items-center gap-4">
-
         <div className="flex gap-3">
           <LabelButton
             onClick={onRun}
             variant="outlined"
             className="flex items-center gap-2 py-2"
+            disabled={isRunning}
           >
             <Play size={16} />
-            Run
+            {isRunning ? 'Running...' : 'Run'}
           </LabelButton>
           <LabelButton
             onClick={onSubmit}
             variant="filled"
             className="flex items-center gap-2 px-1 py-2"
+            disabled={isSubmitting}
           >
             <Send size={16} />
-            Submit
+            {isSubmitting ? 'Submitting...' : 'Submit'}
           </LabelButton>
         </div>
       </div>

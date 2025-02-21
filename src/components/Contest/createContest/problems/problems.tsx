@@ -122,20 +122,31 @@ const Problems: React.FC<ProblemComponentProps> = ({
     setShowCreateProblem(true);
   };
 
-  const handleSaveProblem = (data: Problem) => {
-    onSaveProblem({
-      name: data.name,
-      title: data.name,
-      maxScore: data.maxScore,
-      score: 0,
-      rating: data.rating,
-      description: '',
-      inputFormat: '',
-      constraints: '',
-      outputFormat: '',
-      testCases: []
-    });
-    setShowCreateProblem(false);
+  const handleSaveProblem = async (data: Problem) => {
+    try {
+      await onSaveProblem({
+        name: data.name,
+        title: data.name,
+        maxScore: data.maxScore || 0,
+        score: data.maxScore || 0,
+        rating: data.rating || 1000,
+        description: data.description || '',
+        inputFormat: data.inputFormat || '',
+        constraints: data.constraints || '',
+        outputFormat: data.outputFormat || '',
+        testCases: data.testCases?.map(tc => ({
+          input: tc.input || '',
+          output: tc.output || '',
+          sample: !tc.sample,
+          strength: tc.strength || 1
+        })) || []
+      });
+      setShowCreateProblem(false);
+      toast.success('Problem added successfully');
+    } catch (error) {
+      toast.error('Failed to add problem');
+      console.error('Error adding problem:', error);
+    }
   };
 
   const handleAddFromLibrary = () => {
@@ -151,14 +162,19 @@ const Problems: React.FC<ProblemComponentProps> = ({
       onSaveProblem({
         name: problem.name,
         title: problem.name,
-        maxScore: problem.maxScore,
-        score: 0,
-        rating: problem.rating,
-        description: '',
-        inputFormat: '',
-        constraints: '',
-        outputFormat: '',
-        testCases: []
+        maxScore: problem.maxScore || 100,
+        score: problem.maxScore || 100,
+        rating: problem.rating || 1000,
+        description: problem.description || '',
+        inputFormat: problem.inputFormat || '',
+        constraints: problem.constraints || '',
+        outputFormat: problem.outputFormat || '',
+        testCases: problem.testCases?.map(tc => ({
+          input: tc.input || '',
+          output: tc.output || '',
+          sample: tc.sample,
+          strength: tc.strength || 1
+        })) || []
       });
     });
     setShowLibrary(false);

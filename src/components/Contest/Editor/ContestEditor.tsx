@@ -7,6 +7,8 @@ import CodeEditor from './CodeEditor';
 import Question from './Question';
 import Submissions from './Submissions';
 import TestCases from './TestCases';
+import { TestCase } from '@/features/editor/api/problems';
+import { runCode, submitCode } from '@/features/editor/api/editorApi';
 
 interface ContestEditorProps {
   problemId: string;
@@ -18,15 +20,62 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
   const [language, ] = useState('cpp');
   const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(false);
   const [isDescriptionMaximized, setIsDescriptionMaximized] = useState(false);
+  const [testCases, setTestCases] = useState<TestCase[]>([]);
+  const [runResult, setRunResult] = useState<string | null>(null);
+  const [runError, setRunError] = useState<string | null>(null);
+  const [isRunning, setIsRunning] = useState(false);
+  const [, setIsSubmitting] = useState(false);
 
   const handleRun = async () => {
-    // Implement run logic
-    console.log('Running code:', code);
+    try {
+      setIsRunning(true);
+      setRunError(null);
+      setRunResult(null);
+
+      const response = await runCode({
+        code,
+        language,
+        input: testCases[0]?.input || '',
+        matchId: problemId // Using problemId as matchId for now
+      });
+
+      if (response.body.error) {
+        setRunError(response.body.error);
+      } else {
+        setRunResult(response.body.output);
+      }
+    } catch (error) {
+      setRunError('Failed to run code. Please try again.');
+      console.error('Run error:', error);
+    } finally {
+      setIsRunning(false);
+    }
   };
 
   const handleSubmit = async () => {
-    // Implement submit logic
-    console.log('Submitting code:', code);
+    try {
+      setIsSubmitting(true);
+      const response = await submitCode({
+        code,
+        language,
+        matchId: problemId,
+        questionId: problemId
+      });
+
+      // Handle submission response
+      console.log('Submission result:', response);
+      // You might want to show a success message or redirect
+      
+    } catch (error) {
+      console.error('Submit error:', error);
+      // Handle submission error
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleTestCasesLoaded = (newTestCases: TestCase[]) => {
+    setTestCases(newTestCases);
   };
 
   return (
@@ -40,7 +89,7 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
           <Topbar
             onRun={handleRun}
             onSubmit={handleSubmit}
-        />
+          />
         </div>
         <div className="flex items-center justify-between p-4 sticky top-0 bg-[#1C202A] rounded-t-lg z-10">
           <div className={`flex gap-4 ${isDescriptionCollapsed ? 'hidden' : ''}`}>
@@ -76,7 +125,10 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
 
         <div className={`overflow-y-auto flex-1 bg-[#1C202A] ${isDescriptionCollapsed ? 'hidden' : ''}`}>
           {activeTab === 'description' ? (
-            <Question problemId={problemId} />
+            <Question 
+              problemId={problemId} 
+              onTestCasesLoaded={handleTestCasesLoaded}
+            />
           ) : (
             <Submissions problemId={problemId} />
           )}
@@ -97,7 +149,12 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
             />
           </div>
           <div className="h-full">
-            <TestCases />
+            <TestCases 
+              testCases={testCases} 
+              runResult={runResult}
+              runError={runError}
+              isRunning={isRunning}
+            />
           </div>
         </div>
       </div>

@@ -279,7 +279,7 @@ const Details = () => {
       toast.error('Contest ID not found');
       return;
     }
-    console.log('Problem Data:', problemData);
+
     try {
       await contestApi.addQuestion({
         contestId,
@@ -289,11 +289,11 @@ const Details = () => {
         outputFormat: problemData.outputFormat,
         constraints: problemData.constraints,
         difficulty: problemData.rating < 1000 ? 'EASY' : 
-        problemData.rating < 2000 ? 'MEDIUM' : 'HARD',
+                   problemData.rating < 2000 ? 'MEDIUM' : 'HARD',
         rating: problemData.rating,
         score: problemData.maxScore,
-        timeLimit: 1000,
-        memoryLimit: 256,
+        timeLimit: 1000, // Default value
+        memoryLimit: 256, // Default value
         testCases: problemData.testCases.map(tc => ({
           input: tc.input,
           output: tc.output,
