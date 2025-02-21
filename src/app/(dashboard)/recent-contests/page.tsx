@@ -40,7 +40,7 @@ export default function ContestsPage() {
   }));
 
   return (
-    <div className="min-h-screen bg-[#15171B]">
+    <div className="min-h-screen">
       <div className="container mx-auto p-6">
         <div className='flex justify-end mb-8 flex-wrap'>
           <div className='w-full md:w-[50%]'>

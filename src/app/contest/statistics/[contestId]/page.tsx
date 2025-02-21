@@ -1,12 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-<<<<<<< HEAD
-import {  useParams } from 'next/navigation';  // Change to useParams
-// import { Home, Settings } from 'lucide-react';
-=======
 import {  useParams } from 'next/navigation';  
 import Image from 'next/image';
->>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
 import {
   ResponsiveContainer,
   BarChart,
@@ -19,54 +14,6 @@ import {
 import Sidebar from './Sidebar';
 import Leaderboard from './Leaderboard';
 
-<<<<<<< HEAD
-// interface Participant {
-//   name: string;
-//   score: number;
-//   avatar: string;
-// }
-
-// interface ProblemData {
-//   name: string;
-//   value: number;
-// }
-
-// interface ScoreDistribution {
-//   range: string;
-//   count: number;
-// }
-
-const CodingContestDashboard = () => {
-  // const problemData: ProblemData[] = [
-  //   { name: 'Q1', value: 48 },
-  //   { name: 'Q2', value: 38 },
-  //   { name: 'Q3', value: 40 },
-  //   { name: 'Q4', value: 36 },
-  //   { name: 'Q5', value: 24 },
-  //   { name: 'Q6', value: 32 },
-  //   { name: 'Q7', value: 20 },
-  // ];
-
-  // const scoreDistribution: ScoreDistribution[] = [
-  //   { range: '0-20', count: 4 },
-  //   { range: '21-40', count: 12 },
-  //   { range: '41-60', count: 6 },
-  //   { range: '61-80', count: 20 },
-  //   { range: '81-100', count: 8 },
-  // ];
-
-  // const topPerformers = [
-  //   { name: 'Abcdefgh', score: 120.00, position: 1, avatar: '/first.svg' },
-  //   { name: 'Abcdefgh', score: 100.00, position: 2, avatar: '/second.svg' },
-  //   { name: 'Abcdefgh', score: 80.00, position: 3, avatar: '/third.svg' },
-  // ];
-
-  const [active, setActive] = React.useState('overview'); // State to manage active option
-  // const router = useRouter();
-  const { contestId } = useParams(); // Get contestId from route parameters
-  const [contestData, setContestData] = useState<any>(null);  // State to store the fetched contest data
-
-=======
 interface ContestStatistics {
   totalParticipants: number;
   averageScore: number;
@@ -82,7 +29,6 @@ const CodingContestDashboard = () => {
   const params = useParams();
   const contestId = params?.contestId as string;
   const [contestData, setContestData] = useState<ContestStatistics | null>(null);  
->>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
   const handleLeaderboardClick = () => {
     console.log('Leaderboard clicked');
     setActive('leaderboard');

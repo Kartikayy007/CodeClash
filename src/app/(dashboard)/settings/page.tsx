@@ -12,7 +12,7 @@ export default function SettingsPage() {
   const [activeSection, setActiveSection] = useState<SettingsSection>('General Settings');
 
   return (
-    <div className="min-h-screen bg-[#15171B]">
+    <div className="min-h-screen ">
       {/* <NavbarPlain /> */}
       <div className="p-8">
         <div className="mb-8">

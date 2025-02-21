@@ -17,12 +17,8 @@ interface ApiError {
     };
   };
 }
-<<<<<<< HEAD
-interface ProblemsProps {
-=======
 
 interface ProblemComponentProps {
->>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
   problems: Problem[];
   onAddProblem: () => void;
   onCreateProblem: () => void;
@@ -51,11 +47,7 @@ const Problems: React.FC<ProblemComponentProps> = ({
   onDeleteProblem,
   onSaveProblem 
 }) => {
-<<<<<<< HEAD
-  const [editingProblem, setEditingProblem] = useState<Problem | null>(null);
-=======
   const [, setEditingProblem] = useState<Problem | null>(null);
->>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
   const [editedProblem, setEditedProblem] = useState<Problem | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedProblemIndex, setSelectedProblemIndex] = useState<number | null>(null);
@@ -65,11 +57,7 @@ const Problems: React.FC<ProblemComponentProps> = ({
 
   const handleEditClick = (problem: Problem) => {
     setEditingProblem(problem);
-<<<<<<< HEAD
-    setEditedProblem({ ...problem }); // Create a copy for editing
-=======
     setEditedProblem({ ...problem }); 
->>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
     setIsEditModalOpen(true);
   };
 
@@ -89,13 +77,6 @@ const Problems: React.FC<ProblemComponentProps> = ({
     if (!editedProblem) return;
 
     try {
-<<<<<<< HEAD
-      await onSaveProblem(editedProblem);
-      toast.success('Problem updated successfully');
-      setIsEditModalOpen(false);
-    } catch (error) {
-      toast.error('Failed to update problem');
-=======
       await onSaveProblem({
         name: editedProblem.name,
         title: editedProblem.name,
@@ -112,7 +93,6 @@ const Problems: React.FC<ProblemComponentProps> = ({
       setIsEditModalOpen(false);
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : 'Failed to update problem');
->>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
     }
   };
 

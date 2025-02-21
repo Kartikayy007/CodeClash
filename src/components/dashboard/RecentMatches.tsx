@@ -47,7 +47,7 @@ export default function RecentMatches() {
   }, []);
 
   return (
-    <div className="relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6">
+    <div className="relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6" style={{ minHeight: '200px' }}>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-semibold">Recent Matches</h2>
         <Link 
@@ -59,48 +59,54 @@ export default function RecentMatches() {
         </Link>
       </div>
 
-      <div className="flex gap-3 mb-6">
-        {matchTypes.map((type, index) => (
-          <button
-            key={type}
-            className={`px-2 py-1 rounded text-sm font-medium transition-colors ${
-              index === 0
-                ? "bg-[#3d3d3d] text-white"
-                : "border border-[#888888] text-[#e7e7e7] hover:bg-white/5"
-            }`}
-          >
-            {type}
-          </button>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-5 bg-white/10 rounded-lg px-4 py-2 mb-4 text-sm font-medium">
-        <span>Mode</span>
-        <span>Players</span>
-        <span>Winner</span>
-        <span>Duration</span>
-        <span>Date</span>
-      </div>
-
-      <div className="space-y-2">
-        {matches.map((match, index) => (
-          <div key={index} className="grid grid-cols-5 bg-white/5 rounded-lg px-4 py-2">
-            <span className="text-base font-medium truncate">{match.mode}</span>
-            <div className="flex flex-col">
-              {match.players.map((player: { id: string; username: string }) => (
-                <span key={player.id} className="text-base font-medium truncate">{player.username}</span>
-              ))}
-            </div>
-            <span className="text-base font-medium truncate">
-              {match.winnerId ? 
-                match.players.find((player: { id: string }) => player.id === match.winnerId)?.username || 'N/A' 
-                : 'N/A'}
-            </span>
-            <span className="text-sm truncate">{match.duration}</span>
-            <span className="text-sm truncate">{match.createdAt}</span>
+      {matches.length === 0 ? (
+        <div className="text-gray-400 text-center">No recent matches available.</div>
+      ) : (
+        <>
+          <div className="flex gap-3 mb-6">
+            {matchTypes.map((type, index) => (
+              <button
+                key={type}
+                className={`px-2 py-1 rounded text-sm font-medium transition-colors ${
+                  index === 0
+                    ? "bg-[#3d3d3d] text-white"
+                    : "border border-[#888888] text-[#e7e7e7] hover:bg-white/5"
+                }`}
+              >
+                {type}
+              </button>
+            ))}
           </div>
-        ))}
-      </div>
+
+          <div className="grid grid-cols-5 bg-white/10 rounded-lg px-4 py-2 mb-4 text-sm font-medium">
+            <span>Mode</span>
+            <span>Players</span>
+            <span>Winner</span>
+            <span>Duration</span>
+            <span>Date</span>
+          </div>
+
+          <div className="space-y-2">
+            {matches.slice(0, 5).map((match, index) => (
+              <div key={index} className="grid grid-cols-5 bg-white/5 rounded-lg px-4 py-2">
+                <span className="text-base font-medium truncate">{match.mode}</span>
+                <div className="flex flex-col">
+                  {match.players.map((player: { id: string; username: string }) => (
+                    <span key={player.id} className="text-base font-medium truncate">{player.username}</span>
+                  ))}
+                </div>
+                <span className="text-base font-medium truncate">
+                  {match.winnerId ? 
+                    match.players.find((player: { id: string }) => player.id === match.winnerId)?.username || 'N/A' 
+                    : 'N/A'}
+                </span>
+                <span className="text-sm truncate">{match.duration}</span>
+                <span className="text-sm truncate">{match.createdAt}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

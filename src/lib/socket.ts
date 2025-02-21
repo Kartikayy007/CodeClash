@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-// import { updateProblemStatus } from '@/features/battle/slices/battleSlice';
-// import router from 'next/router';
-=======
->>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
 import { io, Socket } from 'socket.io-client';
 
 type GameMode = 'STANDARD' | 'SPEED' | 'ACCURACY';
@@ -109,10 +104,6 @@ class SocketService {
       return;
     }
 
-<<<<<<< HEAD
-     console.log("🔌 Connecting to Socket.IO server...");
-=======
->>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
     
     this.socket = io('https://goyalshivansh.me', {
       path: '/socket/',

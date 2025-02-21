@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import PlayerList from '../leaderboard/PlayerList';
 import { LeaderboardPlayer } from '@/features/home/leaderboard/types/leaderboard.types';
+import Shimmer from '../ui/Shimmer';
 
 interface LeaderboardProps {
   className?: string;
@@ -9,6 +10,7 @@ interface LeaderboardProps {
 
 export default function Leaderboard({ className = '' }: LeaderboardProps) {
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardPlayer[]>([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -46,6 +48,8 @@ export default function Leaderboard({ className = '' }: LeaderboardProps) {
       } catch (error) {
         console.error('Error fetching leaderboard:', error);
         setLeaderboardData([]); // Set to empty array on error
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -53,7 +57,7 @@ export default function Leaderboard({ className = '' }: LeaderboardProps) {
   }, []);
 
   return (
-    <div className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`}>
+    <div className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`} style={{ minHeight: '200px' }}>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-semibold">Leaderboard</h2>
         <button onClick={() => router.push('/leaderboard')} className="text-base hover:text-white/80">
@@ -61,7 +65,11 @@ export default function Leaderboard({ className = '' }: LeaderboardProps) {
         </button>
       </div>
 
-      <PlayerList players={leaderboardData.slice(0, 7)} />
+      {leaderboardData.length === 0 ? (
+        <div className="text-gray-400 text-center">No leaderboard data available.</div>
+      ) : (
+        <PlayerList players={leaderboardData.slice(0, 5)} />
+      )}
     </div>
   );
 }

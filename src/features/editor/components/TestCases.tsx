@@ -9,17 +9,6 @@ interface TestCaseResult {
   output: string | null;
 }
 
-<<<<<<< HEAD
-// interface SubmissionResponse {
-//   submissionId: string;
-//   status: string;
-//   testCasesPassed: number;
-//   totalTestCases: number;
-//   executionTime: number;
-//   failedTestCase: string | null;
-// }
-=======
->>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
 
 interface TestCasesProps {
   testCases: TestCase[];
@@ -34,13 +23,7 @@ const TestCases: React.FC<TestCasesProps> = ({
   onCollapse,
   className = ''
 }) => {
-<<<<<<< HEAD
-  // const dispatch = useDispatch<AppDispatch>();
   const {  output, error, submissionResponse } = useSelector((state: RootState) => state.editor);
-  // const { matchId } = useSelector((state: RootState) => state.battle);
-=======
-  const {  output, error, submissionResponse } = useSelector((state: RootState) => state.editor);
->>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
   const [selectedCase, setSelectedCase] = React.useState(0);
   const [testResults, setTestResults] = React.useState<Record<number, TestCaseResult>>({});
 

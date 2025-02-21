@@ -51,11 +51,11 @@ export default function ContestTable({ contests, loading, error }: ContestTableP
   return (
     <div className="flex-1 bg-[#1A1D24] rounded-lg p-6">
       <div className="grid grid-cols-5 gap-4 mb-4 text-gray-400 font-medium">
-        <div>Name</div>
-        <div>Start Date</div>
-        <div>Duration</div>
-        <div>Participants</div>
-        <div>Status</div>
+        <div className="truncate">Name</div>
+        <div className="truncate">Start Date</div>
+        <div className="truncate">Duration</div>
+        <div className="truncate">Participants</div>
+        <div className="truncate">Status</div>
       </div>
       <div className="space-y-4">
         {contests.map((contest, index) => (
@@ -63,10 +63,10 @@ export default function ContestTable({ contests, loading, error }: ContestTableP
             key={index}
             className="grid grid-cols-5 gap-4 p-4 bg-[#292C33] rounded-lg hover:bg-[#31343C] transition-colors cursor-pointer"
           >
-            <div className="text-white">{contest.name}</div>
-            <div className="text-gray-400">{contest.startDate}</div>
-            <div className="text-gray-400">{contest.duration}</div>
-            <div className="text-gray-400">{contest.participants}</div>
+            <div className="text-white truncate">{contest.name}</div>
+            <div className="text-gray-400 truncate">{contest.startDate}</div>
+            <div className="text-gray-400 truncate">{contest.duration}</div>
+            <div className="text-gray-400 truncate">{contest.participants}</div>
             <div>
               <span className={`px-2 py-1 rounded text-sm ${
                 contest.status === 'ONGOING' ? 'bg-green-500/20 text-green-500' :

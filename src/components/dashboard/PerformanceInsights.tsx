@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { LineChart } from '@mui/x-charts';
 import axios from 'axios';
+import Shimmer from '../ui/Shimmer'; // Import the Shimmer component
 
 interface WinTrendData {
   date: string;
@@ -63,7 +64,7 @@ const PerformanceInsights: React.FC<PerformanceInsightsProps> = ({ className = '
 
   if (loading) {
     return (
-      <div className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`}>
+      <div className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`} style={{ minHeight: '200px' }}>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg font-semibold">Performance Insights</h2>
         </div>
@@ -75,85 +76,91 @@ const PerformanceInsights: React.FC<PerformanceInsightsProps> = ({ className = '
   }
 
   return (
-    <div className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`}>
+    <div className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`} style={{ minHeight: '200px' }}>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-semibold">Performance Insights</h2>
       </div>
 
-      <div className="h-[220px] mb-6">
-        <LineChart
-          xAxis={[{
-            data: trendData.map(item => item.date.split('/').slice(0, 2).join('/')),
-            scaleType: 'point',
-            tickLabelStyle: {
-              fill: '#D1D1D1',
-            },
-            tickSize: 0,
-            disableLine: true,
-          }]}
-          yAxis={[{
-            min: 0,
-            max: 8,
-            tickLabelStyle: {
-              fill: '#D1D1D1',
-            },
-            tickSize: 0,
-            disableLine: true,
-          }]}
-          series={[{
-            data: trendData.map(item => item.wins),
-            showMark: true,
-            color: '#C879EB',
-            curve: 'linear',
-            valueFormatter: (value: number | null) => value === null ? '' : value > 0 ? 'W' : 'L',
-          }]}
-          width={400}
-          height={220}
-          margin={{ top: 20, right: 20, bottom: 30, left: 40 }}
-          disableAxisListener
-          slots={{
-            axisContent: () => (
-              <g>
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <line
-                    key={`h-${i}`}
-                    x1="0"
-                    x2="100%"
-                    y1={`${(i / 7) * 100}%`}
-                    y2={`${(i / 7) * 100}%`}
-                    stroke="rgba(255, 255, 255, 0.1)"
-                    strokeDasharray="3 3"
-                  />
-                ))}
-                {Array.from({ length: 7 }).map((_, i) => (
-                  <line
-                    key={`v-${i}`}
-                    x1={`${(i / 6) * 100}%`}
-                    x2={`${(i / 6) * 100}%`}
-                    y1="0"
-                    y2="100%"
-                    stroke="rgba(255, 255, 255, 0.1)"
-                    strokeDasharray="3 3"
-                  />
-                ))}
-              </g>
-            ),
-          }}
-          sx={{
-            '& .MuiLineElement-root': { 
-              strokeWidth: 2,
-              filter: 'drop-shadow(0 0 6px rgba(200, 121, 235, 0.6))',
-            },
-            '& .MuiMarkElement-root': {
-              stroke: '#C879EB',
-              fill: '#C879EB',
-              strokeWidth: 2,
-              r: 4,
-              filter: 'drop-shadow(0 0 4px rgba(200, 121, 235, 0.6))',
-            },
-          }}
-        />
-      </div>
+      {loading ? (
+        <Shimmer height="20px" /> // Show shimmer effect while loading
+      ) : trendData.length === 0 ? (
+        <div className="text-gray-400 text-center">No performance data available.</div>
+      ) : (
+        <div className="h-[220px] mb-6">
+          <LineChart
+            xAxis={[{
+              data: trendData.slice(-7).map(item => item.date.split('/').slice(0, 2).join('/')),
+              scaleType: 'point',
+              tickLabelStyle: {
+                fill: '#D1D1D1',
+              },
+              tickSize: 0,
+              disableLine: true,
+            }]}
+            yAxis={[{
+              min: 0,
+              max: 8,
+              tickLabelStyle: {
+                fill: '#D1D1D1',
+              },
+              tickSize: 0,
+              disableLine: true,
+            }]}
+            series={[{
+              data: trendData.slice(-7).map(item => item.wins),
+              showMark: true,
+              color: '#C879EB',
+              curve: 'linear',
+              valueFormatter: (value: number | null) => value === null ? '' : value > 0 ? 'W' : 'L',
+            }]}
+            width={320}
+            height={220}
+            margin={{ top: 20, right: 20, bottom: 30, left: 40 }}
+            disableAxisListener
+            slots={{
+              axisContent: () => (
+                <g>
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <line
+                      key={`h-${i}`}
+                      x1="0"
+                      x2="100%"
+                      y1={`${(i / 7) * 100}%`}
+                      y2={`${(i / 7) * 100}%`}
+                      stroke="rgba(255, 255, 255, 0.1)"
+                      strokeDasharray="3 3"
+                    />
+                  ))}
+                  {Array.from({ length: 7 }).map((_, i) => (
+                    <line
+                      key={`v-${i}`}
+                      x1={`${(i / 6) * 100}%`}
+                      x2={`${(i / 6) * 100}%`}
+                      y1="0"
+                      y2="100%"
+                      stroke="rgba(255, 255, 255, 0.1)"
+                      strokeDasharray="3 3"
+                    />
+                  ))}
+                </g>
+              ),
+            }}
+            sx={{
+              '& .MuiLineElement-root': { 
+                strokeWidth: 2,
+                filter: 'drop-shadow(0 0 6px rgba(200, 121, 235, 0.6))',
+              },
+              '& .MuiMarkElement-root': {
+                stroke: '#C879EB',
+                fill: '#C879EB',
+                strokeWidth: 2,
+                r: 4,
+                filter: 'drop-shadow(0 0 4px rgba(200, 121, 235, 0.6))',
+              },
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };

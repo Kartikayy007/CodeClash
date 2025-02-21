@@ -53,7 +53,7 @@ const ManageContest = () => {
   }, []);
 
   return (
-    <div className="w-full bg-[#1A1D24] rounded-lg p-6">
+    <div className="w-full bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6" style={{ minHeight: '200px' }}>
       <div className="flex items-center justify-between mb-6 flex-wrap">
         <h2 className="text-2xl font-medium text-white">Manage Contest</h2>
         <button 
@@ -65,18 +65,22 @@ const ManageContest = () => {
         </button>
       </div>
 
-      <div className="space-y-4">
-        {contests.slice(0, 2).map((contest, index) => ( // Show only the top 2 contests
-          <div 
-            key={index}
-            className="bg-[#1E2127] rounded-lg p-4 hover:bg-[#282C34] transition-colors cursor-pointer"
-            onClick={() => router.push('/matches')}
-          >
-            <h3 className="text-lg text-white mb-2">{contest.title}</h3>
-            <p className="text-gray-400">Total participants: {contest.participantCount}</p>
-          </div>
-        ))}
-      </div>
+      {contests.length === 0 ? (
+        <div className="text-gray-400 text-center">No contests available.</div>
+      ) : (
+        <div className="space-y-4">
+          {contests.slice(0, 2).map((contest, index) => (
+            <div 
+              key={index}
+              className="bg-white/5 rounded-lg p-4 hover:bg-[#282C34] transition-colors cursor-pointer"
+              onClick={() => router.push('/matches')}
+            >
+              <h3 className="text-lg text-white mb-2">{contest.title}</h3>
+              <p className="text-gray-400">Total participants: {contest.participantCount}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

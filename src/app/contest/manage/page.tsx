@@ -28,7 +28,7 @@ export default function ContestsPage() {
     {
       name: 'Efghij',
       startDate: '1 Jan 2024',
-      duration: '2 hour',
+      duration: '2 hours',
       participants: 10
     },
     {
@@ -46,10 +46,10 @@ export default function ContestsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#15171B]">
-      <NavbarPlain />
-      <div className="p-12">
-        <div className="flex items-center justify-between mb-8">
+    <div className="min-h-screen">
+      
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-8 flex-wrap">
           <div className="flex items-center gap-4">
             <button className="text-white text-lg flex items-center gap-2">
               <span>←</span> Manage
@@ -74,64 +74,63 @@ export default function ContestsPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
             </div>
             <button className="bg-purple-500 text-black px-4 py-2 rounded-lg">
-              Create Contest
+              Create 
             </button>
           </div>
         </div>
 
-<div className='flex'>
+        <div className='flex flex-col md:flex-row'>
+          <div className="mb-6 w-full md:w-1/4">
+            <h2 className="text-white mb-4 flex items-center gap-2">
+              <span className="text-lg">Filters</span>
+            </h2>
+            <div className="space-y-2">
+              {(['All', 'Scheduled', 'Ongoing', 'Completed'] as ContestStatus[]).map((status) => (
+                <button
+                  key={status}
+                  onClick={() => setSelectedStatus(status)}
+                  className={`block w-full text-left px-4 py-2 rounded ${
+                    selectedStatus === status ? 'bg-[#282C34] text-white' : 'text-gray-400'
+                  }`}
+                >
+                  {status}
+                </button>
+              ))}
+            </div>
+          </div>
 
-        <div className="mb-6 w-[20%]">
-          <h2 className="text-white mb-4 flex items-center gap-2">
-            <span className="text-lg">Filters</span>
-          </h2>
-          <div className="space-y-2">
-            {(['All', 'Scheduled', 'Ongoing', 'Completed'] as ContestStatus[]).map((status) => (
-              <button
-                key={status}
-                onClick={() => setSelectedStatus(status)}
-                className={`block w-[90%] text-left px-4 py-2 rounded ${
-                  selectedStatus === status ? 'bg-[#282C34] text-white' : 'text-gray-400'
-                }`}
+          <div className="bg-[#1E2127] rounded-lg overflow-hidden w-full md:w-3/4">
+            <div className="grid grid-cols-4 p-4 text-gray-400 border-b border-gray-700">
+              <div>Contest Name</div>
+              <div>Start Date</div>
+              <div>Duration</div>
+              <div>Participants</div>
+            </div>
+            {contests.map((contest, index) => (
+              <div 
+                key={index}
+                className="grid grid-cols-4 p-4 text-white border-b border-gray-700 hover:bg-[#282C34]"
               >
-                {status}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-[#1E2127] rounded-lg overflow-hidden w-[80%]">
-          <div className="grid grid-cols-4 p-4 text-gray-400 border-b border-gray-700">
-            <div>Contest Name</div>
-            <div>Start Date</div>
-            <div>Duration</div>
-            <div>Participants</div>
-          </div>
-          {contests.map((contest, index) => (
-            <div 
-              key={index}
-              className="grid grid-cols-4 p-4 text-white border-b border-gray-700 hover:bg-[#282C34]"
-            >
-              <div>{contest.name}</div>
-              <div>{contest.startDate}</div>
-              <div>{contest.duration}</div>
-              <div className="flex items-center justify-between">
-                <span>{contest.participants}</span>
-                <div className="flex gap-4">
-                  <button className="text-gray-400 hover:text-white">
-                    <Edit size={18} />
-                  </button>
-                  <button className="text-gray-400 hover:text-white">
-                    <BarChart2 size={18} />
-                  </button>
-                  <button className="text-gray-400 hover:text-white">
-                    <Trash size={18} />
-                  </button>
+                <div>{contest.name}</div>
+                <div>{contest.startDate}</div>
+                <div>{contest.duration}</div>
+                <div className="flex items-center justify-between">
+                  <span>{contest.participants}</span>
+                  <div className="flex gap-4">
+                    <button className="text-gray-400 hover:text-white">
+                      <Edit size={18} />
+                    </button>
+                    <button className="text-gray-400 hover:text-white">
+                      <BarChart2 size={18} />
+                    </button>
+                    <button className="text-gray-400 hover:text-white">
+                      <Trash size={18} />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

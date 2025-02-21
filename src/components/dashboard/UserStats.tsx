@@ -36,36 +36,24 @@ export default function UserStats() {
         }
 
         const data = await response.json();
-        console.log('Fetched user profile data:', data.data); // Log the full response
-
         if (data.success) {
-          console.log('Setting user profile:'); 
           setUserProfile(data);
-          
         } else {
-          console.error('Failed to fetch user profile:', data);
           setUserProfile(null); 
         }
       } catch (error) {
         console.error('Error fetching user profile:', error);
-        setUserProfile(null); // Reset state on error
+        setUserProfile(null); 
       }
     };
 
     fetchUserProfile();
   }, []);
 
-  // Log the userProfile whenever it changes
-  useEffect(() => {
-    console.log('User profile updated:', userProfile);
-  }, [userProfile]);
-
   return (
-    <div className="relative bg-gradient-to-r from-[#1a1d26] to-[#1e222c] rounded-lg p-6">
-      
-
-      {userProfile && (
-        <div className="">
+    <div className="relative bg-gradient-to-r from-[#1a1d26] to-[#1e222c] rounded-lg p-6" style={{ minHeight: '200px' }}>
+      {userProfile ? (
+        <div>
           <h2 className="text-lg font-semibold mb-4">User Profile</h2>
           <div className="text-white">
             <p><strong>Username :</strong> {userProfile.data.username}</p>
@@ -75,6 +63,8 @@ export default function UserStats() {
             <p><strong>Total Matches :</strong> {userProfile.data.totalMatches}</p>
           </div>
         </div>
+      ) : (
+        <div className="text-gray-400 text-center">No user profile data available.</div>
       )}
     </div>
   );

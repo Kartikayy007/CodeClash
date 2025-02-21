@@ -112,12 +112,7 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
     })).then((action) => {
        console.log("📥 Submit code response:", action);
       if (submitCode.fulfilled.match(action)) {
-<<<<<<< HEAD
-        const status = action.payload.data?.status;
-         console.log("✅ Submission status:", status);
-=======
         const status = action.payload.status;
->>>>>>> 26a6027df3179d0a43e8c917d430aab37cf0051e
         if (status === 'ACCEPTED') {
           toast.success('All test cases passed!');
         } else if (status) {
