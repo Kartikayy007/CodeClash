@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2, Minimize2 } from 'lucide-react';
+import { Problem, TestCase, fetchProblem } from '@/features/editor/api/problems';
 import Topbar from './Topbar';
 import CodeEditor from './CodeEditor';
 import Question from './Question';
 import Submissions from './Submissions';
 import TestCases from './TestCases';
-import { TestCase } from '@/features/editor/api/problems';
 import { runCode, submitCode } from '@/features/editor/api/editorApi';
 
 interface ContestEditorProps {
@@ -25,6 +25,25 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
   const [runError, setRunError] = useState<string | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [, setIsSubmitting] = useState(false);
+  const [problem, setProblem] = useState<Problem | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const getProblem = async () => {
+      try {
+        setIsLoading(true);
+        const data = await fetchProblem(problemId);
+        setProblem(data);
+        const visibleTestCases = data.testCases.filter(test => !test.isHidden);
+        setTestCases(visibleTestCases);
+      } catch (error) {
+        console.error('Error fetching problem:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getProblem();
+  }, [problemId]);
 
   const handleRun = async () => {
     try {
@@ -72,10 +91,6 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const handleTestCasesLoaded = (newTestCases: TestCase[]) => {
-    setTestCases(newTestCases);
   };
 
   return (
@@ -126,8 +141,8 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
         <div className={`overflow-y-auto flex-1 bg-[#1C202A] ${isDescriptionCollapsed ? 'hidden' : ''}`}>
           {activeTab === 'description' ? (
             <Question 
-              problemId={problemId} 
-              onTestCasesLoaded={handleTestCasesLoaded}
+              problem={problem}
+              isLoading={isLoading}
             />
           ) : (
             <Submissions problemId={problemId} />

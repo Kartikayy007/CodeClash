@@ -1,34 +1,14 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Problem, TestCase, fetchProblem } from '@/features/editor/api/problems';
+import React from 'react';
+import { Problem } from '@/features/editor/api/problems';
 
 interface QuestionProps {
-  problemId: string;
-  onTestCasesLoaded?: (testCases: TestCase[]) => void;
+  problem: Problem | null;
+  isLoading: boolean;
 }
 
-const Question = ({ problemId, onTestCasesLoaded }: QuestionProps) => {
-  const [problem, setProblem] = useState<Problem | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const getProblem = async () => {
-      try {
-        setIsLoading(true);
-        const data = await fetchProblem(problemId);
-        setProblem(data);
-        const visibleTestCases = data.testCases.filter(test => !test.isHidden);
-        onTestCasesLoaded?.(visibleTestCases);
-      } catch (error) {
-        console.error('Error fetching problem:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getProblem();
-  }, [problemId, onTestCasesLoaded]);
-
+const Question = ({ problem, isLoading }: QuestionProps) => {
   if (isLoading) {
     return <div className="p-6 text-white">Loading...</div>;
   }

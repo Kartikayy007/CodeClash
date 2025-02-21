@@ -140,7 +140,7 @@ export default function ContestPage() {
   };
 
   const handleSolveProblem = (problemId: string) => {
-    router.push(`contest/problem/${problemId}`);
+    router.push(`/contest/problem/${problemId}`);
   };
 
   const handleSearchChange = (query: string) => {
