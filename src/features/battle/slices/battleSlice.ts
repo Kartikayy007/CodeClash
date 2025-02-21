@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
 import { Problem } from '@/lib/socket';
 
 interface Player {

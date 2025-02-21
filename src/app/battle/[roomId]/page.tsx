@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 // import { useParams } from 'next/navigation';
 import { useSelector } from 'react-redux';
-import { socketService } from '@/lib/socket';
+import {  socketService } from '@/lib/socket';
 import EditorLayout from '@/features/editor/components/EditorLayout';
 import Editor from '@/features/editor/components/Editor';
 import { RootState } from '@/store/store';

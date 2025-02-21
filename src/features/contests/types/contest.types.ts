@@ -105,6 +105,7 @@ export interface UpdateContestPayload {
 }
 
 export interface AddQuestionPayload {
+  contestId: string;
   title: string;
   description: string;
   inputFormat: string;
@@ -120,8 +121,6 @@ export interface AddQuestionPayload {
     output: string;
     isHidden: boolean;
   }>;
-  contestId: string;
-  questionId?: string;
 }
 
 export interface DeleteQuestionPayload {

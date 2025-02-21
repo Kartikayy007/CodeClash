@@ -86,27 +86,25 @@ export default function RecentMatches() {
             <span>Date</span>
           </div>
 
-          <div className="space-y-2">
-            {matches.slice(0, 5).map((match, index) => (
-              <div key={index} className="grid grid-cols-5 bg-white/5 rounded-lg px-4 py-2">
-                <span className="text-base font-medium truncate">{match.mode}</span>
-                <div className="flex flex-col">
-                  {match.players.map((player: { id: string; username: string }) => (
-                    <span key={player.id} className="text-base font-medium truncate">{player.username}</span>
-                  ))}
-                </div>
-                <span className="text-base font-medium truncate">
-                  {match.winnerId ? 
-                    match.players.find((player: { id: string }) => player.id === match.winnerId)?.username || 'N/A' 
-                    : 'N/A'}
-                </span>
-                <span className="text-sm truncate">{match.duration}</span>
-                <span className="text-sm truncate">{match.createdAt}</span>
-              </div>
-            ))}
+      <div className="space-y-2">
+        {matches.map((match, index) => (
+          <div key={index} className="grid grid-cols-5 bg-white/5 rounded-lg px-4 py-2">
+            <span className="text-base font-medium truncate">{match.mode}</span>
+            <div className="flex flex-col">
+              {match.players.map((player: { id: string; username: string }) => (
+                <span key={player.id} className="text-base font-medium truncate">{player.username}</span>
+              ))}
+            </div>
+            <span className="text-base font-medium truncate">
+              {match.winnerId ? 
+                match.players.find((player: { id: string }) => player.id === match.winnerId)?.username || 'N/A' 
+                : 'N/A'}
+            </span>
+            <span className="text-sm truncate">{match.duration}</span>
+            <span className="text-sm truncate">{match.createdAt}</span>
           </div>
-        </>
-      )}
+        ))}
+      </div>
     </div>
   );
 }

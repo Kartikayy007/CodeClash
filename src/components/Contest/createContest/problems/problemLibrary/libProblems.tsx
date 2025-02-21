@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ArrowLeft, Search } from 'lucide-react';
 import LabelButton from '@/components/ui/LabelButton';
 import { fetchProblem, fetchProblemList, Problem, ProblemPreview } from '@/features/editor/api/problems';

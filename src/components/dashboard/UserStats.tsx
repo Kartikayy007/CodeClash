@@ -37,8 +37,10 @@ export default function UserStats() {
 
         const data = await response.json();
         if (data.success) {
+          console.log('Setting user profile:'); 
           setUserProfile(data);
         } else {
+          console.error('Failed to fetch user profile:', data);
           setUserProfile(null); 
         }
       } catch (error) {
