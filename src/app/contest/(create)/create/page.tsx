@@ -163,7 +163,7 @@ export default function CreateContest() {
                   onChange={handleInputChange}
                   min={todayStr}
                   required
-                  className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
+                  className=" w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                     focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
                 />
               </div>

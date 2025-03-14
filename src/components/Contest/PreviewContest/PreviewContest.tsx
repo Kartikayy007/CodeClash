@@ -155,17 +155,16 @@ export default function PreviewContest({ contest }: PreviewContestProps) {
   return (
     <div className="min-h-screen bg-[#10141D] text-white">
       <div className="flex flex-col h-full">
-
-        <div className="flex px-8 gap-8">
-          <div className="w-[200px] rounded-lg h-fit">
+        <div className="flex px-4 sm:px-8 gap-4 flex-col lg:flex-row">
+          <div className="w-full sm:w-[200px] rounded-lg h-fit">
             {(['Problem Set', 'Leaderboard', 'My Submissions'] as TabType[]).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`w-full text-left px-4 py-2 rounded-lg text-lg transition-colors ${
                   activeTab === tab 
-                    ? 'text-white bg-[#282C33] rounded-lg' 
-                    : 'text-gray-400 hover:text-white '
+                    ? 'text-white bg-[#282C33]' 
+                    : 'text-gray-400 hover:text-white'
                 }`}
               >
                 {tab}
@@ -175,6 +174,9 @@ export default function PreviewContest({ contest }: PreviewContestProps) {
           <div className="flex-1">
             {renderTabContent()}
           </div>
+        </div>
+        <div className=' mt-4 px-4 sm:px-8 lg:flex lg:justify-end'>
+
         <ContestInsights insights={insights} />
         </div>
       </div>

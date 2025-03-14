@@ -16,7 +16,7 @@ interface ContestInsightsProps {
 
 const ContestInsights: React.FC<ContestInsightsProps> = ({ insights }) => {
   return (
-    <div className="w-[300px] bg-[#1A1D24] rounded-lg p-8 h-fit">
+    <div className="lg:w-[300px] bg-[#1A1D24] rounded-lg p-8 h-fit ">
       <h2 className="text-xl font-semibold">Insights</h2>
       <div className="space-y-4">
         <div className="flex justify-between">

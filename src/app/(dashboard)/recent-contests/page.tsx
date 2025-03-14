@@ -47,7 +47,7 @@ export default function ContestsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#15171B]">
+    <div className="min-h-screen ">
       <div className="p-4 md:p-6 lg:p-12">
         {/* Header area - Search and Create button */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">

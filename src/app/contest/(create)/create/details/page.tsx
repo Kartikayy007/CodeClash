@@ -313,7 +313,7 @@ const Details = () => {
     switch (activeTab) {
       case 'details':
         return (
-          <div className="flex gap-8 ">
+          <div className=" flex flex-col lg:flex-row  gap-8 ">
             <div className="w-56">
               <div className="space-y-4">
                 <button 
@@ -418,62 +418,67 @@ const Details = () => {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       <div className="max-w-[1200px] mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 md:mb-8">
+          {/* Navigation Section */}
+          <div className="flex flex-wrap items-center gap-4 md:gap-8">
             <button 
               onClick={() => router.back()}
-              className="text-white hover:text-gray-300 pb-2 flex items-center gap-2 "
+              className="text-white hover:text-gray-300 pb-2 flex items-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
-            <button 
-              onClick={() => setActiveTab('details')}
-              className={`pb-2 ${
-                activeTab === 'details' 
-                  ? 'text-[#C879EB] border-b-2 border-[#C879EB]' 
-                  : 'text-white hover:text-gray-400 transition-all duration-200'
-              }`}
-            >
-              Details
-            </button>
-            <button 
-              onClick={() => setActiveTab('problems')}
-              className={`pb-2 ${
-                activeTab === 'problems' 
-                  ? 'text-[#C879EB] border-b-2 border-[#C879EB]' 
-                  : 'text-white hover:text-gray-400 transition-all duration-200'
-              }`}
-            >
-              Problems
-            </button>
-            <button 
-              onClick={() => setActiveTab('settings')}
-              className={`pb-2 ${
-                activeTab === 'settings' 
-                  ? 'text-[#C879EB] border-b-2 border-[#C879EB]' 
-                  : 'text-white hover:text-gray-400 transition-all duration-200'
-              }`}
-            >
-              Settings
-            </button>
+            
+            <div className="flex flex-wrap gap-4">
+              <button 
+                onClick={() => setActiveTab('details')}
+                className={`pb-2 ${
+                  activeTab === 'details' 
+                    ? 'text-[#C879EB] border-b-2 border-[#C879EB]' 
+                    : 'text-white hover:text-gray-400 transition-all duration-200'
+                }`}
+              >
+                Details
+              </button>
+              <button 
+                onClick={() => setActiveTab('problems')}
+                className={`pb-2 ${
+                  activeTab === 'problems' 
+                    ? 'text-[#C879EB] border-b-2 border-[#C879EB]' 
+                    : 'text-white hover:text-gray-400 transition-all duration-200'
+                }`}
+              >
+                Problems
+              </button>
+              <button 
+                onClick={() => setActiveTab('settings')}
+                className={`pb-2 ${
+                  activeTab === 'settings' 
+                    ? 'text-[#C879EB] border-b-2 border-[#C879EB]' 
+                    : 'text-white hover:text-gray-400 transition-all duration-200'
+                }`}
+              >
+                Settings
+              </button>
+            </div>
           </div>
 
-          <div className="flex items-center justify-center gap-4">
-            <LabelButton 
-              variant="outlined"
+          {/* Action Buttons */}
+          <div className="flex items-center gap-4 mt-4 sm:mt-0">
+            <button 
               onClick={handlePreview}
+              className="px-4 py-2 border border-white text-white rounded hover:bg-white hover:bg-opacity-10 transition-all duration-200 text-sm md:text-base"
             >
               Live Preview
-            </LabelButton>
-            <LabelButton 
+            </button>
+            <button 
               onClick={handleSubmit}
               disabled={!isDirty}
-              className={!isDirty ? 'opacity-50 cursor-not-allowed' : ''}
+              className={`px-4 py-2 bg-[#C879EB] text-white rounded hover:bg-opacity-90 transition-all duration-200 text-sm md:text-base ${!isDirty ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               Save Changes
-            </LabelButton>
+            </button>
           </div>
         </div>
 
@@ -482,5 +487,6 @@ const Details = () => {
     </div>
   );
 };
+
 
 export default Details;

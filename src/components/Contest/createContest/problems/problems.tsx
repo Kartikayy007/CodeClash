@@ -200,8 +200,8 @@ const Problems: React.FC<ProblemComponentProps> = ({
 
   return (
     <>
-      <div className="flex h-full gap-8">
-        <div className="flex flex-col gap-4 w-56">
+      <div className="flex flex-col md:flex-row h-full gap-8">
+        <div className="flex flex-col gap-4 w-full md:w-56">
           <LabelButton
             variant="light"
             onClick={handleAddFromLibrary}
@@ -231,7 +231,7 @@ const Problems: React.FC<ProblemComponentProps> = ({
               <h1 className="text-white text-2xl font-bold">
                 No Problems added!
               </h1>
-              <p className="text-gray-400 mt-4">No You haven&apos;t added any problems to this contest yet. Start by adding one now!.</p>
+              <p className="text-gray-400 mt-4">You haven&apos;t added any problems to this contest yet. Start by adding one now!.</p>
             </div>
           ) : (
             <div className="bg-[#1A1D24] rounded-lg overflow-hidden">

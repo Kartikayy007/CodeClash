@@ -83,7 +83,7 @@ export const GameModeModal: React.FC<GameModeModalProps> = ({ isOpen, onClose })
                         w-full flex items-center gap-3 px-4 py-3 rounded cursor-pointer transition-all
                         border ${
                           selectedMode === mode.id 
-                            ? 'bg-[#ffffff1a] border-[#E7E7E7]' 
+                            ? 'bg-[#ffffff1a] border-purple-500' // Change to purple border
                             : 'border-transparent hover:bg-[#ffffff1a]'
                         }
                       `}

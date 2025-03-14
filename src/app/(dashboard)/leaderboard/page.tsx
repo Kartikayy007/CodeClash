@@ -43,7 +43,7 @@ export default function LeaderboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#15171B] flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-white text-xl">Loading leaderboard...</div>
       </div>
     );
@@ -51,14 +51,14 @@ export default function LeaderboardPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#15171B] flex items-center justify-center">
+      <div className="min-h-screen  flex items-center justify-center">
         <div className="text-red-500 text-xl">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#15171B] flex flex-col p-4">
+    <div className="min-h-screen  flex flex-col p-4">
       <div className="flex flex-col lg:flex-row lg:gap-4">
         <div className='w-full lg:w-[70%]'>
           <LeaderboardHeader />
