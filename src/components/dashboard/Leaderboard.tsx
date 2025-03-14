@@ -61,7 +61,7 @@ export default function Leaderboard({ className = '' }: LeaderboardProps) {
         </button>
       </div>
 
-      <PlayerList players={leaderboardData.slice(0, 7)} />
+      <PlayerList players={leaderboardData.slice(0, 5)} />
     </div>
   );
 }

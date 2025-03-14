@@ -7,10 +7,10 @@ interface PlayerListProps {
 
 const PlayerList = ({ players }: PlayerListProps) => (
   <div className="rounded-lg overflow-hidden text-center">
-    <div className="grid grid-cols-3 p-4 bg-[#15171B]">
-      <div className="text-white">Rank</div>
-      <div className="text-white">Player</div>
-      <div className="text-white">Game Victories</div>
+    <div className="grid grid-cols-3 p-4 bg-white/15 rounded-lg mb-2">
+      <div className="text-white font-bold">Rank</div>
+      <div className="text-white font-bold">Player</div>
+      <div className="text-white font-bold">Game Victories</div>
     </div>
     {players.map((player, index) => (
       <div

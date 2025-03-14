@@ -229,7 +229,7 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
       `}</style>
 
       <div className="flex flex-col h-full" ref={formRef}>
-        <div className="flex flex-1">
+        <div className="flex-col flex-1 lg:flex-row lg:flex">
           <div className="w-56">
             <div className="space-y-4">
               <button
@@ -265,7 +265,7 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
             </div>
           </div>
 
-          <div className="flex-1 ml-8">
+          <div className="flex-1 lg:ml-8">
             {activeSection === 'details' ? (
               <ProblemDetailsForm 
                 formData={formData} 

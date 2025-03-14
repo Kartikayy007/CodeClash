@@ -43,7 +43,7 @@ export default function LeaderboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#15171B] flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-white text-xl">Loading leaderboard...</div>
       </div>
     );
@@ -51,16 +51,16 @@ export default function LeaderboardPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#15171B] flex items-center justify-center">
+      <div className="min-h-screen  flex items-center justify-center">
         <div className="text-red-500 text-xl">{error}</div>
       </div>
     );
   }
 
   return (
-    <div>
-      <div className="p-12 bg-[#15171B] min-h-screen flex">
-        <div className='w-[70%]'>
+    <div className="min-h-screen  flex flex-col p-4">
+      <div className="flex flex-col lg:flex-row lg:gap-4">
+        <div className='w-full lg:w-[70%]'>
           <LeaderboardHeader />
           <TopPlayers topPlayers={topPlayers} />
           <PlayerList players={players} />
@@ -101,7 +101,7 @@ export default function LeaderboardPage() {
           )}
         </div>
 
-        <div className="mt-8 gap-8 flex flex-col w-[30%] pl-[20px]">
+        <div className="mt-8 gap-8 flex flex-col w-full lg:w-[30%] lg:pl-[20px]">
           <SearchInput 
             searchQuery={searchQuery} 
             setSearchQuery={setSearchQuery} 

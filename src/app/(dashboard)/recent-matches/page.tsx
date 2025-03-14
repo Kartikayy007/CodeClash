@@ -61,7 +61,7 @@ export default function MatchesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#15171B] flex items-center justify-center">
+      <div className="min-h-screen  flex items-center justify-center">
         <div className="text-white text-xl">Loading performance data...</div>
       </div>
     );
@@ -69,23 +69,23 @@ export default function MatchesPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#15171B] flex items-center justify-center">
+      <div className="min-h-screen  flex items-center justify-center">
         <div className="text-red-500 text-xl">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#15171B]">
+    <div className="min-h-screen">
       <div className="container mx-auto p-6">
         <ModeSelector selectedMode={selectedMode} setSelectedMode={setSelectedMode} />
-        <div className="grid grid-cols-12 gap-8">
-          <div className="col-span-8 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+          <div className="col-span-1 md:col-span-8 space-y-4">
             <MatchTable matches={formatMatches} />
             
             {/* Pagination Controls */}
             {pagination.totalPages > 1 && (
-              <div className="flex justify-between items-center bg-[#1A1D24] rounded-lg p-4">
+              <div className="flex flex-col md:flex-row justify-between items-center bg-[#1A1D24] rounded-lg p-4">
                 <div className="text-gray-400">
                   Showing {((currentPage - 1) * PAGE_SIZE) + 1} to {Math.min(currentPage * PAGE_SIZE, pagination.totalCount)} of {pagination.totalCount} matches
                 </div>
@@ -119,13 +119,17 @@ export default function MatchesPage() {
               </div>
             )}
           </div>
-          <div className="col-span-4 flex flex-col gap-5">
-            <div className='flex justify-between'>
+          <div className="col-span-1 md:col-span-4 flex flex-col gap-5">
+            <div className='flex flex-col md:flex-row justify-between'>
               <WinsOverview winRate={winRate} />
+              <div className='mt-5 lg:m-0'>
               <WinningMomentum 
-                currentStreak={currentStreak} 
-                longestStreak={longestStreak} 
-              />
+              
+              currentStreak={currentStreak} 
+              longestStreak={longestStreak} 
+            />
+              </div>
+              
             </div>
             <WinTrend winTrendData={winTrendData} />
           </div>

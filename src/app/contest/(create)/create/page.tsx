@@ -14,6 +14,7 @@ interface ApiError {
     };
   };
 }
+
 export default function CreateContest() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -100,8 +101,8 @@ export default function CreateContest() {
   };
 
   return (
-    <div className="flex p-12 min-h-[calc(100vh-64px)]">
-      <div className="w-1/2 bg-[#282D37] p-8 md:block hidden">
+    <div className="flex flex-col md:flex-row p-6 min-h-[calc(100vh-64px)]">
+      <div className="hidden md:block w-1/2 bg-[#282D37] p-8">
         <div className="flex items-center gap-2 mb-6">
           <button 
             onClick={() => router.back()}
@@ -121,8 +122,8 @@ export default function CreateContest() {
         </div>
       </div>
 
-      <div className="w-1/2 p-8 bg-[#191C23]">
-        <div className="max-w-md mx-auto w-full">
+      <div className="w-full md:w-1/2 p-8 bg-[#191C23]">
+        <div className="max-w-md mx-auto w-full flex flex-col gap-16">
           <div className="flex justify-center items-center mb-12">
             <div className="flex gap-8">
               <button 
@@ -162,7 +163,7 @@ export default function CreateContest() {
                   onChange={handleInputChange}
                   min={todayStr}
                   required
-                  className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
+                  className=" w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                     focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
                 />
               </div>
