@@ -26,6 +26,7 @@ const PerformanceInsights: React.FC<PerformanceInsightsProps> = ({ className = '
   const [, setWinStreak] = useState(0);
   const [, setMaxWinStreak] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [chartWidth, setChartWidth] = useState<number>(0); // Default width
 
   // const stats = [
   //   { label: 'Win Streak', value: winStreak },
@@ -59,6 +60,25 @@ const PerformanceInsights: React.FC<PerformanceInsightsProps> = ({ className = '
     };
 
     fetchWinTrend();
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if(window.innerWidth < 1024) {
+        const width = window.innerWidth * 0.7;
+        setChartWidth(width);
+      }
+      else{
+      const width = window.innerWidth * 0.3; // Set to 90% of the window width
+        setChartWidth(width);}
+    };
+
+    handleResize(); // Set initial width
+    window.addEventListener('resize', handleResize); // Update width on resize
+
+    return () => {
+      window.removeEventListener('resize', handleResize); // Cleanup listener
+    };
   }, []);
 
   if (loading) {
@@ -107,7 +127,7 @@ const PerformanceInsights: React.FC<PerformanceInsightsProps> = ({ className = '
             curve: 'linear',
             valueFormatter: (value: number | null) => value === null ? '' : value > 0 ? 'W' : 'L',
           }]}
-          width={400}
+          width={chartWidth} // Use the measured width
           height={220}
           margin={{ top: 20, right: 20, bottom: 30, left: 40 }}
           disableAxisListener

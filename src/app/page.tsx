@@ -44,62 +44,108 @@ const Page = () => {
 
   return (
     <div className='bg-[#10141D] min-h-screen'>
-      <nav className='bg-[#292C33] fixed top-0 z-50 w-full max-w-[1440px] h-16 mx-auto px-4 sm:px-6 md:px-20 py-2.5 flex items-center justify-between'>
-        <Image
-          src='/logo.svg'
-          alt="logo"
-          width={200}
-          height={40}
-          className="p-4"
-          priority
-        />
-        <button
-          className="md:hidden text-white hover:text-gray-300 transition-colors"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {isMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
-        <ul className="hidden md:flex items-center gap-8 font-[600]">
-          <li>
-            <button className="text-white hover:text-gray-300 transition-colors">
-              Home
-            </button>
-          </li>
-          <li>
-            <button className="text-white hover:text-gray-300 transition-colors">
-              Features
-            </button>
-          </li>
-          <li>
-            <button className="text-white hover:text-gray-300 transition-colors">
-              About
-            </button>
-          </li>
-          <li>
-            <button className="text-white hover:text-gray-300 transition-colors">
-              Contact
-            </button>
-          </li>
-          <li>
-            <LabelButton
-              variant="filled"
-              customSize={{ width: '56px', height: '20px' }}
-              className="text-sm whitespace-nowrap"
-              onClick={() => router.push('/login')}
-            >
-              Join Us
-            </LabelButton>
-          </li>
-        </ul>
+      {/* Fixed navbar with higher z-index and proper overflow handling */}
+      <nav className='bg-[#292C33] fixed top-0 left-0 right-0 z-50 w-full h-16 px-4 sm:px-6 md:px-8 lg:px-10 py-2.5 flex items-center justify-between shadow-md'>
+      {/* Remove the w-screen class */}
+              <div className="flex items-center justify-between w-full max-w-[1440px] mx-auto">
+          <div className="flex-shrink-0">
+            <Image
+              src='/logo.svg'
+              alt="logo"
+              width={160}
+              height={40}
+              className="p-2"
+              priority
+            />
+          </div>
+          <button
+            className="md:hidden text-white hover:text-gray-300 transition-colors "
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {isMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+          <ul className="hidden md:flex items-center gap-4 lg:gap-8 font-[600]">
+            <li>
+              <button className="text-white hover:text-gray-300 transition-colors">
+                Home
+              </button>
+            </li>
+            <li>
+              <button className="text-white hover:text-gray-300 transition-colors">
+                Features
+              </button>
+            </li>
+            <li>
+              <button className="text-white hover:text-gray-300 transition-colors">
+                About
+              </button>
+            </li>
+            <li>
+              <button className="text-white hover:text-gray-300 transition-colors">
+                Contact
+              </button>
+            </li>
+            <li>
+              <LabelButton
+                variant="filled"
+                customSize={{ width: '56px', height: '30px' }}
+                className="text-sm whitespace-nowrap"
+                onClick={() => router.push('/login')}
+              >
+                Join Us
+              </LabelButton>
+            </li>
+          </ul>
+        </div>
       </nav>
 
-      <section className='flex flex-col md:flex-row justify-between items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-20 gap-8 mt-9'>
+      {/* Mobile menu with higher z-index but below the navbar */}
+      {isMenuOpen && (
+        <div className="md:hidden fixed top-16 left-0 right-0 w-screen bg-[#1A1D24] p-4 z-40 shadow-lg">
+          <ul className="flex flex-col gap-4">
+            <li>
+              <button className="text-white hover:text-gray-300 transition-colors w-full text-left px-4">
+                Home
+              </button>
+            </li>
+            <li>
+              <button className="text-white hover:text-gray-300 transition-colors w-full text-left px-4">
+                Features
+              </button>
+            </li>
+            <li>
+              <button className="text-white hover:text-gray-300 transition-colors w-full text-left px-4">
+                About
+              </button>
+            </li>
+            <li>
+              <button className="text-white hover:text-gray-300 transition-colors w-full text-left px-4">
+                Contact
+              </button>
+            </li>
+            <li className="px-4">
+              <LabelButton
+                variant="filled"
+                customSize={{ width: '100%', height: '32px' }}
+                onClick={() => router.push('/login')}
+              >
+                Join Us
+              </LabelButton>
+            </li>
+          </ul>
+        </div>
+      )}
+
+      {/* Top padding to account for fixed navbar */}
+      <div className="pt-16"></div>
+
+      <section className='flex flex-col md:flex-row justify-between items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-20 gap-8'>
         <div className='flex-1'>
           <p className='text-base sm:text-lg mb-4 text-[#db83d8] font-semibold leading-9'>
             With CodeClash
@@ -265,14 +311,14 @@ const Page = () => {
           What Coders Say About Code Clash
         </h2>
         <div className='relative w-full'>
-          <button
-            onClick={previousTestimonials}
-            className='absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 text-white hover:text-gray-300 transition-colors z-10'
-            aria-label="Previous testimonials"
-            disabled={testimonialPage === 0}
-          >
-            <ChevronLeft size={32} className={testimonialPage === 0 ? 'opacity-50' : 'opacity-100'} />
-          </button>
+        <button
+  onClick={previousTestimonials}
+  className='absolute left-0 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10'
+  aria-label="Previous testimonials"
+  disabled={testimonialPage === 0}
+>
+  {/* Remove sm:-translate-x-12 */}
+</button>
 
           <div className='overflow-hidden'>
             <div
@@ -313,14 +359,13 @@ const Page = () => {
           </div>
 
           <button
-            onClick={nextTestimonials}
-            className='absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 text-white hover:text-gray-300 transition-colors z-10'
-            aria-label="Next testimonials"
-            disabled={testimonialPage === 1}
-          >
-            <ChevronRight size={32} className={testimonialPage === 1 ? 'opacity-50' : 'opacity-100'} />
-          </button>
-
+  onClick={nextTestimonials}
+  className='absolute right-0 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10'
+  aria-label="Next testimonials"
+  disabled={testimonialPage === 1}
+>
+  {/* Remove translate-x-12 */}
+</button>
           <div className='flex justify-center gap-2 mt-8'>
             {[0, 1].map((index) => (
               <button
@@ -392,7 +437,7 @@ const Page = () => {
         </div>
       </section>
 
-      {isMenuOpen && (
+      {/* {isMenuOpen && (
         <div className="md:hidden fixed top-16 left-0 right-0 bg-[#FFFFFF1A] p-4">
           <ul className="flex flex-col gap-4">
             <li>
@@ -426,7 +471,7 @@ const Page = () => {
             </li>
           </ul>
         </div>
-      )}
+      )} */}
 
       <footer className="bg-[#10141D] text-white py-16">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20">

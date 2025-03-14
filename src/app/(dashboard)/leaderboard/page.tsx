@@ -58,9 +58,9 @@ export default function LeaderboardPage() {
   }
 
   return (
-    <div>
-      <div className="p-12 bg-[#15171B] min-h-screen flex">
-        <div className='w-[70%]'>
+    <div className="min-h-screen bg-[#15171B] flex flex-col p-4">
+      <div className="flex flex-col lg:flex-row lg:gap-4">
+        <div className='w-full lg:w-[70%]'>
           <LeaderboardHeader />
           <TopPlayers topPlayers={topPlayers} />
           <PlayerList players={players} />
@@ -101,7 +101,7 @@ export default function LeaderboardPage() {
           )}
         </div>
 
-        <div className="mt-8 gap-8 flex flex-col w-[30%] pl-[20px]">
+        <div className="mt-8 gap-8 flex flex-col w-full lg:w-[30%] lg:pl-[20px]">
           <SearchInput 
             searchQuery={searchQuery} 
             setSearchQuery={setSearchQuery} 

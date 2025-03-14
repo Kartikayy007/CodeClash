@@ -83,7 +83,7 @@ export default function RecentMatches() {
       </div>
 
       <div className="space-y-2">
-        {matches.map((match, index) => (
+        {matches.slice(0,3).map((match, index) => (
           <div key={index} className="grid grid-cols-5 bg-white/5 rounded-lg px-4 py-2">
             <span className="text-base font-medium truncate">{match.mode}</span>
             <div className="flex flex-col">
