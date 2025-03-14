@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import NavbarPlain from '@/components/ui/NavbarPlain';
+// import NavbarPlain from '@/components/ui/NavbarPlain';
 import { Search, Edit, BarChart2, Trash, Filter, ChevronDown, Plus } from 'lucide-react';
 import LabelButton from '@/components/ui/LabelButton';
 // import Link from 'next/link';

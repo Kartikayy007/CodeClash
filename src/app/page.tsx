@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import LabelButton from '@/components/ui/LabelButton';
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Twitter, Instagram, Linkedin } from 'lucide-react';
+import {  Twitter, Instagram, Linkedin } from 'lucide-react';
 import Link from 'next/link';
 
 const Page = () => {
