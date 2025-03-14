@@ -93,7 +93,7 @@ export default function ContestsPage() {
                 <ContestFilters 
                   selectedStatus={selectedStatus as "All" | "Scheduled" | "Ongoing" | "Completed"} 
                   setSelectedStatus={handleStatusSelect as (status: "All" | "Scheduled" | "Ongoing" | "Completed") => void}
-                  isMobile={true}
+                  
                 />
               </div>
             </div>
