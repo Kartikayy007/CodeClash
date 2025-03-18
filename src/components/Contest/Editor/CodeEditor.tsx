@@ -13,9 +13,10 @@ interface CodeEditorProps {
   code: string;
   setCode: (code: string) => void;
   language: string;
+  onLanguageChange?: (language: string) => void;
 }
 
-const CodeEditor = ({ code, setCode, language }: CodeEditorProps) => {
+const CodeEditor = ({ code, setCode, language, onLanguageChange }: CodeEditorProps) => {
   const getLanguageExtension = (lang: string) => {
     switch (lang) {
       case 'javascript':
@@ -37,7 +38,7 @@ using namespace std;
 
 int main() {     
     // Write your code here
-    }
+
     return 0;
 }`,
     python: `class Solution:
@@ -57,12 +58,24 @@ int main() {
     `
   };
 
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (onLanguageChange) {
+      const newLanguage = e.target.value;
+      onLanguageChange(newLanguage);
+      
+      if (!code || Object.values(defaultCode).includes(code)) {
+        setCode(defaultCode[newLanguage as keyof typeof defaultCode] || '');
+      }
+    }
+  };
+
   return (
     <div className="h-[calc(100vh-30vh)] flex flex-col overflow-hidden rounded-lg bg-[#1C202A]">
       <div className="flex items-center justify-between p-2 bg-[#1A1D24]">
         <select
           className="bg-[#292C33] text-white px-3 py-1 rounded-lg outline-none"
           value={language}
+          onChange={handleLanguageChange}
         >
           <option value="c">C</option>
           <option value="cpp">C++</option>

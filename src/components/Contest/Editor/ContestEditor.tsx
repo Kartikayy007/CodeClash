@@ -17,14 +17,14 @@ interface ContestEditorProps {
 const ContestEditor = ({ problemId }: ContestEditorProps) => {
   const [activeTab, setActiveTab] = useState<'description' | 'submissions'>('description');
   const [code, setCode] = useState('');
-  const [language, ] = useState('cpp');
+  const [language, setLanguage] = useState('cpp');
   const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(false);
   const [isDescriptionMaximized, setIsDescriptionMaximized] = useState(false);
   const [testCases, setTestCases] = useState<TestCase[]>([]);
   const [runResult, setRunResult] = useState<string | null>(null);
   const [runError, setRunError] = useState<string | null>(null);
   const [isRunning, setIsRunning] = useState(false);
-  const [, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [problem, setProblem] = useState<Problem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -45,6 +45,11 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
     getProblem();
   }, [problemId]);
 
+  const handleLanguageChange = (newLanguage: string) => {
+    console.log('Language changed to:', newLanguage);
+    setLanguage(newLanguage);
+  };
+
   const handleRun = async () => {
     try {
       setIsRunning(true);
@@ -55,7 +60,8 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
         code,
         language,
         input: testCases[0]?.input || '',
-        matchId: problemId // Using problemId as matchId for now
+        matchId: problemId,
+        questionId: problemId
       });
 
       if (response.body.error) {
@@ -83,11 +89,9 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
 
       // Handle submission response
       console.log('Submission result:', response);
-      // You might want to show a success message or redirect
       
     } catch (error) {
       console.error('Submit error:', error);
-      // Handle submission error
     } finally {
       setIsSubmitting(false);
     }
@@ -104,6 +108,8 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
           <Topbar
             onRun={handleRun}
             onSubmit={handleSubmit}
+            isRunning={isRunning}
+            isSubmitting={isSubmitting}
           />
         </div>
         <div className="flex items-center justify-between p-4 sticky top-0 bg-[#1C202A] rounded-t-lg z-10">
@@ -161,6 +167,7 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
               code={code}
               setCode={setCode}
               language={language}
+              onLanguageChange={handleLanguageChange}
             />
           </div>
           <div className="h-full">

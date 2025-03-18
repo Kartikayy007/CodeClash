@@ -1,5 +1,5 @@
 import { api } from '@/utils/api';
-import { ContestResponse, ValidateContestCodeResponse, RegisterContestResponse, CreateContestPayload, CreateContestResponse, UpdateContestPayload, AddQuestionPayload, DeleteQuestionPayload, DeleteQuestionResponse, LeaderboardResponse, UpdateLeaderboardResponse } from '../types/contest.types';
+import { ContestResponse, ValidateContestCodeResponse, RegisterContestResponse, CreateContestPayload, CreateContestResponse, UpdateContestPayload, AddQuestionPayload, DeleteQuestionPayload, DeleteQuestionResponse, LeaderboardResponse, UpdateLeaderboardResponse, AddQuestionFromLibraryPayload, AddQuestionFromLibraryResponse } from '../types/contest.types';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -130,6 +130,21 @@ export const contestApi = {
       {
         headers: {
           'Authorization': `Bearer ${token}`
+        }
+      }
+    );
+    return response.data;
+  },
+
+  addQuestionFromLibrary: async (data: AddQuestionFromLibraryPayload): Promise<AddQuestionFromLibraryResponse> => {
+    const token = localStorage.getItem('accessToken');
+    const response = await api.post<AddQuestionFromLibraryResponse>(
+      `${BASE_URL}/api/v1/contest/addQuestionsFromLibrary`,
+      data,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       }
     );

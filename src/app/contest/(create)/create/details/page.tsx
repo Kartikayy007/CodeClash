@@ -279,30 +279,38 @@ const Details = () => {
       toast.error('Contest ID not found');
       return;
     }
-    console.log('Problem Data:', problemData);
+
     try {
-      await contestApi.addQuestion({
-        contestId,
-        title: problemData.name,
-        description: problemData.description,
-        inputFormat: problemData.inputFormat,
-        outputFormat: problemData.outputFormat,
-        constraints: problemData.constraints,
-        difficulty: problemData.rating < 1000 ? 'EASY' : 
-                   problemData.rating < 2000 ? 'MEDIUM' : 'HARD',
-        rating: problemData.rating,
-        score: problemData.maxScore,
-        timeLimit: 1000, // Default value
-        memoryLimit: 256, // Default value
-        testCases: problemData.testCases.map(tc => ({
-          input: tc.input,
-          output: tc.output,
-          isHidden: !tc.sample
-        }))
-      });
+      if (problemData.id) {
+        await contestApi.addQuestionFromLibrary({
+          contestId,
+          questionId: problemData.id
+        });
+        toast.success('Problem added from library successfully!');
+      } else {
+        await contestApi.addQuestion({
+          contestId,
+          title: problemData.name,
+          description: problemData.description,
+          inputFormat: problemData.inputFormat,
+          outputFormat: problemData.outputFormat,
+          constraints: problemData.constraints,
+          difficulty: problemData.rating < 1000 ? 'EASY' : 
+                      problemData.rating < 2000 ? 'MEDIUM' : 'HARD',
+          rating: problemData.rating,
+          score: problemData.maxScore,
+          timeLimit: 1000,
+          memoryLimit: 256,
+          testCases: problemData.testCases.map(tc => ({
+            input: tc.input,
+            output: tc.output,
+            isHidden: !tc.sample
+          }))
+        });
+        toast.success('New problem added successfully!');
+      }
 
       setProblems(prev => [...prev, problemData]);
-      toast.success('Problem added successfully!');
     } catch (error) {
       const err = error as ApiError;
       toast.error(err?.response?.data?.message || 'Failed to add problem');

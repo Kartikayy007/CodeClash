@@ -60,7 +60,6 @@ export const submitCode = createAsyncThunk<
   { rejectValue: string }
 >('editor/submitCode', async (data, { rejectWithValue, dispatch }) => {
   try {
-     console.log("🚀 Starting code submission:", data);
     dispatch(setActiveTab('submissions'));
     
     const response = await submitCodeApi(data);

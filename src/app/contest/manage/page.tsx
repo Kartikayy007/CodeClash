@@ -176,7 +176,6 @@ export default function ContestsPage() {
             ))}
           </div>
 
-          {/* Contest cards - mobile view */}
           <div className="md:hidden w-full">
             {contests.map((contest, index) => (
               <div 
