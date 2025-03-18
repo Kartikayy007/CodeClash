@@ -152,21 +152,24 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
             <ArrowLeft size={20} />
             <span>Back</span>
           </button>
-          <div className="flex-1 mx-8">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          <div className="flex-1 mx-8 ">
+            <div className="relative flex justify-end">
+              <Search className="absolute right-[200px]  top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
               <input
                 type="text"
                 placeholder="Enter Problem Name"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-[45px] pl-12 pr-4 rounded-lg bg-[#1A1D24] border-none focus:outline-none text-white"
+                className=" h-[45px] pl-12 pr-4 rounded-lg bg-[#1A1D24] border-none focus:outline-none text-white"
               />
             </div>
           </div>
+          <div>
           <LabelButton variant='light' onClick={handleAddSelected} disabled={selectedProblems.size === 0}>
             Add Questions
           </LabelButton>
+          </div>
+         
         </div>
 
         <div className="flex flex-1">
