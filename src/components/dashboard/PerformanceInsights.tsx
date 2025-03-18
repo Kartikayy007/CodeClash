@@ -100,7 +100,7 @@ const PerformanceInsights: React.FC<PerformanceInsightsProps> = ({ className = '
         <h2 className="text-lg font-semibold">Performance Insights</h2>
       </div>
 
-      <div className="h-[220px] mb-6">
+      <div className="h-[220px] mb-6 mt-[30%]">
         <LineChart
           xAxis={[{
             data: trendData.map(item => item.date.split('/').slice(0, 2).join('/')),
