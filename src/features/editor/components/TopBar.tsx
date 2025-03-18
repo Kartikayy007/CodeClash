@@ -84,6 +84,7 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
       code,
       language,
       matchId,
+      questionId: currentProblem.id,
       input: currentProblem.testCases[0].input
     }));
   };

@@ -162,3 +162,13 @@ export interface UpdateLeaderboardResponse {
   message: string;
   updatedUsers: number;
 }
+
+export interface AddQuestionFromLibraryPayload {
+  contestId: string;
+  questionId: string;
+}
+
+export interface AddQuestionFromLibraryResponse {
+  message: string;
+  contest: Contest;
+}

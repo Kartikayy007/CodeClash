@@ -1,4 +1,3 @@
-// import ContestRow from './ContestRow';
 import React from 'react';
 
 interface Contest {

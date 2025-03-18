@@ -6,8 +6,12 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 const runCode = async (data: RunCodePayload): Promise<RunCodeResponse> => {
   const token = localStorage.getItem('accessToken');
   const response = await api.post<RunCodeResponse>(
-    `${BASE_URL}/api/v1/match/run`,
-    data,
+    `${BASE_URL}/api/v1/contest/${data.matchId}/questions/${data.questionId}/run`,
+    {
+      code: data.code,
+      language: data.language,
+      input: data.input
+    },
     {
       headers: {
         'Content-Type': 'application/json',
@@ -20,10 +24,13 @@ const runCode = async (data: RunCodePayload): Promise<RunCodeResponse> => {
 
 const submitCode = async (data: SubmitCodePayload): Promise<SubmitCodeResponse> => {
   const token = localStorage.getItem('accessToken');
-   console.log("Submitting code with data:", data);
+  console.log("Submitting code with data:", data);
   const response = await api.post<SubmitCodeResponse>(
-    `${BASE_URL}/api/v1/match/submit`,
-    data,
+    `${BASE_URL}/api/v1/contest/${data.matchId}/questions/${data.questionId}/submit`,
+    {
+      code: data.code,
+      language: data.language
+    },
     {
       headers: {
         'Content-Type': 'application/json',
@@ -31,7 +38,7 @@ const submitCode = async (data: SubmitCodePayload): Promise<SubmitCodeResponse> 
       },
     }
   );
-   console.log("Submit response:", response.data);
+  console.log("Submit response:", response.data);
   return response.data;
 };
 
