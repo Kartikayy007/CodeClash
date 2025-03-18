@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { TestCase } from '@/features/editor/api/problems';
+import { Loader2 } from 'lucide-react';
 
 interface TestCasesProps {
   testCases?: TestCase[];
@@ -17,6 +18,39 @@ const TestCases = ({
   isRunning 
 }: TestCasesProps) => {
   const [activeCase, setActiveCase] = useState(0);
+
+  const formatCompilerError = (error: string) => {
+    if (!error) return null;
+
+    const filePathRegex = /\/tmp\/prog_[a-z0-9]+\.(cpp|py|java|js|c)/g;
+    
+    const cleanedError = error.replace(filePathRegex, 'code');
+    
+    const lines = cleanedError.split('\n');
+    
+    return (
+      <div className="whitespace-pre-wrap font-mono text-sm">
+        {lines.map((line, index) => {
+          const isErrorLine = line.includes('error:');
+          const isCodeLine = line.includes('|');
+          const isIndicatorLine = line.includes('^');
+
+          return (
+            <div 
+              key={index} 
+              className={`
+                ${isErrorLine ? 'text-red-400 font-semibold' : ''}
+                ${isCodeLine ? 'text-amber-300 pl-4' : ''}
+                ${isIndicatorLine ? 'text-green-400 pl-4' : ''}
+              `}
+            >
+              {line}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
 
   if (testCases.length === 0) {
     return (
@@ -75,11 +109,24 @@ const TestCases = ({
           {(runResult || runError) && (
             <div className="mt-2">
               <h4 className="text-sm text-gray-400 mb-1">Your Output:</h4>
-              <pre className={`bg-[#292C33] p-2 rounded whitespace-pre-wrap font-mono text-sm ${
-                runError ? 'text-red-400' : 'text-green-400'
-              } h-full`}>
-                {runError || runResult || ''}
-              </pre>
+              {isRunning ? (
+                <div className="bg-[#292C33] rounded-md p-3 text-sm flex items-center justify-center h-12">
+                  <Loader2 className="animate-spin h-5 w-5" />
+                  <span className="ml-2">Running code...</span>
+                </div>
+              ) : runError ? (
+                <div className="bg-[#1A1D24] text-red-500 border border-red-600/30 rounded-md p-3 overflow-auto max-h-[200px]">
+                  {formatCompilerError(runError)}
+                </div>
+              ) : runResult ? (
+                <div className="bg-[#292C33] text-white rounded-md p-3 text-sm overflow-auto">
+                  <pre className="whitespace-pre-wrap">{runResult}</pre>
+                </div>
+              ) : (
+                <div className="bg-[#292C33] rounded-md p-3 text-sm text-gray-500">
+                  Run your code to see the output here
+                </div>
+              )}
             </div>
           )}
         </div>
