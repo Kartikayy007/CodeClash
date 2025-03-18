@@ -30,9 +30,7 @@ export default function JoinContest() {
 
     try {
       const contestResponse = await contestApi.getContestDetails(contestCode);
-      
       if (contestResponse.contest) {
-        // Navigate to contest details page if contest exists
         router.push(`/contest/join/${contestCode}`);
       } else {
         setError('Contest not found');

@@ -6,7 +6,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 const runCode = async (data: RunCodePayload): Promise<RunCodeResponse> => {
   const token = localStorage.getItem('accessToken');
   const response = await api.post<RunCodeResponse>(
-    `${BASE_URL}/api/v1/contest/${data.matchId}/questions/${data.questionId}/run`,
+    `${BASE_URL}/api/v1/contest/${localStorage.getItem('contestCode')}/questions/${data.questionId}/run`,
     {
       code: data.code,
       language: data.language,
@@ -26,7 +26,7 @@ const submitCode = async (data: SubmitCodePayload): Promise<SubmitCodeResponse> 
   const token = localStorage.getItem('accessToken');
   console.log("Submitting code with data:", data);
   const response = await api.post<SubmitCodeResponse>(
-    `${BASE_URL}/api/v1/contest/${data.matchId}/questions/${data.questionId}/submit`,
+    `${BASE_URL}/api/v1/contest/${localStorage.getItem('contestCode')}/questions/${data.questionId}/submit`,
     {
       code: data.code,
       language: data.language

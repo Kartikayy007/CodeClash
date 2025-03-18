@@ -41,7 +41,6 @@ export default function ContestPage() {
   const router = useRouter();
   const params = useParams();
   const contestId = params?.contestId as string;
-  
   const [activeTab, setActiveTab] = useState<TabType>('Problem Set');
   const [timeLeft, setTimeLeft] = useState(3600);
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,6 +49,8 @@ export default function ContestPage() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [leaderboardPage, setLeaderboardPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+
+  localStorage.setItem('contestCode', contestId);
 
   useEffect(() => {
     const fetchContestDetails = async () => {
