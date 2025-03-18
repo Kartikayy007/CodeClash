@@ -44,7 +44,7 @@ export default function Dashboard() {
   }, []);
   
   return (
-    <div className="min-h-screen bg-background p-4 lg:p-0">
+    <div className="min-h-screen bg-background p-4 ">
       <div className="flex flex-col lg:flex-row lg:gap-4">
         {/* First Column */}
         <div className="flex flex-col gap-4 flex-1 ">
