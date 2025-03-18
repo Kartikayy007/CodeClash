@@ -32,7 +32,7 @@ const ShimmerEffect = () => (
 export default function RecentMatches() {
   const [matches, setMatches] = useState<Match[]>([])
   const [isLoading, setIsLoading] = useState(true);
-  const matchTypes = ["All", "Standard", "Accuracy", "Speed"];
+  // const matchTypes = ["All", "Standard", "Accuracy", "Speed"];
 
   useEffect(() => {
     const fetchRecentMatches = async () => {
