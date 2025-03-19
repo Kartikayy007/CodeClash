@@ -61,7 +61,7 @@ export default function LeaderboardPage() {
     <div className="min-h-screen  flex flex-col p-4">
       <div className="flex flex-col lg:flex-row lg:gap-4">
         <div className='w-full lg:w-[70%]'>
-          <LeaderboardHeader />
+          {/* <LeaderboardHeader /> */}
           <TopPlayers topPlayers={topPlayers} />
           <PlayerList players={players} />
           

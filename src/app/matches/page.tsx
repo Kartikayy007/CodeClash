@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import NavbarPlain from '@/components/ui/NavbarPlain';
-import { Search, Edit, BarChart2, Trash, Share } from 'lucide-react';
+import { Search, Edit, BarChart2, Trash, Share, Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import ShareContestModal from '@/components/Contest/ShareContestModal';
 
@@ -24,6 +24,7 @@ export default function ContestsPage() {
   const [contests, setContests] = useState<Contest[]>([]);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [selectedContest, setSelectedContest] = useState<Contest | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchContests = async () => {
@@ -94,48 +95,60 @@ export default function ContestsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#15171B]">
+    <div className="min-h-screen bg-[#10141D]">
       <NavbarPlain />
-      <div className="p-12">
-        <div className="flex items-center justify-between mb-8">
+      <div className="p-4 md:p-8 lg:p-12">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div className="flex items-center gap-4">
-            <button className="text-white text-lg flex items-center gap-2">
-              <span>←</span> Manage
-            </button>
+            {/* <button className="text-white text-lg flex items-center gap-2">
+              Manage
+            </button> */}
             <button className="text-purple-500 border-b-2 border-purple-500 pb-1">
               Contests
             </button>
-            <button className="text-gray-400">Questions</button>
+            {/* <button className="text-gray-400">Questions</button> */}
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="relative">
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="relative w-full sm:w-auto">
               <input
                 type="text"
                 placeholder="Enter Contest Name"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-[#282C34] text-white px-4 py-2 pl-10 rounded-lg w-64"
+                className="bg-[#282C34] text-white px-4 py-2 pl-10 rounded-lg w-full sm:w-64"
               />
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
             </div>
-            <button className="bg-purple-500 text-black px-4 py-2 rounded-lg">
+            <button className="bg-purple-500 text-black px-4 py-2 rounded-lg w-full sm:w-auto">
               Create Contest
             </button>
           </div>
         </div>
 
-        <div className="flex">
-          <div className="mb-6 w-[20%]">
-            <h2 className="text-white mb-4 flex items-center gap-2">
-              <span className="text-lg">Filters</span>
-            </h2>
-            <div className="space-y-2">
+        {/* Main Content */}
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Filters Section */}
+          <div className="lg:w-[20%]">
+            <div className="flex items-center justify-between mb-4 lg:hidden">
+              <h2 className="text-white">Filters</h2>
+              <button 
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-white"
+              >
+                <Menu size={24} />
+              </button>
+            </div>
+            <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} lg:block space-y-2`}>
               {(['All', 'Scheduled', 'Ongoing', 'Completed'] as ContestStatus[]).map((status) => (
                 <button
                   key={status}
-                  onClick={() => setSelectedStatus(status)}
-                  className={`block w-[90%] text-left px-4 py-2 rounded ${
+                  onClick={() => {
+                    setSelectedStatus(status);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`block w-full text-left px-4 py-2 rounded ${
                     selectedStatus === status ? 'bg-[#282C34] text-white' : 'text-gray-400'
                   }`}
                 >
@@ -145,49 +158,62 @@ export default function ContestsPage() {
             </div>
           </div>
 
-          <div className="bg-[#1E2127] rounded-lg overflow-hidden w-[80%]">
-            <div className="grid grid-cols-4 p-4 text-gray-400 border-b border-gray-700">
-              <div>Contest Name</div>
-              <div>Start Date</div>
-              <div>Duration</div>
-              <div>Participants</div>
-            </div>
+          {/* Contests List */}
+          <div className="lg:w-[80%]">
+            <div className="bg-[#1E2127] rounded-lg overflow-hidden">
+              {/* Table Header */}
+              <div className="grid grid-cols-2 md:grid-cols-4 p-4 text-gray-400 border-b border-gray-700">
+                <div>Contest Name</div>
+                <div className="hidden md:block">Start Date</div>
+                <div className="hidden md:block">Duration</div>
+                <div>Participants</div>
+              </div>
 
-            {filteredContests.length > 0 ? (
-              filteredContests.map((contest) => (
-                <div
-                  key={contest.contestId}
-                  className="grid grid-cols-4 p-4 text-white border-b border-gray-700 hover:bg-[#282C34] cursor-pointer"
-                  onClick={() => router.push(`/contest/statistics/${contest.contestId}`)}
-                >
-                  <div>{contest.title}</div>
-                  <div>{formatDate(contest.startTime)}</div>
-                  <div>{calculateDuration(contest.startTime, contest.endTime)}</div>
-                  <div className="flex items-center justify-between">
-                    <span>{contest.participantCount}</span>
-                    <div className="flex gap-4">
-                      <button
-                        onClick={(e) => handleShareClick(e, contest)}
-                        className="text-gray-400 hover:text-white"
-                      >
-                        <Share size={18} />
-                      </button>
-                      <button className="text-gray-400 hover:text-white">
-                        <Edit size={18} />
-                      </button>
-                      <button className="text-gray-400 hover:text-white">
-                        <BarChart2 size={18} />
-                      </button>
-                      <button className="text-gray-400 hover:text-white">
-                        <Trash size={18} />
-                      </button>
+              {/* Contests List */}
+              {filteredContests.length > 0 ? (
+                filteredContests.map((contest) => (
+                  <div
+                    key={contest.contestId}
+                    className="grid grid-cols-2 md:grid-cols-4 p-4 text-white border-b border-gray-700 hover:bg-[#282C34] cursor-pointer"
+                    onClick={() => router.push(`/contest/statistics/${contest.contestId}`)}
+                  >
+                    <div className="flex flex-col">
+                      <span>{contest.title}</span>
+                      <span className="text-sm text-gray-400 md:hidden">
+                        {formatDate(contest.startTime)}
+                      </span>
+                      <span className="text-sm text-gray-400 md:hidden">
+                        {calculateDuration(contest.startTime, contest.endTime)}
+                      </span>
+                    </div>
+                    <div className="hidden md:block">{formatDate(contest.startTime)}</div>
+                    <div className="hidden md:block">{calculateDuration(contest.startTime, contest.endTime)}</div>
+                    <div className="flex items-center justify-between">
+                      <span>{contest.participantCount}</span>
+                      <div className="flex gap-2 md:gap-4">
+                        <button
+                          onClick={(e) => handleShareClick(e, contest)}
+                          className="text-gray-400 hover:text-white"
+                        >
+                          <Share size={18} />
+                        </button>
+                        <button className="text-gray-400 hover:text-white">
+                          <Edit size={18} />
+                        </button>
+                        <button className="text-gray-400 hover:text-white hidden md:block">
+                          <BarChart2 size={18} />
+                        </button>
+                        <button className="text-gray-400 hover:text-white hidden md:block">
+                          <Trash size={18} />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
-            ) : (
-              <div className="p-6 text-center text-gray-400">No contests found</div>
-            )}
+                ))
+              ) : (
+                <div className="p-6 text-center text-gray-400">No contests found</div>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -184,12 +184,15 @@ export default function ContestDetails() {
               )}
             </div>
           </div>
+          <div >
           <LabelButton
             onClick={handleRegister}
             disabled={registering || contest.status !== 'UPCOMING' || contest.isRegistered}
           >
             {registering ? 'Registering...' : 'Register'}
           </LabelButton>
+          </div>
+          
         </div>
 
         <div className="flex px-8 gap-8">

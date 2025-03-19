@@ -40,6 +40,7 @@ const ProblemSet: React.FC<ProblemSetProps> = ({ problems, onSolveProblem }) => 
                   </span>
                 </div>
               </div>
+              <div>
               <LabelButton
                 variant={problem.status === 'SOLVED' ? 'light' : 'filled'}
                 onClick={() => onSolveProblem(problem.id)}
@@ -47,6 +48,8 @@ const ProblemSet: React.FC<ProblemSetProps> = ({ problems, onSolveProblem }) => 
               >
                 {problem.status === 'SOLVED' ? 'Solved' : 'Solve'}
               </LabelButton>
+              </div>
+              
             </div>
           ))}
         </div>
