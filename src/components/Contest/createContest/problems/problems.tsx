@@ -267,14 +267,14 @@ const Problems: React.FC<ProblemComponentProps> = ({
                       className="p-1 hover:bg-white/10 rounded"
                       aria-label="Edit problem"
                     >
-                      <Pencil size={14} className="md:size-16" />
+                      <Pencil size={14} className="md:size-6" />
                     </button>
                     <button
                       onClick={() => handleDeleteClick(index)}
                       className="p-1 hover:bg-white/10 rounded text-red-500"
                       aria-label="Delete problem"
                     >
-                      <Trash size={14} className="md:size-16" />
+                      <Trash size={14} className="md:size-6" />
                     </button>
                   </div>
                 </div>
