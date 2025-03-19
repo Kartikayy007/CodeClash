@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
-import LeaderboardHeader from '@/components/leaderboard/LeaderboardHeader';
+// import LeaderboardHeader from '@/components/leaderboard/LeaderboardHeader';
 import TopPlayers from '@/components/leaderboard/TopPlayers';
 import PlayerList from '@/components/leaderboard/PlayerList';
 import SearchInput from '@/components/leaderboard/SearchInput';
