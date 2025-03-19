@@ -101,18 +101,19 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
         matchId: problemId,
         questionId: problemId
       });
-
-      if (response.error) {
+ 
+      if (response.status!="ACCEPTED") {
+        
         setSubmissionResult({
           status: 'RUNTIME_ERROR',
           runtime: 0,
-          message: response.error
+          message: "Failed to submit code. Please try again."
         });
       } else {
         setSubmissionResult({
           status: response.status,
-          runtime: response.runtime || 0,
-          message: response.message
+          runtime:  0,
+          message: "Submitted successfully"
         });
       }
       setShowSubmissionResult(true);
@@ -120,7 +121,7 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
       setSubmissionResult({
         status: 'RUNTIME_ERROR',
         runtime: 0,
-        message: 'Failed to submit code. Please try again.'
+        message: 'Failed to run. Please try again.'
       });
       setShowSubmissionResult(true);
       console.error('Submit error:', error);
