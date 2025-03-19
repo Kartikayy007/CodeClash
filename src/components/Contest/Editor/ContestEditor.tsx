@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Maximize2, Minimize2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight, Maximize2, Minimize2, ArrowLeft } from 'lucide-react';
 import { Problem, TestCase, fetchProblem } from '@/features/editor/api/problems';
 import Topbar from './Topbar';
 import CodeEditor from './CodeEditor';
@@ -12,6 +12,12 @@ import { runCode, submitCode } from '@/features/editor/api/editorApi';
 
 interface ContestEditorProps {
   problemId: string;
+}
+
+interface SubmissionResult {
+  status: 'ACCEPTED' | 'WRONG_ANSWER' | 'RUNTIME_ERROR' | 'COMPILATION_ERROR';
+  runtime: number;
+  message?: string;
 }
 
 const ContestEditor = ({ problemId }: ContestEditorProps) => {
@@ -27,6 +33,9 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [problem, setProblem] = useState<Problem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [submissionResult, setSubmissionResult] = useState<SubmissionResult | null>(null);
+  const [showSubmissionResult, setShowSubmissionResult] = useState(false);
+  const testCasesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const getProblem = async () => {
@@ -48,6 +57,10 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
   const handleLanguageChange = (newLanguage: string) => {
     console.log('Language changed to:', newLanguage);
     setLanguage(newLanguage);
+  };
+
+  const scrollToTestCases = () => {
+    testCasesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const handleRun = async () => {
@@ -74,27 +87,104 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
       console.error('Run error:', error);
     } finally {
       setIsRunning(false);
+      setTimeout(scrollToTestCases, 100);
     }
   };
 
   const handleSubmit = async () => {
     try {
       setIsSubmitting(true);
+      setSubmissionResult(null);
       const response = await submitCode({
         code,
         language,
         matchId: problemId,
         questionId: problemId
       });
-
-      // Handle submission response
-      console.log('Submission result:', response);
-      
+ 
+      if (response.status!="ACCEPTED") {
+        
+        setSubmissionResult({
+          status: 'RUNTIME_ERROR',
+          runtime: 0,
+          message: "Failed to submit code. Please try again."
+        });
+      } else {
+        setSubmissionResult({
+          status: response.status,
+          runtime:  0,
+          message: "Submitted successfully"
+        });
+      }
+      setShowSubmissionResult(true);
     } catch (error) {
+      setSubmissionResult({
+        status: 'RUNTIME_ERROR',
+        runtime: 0,
+        message: 'Failed to run. Please try again.'
+      });
+      setShowSubmissionResult(true);
       console.error('Submit error:', error);
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const getStatusColor = (status: SubmissionResult['status']) => {
+    switch (status) {
+      case 'ACCEPTED':
+        return 'text-green-500';
+      case 'WRONG_ANSWER':
+        return 'text-red-500';
+      case 'RUNTIME_ERROR':
+        return 'text-orange-500';
+      case 'COMPILATION_ERROR':
+        return 'text-yellow-500';
+      default:
+        return 'text-gray-500';
+    }
+  };
+
+  const renderDescriptionContent = () => {
+    if (showSubmissionResult && submissionResult) {
+      return (
+        <div className="p-6">
+          <button
+            onClick={() => setShowSubmissionResult(false)}
+            className="flex items-center gap-2 text-gray-400 hover:text-white mb-6"
+          >
+            <ArrowLeft size={20} />
+            Back to Question
+          </button>
+          <div className="bg-[#292C33] rounded-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold text-white">Submission Result</h3>
+              <span className={`font-medium text-lg ${getStatusColor(submissionResult.status)}`}>
+                {submissionResult.status}
+              </span>
+            </div>
+            <div className="text-gray-400 mb-4">
+              Runtime: {submissionResult.runtime}ms
+            </div>
+            {submissionResult.message && (
+              <div className="mt-4 p-4 bg-[#1C202A] rounded-lg">
+                <h4 className="text-sm font-medium text-gray-300 mb-2">Message</h4>
+                <p className="text-sm text-gray-400 whitespace-pre-wrap">
+                  {submissionResult.message}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <Question 
+        problem={problem}
+        isLoading={isLoading}
+      />
+    );
   };
 
   return (
@@ -146,10 +236,7 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
 
         <div className={`overflow-y-auto flex-1 bg-[#1C202A] ${isDescriptionCollapsed ? 'hidden' : ''}`}>
           {activeTab === 'description' ? (
-            <Question 
-              problem={problem}
-              isLoading={isLoading}
-            />
+            renderDescriptionContent()
           ) : (
             <Submissions problemId={problemId} />
           )}
@@ -170,7 +257,7 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
               onLanguageChange={handleLanguageChange}
             />
           </div>
-          <div className="h-full">
+          <div ref={testCasesRef} className="h-full">
             <TestCases 
               testCases={testCases} 
               runResult={runResult}
