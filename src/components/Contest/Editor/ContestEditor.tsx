@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Maximize2, Minimize2, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Problem, TestCase, fetchProblem } from '@/features/editor/api/problems';
 import Topbar from './Topbar';
 import CodeEditor from './CodeEditor';
@@ -9,6 +9,7 @@ import Question from './Question';
 import Submissions from './Submissions';
 import TestCases from './TestCases';
 import { runCode, submitCode } from '@/features/editor/api/editorApi';
+import ReactConfetti from 'react-confetti';
 
 interface ContestEditorProps {
   problemId: string;
@@ -24,8 +25,6 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
   const [activeTab, setActiveTab] = useState<'description' | 'submissions'>('description');
   const [code, setCode] = useState('');
   const [language, setLanguage] = useState('cpp');
-  const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(false);
-  const [isDescriptionMaximized, setIsDescriptionMaximized] = useState(false);
   const [testCases, setTestCases] = useState<TestCase[]>([]);
   const [runResult, setRunResult] = useState<string | null>(null);
   const [runError, setRunError] = useState<string | null>(null);
@@ -35,6 +34,7 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [submissionResult, setSubmissionResult] = useState<SubmissionResult | null>(null);
   const [showSubmissionResult, setShowSubmissionResult] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
   const testCasesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -115,6 +115,8 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
           runtime:  0,
           message: "Submitted successfully"
         });
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 8000); 
       }
       setShowSubmissionResult(true);
     } catch (error) {
@@ -189,11 +191,17 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
 
   return (
     <div className="flex min-h-screen p-4 gap-4 flex-col lg:flex-row">
-      <div className={`overflow-scroll rounded-lg flex flex-col ${
-        isDescriptionMaximized ? 'w-full' :
-        isDescriptionCollapsed ? 'w-12' :
-        'lg:w-[50%] w-full'
-      }`}>
+      {showConfetti && <ReactConfetti 
+        recycle={false}
+        numberOfPieces={500}
+        gravity={0.15}
+        width={window.innerWidth}
+        height={window.innerHeight}
+        style={{ zIndex: 1000 }}
+        colors={['#22c55e']}
+      />}
+      
+      <div className="overflow-scroll rounded-lg flex flex-col lg:w-[50%] w-full">
         <div className="mb-4">
           <Topbar
             onRun={handleRun}
@@ -203,7 +211,7 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
           />
         </div>
         <div className="flex items-center justify-between p-4 sticky top-0 bg-[#1C202A] rounded-t-lg z-10">
-          <div className={`flex gap-4 ${isDescriptionCollapsed ? 'hidden' : ''}`}>
+          <div className="flex gap-4">
             <button
               className={`${activeTab === 'description' ? 'text-white bg-white/10 rounded-md px-2 py-1' : 'text-gray-500'} hover:text-gray-300 font-bold text-lg`}
               onClick={() => setActiveTab('description')}
@@ -217,24 +225,9 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
               Submissions
             </button>
           </div>
-
-          <div className={`flex gap-2 ${isDescriptionCollapsed ? 'flex-col [&>button]:rotate-90' : ''}`}>
-            <button
-              className="p-1 hover:bg-[#292C33] rounded"
-              onClick={() => setIsDescriptionMaximized(!isDescriptionMaximized)}
-            >
-              {isDescriptionCollapsed ? null : isDescriptionMaximized ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
-            </button>
-            <button
-              className="p-1 hover:bg-[#292C33] rounded"
-              onClick={() => setIsDescriptionCollapsed(!isDescriptionCollapsed)}
-            >
-              {isDescriptionMaximized ? null : isDescriptionCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
-            </button>
-          </div>
         </div>
 
-        <div className={`overflow-y-auto flex-1 bg-[#1C202A] ${isDescriptionCollapsed ? 'hidden' : ''}`}>
+        <div className="overflow-y-auto flex-1 bg-[#1C202A]">
           {activeTab === 'description' ? (
             renderDescriptionContent()
           ) : (
@@ -243,11 +236,7 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
         </div>
       </div>
 
-      <div className={`flex flex-col ${
-        isDescriptionMaximized ? 'hidden' :
-        isDescriptionCollapsed ? 'lg:w-[calc(100%-3rem)] w-full' :
-        'lg:w-[50%] w-full'
-      }`}>
+      <div className="flex flex-col lg:w-[50%] w-full">
         <div className="flex flex-col h-full gap-4">
           <div>
             <CodeEditor 

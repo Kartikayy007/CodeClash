@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TestCase } from '@/features/editor/api/problems';
-import { Loader2 } from 'lucide-react';
+import { Loader2, CheckCircle, XCircle } from 'lucide-react';
 
 interface TestCasesProps {
   testCases?: TestCase[];
@@ -18,6 +18,19 @@ const TestCases = ({
   isRunning 
 }: TestCasesProps) => {
   const [activeCase, setActiveCase] = useState(0);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (runResult && !isRunning && !runError) {
+      const expectedOutput = testCases[activeCase]?.output || '';
+      const normalizedExpected = expectedOutput.trim().replace(/\r\n/g, '\n');
+      const normalizedActual = runResult.trim().replace(/\r\n/g, '\n');
+      
+      setIsCorrect(normalizedExpected === normalizedActual);
+    } else {
+      setIsCorrect(null);
+    }
+  }, [runResult, runError, isRunning, activeCase, testCases]);
 
   const formatCompilerError = (error: string) => {
     if (!error) return null;
@@ -108,7 +121,25 @@ const TestCases = ({
           
           {(runResult || runError) && (
             <div className="mt-2">
-              <h4 className="text-sm text-gray-400 mb-1">Your Output:</h4>
+              <div className="flex justify-between items-center mb-1">
+                <h4 className="text-sm text-gray-400">Your Output:</h4>
+                {!isRunning && !runError && isCorrect !== null && (
+                  <div className={`flex items-center gap-1 text-sm ${isCorrect ? 'text-green-500' : 'text-red-500'}`}>
+                    {isCorrect ? (
+                      <>
+                        <CheckCircle size={16} />
+                        <span>Correct</span>
+                      </>
+                    ) : (
+                      <>
+                        <XCircle size={16} />
+                        <span>Incorrect</span>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+              
               {isRunning ? (
                 <div className="bg-[#292C33] rounded-md p-3 text-sm flex items-center justify-center h-12">
                   <Loader2 className="animate-spin h-5 w-5" />
@@ -119,7 +150,11 @@ const TestCases = ({
                   {formatCompilerError(runError)}
                 </div>
               ) : runResult ? (
-                <div className="bg-[#292C33] text-white rounded-md p-3 text-sm overflow-auto">
+                <div className={`rounded-md p-3 text-sm overflow-auto ${
+                  isCorrect === true ? 'bg-green-900/20 border border-green-600/30 text-green-200' :
+                  isCorrect === false ? 'bg-red-900/20 border border-red-600/30 text-red-200' :
+                  'bg-[#292C33] text-white'
+                }`}>
                   <pre className="whitespace-pre-wrap">{runResult}</pre>
                 </div>
               ) : (

@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { Problem } from '@/features/editor/api/problems';
+import 'katex/dist/katex.min.css';
+import { parseConstraints } from '@/utils/mathUtils';
 
 interface QuestionProps {
   problem: Problem | null;
@@ -28,19 +30,19 @@ const Question = ({ problem, isLoading }: QuestionProps) => {
         </div>
 
         <div>
-          <h3 className="font-medium mb-2">Input Format:</h3>
+          <h3 className="font-medium text-2xl mb-2">Input Format:</h3>
           <p className="text-gray-300">{problem.inputFormat}</p>
         </div>
 
         <div>
-          <h3 className="font-medium mb-2">Output Format:</h3>
+          <h3 className="font-medium text-2xl mb-2">Output Format:</h3>
           <p className="text-gray-300">{problem.outputFormat}</p>
         </div>
 
         <div className="space-y-4">
           {problem.testCases.filter(test => !test.isHidden).map((testCase, index) => (
             <div key={testCase.id} className="space-y-2">
-              <h3 className="font-medium">Example {index + 1}:</h3>
+              <h3 className="font-medium text-2xl">Example {index + 1}:</h3>
               <div className="bg-[#292C33] rounded-lg p-4 space-y-2">
                 <div>
                   <span className="text-gray-400">Input: </span>
@@ -56,11 +58,9 @@ const Question = ({ problem, isLoading }: QuestionProps) => {
         </div>
 
         <div>
-          <h3 className="font-medium mb-2">Constraints:</h3>
-          <div className="text-gray-300 whitespace-pre-line">
-            {problem.constraints}
-          </div>
-        </div>
+          <h3 className="font-medium text-2xl mb-2">Constraints:</h3>
+          {parseConstraints(problem.constraints)}
+        </div> 
 
         <div className="text-sm text-gray-400">
           <p>Time Limit: {problem.timeLimit} ms</p>

@@ -1,10 +1,12 @@
 import { Timer } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
-import LabelButton from '@/components/ui/LabelButton'
+import {  usePathname } from 'next/navigation'
 
 const Header = () => {
   const [timeLeft, setTimeLeft] = useState(5 * 60); 
+  const pathname = usePathname();
+  const isContestMode = pathname?.includes('/contest/');
 
   useEffect(() => {
     if (timeLeft <= 0) return;
@@ -34,24 +36,26 @@ const Header = () => {
           />
         </div>
 
-        <div className="flex justify-center items-center gap-4">
-          <Timer size={30} className={timeLeft <= 60 ? 'text-red-500 animate-pulse' : ''} />
-          <div className={`flex items-center gap-2 rounded-md px-2 py-1 ${
-            timeLeft <= 60 ? ' bg-red-500/10' : 'bg-[#292C33]'
-          }`}>
-            <span className={`font-bold  text-3xl ${
-              timeLeft <= 60 ? 'text-red-500' : 'text-white'
+        {!isContestMode && (
+          <div className="flex justify-center items-center gap-4">
+            <Timer size={30} className={timeLeft <= 60 ? 'text-red-500 animate-pulse' : ''} />
+            <div className={`flex items-center gap-2 rounded-md px-2 py-1 ${
+              timeLeft <= 60 ? ' bg-red-500/10' : 'bg-[#292C33]'
             }`}>
-              {formatTime(timeLeft)}
-            </span>
+              <span className={`font-bold  text-3xl ${
+                timeLeft <= 60 ? 'text-red-500' : 'text-white'
+              }`}>
+                {formatTime(timeLeft)}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
-        <a href="/dashboard">
+        {/* <a href="/dashboard">
           <LabelButton variant="red" customSize={{ width: '56px', height: '20px' }}>
-            END
+            EXIT
           </LabelButton>
-        </a>
+        </a> */}
         </header>
   )
 }

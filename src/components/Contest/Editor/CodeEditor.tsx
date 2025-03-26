@@ -8,6 +8,9 @@ import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { Maximize2 } from 'lucide-react';
 import { ChevronUp } from 'lucide-react';
+import { lintGutter } from '@codemirror/lint';
+import { indentUnit } from '@codemirror/language';
+import { createSyntaxLinter, createErrorTheme } from '@/utils/editorUtils';
 
 interface CodeEditorProps {
   code: string;
@@ -104,7 +107,13 @@ int main() {
           theme="dark"
           style={{ flex: 1 }}
           onChange={setCode}
-          extensions={[getLanguageExtension(language)]}
+          extensions={[
+            getLanguageExtension(language), 
+            lintGutter(),
+            createSyntaxLinter(language),
+            createErrorTheme(),
+            indentUnit.of("    ")
+          ]}
           basicSetup={{
             lineNumbers: true,
             highlightActiveLineGutter: true,
