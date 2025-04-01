@@ -50,7 +50,14 @@ export default function ContestPage() {
   const [leaderboardPage, setLeaderboardPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
-  localStorage.setItem('contestCode', contestId);
+  // Set contestCode in cookie instead of localStorage
+  useEffect(() => {
+    if (contestId) {
+      // Set cookie with path=/ so it's available throughout the site
+      // and max-age=86400 for 24 hours
+      document.cookie = `contestCode=${contestId}; path=/; max-age=86400`;
+    }
+  }, [contestId]);
 
   useEffect(() => {
     const fetchContestDetails = async () => {
@@ -94,7 +101,7 @@ export default function ContestPage() {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          router.push('/dashboard');
+          router.push('/contest/join');
           return 0;
         }
         return prev - 1;

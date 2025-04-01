@@ -3,7 +3,7 @@
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import NavbarPlain from '@/components/ui/NavbarPlain';
-import Header from '@/features/editor/components/Header';
+import Header from '@/features/battle/editor/components/Header';
 
 export default function ContestLayout({
   children,

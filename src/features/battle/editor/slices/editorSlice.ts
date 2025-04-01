@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { runCode as runCodeApi, submitCode as submitCodeApi } from '../api/editorApi';
-import type { RunCodePayload, RunCodeResponse, SubmitCodePayload, SubmitCodeResponse } from '@/features/editor/types/editor.types';
+import type { RunCodePayload, RunCodeResponse, SubmitCodePayload, SubmitCodeResponse } from '@/features/battle/editor/types/editor.types';
 import { AxiosError } from 'axios';
 
 interface ErrorResponse {

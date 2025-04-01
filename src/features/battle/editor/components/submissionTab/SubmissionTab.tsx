@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
-import { clearSelectedSubmission } from '@/features/editor/slices/submissionSlice';
+import { clearSelectedSubmission } from '@/features/battle/editor/slices/submissionSlice';
 import Submissions from './Submissions';
 import SubmissionDetails from './SubmissionDetails';
 

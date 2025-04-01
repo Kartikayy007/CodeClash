@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Maximize2, Minimize2, ChevronDown, ChevronUp } from 'lucide-react';
 import CodeMirror from '@uiw/react-codemirror';
 import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
@@ -13,26 +12,26 @@ import { setCode, setLanguage } from '../slices/editorSlice';
 interface EditorProps {
   language: 'c' | 'cpp' | 'python' | 'java' | 'javascript';
   onLanguageChange: (language: string) => void;
-  onMaximize: (isMaximized: boolean) => void;
+  // onMaximize: (isMaximized: boolean) => void;
   className?: string;
 }
 
 const CodeEditor = ({ 
   language, 
   onLanguageChange, 
-  onMaximize, 
+  // onMaximize, 
   className = '',
 }: EditorProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { code } = useSelector((state: RootState) => state.editor);
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isMaximized, setIsMaximized] = useState(false);
+  const [isCollapsed, ] = useState(false);
+  // const [isMaximized, setIsMaximized] = useState(false);
 
-  const handleMaximize = () => {
-    const newMaximizedState = !isMaximized;
-    setIsMaximized(newMaximizedState);
-    onMaximize(newMaximizedState);
-  };
+  // const handleMaximize = () => {
+  //   const newMaximizedState = !isMaximized;
+  //   setIsMaximized(newMaximizedState);
+  //   onMaximize(newMaximizedState);
+  // };
 
   const handleCodeChange = (value: string) => {
     dispatch(setCode(value));
@@ -99,7 +98,7 @@ int main() {
           <option value="java">Java</option>
           <option value="javascript">JavaScript</option>
         </select>
-        <div className="flex gap-2">
+        {/* <div className="flex gap-2">
           <button 
             className="p-1 hover:bg-[#292C33] rounded transform transition-transform duration-200 hover:scale-110"
             onClick={handleMaximize}
@@ -112,7 +111,7 @@ int main() {
           >
             {isCollapsed ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
           </button>
-        </div>
+        </div> */}
       </div>
       <div className={`transform transition-all duration-300 ease-in-out origin-top ${
         isCollapsed ? 'hidden' : 'h-full'

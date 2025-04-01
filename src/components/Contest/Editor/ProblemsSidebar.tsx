@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
 import LabelButton from '@/components/ui/LabelButton';
 import Loader from '@/components/ui/Loader';
-import { ProblemPreview } from '@/features/editor/api/problems';
+import { ProblemPreview } from '@/features/battle/editor/api/problems';
 
 interface ProblemsSidebarProps {
   isOpen: boolean;
@@ -21,7 +21,6 @@ const ProblemsSidebar: React.FC<ProblemsSidebarProps> = ({
   onProblemSelect,
   onFetchProblems
 }) => {
-  // Fetch problems when sidebar opens if needed
   useEffect(() => {
     if (isOpen) {
       onFetchProblems();
@@ -36,7 +35,6 @@ const ProblemsSidebar: React.FC<ProblemsSidebarProps> = ({
 
   return (
     <div className={`fixed inset-0 z-50 ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
-      {/* Backdrop with fade animation */}
       <div 
         className={`fixed inset-0 bg-black transition-opacity duration-300 ease-in-out ${
           isOpen ? 'opacity-50' : 'opacity-0'
@@ -44,7 +42,6 @@ const ProblemsSidebar: React.FC<ProblemsSidebarProps> = ({
         onClick={onClose}
       ></div>
       
-      {/* Sidebar with slide animation */}
       <div 
         className={`fixed left-0 top-0 h-full w-96 bg-[#1C202A] shadow-lg overflow-y-auto transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'

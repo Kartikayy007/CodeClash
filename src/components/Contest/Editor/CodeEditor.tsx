@@ -1,25 +1,30 @@
 'use client';
 
-import React from 'react';
-import CodeMirror from '@uiw/react-codemirror';
+import React, { useCallback, useRef } from 'react';
+import CodeMirror, { EditorView } from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { cpp } from '@codemirror/lang-cpp';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
-import { Maximize2 } from 'lucide-react';
-import { ChevronUp } from 'lucide-react';
-import { lintGutter } from '@codemirror/lint';
+import { lintGutter, openLintPanel, closeLintPanel, nextDiagnostic, previousDiagnostic } from '@codemirror/lint';
 import { indentUnit } from '@codemirror/language';
 import { createSyntaxLinter, createErrorTheme } from '@/utils/editorUtils';
+import { Loader2, Code2 } from 'lucide-react';
+import { keymap } from '@codemirror/view';
+import { Extension } from '@codemirror/state';
+import { indentWithTab, indentSelection, selectAll } from '@codemirror/commands';
 
 interface CodeEditorProps {
   code: string;
   setCode: (code: string) => void;
   language: string;
   onLanguageChange?: (language: string) => void;
+  isSaving?: boolean;
 }
 
-const CodeEditor = ({ code, setCode, language, onLanguageChange }: CodeEditorProps) => {
+const CodeEditor = ({ code, setCode, language, onLanguageChange, isSaving = false }: CodeEditorProps) => {
+  const editorRef = useRef<EditorView | null>(null);
+
   const getLanguageExtension = (lang: string) => {
     switch (lang) {
       case 'javascript':
@@ -35,41 +40,36 @@ const CodeEditor = ({ code, setCode, language, onLanguageChange }: CodeEditorPro
     }
   };
 
-  const defaultCode = {
-    cpp: `#include <bits/stdc++.h>
-using namespace std;
-
-int main() {     
-    // Write your code here
-
-    return 0;
-}`,
-    python: `class Solution:
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
-        # Write your code here
-        pass`,
-    java: `
-
-    `,
-    javascript: `// Write your code here
-    `,
-    c: `
-      #include <stdio.h>
-      int main() {
-        // Write your code here
-      }
-    `
-  };
-
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (onLanguageChange) {
       const newLanguage = e.target.value;
       onLanguageChange(newLanguage);
-      
-      if (!code || Object.values(defaultCode).includes(code)) {
-        setCode(defaultCode[newLanguage as keyof typeof defaultCode] || '');
-      }
     }
+  };
+
+  const formatCode = useCallback(() => {
+    if (!editorRef.current) return;
+    
+    selectAll(editorRef.current);
+    
+    indentSelection(editorRef.current);
+  }, []);
+
+  const getLintExtensions = (): Extension[] => {
+    const extensions: Extension[] = [
+      lintGutter(),
+      createSyntaxLinter(language),
+      createErrorTheme(),
+      keymap.of([
+        { key: "F8", run: nextDiagnostic },
+        { key: "Shift-F8", run: previousDiagnostic },
+        { key: "Ctrl-Shift-m", mac: "Cmd-Shift-m", run: openLintPanel },
+        { key: "Escape", run: closeLintPanel },
+        indentWithTab
+      ])
+    ];
+    
+    return extensions;
   };
 
   return (
@@ -86,32 +86,38 @@ int main() {
           <option value="java">Java</option>
           <option value="javascript">JavaScript</option>
         </select>
-        <div className="flex gap-2">
+        
+        <div className="flex items-center gap-2">
+        {isSaving && (
+            <div className="flex items-center gap-1 text-gray-400 text-xs">
+              <Loader2 size={12} className="animate-spin" />
+              <span>Saving...</span>
+            </div>
+          )}
           <button
-            className="p-1 hover:bg-[#292C33] rounded transform transition-transform duration-200 hover:scale-110"
+            onClick={formatCode}
+            className="flex items-center gap-1 bg-[#292C33] hover:bg-[#353945] text-white px-3 py-1 rounded-lg transition-colors"
+            title="Format code"
           >
-            <Maximize2 size={18} />
-          </button>
-          <button
-            className="p-1 hover:bg-[#292C33] rounded transform transition-transform duration-200 hover:scale-110"
-          >
-            <ChevronUp size={18} />
+            <Code2 size={14} />
+            <span className="text-xs">Format</span>
           </button>
         </div>
       </div>
       <div className="flex-1 overflow-hidden">
         <CodeMirror
-          value={code || defaultCode[language as keyof typeof defaultCode]}
+          value={code}
           height="calc(100vh - 30vh)" 
           width="100%"
           theme="dark"
           style={{ flex: 1 }}
           onChange={setCode}
+          onCreateEditor={(view) => {
+            editorRef.current = view;
+          }}
           extensions={[
-            getLanguageExtension(language), 
-            lintGutter(),
-            createSyntaxLinter(language),
-            createErrorTheme(),
+            getLanguageExtension(language),
+            ...getLintExtensions(),
             indentUnit.of("    ")
           ]}
           basicSetup={{
@@ -127,7 +133,6 @@ int main() {
             syntaxHighlighting: true,
             bracketMatching: true,
             closeBrackets: true,
-            autocompletion: true,
             rectangularSelection: true,
             crosshairCursor: true,
             highlightActiveLine: true,
@@ -137,7 +142,6 @@ int main() {
             searchKeymap: true,
             historyKeymap: true,
             foldKeymap: true,
-            completionKeymap: true,
             lintKeymap: true,
           }}
         />

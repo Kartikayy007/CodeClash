@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { Problem, TestCase, fetchProblem } from '@/features/editor/api/problems';
+import { Problem, TestCase, fetchProblem } from '@/features/battle/editor/api/problems';
 import Topbar from './Topbar';
 import CodeEditor from './CodeEditor';
 import Question from './Question';
 import Submissions from './Submissions';
-import TestCases from './TestCases';
-import { runCode, submitCode } from '@/features/editor/api/editorApi';
+import TestCases, { TestCasesRef } from './TestCases';
+import { runCode, submitCode } from '@/features/battle/editor/api/editorApi';
 import ReactConfetti from 'react-confetti';
 
 interface ContestEditorProps {
@@ -25,6 +25,37 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
   const [activeTab, setActiveTab] = useState<'description' | 'submissions'>('description');
   const [code, setCode] = useState('');
   const [language, setLanguage] = useState('cpp');
+  const [isSaving, setIsSaving] = useState(false);
+  const [codeByLanguage, setCodeByLanguage] = useState<Record<string, string>>({
+    c: `#include <stdio.h>
+int main() {
+  // Write your code here
+  return 0;
+}`,
+    cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {     
+    // Write your code here
+
+    return 0;
+}`,
+    python: `# Write your code here
+def solution():
+    pass
+
+if __name__ == "__main__":
+    solution()`,
+    java: `public class Solution {
+    public static void main(String[] args) {
+        // Write your code here
+    }
+}`,
+    javascript: `// Write your code here
+function solution() {
+    
+}`,
+  });
   const [testCases, setTestCases] = useState<TestCase[]>([]);
   const [runResult, setRunResult] = useState<string | null>(null);
   const [runError, setRunError] = useState<string | null>(null);
@@ -33,9 +64,16 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
   const [problem, setProblem] = useState<Problem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [submissionResult, setSubmissionResult] = useState<SubmissionResult | null>(null);
+  const [submittedCode, setSubmittedCode] = useState('');
+  const [submittedLanguage, setSubmittedLanguage] = useState('');
   const [showSubmissionResult, setShowSubmissionResult] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [activeTestCase, setActiveTestCase] = useState(0);
   const testCasesRef = useRef<HTMLDivElement>(null);
+  const testCasesComponentRef = useRef<TestCasesRef>(null);
+  const isInitialLoad = useRef(true);
+  const [isCustomInputMode, setIsCustomInputMode] = useState(false);
+  const [customInput, setCustomInput] = useState('');
 
   useEffect(() => {
     const getProblem = async () => {
@@ -52,15 +90,79 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
       }
     };
     getProblem();
+
+    if (isInitialLoad.current) {
+      setCode(codeByLanguage[language] || '');
+      isInitialLoad.current = false;
+    }
+  }, [problemId, codeByLanguage, language]);
+
+  useEffect(() => {
+    const savedData = localStorage.getItem(`code-${problemId}`);
+    if (savedData) {
+      try {
+        const parsed = JSON.parse(savedData);
+        setCodeByLanguage(parsed.codeByLanguage);
+        setLanguage(parsed.language);
+        setCode(parsed.codeByLanguage[parsed.language] || '');
+      } catch (error) {
+        console.error('Error parsing saved code:', error);
+      }
+    }
   }, [problemId]);
+
+  useEffect(() => {
+    if (code && language) {
+      const updatedCodeByLanguage = {
+        ...codeByLanguage,
+        [language]: code
+      };
+      
+      const dataToSave = {
+        language,
+        codeByLanguage: updatedCodeByLanguage
+      };
+      
+      // Set a small delay before saving to avoid excessive saves during typing
+      const saveTimer = setTimeout(() => {
+        // Show saving indicator only when actually saving
+        setIsSaving(true);
+        
+        try {
+          localStorage.setItem(`code-${problemId}`, JSON.stringify(dataToSave));
+          console.log('Auto-saved code to localStorage');
+        } catch (error) {
+          console.error('Error saving code to localStorage:', error);
+        } finally {
+          // Hide saving indicator immediately after save completes
+          setTimeout(() => setIsSaving(false), 300);
+        }
+      }, 500);
+      
+      return () => clearTimeout(saveTimer);
+    }
+  }, [code, language, problemId, codeByLanguage]);
 
   const handleLanguageChange = (newLanguage: string) => {
     console.log('Language changed to:', newLanguage);
+    setCodeByLanguage(prev => ({
+      ...prev,
+      [language]: code
+    }));
+    
     setLanguage(newLanguage);
+    
+    setCode(codeByLanguage[newLanguage] || '');
   };
 
   const scrollToTestCases = () => {
+    // First scroll the test cases container into view
     testCasesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+    // Then scroll to the results section within the test cases component
+    setTimeout(() => {
+      testCasesComponentRef.current?.scrollToResults();
+    }, 100); // Small delay to ensure the component is in view first
   };
 
   const handleRun = async () => {
@@ -72,7 +174,7 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
       const response = await runCode({
         code,
         language,
-        input: testCases[0]?.input || '',
+        input: isCustomInputMode ? customInput : (testCases[activeTestCase]?.input || ''),
         matchId: problemId,
         questionId: problemId
       });
@@ -95,6 +197,9 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
     try {
       setIsSubmitting(true);
       setSubmissionResult(null);
+      setSubmittedCode(code);
+      setSubmittedLanguage(language);
+      
       const response = await submitCode({
         code,
         language,
@@ -102,17 +207,16 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
         questionId: problemId
       });
  
-      if (response.status!="ACCEPTED") {
-        
+      if (response.status != "ACCEPTED") {
         setSubmissionResult({
-          status: 'RUNTIME_ERROR',
+          status: response.status as 'ACCEPTED' | 'WRONG_ANSWER' | 'RUNTIME_ERROR' | 'COMPILATION_ERROR',
           runtime: 0,
           message: "Failed to submit code. Please try again."
         });
       } else {
         setSubmissionResult({
           status: response.status,
-          runtime:  0,
+          runtime: 0,
           message: "Submitted successfully"
         });
         setShowConfetti(true);
@@ -132,20 +236,6 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
     }
   };
 
-  const getStatusColor = (status: SubmissionResult['status']) => {
-    switch (status) {
-      case 'ACCEPTED':
-        return 'text-green-500';
-      case 'WRONG_ANSWER':
-        return 'text-red-500';
-      case 'RUNTIME_ERROR':
-        return 'text-orange-500';
-      case 'COMPILATION_ERROR':
-        return 'text-yellow-500';
-      default:
-        return 'text-gray-500';
-    }
-  };
 
   const renderDescriptionContent = () => {
     if (showSubmissionResult && submissionResult) {
@@ -158,24 +248,45 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
             <ArrowLeft size={20} />
             Back to Question
           </button>
-          <div className="bg-[#292C33] rounded-lg p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold text-white">Submission Result</h3>
-              <span className={`font-medium text-lg ${getStatusColor(submissionResult.status)}`}>
-                {submissionResult.status}
-              </span>
-            </div>
-            <div className="text-gray-400 mb-4">
-              Runtime: {submissionResult.runtime}ms
-            </div>
-            {submissionResult.message && (
-              <div className="mt-4 p-4 bg-[#1C202A] rounded-lg">
-                <h4 className="text-sm font-medium text-gray-300 mb-2">Message</h4>
-                <p className="text-sm text-gray-400 whitespace-pre-wrap">
-                  {submissionResult.message}
-                </p>
+          <div className="bg-[#292C33] rounded-lg p-6 shadow-md">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-semibold text-white">Submission Result</h3>
+                <div className={`px-3 py-1 rounded-md font-medium text-xl shadow-lg ${
+                  submissionResult.status === 'ACCEPTED' ? 'bg-green-900/30 text-green-400 shadow-green-500/50' :
+                  submissionResult.status === 'WRONG_ANSWER' ? 'bg-red-900/30 text-red-400 shadow-red-500/50' : 
+                  submissionResult.status === 'RUNTIME_ERROR' ? 'bg-orange-900/30 text-orange-400 shadow-orange-500/50' :
+                  'bg-yellow-900/30 text-yellow-400 shadow-yellow-500/50'
+                }`}>
+                  {submissionResult.status.replace('_', ' ')}
+                </div>
               </div>
-            )}
+              <div className="flex flex-wrap items-center gap-4 text-sm">
+                <div className="text-gray-300 flex items-center gap-2">
+                  <span className="text-gray-500">Runtime:</span> {submissionResult.runtime} ms
+                </div>
+                <div className="h-4 border-r border-gray-700"></div>
+                <div className="text-gray-300 flex items-center gap-2">
+                  <span className="text-gray-500">Language:</span> {submittedLanguage.charAt(0).toUpperCase() + submittedLanguage.slice(1)}
+                </div>
+              </div>
+              
+              <div className="mt-2 p-4 bg-[#1A1D24] rounded-lg border border-gray-800">
+                <h4 className="text-gray-400 mb-2 text-sm font-medium">Your Code</h4>
+                <pre className="bg-[#1C202A] p-3 rounded whitespace-pre-wrap font-mono text-sm text-white overflow-auto max-h-[200px]">
+                  {submittedCode}
+                </pre>
+              </div>
+              
+              {submissionResult.message && (
+                <div className="mt-2 p-4 bg-[#1A1D24] rounded-lg border border-gray-800">
+                  <h4 className="text-gray-400 mb-2 text-sm font-medium">Message</h4>
+                  <p className="text-sm text-gray-300 whitespace-pre-wrap">
+                    {submissionResult.message}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       );
@@ -244,14 +355,21 @@ const ContestEditor = ({ problemId }: ContestEditorProps) => {
               setCode={setCode}
               language={language}
               onLanguageChange={handleLanguageChange}
+              isSaving={isSaving}
             />
           </div>
           <div ref={testCasesRef} className="h-full">
             <TestCases 
+              ref={testCasesComponentRef}
               testCases={testCases} 
               runResult={runResult}
               runError={runError}
               isRunning={isRunning}
+              onCaseChange={setActiveTestCase}
+              customInput={customInput}
+              setCustomInput={setCustomInput}
+              isCustomInputMode={isCustomInputMode}
+              setIsCustomInputMode={setIsCustomInputMode}
             />
           </div>
         </div>

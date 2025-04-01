@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Play, Send, Grid } from 'lucide-react';
 import LabelButton from '@/components/ui/LabelButton';
 import Loader from '@/components/ui/Loader';
-import { fetchProblemList, ProblemPreview } from '@/features/editor/api/problems';
+import { fetchProblemList, ProblemPreview } from '@/features/battle/editor/api/problems';
 import ProblemsSidebar from './ProblemsSidebar';
 
 interface TopbarProps {

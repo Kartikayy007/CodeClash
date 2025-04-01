@@ -2,16 +2,15 @@
 
 import React from 'react'
 import Image from 'next/image'
-import { Settings, House } from 'lucide-react'
-import { usePathname, useRouter } from 'next/navigation'
+// import { usePathname, useRouter } from 'next/navigation'
 
 const Navbar = () => {
-  const router = useRouter();
-  const pathname = usePathname();
+  // const router = useRouter();
+  // const pathname = usePathname();
 
-  const isContestRoute = pathname && pathname.includes('/contest/') && 
-    !pathname.includes('/contest/join') && 
-    !pathname.includes('/contest/create');
+  // const isContestRoute = pathname && pathname.includes('/contest/') && 
+  //   !pathname.includes('/contest/join') && 
+  //   !pathname.includes('/contest/create');
 
   return (
     <nav className='relative bg-[#10141D] z-50'>
@@ -26,7 +25,7 @@ const Navbar = () => {
           />
         </div>
 
-        {!isContestRoute && (
+        {/* {!isContestRoute && (
           <div className='flex items-center gap-4'>
             <button className='flex items-center gap-6'>
               {pathname === '/dashboard' ? (
@@ -53,7 +52,7 @@ const Navbar = () => {
               )}
             </button>
           </div>
-        )}
+        )} */}
       </div>
     </nav>
   )

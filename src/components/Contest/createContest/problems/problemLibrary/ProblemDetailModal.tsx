@@ -1,6 +1,6 @@
 import React from 'react';
 import { X, Loader2 } from 'lucide-react';
-import { Problem } from '@/features/editor/api/problems';
+import { Problem } from '@/features/battle/editor/api/problems';
 
 interface ProblemDetailModalProps {
   problem?: Problem;

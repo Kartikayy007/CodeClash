@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ChevronLeft, Check, X, AlertTriangle, Clock, Settings, BarChart, Lock, Infinity, HelpCircle, Copy, CheckCheck } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
-import { fetchSubmissionById } from '@/features/editor/slices/submissionSlice';
+import { fetchSubmissionById } from '@/features/battle/editor/slices/submissionSlice';
 import CodeMirror from '@uiw/react-codemirror';
 import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';

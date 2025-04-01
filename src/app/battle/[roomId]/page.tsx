@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 // import { useParams } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import {  socketService } from '@/lib/socket';
-import EditorLayout from '@/features/editor/components/EditorLayout';
-import Editor from '@/features/editor/components/Editor';
+import EditorLayout from '@/features/battle/editor/components/EditorLayout';
+import Editor from '@/features/battle/editor/components/Editor';
 import { RootState } from '@/store/store';
 // import { useRouter } from 'next/navigation';
 // import { Problem } from '@/features/editor/api/problems';
@@ -50,7 +50,7 @@ const BattleRoom = () => {
   // const router = useRouter();
   // const token = localStorage.getItem('accessToken');
   const [language, setLanguage] = useState<Language>('cpp');
-  const [isMaximized, setIsMaximized] = useState(false);
+  // const [isMaximized, setIsMaximized] = useState(false);
   const [error] = useState<string | null>(null);
   const battleState = useSelector((state: RootState) => state.battle);
 
@@ -90,8 +90,8 @@ const BattleRoom = () => {
       <Editor
         language={language}
         onLanguageChange={handleLanguageChange}
-        onMaximize={setIsMaximized}
-        className={isMaximized ? 'fixed inset-0 z-50' : ''}
+        // onMaximize={setIsMaximized}
+        // className={isMaximized ? 'fixed inset-0 z-50' : ''}
       />
     </EditorLayout>
   );

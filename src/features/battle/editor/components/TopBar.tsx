@@ -3,7 +3,7 @@ import LabelButton from '@/components/ui/LabelButton';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState, store } from '@/store/store';
-import { runCode, submitCode, setActiveTab } from '@/features/editor/slices/editorSlice';
+import { runCode, submitCode, setActiveTab } from '@/features/battle/editor/slices/editorSlice';
 import { setCurrentProblemIndex, updateProblemStatus, updateMultipleProblemStatuses } from '@/features/battle/slices/battleSlice';
 import { socketService } from '@/lib/socket';
 import toast from 'react-hot-toast';

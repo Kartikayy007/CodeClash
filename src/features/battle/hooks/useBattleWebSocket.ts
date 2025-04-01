@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { socketService } from '@/lib/socket';
-import { fetchProblem } from '@/features/editor/api/problems';
+import { fetchProblem } from '@/features/battle/editor/api/problems';
 import { useDispatch } from 'react-redux';
 import { setProblems, setStatus, setPlayer1, setPlayer2, setMatchId, updateProblemStatus } from '@/features/battle/slices/battleSlice';
 import { store } from '@/store/store';

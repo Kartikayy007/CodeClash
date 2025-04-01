@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import LabelButton from '@/components/ui/LabelButton';
-import { ArrowLeft } from 'lucide-react';
+// import { ArrowLeft } from 'lucide-react';
 import { Contest } from '@/features/contests/types/contest.types';
 import { contestApi } from '@/features/contests/api/contestApi';
 import toast from 'react-hot-toast';
@@ -158,10 +158,10 @@ export default function ContestDetails() {
         <div className="flex items-center justify-between p-8">
           <button 
             onClick={() => router.back()}
-            className="flex items-center gap-2 text-white hover:text-gray-300"
+            className="flex items-center gap-2 text-white hover:text-gray-300 opacity-0"
           >
-            <ArrowLeft size={20} />
-            <span>Back</span>
+            {/* <ArrowLeft size={20} />
+            <span>Back</span> */}
           </button>
           
           <div className='bg-[#1A1D24] w-1/2 rounded-lg px-18 py-8 flex justify-center items-center'>

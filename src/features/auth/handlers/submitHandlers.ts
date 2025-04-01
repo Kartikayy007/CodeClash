@@ -84,7 +84,7 @@ export const handleLogin = async ({
     }
 
     toast.success('Login Successful', 'Welcome back!')
-    router.push('/dashboard')
+    router.push('/contest/join')
     return true
   }
   return false

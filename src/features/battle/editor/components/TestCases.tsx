@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronUp, ChevronDown, Check, X } from 'lucide-react';
-import { TestCase } from '@/features/editor/api/problems';
+import { TestCase } from '@/features/battle/editor/api/problems';
 import { useSelector } from 'react-redux';
 import {  RootState } from '@/store/store';
 

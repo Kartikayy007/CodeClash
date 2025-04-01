@@ -14,7 +14,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const protectedRoutes = ['/dashboard', '/settings', '/profile'];
+  const protectedRoutes = ['/dashboard', '/settings', '/profile', '/contest/join'];
   if (protectedRoutes.some(route => pathname.startsWith(route))) {
     if (!accessToken) {
       return NextResponse.redirect(new URL('/get-started', request.url));
@@ -25,7 +25,7 @@ export function middleware(request: NextRequest) {
   const publicRoutes = ['/login', '/register', '/forgot-password', '/get-started'];
   if (publicRoutes.includes(pathname)) {
     if (accessToken) {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
+      return NextResponse.redirect(new URL('/contest/join', request.url));
     }
     return NextResponse.next();
   }

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Search } from 'lucide-react';
 import LabelButton from '@/components/ui/LabelButton';
-import { fetchProblem, fetchProblemList, Problem, ProblemPreview } from '@/features/editor/api/problems';
+import { fetchProblem, fetchProblemList, Problem, ProblemPreview } from '@/features/battle/editor/api/problems';
 import toast from 'react-hot-toast';
 import ProblemDetailModal from './ProblemDetailModal';
 import { Problem as ContestProblem } from '@/types/problem.types';

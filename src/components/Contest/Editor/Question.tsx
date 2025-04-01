@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Problem } from '@/features/editor/api/problems';
+import { Problem } from '@/features/battle/editor/api/problems';
 import 'katex/dist/katex.min.css';
 import { parseConstraints } from '@/utils/mathUtils';
 

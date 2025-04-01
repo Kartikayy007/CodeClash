@@ -11,7 +11,7 @@ import TestCases from './TestCases';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setCurrentProblemIndex } from '@/features/battle/slices/battleSlice';
-import { setActiveTab } from '@/features/editor/slices/editorSlice';
+import { setActiveTab } from '@/features/battle/editor/slices/editorSlice';
 import SubmissionTab from './submissionTab/SubmissionTab';
 import { TestCase } from '../api/problems';
 import { GameEndModal } from '@/features/battle/components/GameEndModal';
@@ -29,7 +29,7 @@ const EditorLayout = ({ questionData, matchId }: EditorLayoutProps) => {
   const [language, setLanguage] = useState('cpp');
   const [isDescriptionMaximized, setIsDescriptionMaximized] = useState(false);
   const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(false);
-  const [isEditorMaximized, setIsEditorMaximized] = useState(false);
+  const [isEditorMaximized, ] = useState(false);
   const [isTestCaseCollapsed, setIsTestCaseCollapsed] = useState(false);
 
   const handleProblemChange = (index: number) => {
@@ -117,7 +117,7 @@ const EditorLayout = ({ questionData, matchId }: EditorLayoutProps) => {
               <Editor
                 language={language as 'c' | 'cpp' | 'python' | 'java' | 'javascript'}
                 onLanguageChange={setLanguage}
-                onMaximize={setIsEditorMaximized}
+                // onMaximize={setIsEditorMaximized}
               />
             </div>
 
