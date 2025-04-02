@@ -89,7 +89,7 @@ const CodeEditor = ({
   };
 
   return (
-    <div className="h-[calc(100vh-30vh)] flex flex-col overflow-hidden rounded-lg bg-[#1C202A]">
+    <div className="h-[calc(100vh-30vh)] flex flex-col overflow-hidden rounded-lg bg-[#292c35]">
       <div className="flex items-center justify-between p-2 bg-[#1A1D24]">
         <select
           className="bg-[#292C33] text-white px-3 py-1 rounded-lg outline-none"
@@ -120,10 +120,10 @@ const CodeEditor = ({
           </button>
         </div>
       </div>
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-y-auto"> {/* Fixed scrolling container */}
         <CodeMirror
           value={code}
-          height="calc(100vh - 30vh)"
+          height="100%" // Editor stays at its fixed height
           width="100%"
           theme="dark"
           style={{ flex: 1 }}
