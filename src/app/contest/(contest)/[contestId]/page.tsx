@@ -235,7 +235,7 @@ export default function ContestPage() {
             </div>
             <LabelButton
               variant="red"
-              onClick={() => router.push("/dashboard")}
+              onClick={() => router.push("/contest/join")}
               className="whitespace-nowrap"
             >
               END
