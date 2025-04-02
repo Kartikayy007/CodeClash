@@ -17,7 +17,7 @@ interface EditorLayoutProps {
 const EditorLayout = ({ children, topbarProps }: EditorLayoutProps) => {
   return (
     <div className="flex flex-col h-screen">
-      <Topbar {...topbarProps}  />
+      <Topbar {...topbarProps} />
       <div className="flex flex-1 overflow-hidden">{children}</div>
     </div>
   );

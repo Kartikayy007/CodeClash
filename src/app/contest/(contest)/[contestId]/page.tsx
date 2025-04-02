@@ -13,7 +13,6 @@ import { Timer } from "lucide-react";
 import ProblemSet from "@/components/Contest/PreviewContest/ProblemSet";
 import Leaderboard from "@/components/Contest/contestPage/Leaderboard";
 import MySubmissions from "@/components/Contest/contestPage/MySubmissions";
-import ContestInsights from "@/components/Contest/contestPage/ContestInsights";
 interface ApiError {
   response: {
     data: {
@@ -23,51 +22,36 @@ interface ApiError {
 }
 type TabType = "Problem Set" | "Leaderboard" | "My Submissions";
 
-// const dummyLeaderboard = [
-//   { rank: 1, username: 'JohnDoe', score: 450, solved: 3, time: '01:30:45' },
-//   { rank: 2, username: 'AliceSmith', score: 350, solved: 2, time: '01:45:22' },
-//   { rank: 3, username: 'BobJohnson', score: 250, solved: 2, time: '02:15:10' },
-// ];
-
-const dummyInsights = {
-  rank: 2,
-  score: 350,
-  totalQuestions: 5,
-  solved: 2,
-  unsolved: 2,
-  attempted: 4,
-  submissions: 8,
-};
-
 export default function ContestPage() {
   const router = useRouter();
   const params = useParams();
   const contestId = params?.contestId as string;
   const [activeTab, setActiveTab] = useState<TabType>("Problem Set");
   const [timeLeft, setTimeLeft] = useState(3600);
-  const [searchQuery, setSearchQuery] = useState("");
   const [contest, setContest] = useState<Contest | null>(null);
   const [loading, setLoading] = useState(true);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [leaderboardPage, setLeaderboardPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [loadingProblems, setLoadingProblems] = useState(false);
+  const [loadingLeaderboard, setLoadingLeaderboard] = useState(false);
+  const [, setLoadingInsights] = useState(false);
 
   useEffect(() => {
     const fetchContestDetails = async () => {
       try {
         setLoading(true);
+        setLoadingProblems(true);
         const response = await contestApi.getContestDetails(contestId);
 
         if (response.contest) {
           setContest(response.contest);
 
-          // Handle routing based on contest status
           if (response.contest.status === "UPCOMING") {
             router.push(`/contest/join/${contestId}`);
             return;
           }
 
-          // Calculate time left for ongoing contests
           if (response.contest.status === "ONGOING") {
             const endTime = new Date(response.contest.endTime).getTime();
             const now = new Date().getTime();
@@ -83,6 +67,7 @@ export default function ContestPage() {
         router.push("/dashboard");
       } finally {
         setLoading(false);
+        setLoadingProblems(false);
       }
     };
 
@@ -111,6 +96,7 @@ export default function ContestPage() {
 
     const fetchLeaderboard = async () => {
       try {
+        setLoadingLeaderboard(true);
         const response = await contestApi.getLeaderboard(
           contestId,
           leaderboardPage,
@@ -122,6 +108,8 @@ export default function ContestPage() {
         toast.error(
           err?.response?.data?.message || "Failed to fetch leaderboard",
         );
+      } finally {
+        setLoadingLeaderboard(false);
       }
     };
 
@@ -144,6 +132,17 @@ export default function ContestPage() {
     return () => clearInterval(updateInterval);
   }, [contestId, activeTab, leaderboardPage]);
 
+  useEffect(() => {
+    if (!contestId || !contest) return;
+
+    setLoadingInsights(true);
+    const timer = setTimeout(() => {
+      setLoadingInsights(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [contestId, contest]);
+
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -152,11 +151,6 @@ export default function ContestPage() {
 
   const handleSolveProblem = (problemId: string) => {
     router.push(`/contest/${contestId}/problem/${problemId}`);
-  };
-
-  const handleSearchChange = (query: string) => {
-    setSearchQuery(query);
-    setLeaderboardPage(1);
   };
 
   const handlePageChange = (page: number) => {
@@ -179,27 +173,32 @@ export default function ContestPage() {
               })) || []
             }
             onSolveProblem={handleSolveProblem}
+            isLoading={loadingProblems}
           />
         );
       case "Leaderboard":
         return (
           <Leaderboard
-            leaderboard={leaderboard.map((entry) => ({
-              rank: entry.rank.toString(),
-              username: entry.username,
-              timeTaken: entry.timeTaken,
+            leaderboard={leaderboard.map((entry, index) => ({
+              rank:
+                entry.rank !== null
+                  ? entry.rank.toString()
+                  : (index + 1).toString(),
+              username: entry.user?.username || entry.username,
+              timeTaken: entry.lastSubmissionTime
+                ? new Date(entry.lastSubmissionTime).toLocaleString()
+                : entry.timeTaken,
               score: entry.score,
-              questionsSolved: entry.questionsSolved,
+              questionsSolved: entry.problemsSolved || entry.questionsSolved,
             }))}
-            searchQuery={searchQuery}
-            onSearchChange={handleSearchChange}
             currentPage={leaderboardPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
+            isLoading={loadingLeaderboard}
           />
         );
       case "My Submissions":
-        return <MySubmissions />;
+        return <MySubmissions contestId={contestId} />;
     }
   };
 
@@ -218,8 +217,10 @@ export default function ContestPage() {
   return (
     <div className="min-h-screen bg-[#10141D] text-white">
       <div className="flex flex-col h-full">
-        <div className="flex items-center justify-between p-8">
-          <h1 className="text-2xl font-bold">{contest.title}</h1>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between p-4 md:p-8 gap-4">
+          <h1 className="text-4xl md:text-5xl h-fit font-bold truncate">
+            {contest.title}
+          </h1>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Timer
@@ -227,7 +228,7 @@ export default function ContestPage() {
                 className={timeLeft <= 300 ? "text-red-500 animate-pulse" : ""}
               />
               <span
-                className={`text-2xl font-bold ${timeLeft <= 300 ? "text-red-500" : ""}`}
+                className={`text-xl md:text-2xl font-bold ${timeLeft <= 300 ? "text-red-500" : ""}`}
               >
                 {formatTime(timeLeft)}
               </span>
@@ -235,22 +236,23 @@ export default function ContestPage() {
             <LabelButton
               variant="red"
               onClick={() => router.push("/dashboard")}
+              className="whitespace-nowrap"
             >
               END
             </LabelButton>
           </div>
         </div>
 
-        <div className="flex gap-8 px-8">
-          <div className="flex-1">
-            <div className="flex gap-8 mb-8">
+        <div className="flex flex-col lg:flex-row gap-4 md:gap-8 px-4 md:px-8">
+          <div className="flex-1 w-full overflow-hidden">
+            <div className="flex gap-4 md:gap-8 mb-4 md:mb-8 overflow-x-auto pb-2 scrollbar-hide">
               {(
                 ["Problem Set", "Leaderboard", "My Submissions"] as TabType[]
               ).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`pb-2 ${
+                  className={`pb-2 whitespace-nowrap ${
                     activeTab === tab
                       ? "text-white border-b-2 border-white"
                       : "text-gray-400 hover:text-white"
@@ -260,9 +262,11 @@ export default function ContestPage() {
                 </button>
               ))}
             </div>
-            {renderTabContent()}
+            <div className="w-full">{renderTabContent()}</div>
           </div>
-          <ContestInsights insights={dummyInsights} />
+          {/* <div className="lg:w-80">
+            <ContestInsights insights={dummyInsights} isLoading={loadingInsights} />
+          </div> */}
         </div>
       </div>
     </div>

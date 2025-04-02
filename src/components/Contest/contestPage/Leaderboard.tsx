@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface LeaderboardEntry {
   rank: string;
@@ -11,22 +12,34 @@ interface LeaderboardEntry {
 
 interface LeaderboardProps {
   leaderboard: LeaderboardEntry[];
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  isLoading?: boolean;
 }
+
+// Shimmer loading for leaderboard entries
+const LeaderboardSkeleton = () => (
+  <div className="grid grid-cols-2 md:grid-cols-5 p-4 items-center bg-[#1E2127] animate-pulse">
+    <div className="flex items-center gap-2 mb-2 md:mb-0">
+      <div className="h-5 w-5 bg-gray-700 rounded-full"></div>
+      <div className="h-5 w-8 bg-gray-700 rounded"></div>
+    </div>
+    <div className="h-5 w-24 bg-gray-700 rounded mb-2 md:mb-0"></div>
+    <div className="h-5 w-20 bg-gray-700 rounded mb-2 md:mb-0"></div>
+    <div className="h-5 w-16 bg-gray-700 rounded mb-2 md:mb-0"></div>
+    <div className="h-5 w-10 bg-gray-700 rounded"></div>
+  </div>
+);
 
 const Leaderboard: React.FC<LeaderboardProps> = ({
   leaderboard,
-  searchQuery,
-  onSearchChange,
   currentPage,
   totalPages,
   onPageChange,
+  isLoading = false,
 }) => {
-  const [nextUpdate, setNextUpdate] = useState(900); // 15 minutes in seconds
+  const [nextUpdate, setNextUpdate] = useState(900);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -49,65 +62,50 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
   };
 
   return (
-    <div className="bg-[#1A1D24] rounded-lg p-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="bg-[#1A1D24] rounded-lg p-4 md:p-6 mb-10">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
         <div className="space-y-1">
-          <h2 className="text-xl font-semibold">Leaderboard</h2>
+          <h2 className="text-3xl font-semibold text-white">Leaderboard</h2>
           <p className="text-sm text-gray-400">
             Next update in {formatUpdateTime(nextUpdate)}
           </p>
         </div>
-        <div className="relative w-72">
-          <input
-            type="text"
-            placeholder="Enter UserName"
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full bg-[#282C33] text-white px-4 py-2 rounded-lg focus:outline-none"
-          />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M9.16667 15.8333C12.8486 15.8333 15.8333 12.8486 15.8333 9.16667C15.8333 5.48477 12.8486 2.5 9.16667 2.5C5.48477 2.5 2.5 5.48477 2.5 9.16667C2.5 12.8486 5.48477 15.8333 9.16667 15.8333Z"
-                stroke="#71717A"
-                strokeWidth="1.66667"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M17.5 17.5L13.875 13.875"
-                stroke="#71717A"
-                strokeWidth="1.66667"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
-        </div>
       </div>
 
-      {leaderboard.length > 0 ? (
+      {isLoading ? (
+        <div className="rounded-lg overflow-hidden">
+          <div className="grid grid-cols-2 md:grid-cols-5 bg-[#282C33] p-4 text-sm font-medium">
+            <div>Rank</div>
+            <div>Username</div>
+            <div className="hidden md:block">Time Taken</div>
+            <div className="hidden md:block">Score</div>
+            <div className="hidden md:block">Questions Solved</div>
+          </div>
+
+          <div className="space-y-2 mt-2">
+            <LeaderboardSkeleton />
+            <LeaderboardSkeleton />
+            <LeaderboardSkeleton />
+            <LeaderboardSkeleton />
+            <LeaderboardSkeleton />
+          </div>
+        </div>
+      ) : leaderboard.length > 0 ? (
         <>
           <div className="rounded-lg overflow-hidden">
-            <div className="grid grid-cols-5 bg-[#282C33] p-4 text-sm font-medium">
+            <div className="grid grid-cols-2 md:grid-cols-5 bg-[#282C33] p-4 text-sm font-medium">
               <div>Rank</div>
               <div>Username</div>
-              <div>Time Taken</div>
-              <div>Score</div>
-              <div>Question Solved</div>
+              <div className="hidden md:block">Time Taken</div>
+              <div className="hidden md:block">Score</div>
+              <div className="hidden md:block">Questions Solved</div>
             </div>
 
             <div className="space-y-2 mt-2">
               {leaderboard.map((entry, index) => (
                 <div
-                  key={entry.rank}
-                  className="grid grid-cols-5 p-4 items-center bg-[#1E2127] hover:bg-[#282C33] transition-colors"
+                  key={`${entry.username}-${index}`}
+                  className="grid grid-cols-2 md:grid-cols-5 p-4 items-center bg-[#1E2127] hover:bg-[#282C33] transition-colors"
                 >
                   <div className="flex items-center gap-2">
                     {index < 3 && (
@@ -127,46 +125,35 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
                     )}
                     {entry.rank}
                   </div>
-                  <div>{entry.username}</div>
-                  <div>{entry.timeTaken}</div>
-                  <div>{entry.score.toFixed(2)}</div>
-                  <div>{entry.questionsSolved.toString().padStart(2, "0")}</div>
+                  <div className="truncate">{entry.username}</div>
+                  <div className="hidden md:block">{entry.timeTaken}</div>
+                  <div className="hidden md:block">
+                    {entry.score.toFixed(2)}
+                  </div>
+                  <div className="hidden md:block">{entry.questionsSolved}</div>
                 </div>
               ))}
             </div>
           </div>
 
-          {totalPages > 0 && (
+          {totalPages > 1 && (
             <div className="flex justify-center gap-2 mt-4 text-gray-400">
               <button
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="hover:text-white disabled:opacity-50"
+                className={`${currentPage === 1 ? "text-gray-600 cursor-not-allowed" : "hover:text-white"}`}
               >
-                ←
+                <ChevronLeft size={16} />
               </button>
-              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                const pageNum = i + 1;
-                return (
-                  <button
-                    key={pageNum}
-                    onClick={() => onPageChange(pageNum)}
-                    className={
-                      pageNum === currentPage
-                        ? "text-purple-500"
-                        : "hover:text-white"
-                    }
-                  >
-                    {pageNum}
-                  </button>
-                );
-              })}
+              <span className="text-gray-400">
+                Page {currentPage} of {totalPages}
+              </span>
               <button
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="hover:text-white disabled:opacity-50"
+                className={`${currentPage === totalPages ? "text-gray-600 cursor-not-allowed" : "hover:text-white"}`}
               >
-                →
+                <ChevronRight size={16} />
               </button>
             </div>
           )}

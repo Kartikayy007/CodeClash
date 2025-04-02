@@ -26,6 +26,7 @@ const LabelButton = ({
       hover:opacity-90
       transition-all
       duration-200
+      text-center
       ${disabled ? "opacity-50 bg-[#8B8B8B] cursor-not-allowed" : ""}
     `,
     outlined: `
@@ -57,6 +58,7 @@ const LabelButton = ({
       font-[550]
       hover:opacity-90
       transition-all
+      text-center
       duration-200
       ${disabled ? "opacity-50 bg-[#8B8B8B] cursor-not-allowed" : ""}
     `,

@@ -12,6 +12,7 @@ import {
   UpdateLeaderboardResponse,
   AddQuestionFromLibraryPayload,
   AddQuestionFromLibraryResponse,
+  UserContestSubmissionsResponse,
 } from "../types/contest.types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -130,6 +131,22 @@ export const contestApi = {
         },
       },
     );
+    if (response.data && response.data.leaderboard) {
+      response.data.leaderboard = response.data.leaderboard.map(
+        (entry, index) => {
+          return {
+            ...entry,
+            rank: entry.rank ?? index + 1,
+            username: entry.user?.username || entry.username || "Unknown User",
+            timeTaken:
+              entry.lastSubmissionTime ||
+              entry.timeTaken ||
+              new Date().toISOString(),
+            questionsSolved: entry.problemsSolved || entry.questionsSolved || 0,
+          };
+        },
+      );
+    }
     return response.data;
   },
 
@@ -160,6 +177,39 @@ export const contestApi = {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
+        },
+      },
+    );
+    return response.data;
+  },
+
+  getUserContestSubmissions: async (
+    contestId: string,
+    page: number = 1,
+  ): Promise<UserContestSubmissionsResponse> => {
+    const token = localStorage.getItem("accessToken");
+    const response = await api.get<UserContestSubmissionsResponse>(
+      `${BASE_URL}/api/v1/user/submissions/contest/${contestId}?page=${page}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response.data;
+  },
+
+  getQuestionSubmissions: async (
+    contestId: string,
+    questionId: string,
+    page: number = 1,
+  ): Promise<UserContestSubmissionsResponse> => {
+    const token = localStorage.getItem("accessToken");
+    const response = await api.get<UserContestSubmissionsResponse>(
+      `${BASE_URL}/api/v1/contest/${contestId}/questions/${questionId}/submissions?page=${page}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       },
     );

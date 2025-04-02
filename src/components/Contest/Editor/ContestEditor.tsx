@@ -91,7 +91,6 @@ int main() {
   const [isCustomInputMode, setIsCustomInputMode] = useState(false);
   const [customInput, setCustomInput] = useState("");
 
-  // Effect for fetching problem data
   useEffect(() => {
     const getProblem = async () => {
       try {
@@ -111,9 +110,7 @@ int main() {
     getProblem();
   }, [problemId]);
 
-  // Separate effect for initial code setup - properly includes all dependencies
   useEffect(() => {
-    // Only set code if this is the initial load
     if (isInitialLoad.current) {
       setCode(codeByLanguage[language] || "");
       isInitialLoad.current = false;
@@ -465,7 +462,7 @@ int main() {
           {activeTab === "description" ? (
             renderDescriptionContent()
           ) : (
-            <Submissions problemId={problemId} />
+            <Submissions problemId={problemId} contestId={contestId} />
           )}
         </div>
       </div>

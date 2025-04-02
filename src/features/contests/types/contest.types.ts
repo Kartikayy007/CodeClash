@@ -44,6 +44,50 @@ export interface Contest {
   }>;
 }
 
+export interface SubmissionItem {
+  id: string;
+  userId: string;
+  matchId: string | null;
+  contestId: string;
+  questionId: string;
+  code: string;
+  language: string;
+  status:
+    | "ACCEPTED"
+    | "WRONG_ANSWER"
+    | "RUNTIME_ERROR"
+    | "COMPILATION_ERROR"
+    | "TIME_LIMIT_EXCEEDED"
+    | "MEMORY_LIMIT_EXCEEDED"
+    | "SEGMENTATION_FAULT"
+    | "INFINITE_LOOP";
+  executionTime: number | null;
+  memory: string | null;
+  failedTestCase: number | null;
+  passedTestCases: number | null;
+  totalTestCases: number | null;
+  score: number | null;
+  createdAt: string;
+  updatedAt: string;
+  question?: {
+    title: string;
+    difficulty: "EASY" | "MEDIUM" | "HARD";
+  };
+}
+
+export interface Pagination {
+  totalCount: number;
+  totalPages: number;
+  currentPage: number;
+  limit: number;
+}
+
+export interface UserContestSubmissionsResponse {
+  success: boolean;
+  submissions: SubmissionItem[];
+  pagination: Pagination;
+}
+
 export interface CreateContestPayload {
   title: string;
   description: string;
@@ -132,11 +176,22 @@ export interface DeleteQuestionResponse {
 }
 
 export interface LeaderboardEntry {
-  rank: string;
+  rank: string | number | null;
   username: string;
   timeTaken: string;
   score: number;
   questionsSolved: number;
+  id?: string;
+  contestId?: string;
+  userId?: string;
+  problemsSolved?: number;
+  lastSubmissionTime?: string;
+  updatedAt?: string;
+  user?: {
+    username: string;
+    rating: number;
+    profileImage: string | null;
+  };
 }
 
 export interface LeaderboardPagination {
