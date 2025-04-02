@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
 
 interface LeaderboardEntry {
   rank: string;
@@ -18,13 +18,13 @@ interface LeaderboardProps {
   onPageChange: (page: number) => void;
 }
 
-const Leaderboard: React.FC<LeaderboardProps> = ({ 
-  leaderboard, 
-  searchQuery, 
+const Leaderboard: React.FC<LeaderboardProps> = ({
+  leaderboard,
+  searchQuery,
   onSearchChange,
   currentPage,
   totalPages,
-  onPageChange
+  onPageChange,
 }) => {
   const [nextUpdate, setNextUpdate] = useState(900); // 15 minutes in seconds
 
@@ -45,7 +45,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
   const formatUpdateTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -66,14 +66,32 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
             className="w-full bg-[#282C33] text-white px-4 py-2 rounded-lg focus:outline-none"
           />
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9.16667 15.8333C12.8486 15.8333 15.8333 12.8486 15.8333 9.16667C15.8333 5.48477 12.8486 2.5 9.16667 2.5C5.48477 2.5 2.5 5.48477 2.5 9.16667C2.5 12.8486 5.48477 15.8333 9.16667 15.8333Z" stroke="#71717A" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M17.5 17.5L13.875 13.875" stroke="#71717A" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.16667 15.8333C12.8486 15.8333 15.8333 12.8486 15.8333 9.16667C15.8333 5.48477 12.8486 2.5 9.16667 2.5C5.48477 2.5 2.5 5.48477 2.5 9.16667C2.5 12.8486 5.48477 15.8333 9.16667 15.8333Z"
+                stroke="#71717A"
+                strokeWidth="1.66667"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M17.5 17.5L13.875 13.875"
+                stroke="#71717A"
+                strokeWidth="1.66667"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </div>
         </div>
       </div>
-      
+
       {leaderboard.length > 0 ? (
         <>
           <div className="rounded-lg overflow-hidden">
@@ -84,18 +102,24 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
               <div>Score</div>
               <div>Question Solved</div>
             </div>
-            
+
             <div className="space-y-2 mt-2">
               {leaderboard.map((entry, index) => (
-                <div 
+                <div
                   key={entry.rank}
                   className="grid grid-cols-5 p-4 items-center bg-[#1E2127] hover:bg-[#282C33] transition-colors"
                 >
                   <div className="flex items-center gap-2">
                     {index < 3 && (
-                      <Image 
-                        src={index === 0 ? "/gold.svg" : index === 1 ? "/silver.svg" : "/bronze.svg"} 
-                        alt="medal" 
+                      <Image
+                        src={
+                          index === 0
+                            ? "/gold.svg"
+                            : index === 1
+                              ? "/silver.svg"
+                              : "/bronze.svg"
+                        }
+                        alt="medal"
                         className="w-5 h-5"
                         width={20}
                         height={20}
@@ -106,15 +130,15 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
                   <div>{entry.username}</div>
                   <div>{entry.timeTaken}</div>
                   <div>{entry.score.toFixed(2)}</div>
-                  <div>{entry.questionsSolved.toString().padStart(2, '0')}</div>
+                  <div>{entry.questionsSolved.toString().padStart(2, "0")}</div>
                 </div>
               ))}
             </div>
           </div>
-          
+
           {totalPages > 0 && (
             <div className="flex justify-center gap-2 mt-4 text-gray-400">
-              <button 
+              <button
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
                 className="hover:text-white disabled:opacity-50"
@@ -127,13 +151,17 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
                   <button
                     key={pageNum}
                     onClick={() => onPageChange(pageNum)}
-                    className={pageNum === currentPage ? 'text-purple-500' : 'hover:text-white'}
+                    className={
+                      pageNum === currentPage
+                        ? "text-purple-500"
+                        : "hover:text-white"
+                    }
                   >
                     {pageNum}
                   </button>
                 );
               })}
-              <button 
+              <button
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
                 className="hover:text-white disabled:opacity-50"

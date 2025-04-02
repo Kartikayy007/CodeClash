@@ -1,6 +1,6 @@
-import { io, Socket } from 'socket.io-client';
+import { io, Socket } from "socket.io-client";
 
-type GameMode = 'STANDARD' | 'SPEED' | 'ACCURACY';
+type GameMode = "STANDARD" | "SPEED" | "ACCURACY";
 
 interface Player {
   id: string;
@@ -14,7 +14,7 @@ export interface Problem {
   id: string;
   title: string;
   description: string;
-  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+  difficulty: "EASY" | "MEDIUM" | "HARD";
   inputFormat: string;
   outputFormat: string;
   constraints: string;
@@ -32,9 +32,8 @@ interface RoomState {
   problems: Problem[];
   startTime: number;
   endTime: number | null;
-  status: 'WAITING' | 'IN_PROGRESS' | 'COMPLETED' | 'ABORTED';
+  status: "WAITING" | "IN_PROGRESS" | "COMPLETED" | "ABORTED";
 }
-
 
 interface EventData {
   match_found: { matchId: string; players: string[] };
@@ -44,7 +43,7 @@ interface EventData {
   match_state: {
     matchId: string;
     players: Player[];
-    status: RoomState['status'];
+    status: RoomState["status"];
     problems?: Problem[];
   };
   match_error: { message: string };
@@ -55,21 +54,32 @@ interface EventData {
     gameState: Array<{
       userId: string;
       problemsSolved: number;
-      solvedProblems: Record<string, {
-        status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
-        submittedAt: number;
-      }>;
+      solvedProblems: Record<
+        string,
+        {
+          status:
+            | "ACCEPTED"
+            | "WRONG_ANSWER"
+            | "TIME_LIMIT_EXCEEDED"
+            | "RUNTIME_ERROR";
+          submittedAt: number;
+        }
+      >;
     }>;
   };
   game_error: { message: string };
   game_state: {
     timeLeft: number;
-    status: RoomState['status']
+    status: RoomState["status"];
   };
   game_state_update: {
     userId: string;
     problemId: string;
-    status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
+    status:
+      | "ACCEPTED"
+      | "WRONG_ANSWER"
+      | "TIME_LIMIT_EXCEEDED"
+      | "RUNTIME_ERROR";
   };
   game_end: {
     winner: string;
@@ -94,7 +104,10 @@ interface EventData {
 
 class SocketService {
   private socket: Socket | null = null;
-  private eventListeners: Map<keyof EventData, Set<(data: EventData[keyof EventData]) => void>> = new Map();
+  private eventListeners: Map<
+    keyof EventData,
+    Set<(data: EventData[keyof EventData]) => void>
+  > = new Map();
   private currentmatchId: string | null = null;
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
@@ -105,10 +118,9 @@ class SocketService {
       return;
     }
 
-
-    this.socket = io('https://goyalshivansh.me', {
-      path: '/socket/',
-      transports: ['websocket'],
+    this.socket = io("https://goyalshivansh.me", {
+      path: "/socket/",
+      transports: ["websocket"],
       reconnection: true,
       reconnectionAttempts: this.maxReconnectAttempts,
       reconnectionDelay: 1000,
@@ -116,13 +128,15 @@ class SocketService {
       autoConnect: true,
       query: {
         token,
-        EIO: '4',
-        transport: 'websocket'
-      }
+        EIO: "4",
+        transport: "websocket",
+      },
     });
 
-    if (typeof window !== 'undefined') {
-      (window as unknown as Window & { __socketInstance: Socket | null }).__socketInstance = this.socket;
+    if (typeof window !== "undefined") {
+      (
+        window as unknown as Window & { __socketInstance: Socket | null }
+      ).__socketInstance = this.socket;
     }
 
     this.setupEventListeners();
@@ -131,32 +145,32 @@ class SocketService {
   private setupEventListeners(): void {
     if (!this.socket) return;
 
-    this.socket.on('connect', () => {
+    this.socket.on("connect", () => {
       console.log("✅ Socket connected successfully");
       this.reconnectAttempts = 0;
     });
 
-    this.socket.on('disconnect', (reason) => {
+    this.socket.on("disconnect", (reason) => {
       console.log("❌ Socket disconnected:", reason);
     });
 
-    this.socket.on('connect_error', (error) => {
-      console.error('❌ Socket connection error:', error);
+    this.socket.on("connect_error", (error) => {
+      console.error("❌ Socket connection error:", error);
       this.reconnectAttempts++;
 
       if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-        console.error('🚫 Max reconnection attempts reached');
+        console.error("🚫 Max reconnection attempts reached");
         this.socket?.disconnect();
       }
     });
 
-    this.socket.on('game_end', (data) => {
+    this.socket.on("game_end", (data) => {
       console.log("🎮 Game end received in socket service:", data);
       try {
-        const listeners = this.eventListeners.get('game_end');
+        const listeners = this.eventListeners.get("game_end");
         if (listeners) {
           console.log("🎯 Notifying game_end listeners:", listeners.size);
-          listeners.forEach(listener => {
+          listeners.forEach((listener) => {
             try {
               listener(data);
             } catch (error) {
@@ -171,11 +185,11 @@ class SocketService {
       }
     });
 
-    this.socket.on('game_state_update', (data) => {
+    this.socket.on("game_state_update", (data) => {
       console.log("🎮 Game state update received in socket:", data);
-      const listeners = this.eventListeners.get('game_state_update');
+      const listeners = this.eventListeners.get("game_state_update");
       if (listeners) {
-        listeners.forEach(listener => listener(data));
+        listeners.forEach((listener) => listener(data));
       }
     });
 
@@ -183,24 +197,34 @@ class SocketService {
       console.log("📡 Socket event received:", eventName, args);
       const listeners = this.eventListeners.get(eventName as keyof EventData);
       if (listeners) {
-        listeners.forEach(listener => listener(args[0] as EventData[keyof EventData]));
+        listeners.forEach((listener) =>
+          listener(args[0] as EventData[keyof EventData]),
+        );
       }
     });
 
-    this.socket.removeAllListeners('game_end');
-
-    
+    this.socket.removeAllListeners("game_end");
   }
 
-  on<K extends keyof EventData>(event: K, callback: (data: EventData[K]) => void): void {
+  on<K extends keyof EventData>(
+    event: K,
+    callback: (data: EventData[K]) => void,
+  ): void {
     if (!this.eventListeners.has(event)) {
       this.eventListeners.set(event, new Set());
     }
-    (this.eventListeners.get(event) as Set<(data: EventData[K]) => void>).add(callback);
+    (this.eventListeners.get(event) as Set<(data: EventData[K]) => void>).add(
+      callback,
+    );
   }
 
-  off<K extends keyof EventData>(event: K, callback: (data: EventData[K]) => void): void {
-    const listeners = this.eventListeners.get(event) as Set<(data: EventData[K]) => void>;
+  off<K extends keyof EventData>(
+    event: K,
+    callback: (data: EventData[K]) => void,
+  ): void {
+    const listeners = this.eventListeners.get(event) as Set<
+      (data: EventData[K]) => void
+    >;
     if (listeners) {
       listeners.delete(callback);
     }
@@ -208,7 +232,7 @@ class SocketService {
 
   emit<K extends keyof EventData>(event: K, data: EventData[K]): void {
     if (!this.socket?.connected) {
-      console.warn('⚠️ Socket not connected, cannot emit event:', event);
+      console.warn("⚠️ Socket not connected, cannot emit event:", event);
       return;
     }
     this.socket.emit(event, data);
@@ -229,12 +253,12 @@ class SocketService {
 
   joinMatchmaking(mode: GameMode): void {
     if (!this.socket?.connected) {
-      console.error('❌ Cannot join matchmaking: Socket not connected');
+      console.error("❌ Cannot join matchmaking: Socket not connected");
       return;
     }
     console.log("🎮 Joining matchmaking queue:", mode);
-    this.socket.emit('join_matchmaking', { mode });
-    this.on('match_found', (data) => {
+    this.socket.emit("join_matchmaking", { mode });
+    this.on("match_found", (data) => {
       console.log("🎮 Match found:", data);
     });
   }
@@ -242,44 +266,47 @@ class SocketService {
   leaveMatchmaking(): void {
     if (this.socket?.connected) {
       console.log("🚪 Leaving matchmaking queue");
-      this.socket.emit('leave_matchmaking', {});
+      this.socket.emit("leave_matchmaking", {});
     }
   }
 
   joinRoom(matchId: string): void {
     if (!this.socket?.connected) {
-      console.error('❌ Cannot join room: Socket not connected');
+      console.error("❌ Cannot join room: Socket not connected");
       return;
     }
     console.log("🎯 Joining match:", matchId);
     this.currentmatchId = matchId;
-    this.socket.emit('join_match', matchId);
+    this.socket.emit("join_match", matchId);
   }
 
   startGame(matchId: string): void {
     if (!this.socket?.connected) {
-      console.error('❌ Cannot start game: Socket not connected');
+      console.error("❌ Cannot start game: Socket not connected");
       return;
     }
     if (matchId !== this.currentmatchId) {
-      console.error('❌ Match ID mismatch:', { current: this.currentmatchId, received: matchId });
+      console.error("❌ Match ID mismatch:", {
+        current: this.currentmatchId,
+        received: matchId,
+      });
       return;
     }
     console.log("🎬 Starting game:", matchId);
-    this.socket.emit('start_game', matchId);
+    this.socket.emit("start_game", matchId);
   }
 
   getGameState(matchId: string): void {
     if (!this.socket?.connected) return;
     console.log("📊 Getting game state:", matchId);
-    this.socket.emit('get_game_state', { matchId });
+    this.socket.emit("get_game_state", { matchId });
   }
 
   rejoinRoom(matchId: string): void {
     if (!this.socket?.connected) return;
     console.log("🔄 Rejoining room:", matchId);
-    this.socket.emit('rejoin_room', { matchId });
+    this.socket.emit("rejoin_room", { matchId });
   }
 }
 
-export const socketService = new SocketService(); 
+export const socketService = new SocketService();

@@ -1,5 +1,5 @@
-export type MatchMode = 'STANDARD' | 'SPEED' | 'ACCURACY';
-export type MatchStatus = 'SCHEDULED' | 'ONGOING' | 'COMPLETED' | 'ABORTED';
+export type MatchMode = "STANDARD" | "SPEED" | "ACCURACY";
+export type MatchStatus = "SCHEDULED" | "ONGOING" | "COMPLETED" | "ABORTED";
 
 export interface Player {
   id: string;
@@ -49,4 +49,4 @@ export interface FetchMatchesParams {
   status?: MatchStatus;
   mode?: MatchMode;
   searchQuery?: string;
-} 
+}

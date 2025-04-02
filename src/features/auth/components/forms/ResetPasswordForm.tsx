@@ -1,21 +1,24 @@
-import { Control } from 'react-hook-form'
-import CustomInput from '@/components/CustomInput'
-import LabelButton from '@/components/ui/LabelButton'
-import { useState } from 'react'
+import { Control } from "react-hook-form";
+import CustomInput from "@/components/CustomInput";
+import LabelButton from "@/components/ui/LabelButton";
+import { useState } from "react";
 // import PasswordStrengthChecker from '../PasswordStrengthChecker'
 // import { ResetPasswordFormData } from '@/types/form.types'
-import { AuthFormData } from '@/features/auth/types/form.types'
+import { AuthFormData } from "@/features/auth/types/form.types";
 
 interface ResetPasswordFormProps {
-  control: Control<AuthFormData>
-  isSubmitting: boolean
+  control: Control<AuthFormData>;
+  isSubmitting: boolean;
 }
 
-export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswordFormProps) {
+export default function ResetPasswordForm({
+  control,
+  isSubmitting,
+}: ResetPasswordFormProps) {
   const [, setIsFocused] = useState(false);
 
   return (
-    <div className='w-full min-w-[280px] md:w-[450px] space-y-4 sm:space-y-6'>
+    <div className="w-full min-w-[280px] md:w-[450px] space-y-4 sm:space-y-6">
       <div className="relative">
         <CustomInput
           name="Newpassword"
@@ -50,5 +53,5 @@ export default function ResetPasswordForm({ control, isSubmitting }: ResetPasswo
         Reset Password
       </LabelButton>
     </div>
-  )
+  );
 }

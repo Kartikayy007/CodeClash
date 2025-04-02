@@ -1,11 +1,11 @@
-import { Control } from 'react-hook-form'
-import CustomInput from '@/components/CustomInput'
-import Link from 'next/link'
-import CustomCheckbox from '@/components/ui/CustomCheckbox'
-import LabelButton from '@/components/ui/LabelButton'
+import { Control } from "react-hook-form";
+import CustomInput from "@/components/CustomInput";
+import Link from "next/link";
+import CustomCheckbox from "@/components/ui/CustomCheckbox";
+import LabelButton from "@/components/ui/LabelButton";
 // import { RegisterFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
-import { AuthFormData } from '@/features/auth/types/form.types';
+import { AuthFormData } from "@/features/auth/types/form.types";
 
 // type RegisterFormData = z.infer<typeof RegisterFormSchema>
 
@@ -15,9 +15,12 @@ interface RegisterFormProps {
   password: string;
 }
 
-export default function RegisterForm({ control, isSubmitting }: RegisterFormProps) {
+export default function RegisterForm({
+  control,
+  isSubmitting,
+}: RegisterFormProps) {
   return (
-    <div className='w-full space-y-4 sm:space-y-6'>
+    <div className="w-full space-y-4 sm:space-y-6">
       <CustomInput
         name="email"
         label="Email"
@@ -43,19 +46,21 @@ export default function RegisterForm({ control, isSubmitting }: RegisterFormProp
         />
       </div>
 
-      <div className='flex items-start sm:items-center gap-2'>
-        <CustomCheckbox
-          name="terms"
-          label=""
-          control={control}
-        />
+      <div className="flex items-start sm:items-center gap-2">
+        <CustomCheckbox name="terms" label="" control={control} />
         <p className="text-white text-sm sm:text-base">
-          I agree to the{' '}
-          <Link href={''} className="text-[#C879EB] font-bold hover:opacity-80 transition-opacity">
+          I agree to the{" "}
+          <Link
+            href={""}
+            className="text-[#C879EB] font-bold hover:opacity-80 transition-opacity"
+          >
             Terms and Conditions
-          </Link>
-          {' '}and{' '}
-          <Link href={''} className="text-[#C879EB] font-bold hover:opacity-80 transition-opacity">
+          </Link>{" "}
+          and{" "}
+          <Link
+            href={""}
+            className="text-[#C879EB] font-bold hover:opacity-80 transition-opacity"
+          >
             Privacy Policy
           </Link>
         </p>
@@ -70,5 +75,5 @@ export default function RegisterForm({ control, isSubmitting }: RegisterFormProp
         Sign Up
       </LabelButton>
     </div>
-  )
+  );
 }

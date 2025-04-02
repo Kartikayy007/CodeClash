@@ -1,5 +1,5 @@
 // components/ui/WinsOverview.tsx
-import React from 'react';
+import React from "react";
 
 interface WinsOverviewProps {
   winRate: number;

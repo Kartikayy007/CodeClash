@@ -1,21 +1,19 @@
-import { Metadata } from 'next';
-import { Quicksand } from 'next/font/google';
+import { Metadata } from "next";
+import { Quicksand } from "next/font/google";
 import "@/app/globals.css";
-import { Providers } from '@/providers/redux-provider';
+import { Providers } from "@/providers/redux-provider";
 
 const quicksand = Quicksand({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: 'CodeClash',
-  description: 'CodeClash Platform',
+  title: "CodeClash",
+  description: "CodeClash Platform",
   icons: {
-    icon: [
-      { rel: 'icon', url: '/favicon.svg' },
-    ],
-  }
+    icon: [{ rel: "icon", url: "/favicon.svg" }],
+  },
 };
 
 export default function RootLayout({
@@ -26,9 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={quicksand.className}>
       <body className="antialiased">
-        <Providers>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

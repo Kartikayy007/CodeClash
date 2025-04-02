@@ -21,4 +21,4 @@ export interface ProfileState {
   profile: Profile | null;
   loading: boolean;
   error: string | null;
-} 
+}

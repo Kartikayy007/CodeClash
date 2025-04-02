@@ -1,18 +1,28 @@
-'use client';
+"use client";
 
-import React, { useCallback, useRef } from 'react';
-import CodeMirror, { EditorView } from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
-import { cpp } from '@codemirror/lang-cpp';
-import { python } from '@codemirror/lang-python';
-import { java } from '@codemirror/lang-java';
-import { lintGutter, openLintPanel, closeLintPanel, nextDiagnostic, previousDiagnostic } from '@codemirror/lint';
-import { indentUnit } from '@codemirror/language';
-import { createSyntaxLinter, createErrorTheme } from '@/utils/editorUtils';
-import { Loader2, Code2 } from 'lucide-react';
-import { keymap } from '@codemirror/view';
-import { Extension } from '@codemirror/state';
-import { indentWithTab, indentSelection, selectAll } from '@codemirror/commands';
+import React, { useCallback, useRef } from "react";
+import CodeMirror, { EditorView } from "@uiw/react-codemirror";
+import { javascript } from "@codemirror/lang-javascript";
+import { cpp } from "@codemirror/lang-cpp";
+import { python } from "@codemirror/lang-python";
+import { java } from "@codemirror/lang-java";
+import {
+  lintGutter,
+  openLintPanel,
+  closeLintPanel,
+  nextDiagnostic,
+  previousDiagnostic,
+} from "@codemirror/lint";
+import { indentUnit } from "@codemirror/language";
+import { createSyntaxLinter, createErrorTheme } from "@/utils/editorUtils";
+import { Loader2, Code2 } from "lucide-react";
+import { keymap } from "@codemirror/view";
+import { Extension } from "@codemirror/state";
+import {
+  indentWithTab,
+  indentSelection,
+  selectAll,
+} from "@codemirror/commands";
 
 interface CodeEditorProps {
   code: string;
@@ -22,18 +32,24 @@ interface CodeEditorProps {
   isSaving?: boolean;
 }
 
-const CodeEditor = ({ code, setCode, language, onLanguageChange, isSaving = false }: CodeEditorProps) => {
+const CodeEditor = ({
+  code,
+  setCode,
+  language,
+  onLanguageChange,
+  isSaving = false,
+}: CodeEditorProps) => {
   const editorRef = useRef<EditorView | null>(null);
 
   const getLanguageExtension = (lang: string) => {
     switch (lang) {
-      case 'javascript':
+      case "javascript":
         return javascript();
-      case 'cpp':
+      case "cpp":
         return cpp();
-      case 'python':
+      case "python":
         return python();
-      case 'java':
+      case "java":
         return java();
       default:
         return cpp();
@@ -49,9 +65,9 @@ const CodeEditor = ({ code, setCode, language, onLanguageChange, isSaving = fals
 
   const formatCode = useCallback(() => {
     if (!editorRef.current) return;
-    
+
     selectAll(editorRef.current);
-    
+
     indentSelection(editorRef.current);
   }, []);
 
@@ -65,10 +81,10 @@ const CodeEditor = ({ code, setCode, language, onLanguageChange, isSaving = fals
         { key: "Shift-F8", run: previousDiagnostic },
         { key: "Ctrl-Shift-m", mac: "Cmd-Shift-m", run: openLintPanel },
         { key: "Escape", run: closeLintPanel },
-        indentWithTab
-      ])
+        indentWithTab,
+      ]),
     ];
-    
+
     return extensions;
   };
 
@@ -86,9 +102,9 @@ const CodeEditor = ({ code, setCode, language, onLanguageChange, isSaving = fals
           <option value="java">Java</option>
           <option value="javascript">JavaScript</option>
         </select>
-        
+
         <div className="flex items-center gap-2">
-        {isSaving && (
+          {isSaving && (
             <div className="flex items-center gap-1 text-gray-400 text-xs">
               <Loader2 size={12} className="animate-spin" />
               <span>Saving...</span>
@@ -107,7 +123,7 @@ const CodeEditor = ({ code, setCode, language, onLanguageChange, isSaving = fals
       <div className="flex-1 overflow-hidden">
         <CodeMirror
           value={code}
-          height="calc(100vh - 30vh)" 
+          height="calc(100vh - 30vh)"
           width="100%"
           theme="dark"
           style={{ flex: 1 }}
@@ -118,7 +134,7 @@ const CodeEditor = ({ code, setCode, language, onLanguageChange, isSaving = fals
           extensions={[
             getLanguageExtension(language),
             ...getLintExtensions(),
-            indentUnit.of("    ")
+            indentUnit.of("    "),
           ]}
           basicSetup={{
             lineNumbers: true,
@@ -150,4 +166,4 @@ const CodeEditor = ({ code, setCode, language, onLanguageChange, isSaving = fals
   );
 };
 
-export default CodeEditor; 
+export default CodeEditor;

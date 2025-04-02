@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { LeaderboardState } from '../types/leaderboard.types';
-import { fetchLeaderboard } from '../thunks/leaderboardThunks';
+import { createSlice } from "@reduxjs/toolkit";
+import { LeaderboardState } from "../types/leaderboard.types";
+import { fetchLeaderboard } from "../thunks/leaderboardThunks";
 
 const initialState: LeaderboardState = {
   players: [],
@@ -9,21 +9,21 @@ const initialState: LeaderboardState = {
     totalCount: 0,
     totalPages: 0,
     currentPage: 1,
-    limit: 10
+    limit: 10,
   },
   loading: false,
-  error: null
+  error: null,
 };
 
 const leaderboardSlice = createSlice({
-  name: 'leaderboard',
+  name: "leaderboard",
   initialState,
   reducers: {
     clearLeaderboard: (state) => {
       state.players = [];
       state.pagination = initialState.pagination;
       state.error = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -41,8 +41,8 @@ const leaderboardSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       });
-  }
+  },
 });
 
 export const { clearLeaderboard } = leaderboardSlice.actions;
-export default leaderboardSlice.reducer; 
+export default leaderboardSlice.reducer;

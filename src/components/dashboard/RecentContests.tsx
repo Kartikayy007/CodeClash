@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface RecentContestsProps {
   className?: string;
@@ -15,71 +15,79 @@ interface Contest {
   hasReview: boolean;
 }
 
-
-export default function RecentContests({ className = '' }: RecentContestsProps) {
-  const [contests, setContests] = useState<Contest[]>([])
+export default function RecentContests({
+  className = "",
+}: RecentContestsProps) {
+  const [contests, setContests] = useState<Contest[]>([]);
 
   useEffect(() => {
     const fetchContests = async () => {
-      const token = localStorage.getItem('accessToken')
+      const token = localStorage.getItem("accessToken");
 
       if (!token) {
-        console.error('No access token found in local storage')
-        return
+        console.error("No access token found in local storage");
+        return;
       }
 
       try {
-        const response = await fetch('https://goyalshivansh.me/api/v1/contest/my-contests', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
+        const response = await fetch(
+          "https://goyalshivansh.me/api/v1/contest/my-contests",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           },
-        })
+        );
 
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`)
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const data = await response.json()
-        console.log('Fetched contests data:', data)
+        const data = await response.json();
+        console.log("Fetched contests data:", data);
 
         if (data.contests && Array.isArray(data.contests)) {
-          setContests(data.contests)
+          setContests(data.contests);
         } else {
-          console.error('Expected contests array but got:', data)
-          setContests([])
+          console.error("Expected contests array but got:", data);
+          setContests([]);
         }
       } catch (error) {
-        console.error('Error fetching contests:', error)
-        setContests([])
+        console.error("Error fetching contests:", error);
+        setContests([]);
       }
-    }
+    };
 
-    fetchContests()
-  }, [])
+    fetchContests();
+  }, []);
 
   // Function to calculate duration
   const calculateDuration = (startTime: string, endTime: string) => {
-    const start = new Date(startTime)
-    const end = new Date(endTime)
-    const duration = end.getTime() - start.getTime() // Duration in milliseconds
+    const start = new Date(startTime);
+    const end = new Date(endTime);
+    const duration = end.getTime() - start.getTime(); // Duration in milliseconds
 
-    const hours = Math.floor((duration % (1000 * 3600 * 24)) / (1000 * 3600))
-    const minutes = Math.floor((duration % (1000 * 3600)) / (1000 * 60))
+    const hours = Math.floor((duration % (1000 * 3600 * 24)) / (1000 * 3600));
+    const minutes = Math.floor((duration % (1000 * 3600)) / (1000 * 60));
 
-    return `${hours} hr ${minutes} min`
-  }
+    return `${hours} hr ${minutes} min`;
+  };
 
   return (
-    <div className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`}>
+    <div
+      className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`}
+    >
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-semibold">Recent Contests</h2>
-        <Link 
-          href="/recent-contests" 
-          className="text-base hover:text-white/80" 
+        <Link
+          href="/recent-contests"
+          className="text-base hover:text-white/80"
           prefetch={true}
-        >View All</Link>
+        >
+          View All
+        </Link>
       </div>
 
       {/* <div className="flex gap-3 mb-6">
@@ -99,8 +107,11 @@ export default function RecentContests({ className = '' }: RecentContestsProps) 
       </div>
 
       <div className="space-y-2">
-        {contests.slice(0,3).map((contest, index) => (
-          <div key={index} className="grid grid-cols-5 bg-white/5 rounded-lg px-4 py-2">
+        {contests.slice(0, 3).map((contest, index) => (
+          <div
+            key={index}
+            className="grid grid-cols-5 bg-white/5 rounded-lg px-4 py-2"
+          >
             <div className="flex items-center gap-2 col-span-2">
               <div className="w-4 h-4" />
               <span className="text-base font-medium">{contest.title}</span>
@@ -108,7 +119,9 @@ export default function RecentContests({ className = '' }: RecentContestsProps) 
             <span className="text-sm">{contest.score}</span>
             <span className="text-sm">{contest.participantCount}</span>
             <div className="flex justify-between items-center">
-              <span className="text-sm">{calculateDuration(contest.startTime, contest.endTime)}</span>
+              <span className="text-sm">
+                {calculateDuration(contest.startTime, contest.endTime)}
+              </span>
               {contest.hasReview && (
                 <button className="text-[#b0b0b0] text-sm font-medium hover:text-white">
                   Review

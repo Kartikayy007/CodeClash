@@ -1,14 +1,13 @@
-import { Slide, ToastContainer } from 'react-toastify';
-import { toastConfig } from './toast-config';
+import { Slide, ToastContainer } from "react-toastify";
+import { toastConfig } from "./toast-config";
 
 export const ToastProvider = () => {
-
-  return ( 
+  return (
     <div>
-      <ToastContainer 
-        {...toastConfig} 
-        transition={Slide} 
-        limit={1} 
+      <ToastContainer
+        {...toastConfig}
+        transition={Slide}
+        limit={1}
         closeButton={false}
       />
     </div>

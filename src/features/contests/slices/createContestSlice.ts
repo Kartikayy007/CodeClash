@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Problem } from '@/types/problem.types';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Problem } from "@/types/problem.types";
 
 interface TimeField {
   date: string;
@@ -20,49 +20,49 @@ interface FormData {
 interface CreateContestState {
   formData: FormData;
   problems: Problem[];
-  activeTab: 'details' | 'problems' | 'settings';
-  activeSection: 'basic' | 'description';
+  activeTab: "details" | "problems" | "settings";
+  activeSection: "basic" | "description";
   selectedProblemIndex: number | null;
   isDirty: boolean;
 }
 
 interface FormFieldUpdate {
-  name: Exclude<keyof FormData, 'startTime' | 'endTime'>;
+  name: Exclude<keyof FormData, "startTime" | "endTime">;
   value: string;
 }
 
 interface TimeFieldUpdate {
-  name: 'startTime' | 'endTime';
-  field: 'date' | 'time';
+  name: "startTime" | "endTime";
+  field: "date" | "time";
   value: string;
 }
 
 const initialState: CreateContestState = {
   formData: {
-    name: '',
-    description: '',
-    rules: '',
-    prizes: '',
-    score: '',
+    name: "",
+    description: "",
+    rules: "",
+    prizes: "",
+    score: "",
     startTime: {
-      date: '',
-      time: ''
+      date: "",
+      time: "",
     },
     endTime: {
-      date: '',
-      time: ''
+      date: "",
+      time: "",
     },
-    organizationName: ''
+    organizationName: "",
   },
   problems: [],
-  activeTab: 'details',
-  activeSection: 'basic',
+  activeTab: "details",
+  activeSection: "basic",
   selectedProblemIndex: null,
-  isDirty: false
+  isDirty: false,
 };
 
 const createContestSlice = createSlice({
-  name: 'createContest',
+  name: "createContest",
   initialState,
   reducers: {
     updateFormField: (state, action: PayloadAction<FormFieldUpdate>) => {
@@ -75,17 +75,26 @@ const createContestSlice = createSlice({
       state.formData[name][field] = value;
       state.isDirty = true;
     },
-    setActiveTab: (state, action: PayloadAction<'details' | 'problems' | 'settings'>) => {
+    setActiveTab: (
+      state,
+      action: PayloadAction<"details" | "problems" | "settings">,
+    ) => {
       state.activeTab = action.payload;
     },
-    setActiveSection: (state, action: PayloadAction<'basic' | 'description'>) => {
+    setActiveSection: (
+      state,
+      action: PayloadAction<"basic" | "description">,
+    ) => {
       state.activeSection = action.payload;
     },
     addProblem: (state, action: PayloadAction<Problem>) => {
       state.problems.push(action.payload);
       state.isDirty = true;
     },
-    updateProblem: (state, action: PayloadAction<{ index: number; problem: Problem }>) => {
+    updateProblem: (
+      state,
+      action: PayloadAction<{ index: number; problem: Problem }>,
+    ) => {
       const { index, problem } = action.payload;
       state.problems[index] = problem;
       state.isDirty = true;
@@ -100,14 +109,14 @@ const createContestSlice = createSlice({
     initializeForm: (state, action: PayloadAction<Partial<FormData>>) => {
       state.formData = {
         ...state.formData,
-        ...action.payload
+        ...action.payload,
       };
       state.isDirty = false;
     },
     markAsSaved: (state) => {
       state.isDirty = false;
-    }
-  }
+    },
+  },
 });
 
 export const {
@@ -120,7 +129,7 @@ export const {
   deleteProblem,
   setSelectedProblemIndex,
   initializeForm,
-  markAsSaved
+  markAsSaved,
 } = createContestSlice.actions;
 
-export default createContestSlice.reducer; 
+export default createContestSlice.reducer;

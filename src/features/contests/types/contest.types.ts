@@ -1,5 +1,3 @@
-// import { StaticImageData } from "next/image";
-
 export interface Contest {
   id: string;
   title: string;
@@ -7,7 +5,7 @@ export interface Contest {
   startTime: string;
   endTime: string;
   isPublic: boolean;
-  status: 'UPCOMING' | 'ONGOING' | 'COMPLETED';
+  status: "UPCOMING" | "ONGOING" | "COMPLETED";
   createdAt: string;
   organizationName: string | null;
   rules: string | null;
@@ -27,7 +25,11 @@ export interface Contest {
     questionsSolved: number;
     submissions: Array<{
       questionId: string;
-      status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
+      status:
+        | "ACCEPTED"
+        | "WRONG_ANSWER"
+        | "TIME_LIMIT_EXCEEDED"
+        | "RUNTIME_ERROR";
       submittedAt: string;
     }>;
   };
@@ -36,7 +38,7 @@ export interface Contest {
   questions: Array<{
     id: string;
     title: string;
-    difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+    difficulty: "EASY" | "MEDIUM" | "HARD";
     rating: number;
     score: number;
   }>;
@@ -77,14 +79,6 @@ export interface ContestResponse {
   contest: Contest;
 }
 
-export interface ValidateContestCodeResponse {
-  success: boolean;
-  message: string;
-  data?: {
-    contestId: string;
-  };
-}
-
 export interface RegisterContestResponse {
   success: boolean;
   message: string;
@@ -111,7 +105,7 @@ export interface AddQuestionPayload {
   inputFormat: string;
   outputFormat: string;
   constraints: string;
-  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+  difficulty: "EASY" | "MEDIUM" | "HARD";
   rating: number;
   score: number;
   timeLimit: number;

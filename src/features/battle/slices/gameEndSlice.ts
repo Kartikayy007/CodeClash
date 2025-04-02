@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface RatingChanges {
   [userId: string]: number;
@@ -13,17 +13,20 @@ interface GameEndState {
 const initialState: GameEndState = {
   isOpen: false,
   winnerId: null,
-  ratingChanges: {}
+  ratingChanges: {},
 };
 
 const gameEndSlice = createSlice({
-  name: 'gameEnd',
+  name: "gameEnd",
   initialState,
   reducers: {
-    setGameEnd: (state, action: PayloadAction<{
-      winnerId: string;
-      ratingChanges: RatingChanges;
-    }>) => {
+    setGameEnd: (
+      state,
+      action: PayloadAction<{
+        winnerId: string;
+        ratingChanges: RatingChanges;
+      }>,
+    ) => {
       console.log("🎮 Setting game end state:", action.payload);
       state.isOpen = true;
       state.winnerId = action.payload.winnerId;
@@ -33,9 +36,9 @@ const gameEndSlice = createSlice({
     resetGameEnd: () => {
       console.log("🔄 Resetting game end state");
       return initialState;
-    }
-  }
+    },
+  },
 });
 
 export const { setGameEnd, resetGameEnd } = gameEndSlice.actions;
-export default gameEndSlice.reducer; 
+export default gameEndSlice.reducer;

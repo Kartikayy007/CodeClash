@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import NavbarPlain from '@/components/ui/NavbarPlain';
-import { Search, Edit, BarChart2, Trash, Share, Menu } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import ShareContestModal from '@/components/Contest/ShareContestModal';
+import React, { useEffect, useState } from "react";
+import NavbarPlain from "@/components/ui/NavbarPlain";
+import { Search, Edit, BarChart2, Trash, Share, Menu } from "lucide-react";
+import { useRouter } from "next/navigation";
+import ShareContestModal from "@/components/Contest/ShareContestModal";
 
-type ContestStatus = 'All' | 'Scheduled' | 'Ongoing' | 'Completed';
+type ContestStatus = "All" | "Scheduled" | "Ongoing" | "Completed";
 
 interface Contest {
   contestId: string;
@@ -19,8 +19,8 @@ interface Contest {
 
 export default function ContestsPage() {
   const router = useRouter();
-  const [selectedStatus, setSelectedStatus] = useState<ContestStatus>('All');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState<ContestStatus>("All");
+  const [searchQuery, setSearchQuery] = useState("");
   const [contests, setContests] = useState<Contest[]>([]);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [selectedContest, setSelectedContest] = useState<Contest | null>(null);
@@ -28,32 +28,35 @@ export default function ContestsPage() {
 
   useEffect(() => {
     const fetchContests = async () => {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem("accessToken");
       if (!token) {
-        console.error('No access token found');
+        console.error("No access token found");
         return;
       }
 
       try {
-        const response = await fetch('https://goyalshivansh.me/api/v1/contest/my-contests', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+        const response = await fetch(
+          "https://goyalshivansh.me/api/v1/contest/my-contests",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
 
         const data = await response.json();
-        console.log('Fetched Contests:', data); 
+        console.log("Fetched Contests:", data);
 
         if (Array.isArray(data)) {
           setContests(data);
         } else if (data && data.contests && Array.isArray(data.contests)) {
           setContests(data.contests);
         } else {
-          console.error('Unexpected response format:', data);
+          console.error("Unexpected response format:", data);
         }
       } catch (error) {
-        console.error('Error fetching contests:', error);
+        console.error("Error fetching contests:", error);
       }
     };
 
@@ -62,9 +65,9 @@ export default function ContestsPage() {
 
   // Function to format date
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('en-US', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
+    return new Date(dateString).toLocaleString("en-US", {
+      dateStyle: "medium",
+      timeStyle: "short",
     });
   };
 
@@ -83,7 +86,7 @@ export default function ContestsPage() {
   // Filter contests based on selected status and search query
   const filteredContests = contests.filter((contest) => {
     return (
-      (selectedStatus === 'All' || contest.status === selectedStatus) &&
+      (selectedStatus === "All" || contest.status === selectedStatus) &&
       contest.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
@@ -119,7 +122,10 @@ export default function ContestsPage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-[#282C34] text-white px-4 py-2 pl-10 rounded-lg w-full sm:w-64"
               />
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                size={18}
+              />
             </div>
             <button className="bg-purple-500 text-black px-4 py-2 rounded-lg w-full sm:w-auto">
               Create Contest
@@ -133,15 +139,19 @@ export default function ContestsPage() {
           <div className="lg:w-[20%]">
             <div className="flex items-center justify-between mb-4 lg:hidden">
               <h2 className="text-white">Filters</h2>
-              <button 
+              <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="text-white"
               >
                 <Menu size={24} />
               </button>
             </div>
-            <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} lg:block space-y-2`}>
-              {(['All', 'Scheduled', 'Ongoing', 'Completed'] as ContestStatus[]).map((status) => (
+            <div
+              className={`${isMobileMenuOpen ? "block" : "hidden"} lg:block space-y-2`}
+            >
+              {(
+                ["All", "Scheduled", "Ongoing", "Completed"] as ContestStatus[]
+              ).map((status) => (
                 <button
                   key={status}
                   onClick={() => {
@@ -149,7 +159,9 @@ export default function ContestsPage() {
                     setIsMobileMenuOpen(false);
                   }}
                   className={`block w-full text-left px-4 py-2 rounded ${
-                    selectedStatus === status ? 'bg-[#282C34] text-white' : 'text-gray-400'
+                    selectedStatus === status
+                      ? "bg-[#282C34] text-white"
+                      : "text-gray-400"
                   }`}
                 >
                   {status}
@@ -175,7 +187,9 @@ export default function ContestsPage() {
                   <div
                     key={contest.contestId}
                     className="grid grid-cols-2 md:grid-cols-4 p-4 text-white border-b border-gray-700 hover:bg-[#282C34] cursor-pointer"
-                    onClick={() => router.push(`/contest/statistics/${contest.contestId}`)}
+                    onClick={() =>
+                      router.push(`/contest/statistics/${contest.contestId}`)
+                    }
                   >
                     <div className="flex flex-col">
                       <span>{contest.title}</span>
@@ -186,8 +200,12 @@ export default function ContestsPage() {
                         {calculateDuration(contest.startTime, contest.endTime)}
                       </span>
                     </div>
-                    <div className="hidden md:block">{formatDate(contest.startTime)}</div>
-                    <div className="hidden md:block">{calculateDuration(contest.startTime, contest.endTime)}</div>
+                    <div className="hidden md:block">
+                      {formatDate(contest.startTime)}
+                    </div>
+                    <div className="hidden md:block">
+                      {calculateDuration(contest.startTime, contest.endTime)}
+                    </div>
                     <div className="flex items-center justify-between">
                       <span>{contest.participantCount}</span>
                       <div className="flex gap-2 md:gap-4">
@@ -211,7 +229,9 @@ export default function ContestsPage() {
                   </div>
                 ))
               ) : (
-                <div className="p-6 text-center text-gray-400">No contests found</div>
+                <div className="p-6 text-center text-gray-400">
+                  No contests found
+                </div>
               )}
             </div>
           </div>

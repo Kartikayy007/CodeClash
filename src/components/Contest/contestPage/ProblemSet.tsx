@@ -1,12 +1,12 @@
-import React from 'react';
-import LabelButton from '@/components/ui/LabelButton';
+import React from "react";
+import LabelButton from "@/components/ui/LabelButton";
 
 interface Problem {
   id: string;
   title: string;
   rating: number;
   score: number;
-  status: 'SOLVED' | 'UNSOLVED' | null;
+  status: "SOLVED" | "UNSOLVED" | null;
 }
 
 interface ProblemSetProps {
@@ -14,7 +14,10 @@ interface ProblemSetProps {
   onSolveProblem: (problemId: string) => void;
 }
 
-const ProblemSet: React.FC<ProblemSetProps> = ({ problems, onSolveProblem }) => {
+const ProblemSet: React.FC<ProblemSetProps> = ({
+  problems,
+  onSolveProblem,
+}) => {
   return (
     <div className="bg-[#1A1D24] rounded-lg p-6">
       <h2 className="text-xl font-semibold mb-6">Problem Set</h2>
@@ -32,11 +35,11 @@ const ProblemSet: React.FC<ProblemSetProps> = ({ problems, onSolveProblem }) => 
               </div>
             </div>
             <LabelButton
-              variant={problem.status === 'SOLVED' ? 'light' : 'filled'}
+              variant={problem.status === "SOLVED" ? "light" : "filled"}
               onClick={() => onSolveProblem(problem.id)}
               className="w-24"
             >
-              {problem.status === 'SOLVED' ? 'Solved' : 'Solve'}
+              {problem.status === "SOLVED" ? "Solved" : "Solve"}
             </LabelButton>
           </div>
         ))}

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface TimerProps {
   startTime: string;
@@ -7,13 +7,17 @@ interface TimerProps {
   className?: string;
 }
 
-export default function Timer({ startTime, contestId, className = '' }: TimerProps) {
+export default function Timer({
+  startTime,
+  contestId,
+  className = "",
+}: TimerProps) {
   const router = useRouter();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
-    seconds: 0
+    seconds: 0,
   });
 
   useEffect(() => {
@@ -33,9 +37,11 @@ export default function Timer({ startTime, contestId, className = '' }: TimerPro
 
       return {
         days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        hours: Math.floor(
+          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+        ),
         minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((distance % (1000 * 60)) / 1000)
+        seconds: Math.floor((distance % (1000 * 60)) / 1000),
       };
     };
 
@@ -54,7 +60,7 @@ export default function Timer({ startTime, contestId, className = '' }: TimerPro
     return () => clearInterval(timer);
   }, [startTime, contestId, router]);
 
-  const padNumber = (num: number) => num.toString().padStart(2, '0');
+  const padNumber = (num: number) => num.toString().padStart(2, "0");
 
   return (
     <div className={`flex items-center justify-center gap-4 ${className}`}>
@@ -69,12 +75,16 @@ export default function Timer({ startTime, contestId, className = '' }: TimerPro
       </div>
       <div className="text-xl font-bold">:</div>
       <div className="flex flex-col items-center bg-[#db83d8] p-4 rounded-lg text-black">
-        <span className="text-2xl font-bold">{padNumber(timeLeft.minutes)}</span>
+        <span className="text-2xl font-bold">
+          {padNumber(timeLeft.minutes)}
+        </span>
         <span className="text-xs">Minutes</span>
       </div>
       <div className="text-xl font-bold">:</div>
       <div className="flex flex-col items-center bg-[#db83d8] p-4 rounded-lg text-black">
-        <span className="text-2xl font-bold">{padNumber(timeLeft.seconds)}</span>
+        <span className="text-2xl font-bold">
+          {padNumber(timeLeft.seconds)}
+        </span>
         <span className="text-xs">Seconds</span>
       </div>
     </div>

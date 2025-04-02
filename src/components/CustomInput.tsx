@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
-import { FormControl, FormField, FormLabel, FormMessage } from '@/components/ui/form';
-import { Control, Path } from 'react-hook-form';
+import React, { useState } from "react";
+import {
+  FormControl,
+  FormField,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Control, Path } from "react-hook-form";
 // import PasswordStrengthChecker from '../features/auth/components/PasswordStrengthChecker';
-import Image from 'next/image';
+import Image from "next/image";
 // import { z } from 'zod'
 // import { AuthFormSchema, ForgotPasswordFormSchema, GetStartedFormSchema, LoginFormSchema, RegisterFormSchema, ResetPasswordFormSchema } from '@/lib/schemas/authSchema';
 
@@ -23,7 +28,7 @@ const CustomInput = <T extends object>({
   name,
   label,
   placeholder,
-  type = 'text',
+  type = "text",
   isLoginForm = false,
 }: CustomInputProps<T>) => {
   const [, setIsFocused] = useState(false);
@@ -34,9 +39,9 @@ const CustomInput = <T extends object>({
       control={control}
       name={name}
       render={({ field, fieldState: { error } }) => (
-        <div className='form-item'>
-          <FormLabel className='text-[#D1D1D1] text-[14px]'>{label}</FormLabel>
-          <div className='flex flex-col w-full mt-2'>
+        <div className="form-item">
+          <FormLabel className="text-[#D1D1D1] text-[14px]">{label}</FormLabel>
+          <div className="flex flex-col w-full mt-2">
             <div className="relative w-full">
               <FormControl>
                 <input
@@ -44,7 +49,13 @@ const CustomInput = <T extends object>({
                   value={String(field.value)}
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => setIsFocused(false)}
-                  type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
+                  type={
+                    type === "password"
+                      ? showPassword
+                        ? "text"
+                        : "password"
+                      : type
+                  }
                   className={`w-full 
                     h-[45px] 
                     px-3 sm:px-4
@@ -52,26 +63,26 @@ const CustomInput = <T extends object>({
                     rounded-md
                     bg-transparent
                     border-2
-                    ${(!isLoginForm && (name === 'Newpassword' || name === 'confirmPassword' || name === 'password' || name === 'username') && error) ? 'border-[#EF4444]' : 'border-[#D1D1D1]'}
+                    ${!isLoginForm && (name === "Newpassword" || name === "confirmPassword" || name === "password" || name === "username") && error ? "border-[#EF4444]" : "border-[#D1D1D1]"}
                     focus:outline-none
                     transition-all
                     duration-500
                     text-sm sm:text-base
                     text-white
                     placeholder:text-gray-400
-                    ${type === 'password' ? 'pr-12' : 'pr-4'}`}
+                    ${type === "password" ? "pr-12" : "pr-4"}`}
                   placeholder={placeholder}
                 />
               </FormControl>
-              {type === 'password' && (
+              {type === "password" && (
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-white/5 rounded-full transition-colors"
                 >
                   <Image
-                    src={showPassword ? '/eyeclosed.svg' : '/eye.svg'}
-                    alt={showPassword ? 'Hide password' : 'Show password'}
+                    src={showPassword ? "/eyeclosed.svg" : "/eye.svg"}
+                    alt={showPassword ? "Hide password" : "Show password"}
                     width={20}
                     height={20}
                     className="w-4 h-4 sm:w-5 sm:h-5"
@@ -79,13 +90,14 @@ const CustomInput = <T extends object>({
                 </button>
               )}
             </div>
-            {!isLoginForm && name === 'password' && error && (
+            {!isLoginForm && name === "password" && error && (
               <FormMessage className="text-[#EF4444] text-sm mt-1 ml-1" />
             )}
-            {(name === 'Newpassword' || name === 'confirmPassword') && error && (
-              <FormMessage className="text-[#EF4444] text-sm mt-1 ml-1" />
-            )}
-            {name === 'username' && error && (
+            {(name === "Newpassword" || name === "confirmPassword") &&
+              error && (
+                <FormMessage className="text-[#EF4444] text-sm mt-1 ml-1" />
+              )}
+            {name === "username" && error && (
               <FormMessage className="text-[#EF4444] text-sm mt-1 ml-1" />
             )}
             {/* {showStrengthChecker && (name === 'Newpassword') && (

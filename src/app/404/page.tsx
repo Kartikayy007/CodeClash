@@ -1,9 +1,9 @@
-import React from 'react'
-import LetterGlitch from '@/components/404page'
+import React from "react";
+import LetterGlitch from "@/components/404page";
 const page = () => {
   return (
-    <div className='flex justify-center items-center h-screen'>
-      <h1 className='text-white z-10 text-4xl font-bold absolute top-50 left-50 '>
+    <div className="flex justify-center items-center h-screen">
+      <h1 className="text-white z-10 text-4xl font-bold absolute top-50 left-50 ">
         PAGE NOT FOUND
       </h1>
       <LetterGlitch
@@ -14,7 +14,7 @@ const page = () => {
         smooth={true}
       />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

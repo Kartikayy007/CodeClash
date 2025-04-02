@@ -15,4 +15,4 @@ export interface ContestDetails {
   score: string;
 }
 
-export type ContestSection = 'basic' | 'description'; 
+export type ContestSection = "basic" | "description";

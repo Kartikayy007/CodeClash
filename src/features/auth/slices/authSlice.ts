@@ -1,23 +1,23 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AuthState, User } from '../types/auth.types';
-import { register } from '../thunks/registerThunk';
-import { refreshToken } from '../thunks/refreshTokenThunk';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AuthState, User } from "../types/auth.types";
+import { register } from "../thunks/registerThunk";
+import { refreshToken } from "../thunks/refreshTokenThunk";
 
 const initialState: AuthState = {
   user: null,
   token: null,
   loading: false,
   error: null,
-  registrationStep: 'initial',
+  registrationStep: "initial",
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     setCredentials: (
       state,
-      action: PayloadAction<{ user: User; token: string }>
+      action: PayloadAction<{ user: User; token: string }>,
     ) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
@@ -25,7 +25,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.token = null;
-      state.registrationStep = 'initial';
+      state.registrationStep = "initial";
     },
   },
   extraReducers: (builder) => {
@@ -36,11 +36,11 @@ const authSlice = createSlice({
       })
       .addCase(register.fulfilled, (state) => {
         state.loading = false;
-        state.registrationStep = 'verification';
+        state.registrationStep = "verification";
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string || 'Registration failed';
+        state.error = (action.payload as string) || "Registration failed";
       })
       .addCase(refreshToken.fulfilled, (state, action) => {
         if (action.payload.data?.tokens) {
@@ -50,7 +50,7 @@ const authSlice = createSlice({
       .addCase(refreshToken.rejected, (state) => {
         state.user = null;
         state.token = null;
-        state.registrationStep = 'initial';
+        state.registrationStep = "initial";
       });
   },
 });

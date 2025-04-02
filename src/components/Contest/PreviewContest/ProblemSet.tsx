@@ -1,5 +1,5 @@
-import React from 'react';
-import LabelButton from '@/components/ui/LabelButton';
+import React from "react";
+import LabelButton from "@/components/ui/LabelButton";
 
 interface Problem {
   id: string;
@@ -7,7 +7,7 @@ interface Problem {
   rating: number;
   score: number;
   difficulty: string;
-  status?: 'SOLVED' | 'UNSOLVED' | null;
+  status?: "SOLVED" | "UNSOLVED" | null;
 }
 
 interface ProblemSetProps {
@@ -15,7 +15,10 @@ interface ProblemSetProps {
   onSolveProblem: (problemId: string) => void;
 }
 
-const ProblemSet: React.FC<ProblemSetProps> = ({ problems, onSolveProblem }) => {
+const ProblemSet: React.FC<ProblemSetProps> = ({
+  problems,
+  onSolveProblem,
+}) => {
   return (
     <div className="bg-[#1A1D24] rounded-lg p-6">
       <h2 className="text-xl font-semibold mb-6">Problem Set</h2>
@@ -31,25 +34,28 @@ const ProblemSet: React.FC<ProblemSetProps> = ({ problems, onSolveProblem }) => 
                 <div className="flex gap-8 text-sm text-gray-400 mt-1">
                   <span>Rating: {problem.rating}</span>
                   <span>Score: {problem.score}</span>
-                  <span className={`${
-                    problem.difficulty === 'EASY' ? 'text-green-400' :
-                    problem.difficulty === 'MEDIUM' ? 'text-yellow-400' :
-                    'text-red-400'
-                  }`}>
+                  <span
+                    className={`${
+                      problem.difficulty === "EASY"
+                        ? "text-green-400"
+                        : problem.difficulty === "MEDIUM"
+                          ? "text-yellow-400"
+                          : "text-red-400"
+                    }`}
+                  >
                     {problem.difficulty}
                   </span>
                 </div>
               </div>
               <div>
-              <LabelButton
-                variant={problem.status === 'SOLVED' ? 'light' : 'filled'}
-                onClick={() => onSolveProblem(problem.id)}
-                className="w-24"
-              >
-                {problem.status === 'SOLVED' ? 'Solved' : 'Solve'}
-              </LabelButton>
+                <LabelButton
+                  variant={problem.status === "SOLVED" ? "light" : "filled"}
+                  onClick={() => onSolveProblem(problem.id)}
+                  className="w-24"
+                >
+                  {problem.status === "SOLVED" ? "Solved" : "Solve"}
+                </LabelButton>
               </div>
-              
             </div>
           ))}
         </div>

@@ -1,6 +1,6 @@
-import React from 'react';
-import ActivityCalendarComponent from 'react-activity-calendar';
-import { Tooltip } from '@mui/material';
+import React from "react";
+import ActivityCalendarComponent from "react-activity-calendar";
+import { Tooltip } from "@mui/material";
 
 interface ActivityDay {
   date: string;
@@ -23,29 +23,31 @@ const ActivityCalendar: React.FC<ActivityCalendarProps> = ({
   startMonthIndex,
   visibleMonths,
   handlePrevMonth,
-  handleNextMonth
+  handleNextMonth,
 }) => {
-  const defaultData: ActivityDay[] = [{
-    date: new Date().toISOString().split('T')[0],
-    count: 0,
-    level: 0
-  }];
-console.log("visibleMonths", visibleMonths)
+  const defaultData: ActivityDay[] = [
+    {
+      date: new Date().toISOString().split("T")[0],
+      count: 0,
+      level: 0,
+    },
+  ];
+  console.log("visibleMonths", visibleMonths);
   const displayData = activityData.length > 0 ? activityData : defaultData;
 
   return (
     <div className="relative">
-      <button 
+      <button
         className={`absolute left-0 top-1/2 -translate-y-1/2 text-white/50 hover:text-white text-2xl
-          ${startMonthIndex === 0 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+          ${startMonthIndex === 0 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
         onClick={handlePrevMonth}
         disabled={startMonthIndex === 0}
       >
         ←
       </button>
-      <button 
+      <button
         className={`absolute right-0 top-1/2 -translate-y-1/2 text-white/50 hover:text-white text-2xl
-          ${startMonthIndex >= months.length - 4 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+          ${startMonthIndex >= months.length - 4 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
         onClick={handleNextMonth}
         disabled={startMonthIndex >= months.length - 4}
       >
@@ -56,17 +58,29 @@ console.log("visibleMonths", visibleMonths)
         <ActivityCalendarComponent
           data={displayData}
           theme={{
-            light: ['#1E1B2E', 'rgba(200, 121, 235, 0.25)', 'rgba(200, 121, 235, 0.5)', 'rgba(200, 121, 235, 0.75)', 'rgba(200, 121, 235, 1)'],
-            dark: ['#1E1B2E', 'rgba(200, 121, 235, 0.25)', 'rgba(200, 121, 235, 0.5)', 'rgba(200, 121, 235, 0.75)', 'rgba(200, 121, 235, 1)']
+            light: [
+              "#1E1B2E",
+              "rgba(200, 121, 235, 0.25)",
+              "rgba(200, 121, 235, 0.5)",
+              "rgba(200, 121, 235, 0.75)",
+              "rgba(200, 121, 235, 1)",
+            ],
+            dark: [
+              "#1E1B2E",
+              "rgba(200, 121, 235, 0.25)",
+              "rgba(200, 121, 235, 0.5)",
+              "rgba(200, 121, 235, 0.75)",
+              "rgba(200, 121, 235, 1)",
+            ],
           }}
           labels={{
             months: months,
-            weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-            totalCount: '{{count}} matches in one year',
+            weekdays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            totalCount: "{{count}} matches in one year",
             legend: {
-              less: 'Less',
-              more: 'More'
-            }
+              less: "Less",
+              more: "More",
+            },
           }}
           hideTotalCount
           hideColorLegend
@@ -81,10 +95,10 @@ console.log("visibleMonths", visibleMonths)
             </Tooltip>
           )}
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: '4px'
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "4px",
           }}
         />
       </div>

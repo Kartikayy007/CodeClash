@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import axios from "axios";
 // import { Language } from '../types/editor.types';
 
 // interface Question {
@@ -69,10 +69,10 @@ const initialState: SubmissionState = {
     totalCount: 0,
     totalPages: 0,
     currentPage: 1,
-    limit: 10
+    limit: 10,
   },
   loading: false,
-  error: null
+  error: null,
 };
 
 interface LatestSubmission {
@@ -83,49 +83,58 @@ interface LatestSubmission {
   executionTime: number;
   failedTestCase: string | null;
 }
-  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-  
-  export const fetchSubmissions = createAsyncThunk(
-    'submissions/fetchAll',
-    async ({ page, limit }: { page: number; limit: number }) => {
-      const token = localStorage.getItem('accessToken');
-      const response = await axios.get(`${BASE_URL}/api/v1/user/submissions?page=${page}&limit=${limit}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+export const fetchSubmissions = createAsyncThunk(
+  "submissions/fetchAll",
+  async ({ page, limit }: { page: number; limit: number }) => {
+    const token = localStorage.getItem("accessToken");
+    const response = await axios.get(
+      `${BASE_URL}/api/v1/user/submissions?page=${page}&limit=${limit}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
     return response.data;
-  }
+  },
 );
 
 export const fetchSubmissionById = createAsyncThunk(
-  'submissions/fetchById',
+  "submissions/fetchById",
   async (submissionId: string) => {
-    const token = localStorage.getItem('accessToken');
-    const response = await axios.get(`${BASE_URL}/api/v1/user/submissions/${submissionId}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
+    const token = localStorage.getItem("accessToken");
+    const response = await axios.get(
+      `${BASE_URL}/api/v1/user/submissions/${submissionId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
     return response.data;
-  }
+  },
 );
 
 export const fetchSubmissionsByMatchId = createAsyncThunk(
-  'submissions/fetchByMatchId',
+  "submissions/fetchByMatchId",
   async (matchId: string) => {
-    const token = localStorage.getItem('accessToken');
-    const response = await axios.get(`${BASE_URL}/api/v1/user/submissions/match/${matchId}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
+    const token = localStorage.getItem("accessToken");
+    const response = await axios.get(
+      `${BASE_URL}/api/v1/user/submissions/match/${matchId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
     return response.data;
-  }
+  },
 );
 
 const submissionSlice = createSlice({
-  name: 'submissions',
+  name: "submissions",
   initialState,
   reducers: {
     clearSelectedSubmission: (state) => {
@@ -151,7 +160,7 @@ const submissionSlice = createSlice({
       })
       .addCase(fetchSubmissions.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to fetch submissions';
+        state.error = action.error.message || "Failed to fetch submissions";
       })
       .addCase(fetchSubmissionById.pending, (state) => {
         state.loading = true;
@@ -163,7 +172,8 @@ const submissionSlice = createSlice({
       })
       .addCase(fetchSubmissionById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to fetch submission details';
+        state.error =
+          action.error.message || "Failed to fetch submission details";
       })
       .addCase(fetchSubmissionsByMatchId.pending, (state) => {
         state.loading = true;
@@ -176,11 +186,13 @@ const submissionSlice = createSlice({
       })
       .addCase(fetchSubmissionsByMatchId.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to fetch match submissions';
+        state.error =
+          action.error.message || "Failed to fetch match submissions";
       });
   },
 });
 
-export const { clearSelectedSubmission, setPage, setLatestSubmission } = submissionSlice.actions;
+export const { clearSelectedSubmission, setPage, setLatestSubmission } =
+  submissionSlice.actions;
 
-export default submissionSlice.reducer; 
+export default submissionSlice.reducer;

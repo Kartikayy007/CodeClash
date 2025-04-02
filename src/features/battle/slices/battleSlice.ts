@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Problem } from '@/lib/socket';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Problem } from "@/lib/socket";
 
 interface Player {
   id: string;
@@ -11,10 +11,17 @@ interface Player {
   output: string | null;
   error: string | null;
   score: number;
-  solvedProblems: Record<string, {
-    status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
-    timestamp: number;
-  }>;
+  solvedProblems: Record<
+    string,
+    {
+      status:
+        | "ACCEPTED"
+        | "WRONG_ANSWER"
+        | "TIME_LIMIT_EXCEEDED"
+        | "RUNTIME_ERROR";
+      timestamp: number;
+    }
+  >;
 }
 
 interface BattleState {
@@ -24,15 +31,22 @@ interface BattleState {
   problems: Problem[];
   currentProblemIndex: number;
   timeLeft: number;
-  status: 'waiting' | 'in-progress' | 'completed';
+  status: "waiting" | "in-progress" | "completed";
   isConnected: boolean;
   error: string | null;
-  problemStatuses: Record<string, {
-    [userId: string]: {  
-      status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
-      timestamp: number;
-    };
-  }>;
+  problemStatuses: Record<
+    string,
+    {
+      [userId: string]: {
+        status:
+          | "ACCEPTED"
+          | "WRONG_ANSWER"
+          | "TIME_LIMIT_EXCEEDED"
+          | "RUNTIME_ERROR";
+        timestamp: number;
+      };
+    }
+  >;
 }
 
 const initialState: BattleState = {
@@ -42,14 +56,14 @@ const initialState: BattleState = {
   problems: [],
   currentProblemIndex: 0,
   timeLeft: 0,
-  status: 'waiting',
+  status: "waiting",
   isConnected: false,
   error: null,
   problemStatuses: {},
 };
 
 const battleSlice = createSlice({
-  name: 'battle',
+  name: "battle",
   initialState,
   reducers: {
     setMatchId: (state, action: PayloadAction<string>) => {
@@ -57,13 +71,13 @@ const battleSlice = createSlice({
     },
     setPlayer1: (state, action: PayloadAction<Player>) => {
       state.player1 = action.payload;
-      if(!state.player1?.solvedProblems){
+      if (!state.player1?.solvedProblems) {
         state.problemStatuses = {};
       }
     },
     setPlayer2: (state, action: PayloadAction<Player>) => {
       state.player2 = action.payload;
-      if(!state.player2?.solvedProblems){
+      if (!state.player2?.solvedProblems) {
         state.problemStatuses = {};
       }
     },
@@ -76,7 +90,10 @@ const battleSlice = createSlice({
     updateTimeLeft: (state, action: PayloadAction<number>) => {
       state.timeLeft = action.payload;
     },
-    setStatus: (state, action: PayloadAction<'waiting' | 'in-progress' | 'completed'>) => {
+    setStatus: (
+      state,
+      action: PayloadAction<"waiting" | "in-progress" | "completed">,
+    ) => {
       state.status = action.payload;
     },
     setIsConnected: (state, action: PayloadAction<boolean>) => {
@@ -85,7 +102,10 @@ const battleSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
-    updatePlayerCode: (state, action: PayloadAction<{ playerId: string; code: string }>) => {
+    updatePlayerCode: (
+      state,
+      action: PayloadAction<{ playerId: string; code: string }>,
+    ) => {
       const { playerId, code } = action.payload;
       if (state.player1?.id === playerId) {
         state.player1.code = code;
@@ -93,7 +113,10 @@ const battleSlice = createSlice({
         state.player2.code = code;
       }
     },
-    updatePlayerLanguage: (state, action: PayloadAction<{ playerId: string; language: string }>) => {
+    updatePlayerLanguage: (
+      state,
+      action: PayloadAction<{ playerId: string; language: string }>,
+    ) => {
       const { playerId, language } = action.payload;
       if (state.player1?.id === playerId) {
         state.player1.language = language;
@@ -101,11 +124,14 @@ const battleSlice = createSlice({
         state.player2.language = language;
       }
     },
-    updatePlayerOutput: (state, action: PayloadAction<{ 
-      playerId: string; 
-      output: string | null;
-      error: string | null;
-    }>) => {
+    updatePlayerOutput: (
+      state,
+      action: PayloadAction<{
+        playerId: string;
+        output: string | null;
+        error: string | null;
+      }>,
+    ) => {
       const { playerId, output, error } = action.payload;
       if (state.player1?.id === playerId) {
         state.player1.output = output;
@@ -115,7 +141,10 @@ const battleSlice = createSlice({
         state.player2.error = error;
       }
     },
-    updatePlayerScore: (state, action: PayloadAction<{ playerId: string; score: number }>) => {
+    updatePlayerScore: (
+      state,
+      action: PayloadAction<{ playerId: string; score: number }>,
+    ) => {
       const { playerId, score } = action.payload;
       if (state.player1?.id === playerId) {
         state.player1.score = score;
@@ -126,30 +155,45 @@ const battleSlice = createSlice({
     resetBattle: (state) => {
       Object.assign(state, initialState);
     },
-    updateProblemStatus: (state, action: PayloadAction<{
-      problemId: string;
-      status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
-      userId: string;
-      myId: string;
-    }>) => {
+    updateProblemStatus: (
+      state,
+      action: PayloadAction<{
+        problemId: string;
+        status:
+          | "ACCEPTED"
+          | "WRONG_ANSWER"
+          | "TIME_LIMIT_EXCEEDED"
+          | "RUNTIME_ERROR";
+        userId: string;
+        myId: string;
+      }>,
+    ) => {
       const { problemId, status, userId, myId } = action.payload;
-       console.log("updateProblemStatus", action.payload);
+      console.log("updateProblemStatus", action.payload);
       // Update the problem status in the global problemStatuses
       if (!state.problemStatuses[problemId]) {
         state.problemStatuses[problemId] = {};
       }
       state.problemStatuses[problemId][userId] = {
-        status: status as 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR',
-        timestamp: Date.now()
+        status: status as
+          | "ACCEPTED"
+          | "WRONG_ANSWER"
+          | "TIME_LIMIT_EXCEEDED"
+          | "RUNTIME_ERROR",
+        timestamp: Date.now(),
       };
-       console.log("state.problemStatuses", state.problemStatuses[problemId]);
-      const player = userId === state.player1?.id ? state.player1 : 
-      userId === state.player2?.id ? state.player2 : null;
+      console.log("state.problemStatuses", state.problemStatuses[problemId]);
+      const player =
+        userId === state.player1?.id
+          ? state.player1
+          : userId === state.player2?.id
+            ? state.player2
+            : null;
       // Update the player's solved problems
-      if(myId === userId){
-         console.log("me");
-      }else{
-         console.log("opponent");
+      if (myId === userId) {
+        console.log("me");
+      } else {
+        console.log("opponent");
       }
 
       if (player) {
@@ -158,36 +202,53 @@ const battleSlice = createSlice({
         }
         player.solvedProblems[problemId] = {
           status,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         };
       }
-        console.log("player.solvedProblems", player?.solvedProblems[problemId]);
+      console.log("player.solvedProblems", player?.solvedProblems[problemId]);
     },
-    updateMultipleProblemStatuses: (state, action: PayloadAction<Array<{
-      problemId: string;
-      status: 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR';
-      userId: string;
-    }>>) => {
+    updateMultipleProblemStatuses: (
+      state,
+      action: PayloadAction<
+        Array<{
+          problemId: string;
+          status:
+            | "ACCEPTED"
+            | "WRONG_ANSWER"
+            | "TIME_LIMIT_EXCEEDED"
+            | "RUNTIME_ERROR";
+          userId: string;
+        }>
+      >,
+    ) => {
       action.payload.forEach(({ problemId, status, userId }) => {
         if (!state.problemStatuses[problemId]) {
           state.problemStatuses[problemId] = {};
         }
         state.problemStatuses[problemId][userId] = {
-          status: status as 'ACCEPTED' | 'WRONG_ANSWER' | 'TIME_LIMIT_EXCEEDED' | 'RUNTIME_ERROR',
-          timestamp: Date.now()
+          status: status as
+            | "ACCEPTED"
+            | "WRONG_ANSWER"
+            | "TIME_LIMIT_EXCEEDED"
+            | "RUNTIME_ERROR",
+          timestamp: Date.now(),
         };
 
         // Update player's solved problems
-        const player = userId === state.player1?.id ? state.player1 : 
-                      userId === state.player2?.id ? state.player2 : null;
-        
+        const player =
+          userId === state.player1?.id
+            ? state.player1
+            : userId === state.player2?.id
+              ? state.player2
+              : null;
+
         if (player) {
           if (!player.solvedProblems) {
             player.solvedProblems = {};
           }
           player.solvedProblems[problemId] = {
             status,
-            timestamp: Date.now()
+            timestamp: Date.now(),
           };
         }
       });
@@ -214,4 +275,4 @@ export const {
   updateMultipleProblemStatuses,
 } = battleSlice.actions;
 
-export default battleSlice.reducer; 
+export default battleSlice.reducer;

@@ -1,6 +1,6 @@
-import React from 'react';
-import { InlineMath } from 'react-katex';
-import 'katex/dist/katex.min.css';
+import React from "react";
+import { InlineMath } from "react-katex";
+import "katex/dist/katex.min.css";
 
 /**
  * Parses constraints text and renders LaTeX expressions properly
@@ -9,14 +9,13 @@ import 'katex/dist/katex.min.css';
  */
 export const parseConstraints = (constraints: string) => {
   if (!constraints) return null;
-  
-  
-  const lines = constraints.split('\n').filter(line => line.trim() !== '');
-  
+
+  const lines = constraints.split("\n").filter((line) => line.trim() !== "");
+
   return (
     <div className="space-y-3">
       {lines.map((line, index) => {
-        if (line.trim().startsWith('$') && line.trim().endsWith('$')) {
+        if (line.trim().startsWith("$") && line.trim().endsWith("$")) {
           const mathContent = line.trim().slice(1, -1);
           return (
             <div key={index} className="flex items-center gap-2 ml-4">
@@ -25,9 +24,10 @@ export const parseConstraints = (constraints: string) => {
             </div>
           );
         }
-        
-        const latexPatterns = /\\le|\\ge|\\cdot|\\times|\\in|\^|\\leq|\\geq|\\neq|\\equiv|\\approx/i;
-        
+
+        const latexPatterns =
+          /\\le|\\ge|\\cdot|\\times|\\in|\^|\\leq|\\geq|\\neq|\\equiv|\\approx/i;
+
         if (latexPatterns.test(line)) {
           return (
             <div key={index} className="flex items-center gap-2 ml-4">
@@ -36,48 +36,53 @@ export const parseConstraints = (constraints: string) => {
             </div>
           );
         }
-        
-        if (line.includes('$')) {
+
+        if (line.includes("$")) {
           const parts = [];
-          let currentText = '';
+          let currentText = "";
           let inMath = false;
-          
+
           for (let i = 0; i < line.length; i++) {
-            if (line[i] === '$') {
+            if (line[i] === "$") {
               if (inMath) {
                 inMath = false;
-                parts.push({ type: 'math', content: currentText });
-                currentText = '';
+                parts.push({ type: "math", content: currentText });
+                currentText = "";
               } else {
                 inMath = true;
                 if (currentText) {
-                  parts.push({ type: 'text', content: currentText });
-                  currentText = '';
+                  parts.push({ type: "text", content: currentText });
+                  currentText = "";
                 }
               }
             } else {
               currentText += line[i];
             }
           }
-          
+
           if (currentText) {
-            parts.push({ type: inMath ? 'math' : 'text', content: currentText });
+            parts.push({
+              type: inMath ? "math" : "text",
+              content: currentText,
+            });
           }
-          
+
           return (
             <div key={index} className="flex items-start gap-2 ml-4">
               <span className="text-gray-300 text-lg mt-1">•</span>
               <div className="text-gray-300">
-                {parts.map((part, pIndex) => 
-                  part.type === 'math' 
-                    ? <InlineMath key={pIndex} math={part.content} /> 
-                    : <span key={pIndex}>{part.content}</span>
+                {parts.map((part, pIndex) =>
+                  part.type === "math" ? (
+                    <InlineMath key={pIndex} math={part.content} />
+                  ) : (
+                    <span key={pIndex}>{part.content}</span>
+                  ),
                 )}
               </div>
             </div>
           );
         }
-        
+
         return (
           <div key={index} className="flex items-center gap-2 ml-4">
             <span className="text-gray-300 text-lg">•</span>
@@ -87,4 +92,4 @@ export const parseConstraints = (constraints: string) => {
       })}
     </div>
   );
-}; 
+};

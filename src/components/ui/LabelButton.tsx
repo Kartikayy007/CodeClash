@@ -1,21 +1,22 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from "react";
 
-interface LabelButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface LabelButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
-  variant?: 'filled' | 'outlined' | 'light' | 'red';
+  variant?: "filled" | "outlined" | "light" | "red";
   customSize?: {
     width?: string;
     height?: string;
   };
 }
 
-const LabelButton = ({ 
-  children, 
-  className, 
-  variant = 'filled', 
+const LabelButton = ({
+  children,
+  className,
+  variant = "filled",
   customSize,
   disabled,
-  ...props 
+  ...props
 }: PropsWithChildren<LabelButtonProps>) => {
   const variantStyles = {
     filled: `
@@ -25,7 +26,7 @@ const LabelButton = ({
       hover:opacity-90
       transition-all
       duration-200
-      ${disabled ? 'opacity-50 bg-[#8B8B8B] cursor-not-allowed' : ''}
+      ${disabled ? "opacity-50 bg-[#8B8B8B] cursor-not-allowed" : ""}
     `,
     outlined: `
       border-2
@@ -37,7 +38,7 @@ const LabelButton = ({
       hover:opacity-90
       transition-all
       duration-200
-      ${disabled ? 'opacity-50 border-[#8B8B8B] text-[#8B8B8B] cursor-not-allowed' : ''}
+      ${disabled ? "opacity-50 border-[#8B8B8B] text-[#8B8B8B] cursor-not-allowed" : ""}
     `,
     light: `
       text-[#000000]
@@ -47,7 +48,7 @@ const LabelButton = ({
       hover:opacity-90
       transition-all
       duration-200
-      ${disabled ? 'opacity-50 bg-[#8B8B8B] cursor-not-allowed' : ''}
+      ${disabled ? "opacity-50 bg-[#8B8B8B] cursor-not-allowed" : ""}
     `,
     red: `
       bg-[#FF4D4D]
@@ -57,14 +58,16 @@ const LabelButton = ({
       hover:opacity-90
       transition-all
       duration-200
-      ${disabled ? 'opacity-50 bg-[#8B8B8B] cursor-not-allowed' : ''}
-    `
+      ${disabled ? "opacity-50 bg-[#8B8B8B] cursor-not-allowed" : ""}
+    `,
   };
 
-  const sizeStyles = customSize ? `
+  const sizeStyles = customSize
+    ? `
     w-[${customSize.width}]
     h-[${customSize.height}]
-  ` : `
+  `
+    : `
     h-[45px]
   `;
 
@@ -81,22 +84,26 @@ const LabelButton = ({
         sm:text-lg
         ${sizeStyles}
         ${variantStyles[variant]}
-        ${className || ''}
+        ${className || ""}
       `}
       style={{
-        boxShadow: variant === 'filled' ? `
+        boxShadow:
+          variant === "filled"
+            ? `
           0px 1px 12px 0px rgba(255, 255, 255, 0.1) inset,
           0px -1px 4px 0px rgba(0, 0, 0, 0.1) inset,
           0px 4px 8px 0px rgba(255, 255, 255, 0.1) inset
-        ` : 'none'
+        `
+            : "none",
       }}
       disabled={disabled}
       {...props}
     >
       <div
-        className={`${variant === 'filled' ? 'text-black' : ''} ${className || ''}`}
+        className={`${variant === "filled" ? "text-black" : ""} ${className || ""}`}
         style={{
-          textShadow: variant === 'filled' ? '1px 1px 4px rgba(0, 0, 0, 0.35)' : 'none'
+          textShadow:
+            variant === "filled" ? "1px 1px 4px rgba(0, 0, 0, 0.35)" : "none",
         }}
       >
         {children}

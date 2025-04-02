@@ -1,4 +1,4 @@
-import { Edit, BarChart2, Trash } from 'lucide-react';
+import { Edit, BarChart2, Trash } from "lucide-react";
 
 interface ContestRowProps {
   contest: {
@@ -31,6 +31,6 @@ const ContestRow: React.FC<ContestRowProps> = ({ contest }) => {
       </div>
     </div>
   );
-}
+};
 
 export default ContestRow;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface ContestInsightsData {
   rank: number;
@@ -52,4 +52,4 @@ const ContestInsights: React.FC<ContestInsightsProps> = ({ insights }) => {
   );
 };
 
-export default ContestInsights; 
+export default ContestInsights;

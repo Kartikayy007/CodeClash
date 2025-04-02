@@ -1,11 +1,11 @@
-import { Control } from 'react-hook-form'
-import CustomInput from '@/components/CustomInput'
-import LabelButton from '@/components/ui/LabelButton'
-import Link from 'next/link'
-import CustomCheckbox from '@/components/ui/CustomCheckbox'
+import { Control } from "react-hook-form";
+import CustomInput from "@/components/CustomInput";
+import LabelButton from "@/components/ui/LabelButton";
+import Link from "next/link";
+import CustomCheckbox from "@/components/ui/CustomCheckbox";
 // import { LoginFormSchema } from '@/lib/schemas/authSchema'
 // import { z } from 'zod'
-import { AuthFormData } from '@/features/auth/types/form.types';
+import { AuthFormData } from "@/features/auth/types/form.types";
 
 // type LoginFormData = z.infer<typeof LoginFormSchema>
 
@@ -17,9 +17,9 @@ interface LoginFormProps {
 
 export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
   return (
-    <div className='w-full space-y-4 sm:space-y-6'>
+    <div className="w-full space-y-4 sm:space-y-6">
       <CustomInput
-        name="email" 
+        name="email"
         label="Email"
         control={control}
         placeholder=""
@@ -28,7 +28,7 @@ export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
       />
       <CustomInput
         name="password"
-        label="Password" 
+        label="Password"
         control={control}
         placeholder=""
         type="password"
@@ -60,5 +60,5 @@ export default function LoginForm({ control, isSubmitting }: LoginFormProps) {
         Login
       </LabelButton>
     </div>
-  )
+  );
 }

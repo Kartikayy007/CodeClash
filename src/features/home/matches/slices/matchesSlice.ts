@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { MatchesState } from '../types/matches.types';
-import { fetchMatches } from '../thunks/matchesThunks';
+import { createSlice } from "@reduxjs/toolkit";
+import { MatchesState } from "../types/matches.types";
+import { fetchMatches } from "../thunks/matchesThunks";
 
 const initialState: MatchesState = {
   matches: [],
@@ -11,21 +11,21 @@ const initialState: MatchesState = {
     totalCount: 0,
     totalPages: 0,
     currentPage: 1,
-    limit: 10
+    limit: 10,
   },
   loading: false,
-  error: null
+  error: null,
 };
 
 const matchesSlice = createSlice({
-  name: 'matches',
+  name: "matches",
   initialState,
   reducers: {
     clearMatches: (state) => {
       state.matches = [];
       state.pagination = initialState.pagination;
       state.error = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -45,8 +45,8 @@ const matchesSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       });
-  }
+  },
 });
 
 export const { clearMatches } = matchesSlice.actions;
-export default matchesSlice.reducer; 
+export default matchesSlice.reducer;

@@ -29,4 +29,4 @@ export interface ProblemFormData {
     sample: boolean;
     strength: number;
   }>;
-} 
+}

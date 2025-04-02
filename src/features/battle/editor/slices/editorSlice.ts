@@ -1,7 +1,15 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { runCode as runCodeApi, submitCode as submitCodeApi } from '../api/editorApi';
-import type { RunCodePayload, RunCodeResponse, SubmitCodePayload, SubmitCodeResponse } from '@/features/battle/editor/types/editor.types';
-import { AxiosError } from 'axios';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import {
+  runCode as runCodeApi,
+  submitCode as submitCodeApi,
+} from "../api/editorApi";
+import type {
+  RunCodePayload,
+  RunCodeResponse,
+  SubmitCodePayload,
+  SubmitCodeResponse,
+} from "@/features/battle/editor/types/editor.types";
+import { AxiosError } from "axios";
 
 interface ErrorResponse {
   message: string;
@@ -24,32 +32,32 @@ interface EditorState {
   output: string | null;
   error: string | null;
   submissionResponse: SubmissionResponse | null;
-  activeTab: 'description' | 'submissions' | 'submission-details';
+  activeTab: "description" | "submissions" | "submission-details";
 }
 
 const initialState: EditorState = {
-  code: '',
-  language: 'cpp',
+  code: "",
+  language: "cpp",
   isRunning: false,
   isSubmitting: false,
   output: null,
   error: null,
   submissionResponse: null,
-  activeTab: 'description',
+  activeTab: "description",
 };
 
 export const runCode = createAsyncThunk<
   RunCodeResponse,
   RunCodePayload,
   { rejectValue: string }
->('editor/runCode', async (data, { rejectWithValue }) => {
+>("editor/runCode", async (data, { rejectWithValue }) => {
   try {
     const response = await runCodeApi(data);
     return response;
   } catch (error: unknown) {
     const axiosError = error as AxiosError<ErrorResponse>;
     return rejectWithValue(
-      axiosError.response?.data?.message || 'Failed to run code'
+      axiosError.response?.data?.message || "Failed to run code",
     );
   }
 });
@@ -58,24 +66,24 @@ export const submitCode = createAsyncThunk<
   SubmitCodeResponse,
   SubmitCodePayload,
   { rejectValue: string }
->('editor/submitCode', async (data, { rejectWithValue, dispatch }) => {
+>("editor/submitCode", async (data, { rejectWithValue, dispatch }) => {
   try {
-    dispatch(setActiveTab('submissions'));
-    
+    dispatch(setActiveTab("submissions"));
+
     const response = await submitCodeApi(data);
-     console.log("✅ Submission API response:", response);
+    console.log("✅ Submission API response:", response);
     return response;
   } catch (error: unknown) {
     const axiosError = error as AxiosError<ErrorResponse>;
-     console.log("❌ Submission error:", axiosError.response?.data);
+    console.log("❌ Submission error:", axiosError.response?.data);
     return rejectWithValue(
-      axiosError.response?.data?.message || 'Failed to submit code'
+      axiosError.response?.data?.message || "Failed to submit code",
     );
   }
 });
 
 const editorSlice = createSlice({
-  name: 'editor',
+  name: "editor",
   initialState,
   reducers: {
     setCode: (state, action: PayloadAction<string>) => {
@@ -96,14 +104,22 @@ const editorSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
-    setSubmissionResponse: (state, action: PayloadAction<SubmissionResponse | null>) => {
+    setSubmissionResponse: (
+      state,
+      action: PayloadAction<SubmissionResponse | null>,
+    ) => {
       state.submissionResponse = action.payload;
     },
-    setActiveTab: (state, action: PayloadAction<'description' | 'submissions' | 'submission-details'>) => {
+    setActiveTab: (
+      state,
+      action: PayloadAction<
+        "description" | "submissions" | "submission-details"
+      >,
+    ) => {
       state.activeTab = action.payload;
     },
     resetEditor: (state) => {
-      state.code = '';
+      state.code = "";
       state.output = null;
       state.error = null;
       state.submissionResponse = null;
@@ -130,25 +146,28 @@ const editorSlice = createSlice({
       })
       .addCase(runCode.rejected, (state, action) => {
         state.isRunning = false;
-        state.error = action.payload || 'Failed to run code';
+        state.error = action.payload || "Failed to run code";
         state.output = null;
       })
       .addCase(submitCode.pending, (state) => {
-         console.log("⏳ Submission pending, setting initial state");
+        console.log("⏳ Submission pending, setting initial state");
         state.isSubmitting = true;
         state.submissionResponse = {
-          submissionId: '',
-          status: 'PROCESSING',
+          submissionId: "",
+          status: "PROCESSING",
           testCasesPassed: 0,
           totalTestCases: 0,
           executionTime: 0,
-          failedTestCase: null
+          failedTestCase: null,
         };
-         console.log("🔄 Current submission state:", state.submissionResponse);
+        console.log("🔄 Current submission state:", state.submissionResponse);
         state.error = null;
       })
       .addCase(submitCode.fulfilled, (state, action) => {
-         console.log("✨ Submission fulfilled, updating state with:", action.payload);
+        console.log(
+          "✨ Submission fulfilled, updating state with:",
+          action.payload,
+        );
         state.isSubmitting = false;
         if (action.payload) {
           state.submissionResponse = {
@@ -159,13 +178,13 @@ const editorSlice = createSlice({
             executionTime: action.payload.executionTime,
             failedTestCase: action.payload.failedTestCase,
           };
-                 console.log("📊 Updated submission state:", state.submissionResponse);
+          console.log("📊 Updated submission state:", state.submissionResponse);
         }
       })
       .addCase(submitCode.rejected, (state, action) => {
-          console.log("💥 Submission rejected:", action.payload);
+        console.log("💥 Submission rejected:", action.payload);
         state.isSubmitting = false;
-        state.error = action.payload || 'Failed to submit code';
+        state.error = action.payload || "Failed to submit code";
         state.submissionResponse = null;
       });
   },
@@ -183,4 +202,4 @@ export const {
   resetEditor,
 } = editorSlice.actions;
 
-export default editorSlice.reducer; 
+export default editorSlice.reducer;

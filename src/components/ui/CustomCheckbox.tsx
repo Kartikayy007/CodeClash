@@ -1,17 +1,17 @@
-import * as React from 'react'
-import { Control, FieldValues, Path } from 'react-hook-form';
-import { FormField, FormControl } from './form';
+import * as React from "react";
+import { Control, FieldValues, Path } from "react-hook-form";
+import { FormField, FormControl } from "./form";
 
 interface CustomCheckboxProps<T extends FieldValues> {
   label: string;
-  name: Path<T>;  
+  name: Path<T>;
   control: Control<T>;
 }
 
-const CustomCheckbox = <T extends FieldValues>({ 
+const CustomCheckbox = <T extends FieldValues>({
   label,
   name,
-  control 
+  control,
 }: CustomCheckboxProps<T>) => {
   return (
     <FormField
@@ -29,7 +29,8 @@ const CustomCheckbox = <T extends FieldValues>({
                 onBlur={field.onBlur}
                 name={field.name}
               />
-              <div className="h-5 w-5 border-2 border-[#D1D1D1] bg-[#D1D1D1] rounded-sm 
+              <div
+                className="h-5 w-5 border-2 border-[#D1D1D1] bg-[#D1D1D1] rounded-sm 
                 peer-checked:bg-[#D1D1D1] peer-checked:border-[#D1D1D1]
                 transition-all duration-200 ease-in-out
                 hover:border-[#D1D1D1]/80

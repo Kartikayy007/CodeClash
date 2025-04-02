@@ -1,21 +1,21 @@
-'use client'
+"use client";
 
-import React from 'react'
-import Image from 'next/image'
+import React from "react";
+import Image from "next/image";
 // import { usePathname, useRouter } from 'next/navigation'
 
 const Navbar = () => {
   // const router = useRouter();
   // const pathname = usePathname();
 
-  // const isContestRoute = pathname && pathname.includes('/contest/') && 
-  //   !pathname.includes('/contest/join') && 
+  // const isContestRoute = pathname && pathname.includes('/contest/') &&
+  //   !pathname.includes('/contest/join') &&
   //   !pathname.includes('/contest/create');
 
   return (
-    <nav className='relative bg-[#10141D] z-50'>
-      <div className='flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4'>
-        <div className='flex items-center gap-4'>
+    <nav className="relative bg-[#10141D] z-50">
+      <div className="flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
+        <div className="flex items-center gap-4">
           <Image
             src="/logo.svg"
             alt="Code Clash"
@@ -55,7 +55,7 @@ const Navbar = () => {
         )} */}
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

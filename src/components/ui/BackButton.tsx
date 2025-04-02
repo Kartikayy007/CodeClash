@@ -1,9 +1,8 @@
-import Link from 'next/link'
-
+import Link from "next/link";
 
 export const BackButton = ({ href }: { href: string }) => {
   return (
-    <Link 
+    <Link
       href={href}
       className="inline-flex items-center gap-2 font-[600] text-[#C879EB] hover:opacity-80 transition-opacity ml-2"
       aria-label="Go back to previous page"
@@ -26,5 +25,5 @@ export const BackButton = ({ href }: { href: string }) => {
       </svg>
       <span>Back</span>
     </Link>
-  )
-}
+  );
+};

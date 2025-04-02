@@ -1,7 +1,17 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Check, X, AlertTriangle, Clock, Settings, BarChart, Lock, Infinity, HelpCircle } from 'lucide-react';
+import React from "react";
+import {
+  Check,
+  X,
+  AlertTriangle,
+  Clock,
+  Settings,
+  BarChart,
+  Lock,
+  Infinity,
+  HelpCircle,
+} from "lucide-react";
 
 interface SubmissionsProps {
   problemId: string;
@@ -10,21 +20,21 @@ interface SubmissionsProps {
 
 const getStatusIcon = (status: string) => {
   switch (status) {
-    case 'ACCEPTED':
+    case "ACCEPTED":
       return <Check className="w-4 h-4 text-green-500" />;
-    case 'TIME_LIMIT_EXCEEDED':
+    case "TIME_LIMIT_EXCEEDED":
       return <Clock className="w-4 h-4 text-yellow-500" />;
-    case 'RUNTIME_ERROR':
+    case "RUNTIME_ERROR":
       return <AlertTriangle className="w-4 h-4 text-red-500" />;
-    case 'WRONG_ANSWER':
+    case "WRONG_ANSWER":
       return <X className="w-4 h-4 text-red-500" />;
-    case 'COMPILATION_ERROR':
+    case "COMPILATION_ERROR":
       return <Settings className="w-4 h-4 text-blue-500" />;
-    case 'MEMORY_LIMIT_EXCEEDED':
+    case "MEMORY_LIMIT_EXCEEDED":
       return <BarChart className="w-4 h-4 text-purple-500" />;
-    case 'SEGMENTATION_FAULT':
+    case "SEGMENTATION_FAULT":
       return <Lock className="w-4 h-4 text-orange-500" />;
-    case 'INFINITE_LOOP':
+    case "INFINITE_LOOP":
       return <Infinity className="w-4 h-4 text-red-500" />;
     default:
       return <HelpCircle className="w-4 h-4 text-gray-500" />;
@@ -33,50 +43,50 @@ const getStatusIcon = (status: string) => {
 
 const getStatusText = (status: string) => {
   switch (status) {
-    case 'ACCEPTED':
-      return 'Accepted';
-    case 'TIME_LIMIT_EXCEEDED':
-      return 'Time Limit Exceeded';
-    case 'RUNTIME_ERROR':
-      return 'Runtime Error';
-    case 'WRONG_ANSWER':
-      return 'Wrong Answer';
-    case 'COMPILATION_ERROR':
-      return 'Compilation Error';
-    case 'MEMORY_LIMIT_EXCEEDED':
-      return 'Memory Limit Exceeded';
-    case 'SEGMENTATION_FAULT':
-      return 'Segmentation Fault';
-    case 'INFINITE_LOOP':
-      return 'Infinite Loop';
+    case "ACCEPTED":
+      return "Accepted";
+    case "TIME_LIMIT_EXCEEDED":
+      return "Time Limit Exceeded";
+    case "RUNTIME_ERROR":
+      return "Runtime Error";
+    case "WRONG_ANSWER":
+      return "Wrong Answer";
+    case "COMPILATION_ERROR":
+      return "Compilation Error";
+    case "MEMORY_LIMIT_EXCEEDED":
+      return "Memory Limit Exceeded";
+    case "SEGMENTATION_FAULT":
+      return "Segmentation Fault";
+    case "INFINITE_LOOP":
+      return "Infinite Loop";
     default:
-      return 'Undefined Behavior';
+      return "Undefined Behavior";
   }
 };
 
-const Submissions = ({  onSelectSubmission }: SubmissionsProps) => {
+const Submissions = ({ onSelectSubmission }: SubmissionsProps) => {
   // Mock submissions data
   const submissions = [
     {
-      id: '1',
+      id: "1",
       createdAt: new Date().toISOString(),
       testCasesPassed: 5,
       totalTestCases: 10,
-      status: 'ACCEPTED',
-      language: 'cpp',
-      runtime: '2ms',
-      memory: '6.2MB'
+      status: "ACCEPTED",
+      language: "cpp",
+      runtime: "2ms",
+      memory: "6.2MB",
     },
     {
-      id: '2',
+      id: "2",
       createdAt: new Date(Date.now() - 3600000).toISOString(),
       testCasesPassed: 3,
       totalTestCases: 10,
-      status: 'WRONG_ANSWER',
-      language: 'python',
-      runtime: '4ms',
-      memory: '8.1MB'
-    }
+      status: "WRONG_ANSWER",
+      language: "python",
+      runtime: "4ms",
+      memory: "8.1MB",
+    },
   ];
 
   return (
@@ -87,7 +97,7 @@ const Submissions = ({  onSelectSubmission }: SubmissionsProps) => {
         <div className="text-center">Status</div>
         <div className="text-center">Score</div>
       </div>
-      
+
       <div className="px-6">
         <div className="rounded-lg overflow-hidden">
           {submissions.length === 0 ? (
@@ -102,20 +112,26 @@ const Submissions = ({  onSelectSubmission }: SubmissionsProps) => {
                 className="w-full grid grid-cols-4 p-4 mb-4 rounded-lg bg-[#1A1D24] items-center border border-[#5D5D5D] text-[#5D5D5D] hover:border-gray-400 hover:text-gray-400 transition-colors"
               >
                 <div className="text-sm">
-                  {new Date(submission.createdAt).toLocaleString('en-US', {
-                    day: '2-digit',
-                    month: 'short',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: true
-                  }).replace(',', '')}
+                  {new Date(submission.createdAt)
+                    .toLocaleString("en-US", {
+                      day: "2-digit",
+                      month: "short",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })
+                    .replace(",", "")}
                 </div>
                 <div className="text-sm">
                   {submission.testCasesPassed}/{submission.totalTestCases}
                 </div>
                 <div className="flex items-center justify-center gap-2">
-                  <span className="text-lg">{getStatusIcon(submission.status)}</span>
-                  <span className="text-sm">{getStatusText(submission.status)}</span>
+                  <span className="text-lg">
+                    {getStatusIcon(submission.status)}
+                  </span>
+                  <span className="text-sm">
+                    {getStatusText(submission.status)}
+                  </span>
                 </div>
                 <div className="text-sm text-center">
                   {submission.testCasesPassed * 10}
@@ -129,4 +145,4 @@ const Submissions = ({  onSelectSubmission }: SubmissionsProps) => {
   );
 };
 
-export default Submissions; 
+export default Submissions;

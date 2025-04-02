@@ -1,23 +1,26 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 interface LoaderProps {
-  size?: 'small' | 'medium' | 'large';
+  size?: "small" | "medium" | "large";
 }
 
-const Loader = ({ size = 'medium' }: LoaderProps) => {
+const Loader = ({ size = "medium" }: LoaderProps) => {
   return (
     <StyledWrapper size={size}>
       <div className="loader" />
     </StyledWrapper>
   );
-}
+};
 
 const StyledWrapper = styled.div<{ size: string }>`
   .loader {
-    height: ${props => 
-      props.size === 'small' ? '8px' : 
-      props.size === 'large' ? '20px' : '15px'};
+    height: ${(props) =>
+      props.size === "small"
+        ? "8px"
+        : props.size === "large"
+          ? "20px"
+          : "15px"};
     aspect-ratio: 4;
     --_g: no-repeat radial-gradient(farthest-side, #4319ec 90%, #3604ff);
     background:
@@ -49,6 +52,7 @@ const StyledWrapper = styled.div<{ size: string }>`
     100% {
       transform: rotate(calc(var(--s, 1) * 1turn));
     }
-  }`;
+  }
+`;
 
 export default Loader;

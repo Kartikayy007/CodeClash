@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface SubmissionDetailProps {
   submission: {
@@ -23,9 +23,14 @@ const SubmissionDetail = ({ submission, onClose }: SubmissionDetailProps) => {
       <h3 className="text-lg font-bold text-white mt-12">Analysis</h3>
       <p className="text-white">Problem Name: {submission.problemName}</p>
       <p className="text-white">Language: {submission.language}</p>
-      <button onClick={onClose} className="mt-4 bg-gray-500 text-white py-2 px-4 rounded">Close</button>
+      <button
+        onClick={onClose}
+        className="mt-4 bg-gray-500 text-white py-2 px-4 rounded"
+      >
+        Close
+      </button>
     </div>
   );
 };
 
-export default SubmissionDetail; 
+export default SubmissionDetail;

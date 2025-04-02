@@ -1,7 +1,7 @@
-import React from 'react';
-import Modal from '@/components/ui/Modal';
-import { Copy } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import React from "react";
+import Modal from "@/components/ui/Modal";
+import { Copy } from "lucide-react";
+import { toast } from "react-hot-toast";
 
 interface ShareContestModalProps {
   isOpen: boolean;
@@ -20,18 +20,22 @@ const ShareContestModal: React.FC<ShareContestModalProps> = ({
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(contestLink);
-      toast.success('Link copied to clipboard!');
+      toast.success("Link copied to clipboard!");
     } catch (error: unknown) {
-      toast.error(error instanceof Error ? error.message : 'Failed to copy link');
+      toast.error(
+        error instanceof Error ? error.message : "Failed to copy link",
+      );
     }
   };
 
   const handleCopyCode = async () => {
     try {
       await navigator.clipboard.writeText(contestId);
-      toast.success('Contest code copied to clipboard!');
+      toast.success("Contest code copied to clipboard!");
     } catch (error: unknown) {
-      toast.error(error instanceof Error ? error.message : 'Failed to copy contest code');
+      toast.error(
+        error instanceof Error ? error.message : "Failed to copy contest code",
+      );
     }
   };
 

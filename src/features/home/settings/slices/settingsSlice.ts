@@ -1,5 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { changePassword, changeUsername, deleteAccount, logoutAllDevices } from '../thunks/settingsThunks';
+import { createSlice } from "@reduxjs/toolkit";
+import {
+  changePassword,
+  changeUsername,
+  deleteAccount,
+  logoutAllDevices,
+} from "../thunks/settingsThunks";
 
 interface SettingsState {
   loading: boolean;
@@ -14,7 +19,7 @@ const initialState: SettingsState = {
 };
 
 const settingsSlice = createSlice({
-  name: 'settings',
+  name: "settings",
   initialState,
   reducers: {
     clearSettingsState: (state) => {
@@ -90,4 +95,4 @@ const settingsSlice = createSlice({
 });
 
 export const { clearSettingsState } = settingsSlice.actions;
-export default settingsSlice.reducer; 
+export default settingsSlice.reducer;

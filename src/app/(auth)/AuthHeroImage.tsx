@@ -1,55 +1,59 @@
-'use client'
+"use client";
 
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
-
 type RouteImages = {
-  [key: string]: { src: string; alt: string; width: number ; caption: string };
-}
+  [key: string]: { src: string; alt: string; width: number; caption: string };
+};
 
 const routeImages: RouteImages = {
-  '/login': {
-    src: '/login.svg',
-    alt: 'login',
+  "/login": {
+    src: "/login.svg",
+    alt: "login",
     width: 400,
-    caption: 'Continue your journey of coding excellence and unlock new challenges with every round!',
+    caption:
+      "Continue your journey of coding excellence and unlock new challenges with every round!",
   },
-  '/register': {
-    src: '/register.svg',
-    alt: 'register',
+  "/register": {
+    src: "/register.svg",
+    alt: "register",
     width: 330,
-    caption: 'Test your skills, challenge the best, and conquer new heights in the world of coding.',
+    caption:
+      "Test your skills, challenge the best, and conquer new heights in the world of coding.",
   },
-  '/forgot-password': {
-    src: '/forgot-password.svg',
-    alt: 'forgot-password',
+  "/forgot-password": {
+    src: "/forgot-password.svg",
+    alt: "forgot-password",
     width: 400,
-    caption: 'Forgot your password? Take a moment to reset and get back to conquering the coding arena!',
+    caption:
+      "Forgot your password? Take a moment to reset and get back to conquering the coding arena!",
   },
-  '/reset-password': {
-    src: '/reset-password.svg',
-    alt: 'reset-password',
+  "/reset-password": {
+    src: "/reset-password.svg",
+    alt: "reset-password",
     width: 250,
-    caption: 'Continue your journey of coding excellence and unlock new challenges with every round!',
+    caption:
+      "Continue your journey of coding excellence and unlock new challenges with every round!",
   },
-  '/get-started': {
-    src: '/get-started.svg',
-    alt: 'get-started',
+  "/get-started": {
+    src: "/get-started.svg",
+    alt: "get-started",
     width: 350,
-    caption: 'Embark on the thrilling journey of competitive coding with Code Clash and rise to the challenge!',
+    caption:
+      "Embark on the thrilling journey of competitive coding with Code Clash and rise to the challenge!",
   },
-}
+};
 
 export function AuthHeroImage() {
   const pathname = usePathname();
   const validPathname = pathname as keyof typeof routeImages;
-  const Info = routeImages[validPathname] || routeImages['/register'];
+  const Info = routeImages[validPathname] || routeImages["/register"];
 
   return (
     <div className="bg-[#282D37] w-1/2 lg:flex flex-col hidden">
       <Image
-        src='/logo.svg'
+        src="/logo.svg"
         alt="logo"
         width={200}
         height={40}

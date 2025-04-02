@@ -17,7 +17,7 @@ export interface Problem {
   inputFormat: string;
   outputFormat: string;
   constraints: string;
-  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+  difficulty: "EASY" | "MEDIUM" | "HARD";
   rating: number;
   timeLimit: number;
   memoryLimit: number;
@@ -48,24 +48,30 @@ export interface ProblemListResponse {
 }
 
 export async function fetchProblem(problemId: string): Promise<Problem> {
-  const token = localStorage.getItem('accessToken');
-  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/question/${problemId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
+  const token = localStorage.getItem("accessToken");
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/question/${problemId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
   return response.data.data;
 }
 
-export async function fetchProblemList(page: number = 1, limit: number = 10): Promise<ProblemListResponse> {
-  const token = localStorage.getItem('accessToken');
+export async function fetchProblemList(
+  page: number = 1,
+  limit: number = 10,
+): Promise<ProblemListResponse> {
+  const token = localStorage.getItem("accessToken");
   const response = await axios.get(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/contest/questions/all?page=${page}&limit=${limit}`,
     {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }
+        Authorization: `Bearer ${token}`,
+      },
+    },
   );
   return response.data;
 }

@@ -1,44 +1,47 @@
-import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { Match } from '@/features/home/matches/types/matches.types';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { Match } from "@/features/home/matches/types/matches.types";
 
 export default function RecentMatches() {
-  const [matches, setMatches] = useState<Match[]>([])
+  const [matches, setMatches] = useState<Match[]>([]);
   // const matchTypes = ["All", "Standard", "Accuracy", "Speed"];
 
   useEffect(() => {
     const fetchRecentMatches = async () => {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem("accessToken");
 
       if (!token) {
-        console.error('No access token found in local storage');
+        console.error("No access token found in local storage");
         return;
       }
 
       try {
-        const response = await fetch('https://goyalshivansh.me/api/v1/user/recent-matches?page=1&limit=12', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
+        const response = await fetch(
+          "https://goyalshivansh.me/api/v1/user/recent-matches?page=1&limit=12",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
         const data = await response.json();
-        console.log('Fetched recent matches data:', data);
+        console.log("Fetched recent matches data:", data);
 
         if (data.success && Array.isArray(data.recentMatches)) {
           setMatches(data.recentMatches);
         } else {
-          console.error('Expected recentMatches array but got:', data);
+          console.error("Expected recentMatches array but got:", data);
           setMatches([]);
         }
       } catch (error) {
-        console.error('Error fetching recent matches:', error);
+        console.error("Error fetching recent matches:", error);
         setMatches([]);
       }
     };
@@ -50,8 +53,8 @@ export default function RecentMatches() {
     <div className="relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-semibold">Recent Matches</h2>
-        <Link 
-          href="/recent-matches" 
+        <Link
+          href="/recent-matches"
           className="text-base hover:text-white/80 cursor-pointer"
           prefetch={true}
         >
@@ -83,21 +86,37 @@ export default function RecentMatches() {
       </div>
 
       <div className="space-y-2">
-        {matches.slice(0,3).map((match, index) => (
-          <div key={index} className="grid grid-cols-5 bg-white/5 rounded-lg px-4 py-2">
-            <span className="text-base font-medium truncate text-center">{match.mode}</span>
+        {matches.slice(0, 3).map((match, index) => (
+          <div
+            key={index}
+            className="grid grid-cols-5 bg-white/5 rounded-lg px-4 py-2"
+          >
+            <span className="text-base font-medium truncate text-center">
+              {match.mode}
+            </span>
             <div className="flex flex-col">
               {match.players.map((player: { id: string; username: string }) => (
-                <span key={player.id} className="text-base font-medium truncate text-center">{player.username}</span>
+                <span
+                  key={player.id}
+                  className="text-base font-medium truncate text-center"
+                >
+                  {player.username}
+                </span>
               ))}
             </div>
             <span className="text-base font-medium truncate text-center">
-              {match.winnerId ? 
-                match.players.find((player: { id: string }) => player.id === match.winnerId)?.username || 'N/A' 
-                : 'N/A'}
+              {match.winnerId
+                ? match.players.find(
+                    (player: { id: string }) => player.id === match.winnerId,
+                  )?.username || "N/A"
+                : "N/A"}
             </span>
-            <span className="text-sm truncat text-center">{match.duration}</span>
-            <span className="text-sm truncate text-center">{match.createdAt}</span>
+            <span className="text-sm truncat text-center">
+              {match.duration}
+            </span>
+            <span className="text-sm truncate text-center">
+              {match.createdAt}
+            </span>
           </div>
         ))}
       </div>

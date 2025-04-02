@@ -1,13 +1,16 @@
 // components/ui/WinningMomentum.tsx
-import React from 'react';
-import { Zap } from 'lucide-react';
+import React from "react";
+import { Zap } from "lucide-react";
 
 interface WinningMomentumProps {
   currentStreak: number;
   longestStreak: number;
 }
 
-const WinningMomentum: React.FC<WinningMomentumProps> = ({ currentStreak, longestStreak }) => {
+const WinningMomentum: React.FC<WinningMomentumProps> = ({
+  currentStreak,
+  longestStreak,
+}) => {
   return (
     <div className="bg-[#1E2127] rounded-lg p-6">
       <h3 className="text-white mb-4">Winning Momentum</h3>

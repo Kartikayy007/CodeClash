@@ -1,12 +1,17 @@
-import React from 'react';
-import { ContestDetails } from '@/types/contest.types';
+import React from "react";
+import { ContestDetails } from "@/types/contest.types";
 
 interface DescriptionFormProps {
   formData: ContestDetails;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => void;
 }
 
-const DescriptionForm: React.FC<DescriptionFormProps> = ({ formData, onChange }) => {
+const DescriptionForm: React.FC<DescriptionFormProps> = ({
+  formData,
+  onChange,
+}) => {
   return (
     <form className="space-y-6">
       <div>
@@ -60,4 +65,4 @@ const DescriptionForm: React.FC<DescriptionFormProps> = ({ formData, onChange })
   );
 };
 
-export default DescriptionForm; 
+export default DescriptionForm;

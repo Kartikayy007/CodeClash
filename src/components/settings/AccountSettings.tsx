@@ -1,17 +1,23 @@
-import { useState } from 'react';
-import Modal from '@/components/ui/Modal';
-import LabelButton from '@/components/ui/LabelButton';
-import CustomInput from '../CustomInput';
-import {  useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { SettingsPasswordFormSchema, SettingsUsernameFormSchema } from '@/lib/schemas/authSchema';
-import { Form } from '@/components/ui/form';
-import { SettingsPasswordFormData, SettingsUsernameFormData } from '@/features/auth/types/form.types';
-import { settingsApi } from '@/features/home/settings/apis/settingsApi';
-import { toast } from "@/providers/toast-config"
-import { useRouter } from 'next/navigation';
-import { ToastProvider } from '@/providers/ToastProvider';
-import { z } from 'zod';
+import { useState } from "react";
+import Modal from "@/components/ui/Modal";
+import LabelButton from "@/components/ui/LabelButton";
+import CustomInput from "../CustomInput";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  SettingsPasswordFormSchema,
+  SettingsUsernameFormSchema,
+} from "@/lib/schemas/authSchema";
+import { Form } from "@/components/ui/form";
+import {
+  SettingsPasswordFormData,
+  SettingsUsernameFormData,
+} from "@/features/auth/types/form.types";
+import { settingsApi } from "@/features/home/settings/apis/settingsApi";
+import { toast } from "@/providers/toast-config";
+import { useRouter } from "next/navigation";
+import { ToastProvider } from "@/providers/ToastProvider";
+import { z } from "zod";
 
 interface ApiError {
   response?: {
@@ -29,68 +35,89 @@ export default function AccountSettings() {
   const passwordForm = useForm<z.infer<typeof SettingsPasswordFormSchema>>({
     resolver: zodResolver(SettingsPasswordFormSchema),
     defaultValues: {
-      password: '',
-      Newpassword: '',
-      confirmPassword: ''
-    }
+      password: "",
+      Newpassword: "",
+      confirmPassword: "",
+    },
   });
 
   const usernameForm = useForm<z.infer<typeof SettingsUsernameFormSchema>>({
     resolver: zodResolver(SettingsUsernameFormSchema),
     defaultValues: {
-      username: ''
-    }
+      username: "",
+    },
   });
 
   const handlePasswordSubmit = async (data: SettingsPasswordFormData) => {
-    try { 
+    try {
       await settingsApi.changePassword({
         oldPassword: data.password,
-        newPassword: data.Newpassword
+        newPassword: data.Newpassword,
       });
-      toast.success('Password changed successfully', 'Password changed successfully');
+      toast.success(
+        "Password changed successfully",
+        "Password changed successfully",
+      );
       setIsPasswordModalOpen(false);
       passwordForm.reset();
     } catch (error) {
       const err = error as ApiError;
-      toast.error(err?.response?.data?.message || 'Failed to change password', 'Failed to change password');
+      toast.error(
+        err?.response?.data?.message || "Failed to change password",
+        "Failed to change password",
+      );
     }
   };
 
   const handleUsernameSubmit = async (data: SettingsUsernameFormData) => {
     try {
       await settingsApi.changeUsername({
-        username: data.username
+        username: data.username,
       });
-      toast.success('Username changed successfully', 'Username changed successfully');
+      toast.success(
+        "Username changed successfully",
+        "Username changed successfully",
+      );
       setIsProfileModalOpen(false);
       usernameForm.reset();
     } catch (error) {
       const err = error as ApiError;
-      toast.error(err?.response?.data?.message || 'Failed to change username', 'Failed to change username');
+      toast.error(
+        err?.response?.data?.message || "Failed to change username",
+        "Failed to change username",
+      );
     }
   };
 
   const handleDeleteAccount = async () => {
     try {
       await settingsApi.deleteAccount();
-      toast.success('Account deleted successfully', 'Account deleted successfully');
-      localStorage.removeItem('accessToken');  
+      toast.success(
+        "Account deleted successfully",
+        "Account deleted successfully",
+      );
+      localStorage.removeItem("accessToken");
       // router.push('/login');
     } catch (error: unknown) {
       const err = error as ApiError;
-      toast.error(err?.response?.data?.message || 'Failed to delete account', 'Failed to delete account');
+      toast.error(
+        err?.response?.data?.message || "Failed to delete account",
+        "Failed to delete account",
+      );
     }
   };
 
   const handleLogout = async () => {
     try {
       await settingsApi.logoutAllDevices();
-      localStorage.removeItem('accessToken');
-      router.push('/login');
+      localStorage.removeItem("accessToken");
+      router.push("/login");
     } catch (error) {
       const err = error as ApiError;
-      toast.error(err?.response?.data?.message || 'Failed to logout', 'Failed to logout');
+      toast.error(
+        err?.response?.data?.message || "Failed to logout",
+        "Failed to logout",
+      );
     }
   };
 
@@ -99,32 +126,44 @@ export default function AccountSettings() {
       <h2 className="text-white text-xl mb-6">Account Settings</h2>
 
       <div className="absolute top-20">
-          <ToastProvider />
-      </div> 
-      
+        <ToastProvider />
+      </div>
+
       <div className="space-y-6">
         <div>
           <h3 className="text-white mb-1">Change Password</h3>
-          <p className="text-gray-400 text-sm mb-4">Enter your current password and set a new one to update your credentials.</p>
-          <button className="text-white bg-[#282C34] px-4 py-2 rounded hover:bg-[#343841]"
-          onClick={() => setIsPasswordModalOpen(true)}>
+          <p className="text-gray-400 text-sm mb-4">
+            Enter your current password and set a new one to update your
+            credentials.
+          </p>
+          <button
+            className="text-white bg-[#282C34] px-4 py-2 rounded hover:bg-[#343841]"
+            onClick={() => setIsPasswordModalOpen(true)}
+          >
             Change Password
           </button>
         </div>
 
         <div>
           <h3 className="text-white mb-1">Profile Information</h3>
-          <p className="text-gray-400 text-sm mb-4">Update your name, email, and contact details to keep your account current.</p>
-          <button className="text-white bg-[#282C34] px-4 py-2 rounded hover:bg-[#343841]"
-          onClick={() => setIsProfileModalOpen(true)}>
+          <p className="text-gray-400 text-sm mb-4">
+            Update your name, email, and contact details to keep your account
+            current.
+          </p>
+          <button
+            className="text-white bg-[#282C34] px-4 py-2 rounded hover:bg-[#343841]"
+            onClick={() => setIsProfileModalOpen(true)}
+          >
             Edit Profile
           </button>
         </div>
 
         <div>
           <h3 className="text-white mb-1">Log Out</h3>
-          <p className="text-gray-400 text-sm mb-4">Log out of your account to end your session securely.</p>
-          <button 
+          <p className="text-gray-400 text-sm mb-4">
+            Log out of your account to end your session securely.
+          </p>
+          <button
             className="text-white bg-red-500 px-4 py-2 rounded hover:bg-red-600"
             onClick={handleLogout}
           >
@@ -134,8 +173,11 @@ export default function AccountSettings() {
 
         <div>
           <h3 className="text-white mb-1">Delete Account</h3>
-          <p className="text-gray-400 text-sm mb-4">Deleting your account will permanently remove all data and cannot be undone.</p>
-          <button 
+          <p className="text-gray-400 text-sm mb-4">
+            Deleting your account will permanently remove all data and cannot be
+            undone.
+          </p>
+          <button
             className="text-red-500 border border-red-500 px-4 py-2 rounded hover:bg-red-500/10"
             onClick={() => setIsDeleteModalOpen(true)}
           >
@@ -150,7 +192,10 @@ export default function AccountSettings() {
         title="Change Password"
       >
         <Form {...passwordForm}>
-          <form onSubmit={passwordForm.handleSubmit(handlePasswordSubmit)} className="space-y-6">
+          <form
+            onSubmit={passwordForm.handleSubmit(handlePasswordSubmit)}
+            className="space-y-6"
+          >
             <CustomInput
               control={passwordForm.control}
               name="password"
@@ -180,9 +225,7 @@ export default function AccountSettings() {
               >
                 Cancel
               </LabelButton>
-              <LabelButton type="submit">
-                Update Password
-              </LabelButton>
+              <LabelButton type="submit">Update Password</LabelButton>
             </div>
           </form>
         </Form>
@@ -194,7 +237,10 @@ export default function AccountSettings() {
         title="Edit Profile"
       >
         <Form {...usernameForm}>
-          <form onSubmit={usernameForm.handleSubmit(handleUsernameSubmit)} className="space-y-6">
+          <form
+            onSubmit={usernameForm.handleSubmit(handleUsernameSubmit)}
+            className="space-y-6"
+          >
             <CustomInput
               control={usernameForm.control}
               name="username"
@@ -210,9 +256,7 @@ export default function AccountSettings() {
               >
                 Cancel
               </LabelButton>
-              <LabelButton type="submit">
-                Save Changes
-              </LabelButton>
+              <LabelButton type="submit">Save Changes</LabelButton>
             </div>
           </form>
         </Form>
@@ -225,7 +269,8 @@ export default function AccountSettings() {
       >
         <div className="space-y-6">
           <p className="text-gray-400">
-            Are you sure you want to delete your account? This action cannot be undone and will permanently remove all your data.
+            Are you sure you want to delete your account? This action cannot be
+            undone and will permanently remove all your data.
           </p>
           <div className="flex justify-end gap-4">
             <LabelButton
@@ -247,4 +292,4 @@ export default function AccountSettings() {
       </Modal>
     </div>
   );
-} 
+}

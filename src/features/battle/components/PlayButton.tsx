@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import LabelButton from '@/components/ui/LabelButton';
-import { GameModeModal } from './GameModeModal';
+import { useState } from "react";
+import LabelButton from "@/components/ui/LabelButton";
+import { GameModeModal } from "./GameModeModal";
 
 export const PlayButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -8,14 +8,10 @@ export const PlayButton = () => {
   return (
     <>
       <div className="flex flex-col items-center gap-4">
-        <LabelButton
-          onClick={() => setIsModalOpen(true)}
-        >
-          Play Now
-        </LabelButton>
+        <LabelButton onClick={() => setIsModalOpen(true)}>Play Now</LabelButton>
       </div>
 
-      <GameModeModal 
+      <GameModeModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />

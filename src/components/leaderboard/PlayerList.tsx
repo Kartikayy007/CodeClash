@@ -1,9 +1,8 @@
-import { LeaderboardPlayer } from '@/features/home/leaderboard/types/leaderboard.types';
+import { LeaderboardPlayer } from "@/features/home/leaderboard/types/leaderboard.types";
 
 interface PlayerListProps {
   players: LeaderboardPlayer[];
 }
-
 
 const PlayerList = ({ players }: PlayerListProps) => (
   <div className="rounded-lg overflow-hidden text-center">
@@ -26,4 +25,3 @@ const PlayerList = ({ players }: PlayerListProps) => (
 );
 
 export default PlayerList;
-  

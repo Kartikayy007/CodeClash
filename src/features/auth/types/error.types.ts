@@ -5,7 +5,7 @@ export interface ApiError {
     };
     status: number;
   };
-  error: string; 
+  error: string;
   message: string;
 }
 

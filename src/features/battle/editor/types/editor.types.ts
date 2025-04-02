@@ -1,4 +1,4 @@
-export type Language = 'cpp' | 'python' | 'java';
+export type Language = "cpp" | "python" | "java";
 
 export interface TestCase {
   id: string;
@@ -10,7 +10,7 @@ export interface TestCase {
 export interface Problem {
   id: string;
   title: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: "easy" | "medium" | "hard";
   description: string;
   examples: TestCase[];
   testCases: TestCase[];
@@ -40,14 +40,14 @@ export interface BattleState {
   player1: PlayerState;
   player2: PlayerState;
   timeLeft: number;
-  status: 'waiting' | 'in-progress' | 'completed';
+  status: "waiting" | "in-progress" | "completed";
 }
 
 export interface RunCodePayload {
   code: string;
   language: string;
   input: string;
-  matchId: string;
+  contestId: string;
   questionId: string;
 }
 
@@ -61,7 +61,7 @@ export interface RunCodeResponse {
 export interface SubmitCodePayload {
   code: string;
   language: string;
-  matchId: string;
+  contestId: string;
   questionId: string;
 }
 
@@ -72,8 +72,9 @@ export interface SubmitCodeResponse {
   totalTestCases: number;
   executionTime: number;
   failedTestCase: string | null;
+  score: number;
 }
 
 export interface ApiError {
   message: string;
-} 
+}

@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from "next/image";
 
 interface PlayerRankCardProps {
   title: string;
@@ -12,12 +12,7 @@ const PlayerRankCard = ({ title, value, iconSrc }: PlayerRankCardProps) => (
     <div className="flex items-center justify-between">
       <span className="text-6xl font-bold text-white">{value}</span>
       <div className="w-24 h-24 relative">
-        <Image
-          src={iconSrc}
-          alt={title}
-          fill
-          className="object-contain"
-        />
+        <Image src={iconSrc} alt={title} fill className="object-contain" />
       </div>
     </div>
   </div>

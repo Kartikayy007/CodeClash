@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 // import { useParams } from 'next/navigation';
-import { useSelector } from 'react-redux';
-import {  socketService } from '@/lib/socket';
-import EditorLayout from '@/features/battle/editor/components/EditorLayout';
-import Editor from '@/features/battle/editor/components/Editor';
-import { RootState } from '@/store/store';
+import { useSelector } from "react-redux";
+import { socketService } from "@/lib/socket";
+import EditorLayout from "@/features/battle/editor/components/EditorLayout";
+import Editor from "@/features/battle/editor/components/Editor";
+import { RootState } from "@/store/store";
 // import { useRouter } from 'next/navigation';
 // import { Problem } from '@/features/editor/api/problems';
 
-type Language = 'cpp' | 'c' | 'python' | 'java' | 'javascript';
+type Language = "cpp" | "c" | "python" | "java" | "javascript";
 
 // interface Player {
 //   id: string;
@@ -49,20 +49,19 @@ const BattleRoom = () => {
   // const dispatch = useDispatch();
   // const router = useRouter();
   // const token = localStorage.getItem('accessToken');
-  const [language, setLanguage] = useState<Language>('cpp');
+  const [language, setLanguage] = useState<Language>("cpp");
   // const [isMaximized, setIsMaximized] = useState(false);
   const [error] = useState<string | null>(null);
   const battleState = useSelector((state: RootState) => state.battle);
 
-
   const handleLanguageChange = (newLanguage: string) => {
     const validLanguage = newLanguage as Language;
     setLanguage(validLanguage);
-    socketService.emit('code_update', {
+    socketService.emit("code_update", {
       matchId: battleState.matchId as string,
       language: validLanguage,
       playerId: battleState.player1?.id,
-      code: battleState.player1?.code
+      code: battleState.player1?.code,
     });
   };
 
@@ -84,9 +83,11 @@ const BattleRoom = () => {
     );
   }
 
-
   return (
-    <EditorLayout questionData={currentProblem} matchId={battleState.matchId as string}>
+    <EditorLayout
+      questionData={currentProblem}
+      matchId={battleState.matchId as string}
+    >
       <Editor
         language={language}
         onLanguageChange={handleLanguageChange}
@@ -98,4 +99,3 @@ const BattleRoom = () => {
 };
 
 export default BattleRoom;
-

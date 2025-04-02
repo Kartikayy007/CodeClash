@@ -30,4 +30,4 @@ export interface FetchLeaderboardParams {
   page: number;
   limit: number;
   searchQuery?: string;
-} 
+}

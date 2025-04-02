@@ -1,15 +1,20 @@
-import React from 'react';
-import { ContestDetails } from '@/types/contest.types';
+import React from "react";
+import { ContestDetails } from "@/types/contest.types";
 
 interface BasicDetailsFormProps {
   formData: ContestDetails;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => void;
 }
 
-const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({ formData, onChange }) => {
+const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({
+  formData,
+  onChange,
+}) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const todayStr = today.toISOString().split('T')[0];
+  const todayStr = today.toISOString().split("T")[0];
 
   // Get minimum time for start time if date is today
   const getMinStartTime = (date: string) => {
@@ -31,7 +36,9 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({ formData, onChange 
   return (
     <div className="space-y-6">
       <div className="form-item">
-        <label className="text-[#D1D1D1] text-[14px] block mb-2">Contest Name</label>
+        <label className="text-[#D1D1D1] text-[14px] block mb-2">
+          Contest Name
+        </label>
         <input
           type="text"
           name="name"
@@ -45,7 +52,9 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({ formData, onChange 
 
       <div className="grid grid-cols-2 gap-6">
         <div className="form-item">
-          <label className="text-[#D1D1D1] text-[14px] block mb-2">Start Date</label>
+          <label className="text-[#D1D1D1] text-[14px] block mb-2">
+            Start Date
+          </label>
           <input
             type="date"
             name="startTime.date"
@@ -58,13 +67,19 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({ formData, onChange 
           />
         </div>
         <div className="form-item">
-          <label className="text-[#D1D1D1] text-[14px] block mb-2">Start Time</label>
+          <label className="text-[#D1D1D1] text-[14px] block mb-2">
+            Start Time
+          </label>
           <input
             type="time"
             name="startTime.time"
             value={formData.startTime.time}
             onChange={onChange}
-            min={formData.startTime.date === todayStr ? getMinStartTime(formData.startTime.date) : undefined}
+            min={
+              formData.startTime.date === todayStr
+                ? getMinStartTime(formData.startTime.date)
+                : undefined
+            }
             required
             className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-white 
               focus:outline-none transition-all duration-500 text-sm sm:text-base text-white focus:border-[#C879EB]"
@@ -74,7 +89,9 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({ formData, onChange 
 
       <div className="grid grid-cols-2 gap-6">
         <div className="form-item">
-          <label className="text-[#D1D1D1] text-[14px] block mb-2">End Date</label>
+          <label className="text-[#D1D1D1] text-[14px] block mb-2">
+            End Date
+          </label>
           <input
             type="date"
             name="endTime.date"
@@ -87,7 +104,9 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({ formData, onChange 
           />
         </div>
         <div className="form-item">
-          <label className="text-[#D1D1D1] text-[14px] block mb-2">End Time</label>
+          <label className="text-[#D1D1D1] text-[14px] block mb-2">
+            End Time
+          </label>
           <input
             type="time"
             name="endTime.time"
@@ -102,7 +121,9 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({ formData, onChange 
       </div>
 
       <div className="form-item">
-        <label className="text-[#D1D1D1] text-[14px] block mb-2">Organization Name</label>
+        <label className="text-[#D1D1D1] text-[14px] block mb-2">
+          Organization Name
+        </label>
         <input
           type="text"
           name="organizationName"
@@ -116,4 +137,4 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({ formData, onChange 
   );
 };
 
-export default BasicDetailsForm; 
+export default BasicDetailsForm;

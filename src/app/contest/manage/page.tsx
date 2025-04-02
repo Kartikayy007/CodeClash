@@ -1,12 +1,20 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 // import NavbarPlain from '@/components/ui/NavbarPlain';
-import { Search, Edit, BarChart2, Trash, Filter, ChevronDown, Plus } from 'lucide-react';
-import LabelButton from '@/components/ui/LabelButton';
+import {
+  Search,
+  Edit,
+  BarChart2,
+  Trash,
+  Filter,
+  ChevronDown,
+  Plus,
+} from "lucide-react";
+import LabelButton from "@/components/ui/LabelButton";
 // import Link from 'next/link';
 
-type ContestStatus = 'All' | 'Scheduled' | 'Ongoing' | 'Completed';
+type ContestStatus = "All" | "Scheduled" | "Ongoing" | "Completed";
 
 interface Contest {
   name: string;
@@ -16,35 +24,35 @@ interface Contest {
 }
 
 export default function ContestsPage() {
-  const [selectedStatus, setSelectedStatus] = useState<ContestStatus>('All');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState<ContestStatus>("All");
+  const [searchQuery, setSearchQuery] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const contests: Contest[] = [
     {
-      name: 'Abcdef',
-      startDate: '1 Jan 2024',
-      duration: '1 hour',
-      participants: 20
+      name: "Abcdef",
+      startDate: "1 Jan 2024",
+      duration: "1 hour",
+      participants: 20,
     },
     {
-      name: 'Efghij',
-      startDate: '1 Jan 2024',
-      duration: '2 hours',
-      participants: 10
+      name: "Efghij",
+      startDate: "1 Jan 2024",
+      duration: "2 hours",
+      participants: 10,
     },
     {
-      name: 'Qwetyu',
-      startDate: '2 Jan 2024',
-      duration: '20 mins',
-      participants: 15
+      name: "Qwetyu",
+      startDate: "2 Jan 2024",
+      duration: "20 mins",
+      participants: 15,
     },
     {
-      name: 'Asdfhjc',
-      startDate: '2 Jan 2024',
-      duration: '40 mins',
-      participants: 10
-    }
+      name: "Asdfhjc",
+      startDate: "2 Jan 2024",
+      duration: "40 mins",
+      participants: 10,
+    },
   ];
 
   return (
@@ -73,13 +81,18 @@ export default function ContestsPage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-[#282C34] text-white px-4 py-2 pl-10 rounded-lg w-full sm:w-64"
               />
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                size={18}
+              />
             </div>
             <div className="w-full sm:w-auto">
               <LabelButton
                 variant="filled"
                 className="flex items-center justify-center gap-2 w-full sm:w-auto"
-                onClick={() => {/* Handle create contest */}}
+                onClick={() => {
+                  /* Handle create contest */
+                }}
               >
                 <Plus size={20} />
                 Create Contest
@@ -90,7 +103,7 @@ export default function ContestsPage() {
 
         {/* Mobile filters toggle */}
         <div className="md:hidden mb-4">
-          <button 
+          <button
             onClick={() => setFiltersOpen(!filtersOpen)}
             className="flex items-center justify-between w-full bg-[#282C34] p-3 rounded-lg text-white"
           >
@@ -98,12 +111,17 @@ export default function ContestsPage() {
               <Filter size={18} />
               <span>Filters: {selectedStatus}</span>
             </div>
-            <ChevronDown size={18} className={`transition-transform ${filtersOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown
+              size={18}
+              className={`transition-transform ${filtersOpen ? "rotate-180" : ""}`}
+            />
           </button>
-          
+
           {filtersOpen && (
             <div className="bg-[#1E2127] mt-2 p-2 rounded-lg">
-              {(['All', 'Scheduled', 'Ongoing', 'Completed'] as ContestStatus[]).map((status) => (
+              {(
+                ["All", "Scheduled", "Ongoing", "Completed"] as ContestStatus[]
+              ).map((status) => (
                 <button
                   key={status}
                   onClick={() => {
@@ -111,7 +129,9 @@ export default function ContestsPage() {
                     setFiltersOpen(false);
                   }}
                   className={`block w-full text-left px-4 py-2 rounded ${
-                    selectedStatus === status ? 'bg-[#282C34] text-white' : 'text-gray-400'
+                    selectedStatus === status
+                      ? "bg-[#282C34] text-white"
+                      : "text-gray-400"
                   }`}
                 >
                   {status}
@@ -121,19 +141,23 @@ export default function ContestsPage() {
           )}
         </div>
 
-        <div className='flex flex-col md:flex-row gap-6'>
+        <div className="flex flex-col md:flex-row gap-6">
           {/* Desktop filters sidebar */}
           <div className="hidden md:block w-full md:w-1/4">
             <h2 className="text-white mb-4 flex items-center gap-2">
               <span className="text-lg">Filters</span>
             </h2>
             <div className="space-y-2">
-              {(['All', 'Scheduled', 'Ongoing', 'Completed'] as ContestStatus[]).map((status) => (
+              {(
+                ["All", "Scheduled", "Ongoing", "Completed"] as ContestStatus[]
+              ).map((status) => (
                 <button
                   key={status}
                   onClick={() => setSelectedStatus(status)}
                   className={`block w-full text-left px-4 py-2 rounded ${
-                    selectedStatus === status ? 'bg-[#282C34] text-white' : 'text-gray-400'
+                    selectedStatus === status
+                      ? "bg-[#282C34] text-white"
+                      : "text-gray-400"
                   }`}
                 >
                   {status}
@@ -151,7 +175,7 @@ export default function ContestsPage() {
               <div>Participants</div>
             </div>
             {contests.map((contest, index) => (
-              <div 
+              <div
                 key={index}
                 className="grid grid-cols-4 p-4 text-white border-b border-gray-700 hover:bg-[#282C34]"
               >
@@ -178,7 +202,7 @@ export default function ContestsPage() {
 
           <div className="md:hidden w-full">
             {contests.map((contest, index) => (
-              <div 
+              <div
                 key={index}
                 className="bg-[#1E2127] mb-4 p-4 rounded-lg text-white"
               >

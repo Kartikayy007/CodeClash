@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface ProblemDetailsFormData {
   name: string;
@@ -12,15 +12,23 @@ interface ProblemDetailsFormData {
 
 interface ProblemDetailsFormProps {
   formData: ProblemDetailsFormData;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => void;
   errors: { [key: string]: boolean };
 }
 
-const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({ formData, onChange, errors }) => {
+const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({
+  formData,
+  onChange,
+  errors,
+}) => {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <label className="block text-[#D1D1D1] text-[14px] mb-2">Problem Name</label>
+        <label className="block text-[#D1D1D1] text-[14px] mb-2">
+          Problem Name
+        </label>
         <input
           type="text"
           name="name"
@@ -28,7 +36,7 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({ formData, onCha
           onChange={onChange}
           data-error={errors.name || undefined}
           className={`w-full h-[45px] px-4 py-2 rounded-md bg-transparent border-2 
-            ${errors.name ? 'border-red-500 error-outline' : 'border-[#D1D1D1]'}
+            ${errors.name ? "border-red-500 error-outline" : "border-[#D1D1D1]"}
             focus:outline-none transition-all duration-500 text-sm text-white`}
         />
         {errors.name && (
@@ -38,7 +46,9 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({ formData, onCha
 
       <div className="grid grid-cols-2 gap-6">
         <div>
-          <label className="block text-[#D1D1D1] text-[14px] mb-2">Rating</label>
+          <label className="block text-[#D1D1D1] text-[14px] mb-2">
+            Rating
+          </label>
           <input
             type="number"
             name="rating"
@@ -46,7 +56,7 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({ formData, onCha
             onChange={onChange}
             data-error={errors.rating || undefined}
             className={`w-full h-[45px] px-4 py-2 rounded-md bg-transparent border-2 
-              ${errors.rating ? 'border-red-500 error-outline' : 'border-[#D1D1D1]'}
+              ${errors.rating ? "border-red-500 error-outline" : "border-[#D1D1D1]"}
               focus:outline-none transition-all duration-500 text-sm text-white`}
           />
           {errors.rating && (
@@ -54,7 +64,9 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({ formData, onCha
           )}
         </div>
         <div>
-          <label className="block text-[#D1D1D1] text-[14px] mb-2">Max Score</label>
+          <label className="block text-[#D1D1D1] text-[14px] mb-2">
+            Max Score
+          </label>
           <input
             type="number"
             name="maxScore"
@@ -62,7 +74,7 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({ formData, onCha
             onChange={onChange}
             data-error={errors.maxScore || undefined}
             className={`w-full h-[45px] px-4 py-2 rounded-md bg-transparent border-2 
-              ${errors.maxScore ? 'border-red-500 error-outline' : 'border-[#D1D1D1]'}
+              ${errors.maxScore ? "border-red-500 error-outline" : "border-[#D1D1D1]"}
               focus:outline-none transition-all duration-500 text-sm text-white`}
           />
           {errors.maxScore && (
@@ -72,7 +84,9 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({ formData, onCha
       </div>
 
       <div>
-        <label className="block text-[#D1D1D1] text-[14px] mb-2">Description</label>
+        <label className="block text-[#D1D1D1] text-[14px] mb-2">
+          Description
+        </label>
         <textarea
           name="description"
           value={formData.description}
@@ -80,7 +94,7 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({ formData, onCha
           data-error={errors.description || undefined}
           rows={6}
           className={`w-full px-4 py-2 rounded-md bg-transparent border-2 
-            ${errors.description ? 'border-red-500 error-outline' : 'border-[#D1D1D1]'}
+            ${errors.description ? "border-red-500 error-outline" : "border-[#D1D1D1]"}
             focus:outline-none transition-all duration-500 text-sm text-white`}
         />
         {errors.description && (
@@ -89,7 +103,9 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({ formData, onCha
       </div>
 
       <div>
-        <label className="block text-[#D1D1D1] text-[14px] mb-2">Input Format</label>
+        <label className="block text-[#D1D1D1] text-[14px] mb-2">
+          Input Format
+        </label>
         <textarea
           name="inputFormat"
           value={formData.inputFormat}
@@ -97,7 +113,7 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({ formData, onCha
           data-error={errors.inputFormat || undefined}
           rows={4}
           className={`w-full px-4 py-2 rounded-md bg-transparent border-2 
-            ${errors.inputFormat ? 'border-red-500 error-outline' : 'border-[#D1D1D1]'}
+            ${errors.inputFormat ? "border-red-500 error-outline" : "border-[#D1D1D1]"}
             focus:outline-none transition-all duration-500 text-sm text-white`}
         />
         {errors.inputFormat && (
@@ -106,7 +122,9 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({ formData, onCha
       </div>
 
       <div>
-        <label className="block text-[#D1D1D1] text-[14px] mb-2">Constraints</label>
+        <label className="block text-[#D1D1D1] text-[14px] mb-2">
+          Constraints
+        </label>
         <textarea
           name="constraints"
           value={formData.constraints}
@@ -114,7 +132,7 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({ formData, onCha
           data-error={errors.constraints || undefined}
           rows={4}
           className={`w-full px-4 py-2 rounded-md bg-transparent border-2 
-            ${errors.constraints ? 'border-red-500 error-outline' : 'border-[#D1D1D1]'}
+            ${errors.constraints ? "border-red-500 error-outline" : "border-[#D1D1D1]"}
             focus:outline-none transition-all duration-500 text-sm text-white`}
         />
         {errors.constraints && (
@@ -123,7 +141,9 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({ formData, onCha
       </div>
 
       <div>
-        <label className="block text-[#D1D1D1] text-[14px] mb-2">Output Format</label>
+        <label className="block text-[#D1D1D1] text-[14px] mb-2">
+          Output Format
+        </label>
         <textarea
           name="outputFormat"
           value={formData.outputFormat}
@@ -131,7 +151,7 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({ formData, onCha
           data-error={errors.outputFormat || undefined}
           rows={4}
           className={`w-full px-4 py-2 rounded-md bg-transparent border-2 
-            ${errors.outputFormat ? 'border-red-500 error-outline' : 'border-[#D1D1D1]'}
+            ${errors.outputFormat ? "border-red-500 error-outline" : "border-[#D1D1D1]"}
             focus:outline-none transition-all duration-500 text-sm text-white`}
         />
         {errors.outputFormat && (
@@ -142,4 +162,4 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({ formData, onCha
   );
 };
 
-export default ProblemDetailsForm; 
+export default ProblemDetailsForm;

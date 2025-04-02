@@ -1,16 +1,14 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Settings, Menu, X } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-
+import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Settings, Menu, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const router = useRouter();
-  
+  const router = useRouter();
 
   const navLinks = [
     { href: "/dashboard", label: "Home" },
@@ -21,9 +19,9 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className='relative bg-[#15171B] z-50'>
-      <div className='flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4'>
-        <div className='flex items-center gap-4'>
+    <nav className="relative bg-[#15171B] z-50">
+      <div className="flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
+        <div className="flex items-center gap-4">
           <Image
             src="/logo.svg"
             alt="Code Clash"
@@ -33,24 +31,30 @@ const Navbar = () => {
           />
         </div>
 
-        <ul className='hidden lg:flex items-center gap-12 text-base font-bold'>
+        <ul className="hidden lg:flex items-center gap-12 text-base font-bold">
           {navLinks.map((link) => (
             <li key={link.href}>
-              <Link href={link.href} className="hover:text-primary transition-colors">
+              <Link
+                href={link.href}
+                className="hover:text-primary transition-colors"
+              >
                 {link.label}
               </Link>
             </li>
           ))}
         </ul>
 
-        <div className='flex items-center gap-4'>
-          <button className='flex items-center'>
-            <Settings size={30} className="hover:rotate-90 transition-transform duration-300"               onClick={() => router.push('/settings')}
+        <div className="flex items-center gap-4">
+          <button className="flex items-center">
+            <Settings
+              size={30}
+              className="hover:rotate-90 transition-transform duration-300"
+              onClick={() => router.push("/settings")}
             />
           </button>
-            
-          <button 
-            className='lg:hidden flex items-center'
+
+          <button
+            className="lg:hidden flex items-center"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? (
@@ -63,11 +67,11 @@ const Navbar = () => {
       </div>
 
       {isMenuOpen && (
-        <div className='lg:hidden absolute top-full left-0 right-0 bg-[#15171B] border-t border-white/10'>
-          <ul className='flex flex-col py-4'>
+        <div className="lg:hidden absolute top-full left-0 right-0 bg-[#15171B] border-t border-white/10">
+          <ul className="flex flex-col py-4">
             {navLinks.map((link) => (
               <li key={link.href}>
-                <Link 
+                <Link
                   href={link.href}
                   className="block px-6 py-3 hover:bg-white/5 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
@@ -80,7 +84,7 @@ const Navbar = () => {
         </div>
       )}
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

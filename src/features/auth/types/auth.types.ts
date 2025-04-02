@@ -1,9 +1,15 @@
-import { AppDispatch } from '@/store/store'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import { NextRouter } from 'next/router'
-import { UseFormReturn } from 'react-hook-form'
-import { ForgotPasswordFormSchema, GetStartedFormSchema, LoginFormSchema, RegisterFormSchema, ResetPasswordFormSchema } from '@/lib/schemas/authSchema'
-import { z } from 'zod'
+import { AppDispatch } from "@/store/store";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { NextRouter } from "next/router";
+import { UseFormReturn } from "react-hook-form";
+import {
+  ForgotPasswordFormSchema,
+  GetStartedFormSchema,
+  LoginFormSchema,
+  RegisterFormSchema,
+  ResetPasswordFormSchema,
+} from "@/lib/schemas/authSchema";
+import { z } from "zod";
 
 export interface User {
   id: string;
@@ -17,7 +23,7 @@ export interface AuthState {
   token: string | null;
   loading: boolean;
   error: string | null;
-  registrationStep: 'initial' | 'verification' | 'complete';
+  registrationStep: "initial" | "verification" | "complete";
 }
 
 export interface RegisterPayload {
@@ -70,8 +76,8 @@ export interface LoginResponse {
     tokens: {
       accessToken: string;
       refreshToken: string;
-    }
-  }
+    };
+  };
 }
 
 export interface ResetPasswordPayload {
@@ -97,7 +103,7 @@ export interface CheckEmailResponse {
   message: string;
   data?: {
     flow: 1 | 2 | 3;
-  }
+  };
 }
 
 export interface CheckEmailError {
@@ -118,8 +124,8 @@ export interface GoogleOAuthResponse {
     tokens: {
       accessToken: string;
       refreshToken: string;
-    }
-  }
+    };
+  };
 }
 
 export interface GoogleAuthError {
@@ -165,33 +171,43 @@ export interface BaseAuthHandlerProps<T> {
   setIsSubmitting: (value: boolean) => void;
 }
 
-export interface ResetPasswordHandlerProps extends BaseAuthHandlerProps<z.infer<typeof ResetPasswordFormSchema>> {
+export interface ResetPasswordHandlerProps
+  extends BaseAuthHandlerProps<z.infer<typeof ResetPasswordFormSchema>> {
   token?: string;
   form: UseFormReturn<z.infer<typeof ResetPasswordFormSchema>>;
 }
 
-export interface LoginHandlerProps extends BaseAuthHandlerProps<z.infer<typeof LoginFormSchema>> {
+export interface LoginHandlerProps
+  extends BaseAuthHandlerProps<z.infer<typeof LoginFormSchema>> {
   form: UseFormReturn<z.infer<typeof LoginFormSchema>>;
   router: AppRouterInstance;
 }
 
-export interface RegisterHandlerProps extends BaseAuthHandlerProps<z.infer<typeof RegisterFormSchema>> {
+export interface RegisterHandlerProps
+  extends BaseAuthHandlerProps<z.infer<typeof RegisterFormSchema>> {
   router: AppRouterInstance | NextRouter;
 }
 
-export interface ForgotPasswordHandlerProps extends BaseAuthHandlerProps<z.infer<typeof ForgotPasswordFormSchema>> {
+export interface ForgotPasswordHandlerProps
+  extends BaseAuthHandlerProps<z.infer<typeof ForgotPasswordFormSchema>> {
   setResetLinkSent: (value: boolean) => void;
   setTimeLeft: (value: number) => void;
   onResetLinkSent?: (email: string) => void;
 }
 
-export interface GetStartedHandlerProps extends BaseAuthHandlerProps<z.infer<typeof GetStartedFormSchema>> {
+export interface GetStartedHandlerProps
+  extends BaseAuthHandlerProps<z.infer<typeof GetStartedFormSchema>> {
   router: AppRouterInstance | NextRouter;
 }
 
-export type AuthFormType = 'login' | 'register' | 'reset-password' | 'forgot-password' | 'get-started';
+export type AuthFormType =
+  | "login"
+  | "register"
+  | "reset-password"
+  | "forgot-password"
+  | "get-started";
 
-export type FormData = 
+export type FormData =
   | z.infer<typeof LoginFormSchema>
   | z.infer<typeof RegisterFormSchema>
   | z.infer<typeof ResetPasswordFormSchema>

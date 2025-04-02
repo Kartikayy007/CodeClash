@@ -1,5 +1,5 @@
 // components/Badges.tsx
-import Image from 'next/image';
+import Image from "next/image";
 
 interface Badge {
   id: number;
@@ -20,14 +20,11 @@ const Badges: React.FC<BadgesProps> = ({ badges }) => {
         {badges.map((badge) => (
           <div key={badge.id} className="flex-shrink-0">
             <div className="w-32 h-32 bg-[#282C34] rounded-lg flex items-center justify-center mb-3">
-              <Image
-                src={badge.icon}
-                alt={badge.name}
-                width={64}
-                height={64}
-              />
+              <Image src={badge.icon} alt={badge.name} width={64} height={64} />
             </div>
-            <p className="text-gray-400 text-center text-base">Rank: {badge.rank}</p>
+            <p className="text-gray-400 text-center text-base">
+              Rank: {badge.rank}
+            </p>
           </div>
         ))}
       </div>

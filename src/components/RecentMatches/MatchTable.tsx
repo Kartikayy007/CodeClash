@@ -1,12 +1,12 @@
 // components/ui/MatchTable.tsx
-import React from 'react';
-import { MatchMode } from '@/features/home/matches/types/matches.types';
+import React from "react";
+import { MatchMode } from "@/features/home/matches/types/matches.types";
 
 interface Match {
   mode: MatchMode;
   player: string;
   opponent: string;
-  result: 'win' | 'loss';
+  result: "win" | "loss";
   duration: string;
   date: string;
 }
@@ -44,27 +44,21 @@ export default function MatchTable({ matches }: MatchTableProps) {
                 <td className="text-center truncate px-4">
                   {match.mode.charAt(0) + match.mode.slice(1).toLowerCase()}
                 </td>
+                <td className="text-center px-4">{match.player}</td>
+                <td className="text-center px-4">{match.opponent}</td>
                 <td className="text-center px-4">
-                  {match.player}
-                </td>
-                <td className="text-center px-4">
-                  {match.opponent}
-                </td>
-                <td className="text-center px-4">
-                  <span className={`px-2 py-1 rounded text-sm ${
-                    match.result === 'win' 
-                      ? 'bg-green-500/20 text-green-500' 
-                      : 'bg-red-500/20 text-red-500'
-                  }`}>
+                  <span
+                    className={`px-2 py-1 rounded text-sm ${
+                      match.result === "win"
+                        ? "bg-green-500/20 text-green-500"
+                        : "bg-red-500/20 text-red-500"
+                    }`}
+                  >
                     {match.result.toUpperCase()}
                   </span>
                 </td>
-                <td className="text-center px-4">
-                  {match.duration}
-                </td>
-                <td className="text-center px-4">
-                  {match.date}
-                </td>
+                <td className="text-center px-4">{match.duration}</td>
+                <td className="text-center px-4">{match.date}</td>
               </tr>
             ))}
           </tbody>

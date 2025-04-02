@@ -1,30 +1,30 @@
-import React, { useState } from 'react';
-import CodeMirror from '@uiw/react-codemirror';
-import { cpp } from '@codemirror/lang-cpp';
-import { javascript } from '@codemirror/lang-javascript';
-import { python } from '@codemirror/lang-python';
-import { java } from '@codemirror/lang-java';
-import { EditorView } from '@codemirror/view';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/store/store';
-import { setCode, setLanguage } from '../slices/editorSlice';
+import React, { useState } from "react";
+import CodeMirror from "@uiw/react-codemirror";
+import { cpp } from "@codemirror/lang-cpp";
+import { javascript } from "@codemirror/lang-javascript";
+import { python } from "@codemirror/lang-python";
+import { java } from "@codemirror/lang-java";
+import { EditorView } from "@codemirror/view";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { setCode, setLanguage } from "../slices/editorSlice";
 
 interface EditorProps {
-  language: 'c' | 'cpp' | 'python' | 'java' | 'javascript';
+  language: "c" | "cpp" | "python" | "java" | "javascript";
   onLanguageChange: (language: string) => void;
   // onMaximize: (isMaximized: boolean) => void;
   className?: string;
 }
 
-const CodeEditor = ({ 
-  language, 
-  onLanguageChange, 
-  // onMaximize, 
-  className = '',
+const CodeEditor = ({
+  language,
+  onLanguageChange,
+  // onMaximize,
+  className = "",
 }: EditorProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { code } = useSelector((state: RootState) => state.editor);
-  const [isCollapsed, ] = useState(false);
+  const [isCollapsed] = useState(false);
   // const [isMaximized, setIsMaximized] = useState(false);
 
   // const handleMaximize = () => {
@@ -64,19 +64,19 @@ int main() {
       int main() {
         // Write your code here
       }
-    `
+    `,
   };
 
   const getLanguageExtension = (lang: string) => {
     switch (lang) {
-      case 'cpp':
-      case 'c':
+      case "cpp":
+      case "c":
         return cpp();
-      case 'javascript':
+      case "javascript":
         return javascript();
-      case 'python':
+      case "python":
         return python();
-      case 'java':
+      case "java":
         return java();
       default:
         return cpp();
@@ -84,10 +84,12 @@ int main() {
   };
 
   return (
-    <div className={`bg-[#1A1D24] w-full rounded-lg overflow-hidden ${className}`}>
+    <div
+      className={`bg-[#1A1D24] w-full rounded-lg overflow-hidden ${className}`}
+    >
       {/* Header */}
       <div className="flex items-center justify-between p-2 bg-[#1A1D24] ">
-        <select 
+        <select
           className="bg-[#292C33] text-white px-3 py-1 rounded-lg outline-none"
           value={language}
           onChange={(e) => handleLanguageChange(e.target.value)}
@@ -113,21 +115,20 @@ int main() {
           </button>
         </div> */}
       </div>
-      <div className={`transform transition-all duration-300 ease-in-out origin-top ${
-        isCollapsed ? 'hidden' : 'h-full'
-      } bg-[#1E1B2E] flex flex-col`}>
+      <div
+        className={`transform transition-all duration-300 ease-in-out origin-top ${
+          isCollapsed ? "hidden" : "h-full"
+        } bg-[#1E1B2E] flex flex-col`}
+      >
         <CodeMirror
           value={code || defaultCode[language]}
-          height="calc(100vh - 50vh)" 
+          height="calc(100vh - 50vh)"
           width="100%"
           theme="dark"
           style={{ flex: 1 }}
           className="h-full"
           onChange={handleCodeChange}
-          extensions={[
-            getLanguageExtension(language),
-            EditorView.lineWrapping
-          ]}
+          extensions={[getLanguageExtension(language), EditorView.lineWrapping]}
           basicSetup={{
             lineNumbers: true,
             highlightActiveLineGutter: true,
@@ -151,7 +152,7 @@ int main() {
             historyKeymap: true,
             foldKeymap: true,
             completionKeymap: true,
-            lintKeymap: true
+            lintKeymap: true,
           }}
         />
       </div>

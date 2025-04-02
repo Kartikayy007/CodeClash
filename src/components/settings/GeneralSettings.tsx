@@ -2,13 +2,15 @@ export default function GeneralSettings() {
   return (
     <div className="bg-[#1E2127] rounded-lg p-6">
       <h2 className="text-white text-xl mb-6">General Settings</h2>
-      
+
       <div className="space-y-6">
         <div>
           <div className="flex justify-between items-center mb-2">
             <div>
               <h3 className="text-white mb-1">Language Preference</h3>
-              <p className="text-gray-400 text-sm">Select your preferred language for the interface</p>
+              <p className="text-gray-400 text-sm">
+                Select your preferred language for the interface
+              </p>
             </div>
             <select className="bg-[#282C34] text-white px-4 py-2 rounded">
               <option value="en">English</option>
@@ -22,7 +24,9 @@ export default function GeneralSettings() {
           <div className="flex justify-between items-center mb-2">
             <div>
               <h3 className="text-white mb-1">Notifications</h3>
-              <p className="text-gray-400 text-sm">Manage email notifications for updates</p>
+              <p className="text-gray-400 text-sm">
+                Manage email notifications for updates
+              </p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" className="sr-only peer" />
@@ -33,4 +37,4 @@ export default function GeneralSettings() {
       </div>
     </div>
   );
-} 
+}

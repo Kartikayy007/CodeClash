@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import LabelButton from '@/components/ui/LabelButton';
-import Image from 'next/image';
-import { contestApi } from '@/features/contests/api/contestApi';
-import { toast } from 'react-hot-toast';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import LabelButton from "@/components/ui/LabelButton";
+import Image from "next/image";
+import { contestApi } from "@/features/contests/api/contestApi";
+import { toast } from "react-hot-toast";
 
 interface ApiError {
   response?: {
@@ -18,24 +18,24 @@ interface ApiError {
 export default function CreateContest() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    name: '',
-    startDate: '',
-    startTime: '',
-    endDate: '',
-    endTime: '',
-    description: ''
+    name: "",
+    startDate: "",
+    startTime: "",
+    endDate: "",
+    endTime: "",
+    description: "",
   });
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const todayStr = today.toISOString().split('T')[0];
+  const todayStr = today.toISOString().split("T")[0];
 
   const getMinStartTime = (date: string) => {
     if (date === todayStr) {
       const now = new Date();
       const utcHours = now.getUTCHours();
       const utcMinutes = now.getUTCMinutes();
-      return `${utcHours.toString().padStart(2, '0')}:${utcMinutes.toString().padStart(2, '0')}`;
+      return `${utcHours.toString().padStart(2, "0")}:${utcMinutes.toString().padStart(2, "0")}`;
     }
     return "00:00";
   };
@@ -47,56 +47,62 @@ export default function CreateContest() {
     return "00:00";
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
 
-    if (name === 'endDate') {
+    if (name === "endDate") {
       const startDate = new Date(formData.startDate);
       const endDate = new Date(value);
       if (endDate < startDate) {
-        return; 
+        return;
       }
     }
 
-    if (name === 'endTime' && formData.endDate === formData.startDate) {
+    if (name === "endTime" && formData.endDate === formData.startDate) {
       if (value < formData.startTime) {
-        return; 
+        return;
       }
     }
 
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const startDateTime = new Date(`${formData.startDate}T${formData.startTime}:00`);
-      const endDateTime = new Date(`${formData.endDate}T${formData.endTime}:00`);
+      const startDateTime = new Date(
+        `${formData.startDate}T${formData.startTime}:00`,
+      );
+      const endDateTime = new Date(
+        `${formData.endDate}T${formData.endTime}:00`,
+      );
 
       // Format dates to ISO string (UTC)
       const response = await contestApi.createContest({
         title: formData.name,
         description: formData.description,
         startTime: startDateTime.toISOString(),
-        endTime: endDateTime.toISOString()
+        endTime: endDateTime.toISOString(),
       });
 
-      toast.success('Contest created successfully!');
-      
+      toast.success("Contest created successfully!");
+
       const params = new URLSearchParams({
         contestId: response.contest.id,
         title: response.contest.title,
         startTime: response.contest.startTime,
-        endTime: response.contest.endTime
+        endTime: response.contest.endTime,
       });
 
       router.push(`/contest/create/details?${params.toString()}`);
     } catch (error) {
       const err = error as ApiError;
-      toast.error(err?.response?.data?.message || 'Failed to create contest');
+      toast.error(err?.response?.data?.message || "Failed to create contest");
     }
   };
 
@@ -104,7 +110,7 @@ export default function CreateContest() {
     <div className="flex flex-col md:flex-row p-6 min-h-[calc(100vh-64px)]">
       <div className="hidden md:block w-1/2 bg-[#282D37] p-8">
         <div className="flex items-center gap-2 mb-6">
-          <button 
+          <button
             onClick={() => router.back()}
             className="text-white hover:text-gray-300"
           >
@@ -126,8 +132,8 @@ export default function CreateContest() {
         <div className="max-w-md mx-auto w-full flex flex-col gap-16">
           <div className="flex justify-center items-center mb-12">
             <div className="flex gap-8">
-              <button 
-                onClick={() => router.push('/contest/join')}
+              <button
+                onClick={() => router.push("/contest/join")}
                 className="text-white/60 hover:text-white pb-1 text-lg font-medium transition-colors"
               >
                 Join Contest
@@ -141,7 +147,9 @@ export default function CreateContest() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="form-item">
-              <label className="text-[#D1D1D1] text-[14px] block mb-2">Contest Name</label>
+              <label className="text-[#D1D1D1] text-[14px] block mb-2">
+                Contest Name
+              </label>
               <input
                 type="text"
                 name="name"
@@ -155,7 +163,9 @@ export default function CreateContest() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="form-item">
-                <label className="text-[#D1D1D1] text-[14px] block mb-2">Start Date</label>
+                <label className="text-[#D1D1D1] text-[14px] block mb-2">
+                  Start Date
+                </label>
                 <input
                   type="date"
                   name="startDate"
@@ -168,7 +178,9 @@ export default function CreateContest() {
                 />
               </div>
               <div className="form-item">
-                <label className="text-[#D1D1D1] text-[14px] block mb-2">Start Time</label>
+                <label className="text-[#D1D1D1] text-[14px] block mb-2">
+                  Start Time
+                </label>
                 <input
                   type="time"
                   name="startTime"
@@ -184,7 +196,9 @@ export default function CreateContest() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="form-item">
-                <label className="text-[#D1D1D1] text-[14px] block mb-2">End Date</label>
+                <label className="text-[#D1D1D1] text-[14px] block mb-2">
+                  End Date
+                </label>
                 <input
                   type="date"
                   name="endDate"
@@ -197,7 +211,9 @@ export default function CreateContest() {
                 />
               </div>
               <div className="form-item">
-                <label className="text-[#D1D1D1] text-[14px] block mb-2">End Time</label>
+                <label className="text-[#D1D1D1] text-[14px] block mb-2">
+                  End Time
+                </label>
                 <input
                   type="time"
                   name="endTime"

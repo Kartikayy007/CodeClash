@@ -1,4 +1,4 @@
-import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 interface QueuePromise {
   resolve: (value: unknown) => void;
@@ -21,7 +21,7 @@ let isRefreshing = false;
 let failedQueue: QueuePromise[] = [];
 
 const processQueue = (error: unknown = null) => {
-  failedQueue.forEach(prom => {
+  failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
     } else {
@@ -32,12 +32,14 @@ const processQueue = (error: unknown = null) => {
 };
 
 const redirectToLogin = () => {
-  if (typeof window !== 'undefined') {
-    window.location.href = '/login';
+  if (typeof window !== "undefined") {
+    window.location.href = "/login";
   }
 };
 
-const refreshTokenAndRetry = async (failedRequest: InternalAxiosRequestConfig) => {
+const refreshTokenAndRetry = async (
+  failedRequest: InternalAxiosRequestConfig,
+) => {
   try {
     if (isRefreshing) {
       return new Promise((resolve, reject) => {
@@ -46,38 +48,39 @@ const refreshTokenAndRetry = async (failedRequest: InternalAxiosRequestConfig) =
     }
 
     isRefreshing = true;
-    const refreshToken = localStorage.getItem('refreshToken');
-    
+    const refreshToken = localStorage.getItem("refreshToken");
+
     if (!refreshToken) {
-      throw new Error('No refresh token available');
+      throw new Error("No refresh token available");
     }
 
     const { data } = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/refresh-token`,
       { refreshToken },
-      { headers: { 'Content-Type': 'application/json' } }
+      { headers: { "Content-Type": "application/json" } },
     );
 
     if (data.success && data.data?.tokens) {
-      localStorage.setItem('accessToken', data.data.tokens.accessToken);
-      localStorage.setItem('refreshToken', data.data.tokens.refreshToken);
-      api.defaults.headers.common['Authorization'] = `Bearer ${data.data.tokens.accessToken}`;
+      localStorage.setItem("accessToken", data.data.tokens.accessToken);
+      localStorage.setItem("refreshToken", data.data.tokens.refreshToken);
+      api.defaults.headers.common["Authorization"] =
+        `Bearer ${data.data.tokens.accessToken}`;
       processQueue();
-      
+
       return api({
         ...failedRequest,
         headers: {
           ...failedRequest.headers,
-          Authorization: `Bearer ${data.data.tokens.accessToken}`
-        }
+          Authorization: `Bearer ${data.data.tokens.accessToken}`,
+        },
       });
     } else {
-      throw new Error('Token refresh failed');
+      throw new Error("Token refresh failed");
     }
   } catch (error: unknown) {
     processQueue(error);
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     redirectToLogin();
     return Promise.reject(error);
   } finally {
@@ -88,69 +91,80 @@ const refreshTokenAndRetry = async (failedRequest: InternalAxiosRequestConfig) =
 // Request interceptor
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // Response interceptor
 api.interceptors.response.use(
   (response) => {
-    if (response.data?.success === false && response.data?.error === "Unauthorized") {
+    if (
+      response.data?.success === false &&
+      response.data?.error === "Unauthorized"
+    ) {
       return refreshTokenAndRetry(response.config);
     }
     return response;
   },
   async (error: AxiosError) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
-    
+    const originalRequest = error.config as InternalAxiosRequestConfig & {
+      _retry?: boolean;
+    };
+
     if (!originalRequest || originalRequest._retry) {
       return Promise.reject(error);
     }
 
-    if (error.response?.status === 401 || 
-        (error.response?.data as TokenResponse)?.error === "Unauthorized") {
+    if (
+      error.response?.status === 401 ||
+      (error.response?.data as TokenResponse)?.error === "Unauthorized"
+    ) {
       originalRequest._retry = true;
       return refreshTokenAndRetry(originalRequest);
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 // Token refresh setup with Next.js App Router considerations
 const setupTokenRefresh = () => {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
 
-  const refreshInterval = setInterval(async () => {
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (refreshToken && !isRefreshing) {
-      try {
-        const { data } = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/refresh-token`,
-          { refreshToken },
-          { headers: { 'Content-Type': 'application/json' } }
-        );
+  const refreshInterval = setInterval(
+    async () => {
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (refreshToken && !isRefreshing) {
+        try {
+          const { data } = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/refresh-token`,
+            { refreshToken },
+            { headers: { "Content-Type": "application/json" } },
+          );
 
-        if (data.success && data.data?.tokens) {
-          localStorage.setItem('accessToken', data.data.tokens.accessToken);
-          localStorage.setItem('refreshToken', data.data.tokens.refreshToken);
-          api.defaults.headers.common['Authorization'] = `Bearer ${data.data.tokens.accessToken}`;
+          if (data.success && data.data?.tokens) {
+            localStorage.setItem("accessToken", data.data.tokens.accessToken);
+            localStorage.setItem("refreshToken", data.data.tokens.refreshToken);
+            api.defaults.headers.common["Authorization"] =
+              `Bearer ${data.data.tokens.accessToken}`;
+          }
+        } catch (error: unknown) {
+          console.error("Failed to refresh token:", error);
         }
-      } catch (error: unknown) {
-        console.error('Failed to refresh token:', error);
       }
-    }
-  }, 14 * 60 * 1000);
+    },
+    14 * 60 * 1000,
+  );
 
-  window.addEventListener('unload', () => clearInterval(refreshInterval));
+  window.addEventListener("unload", () => clearInterval(refreshInterval));
 };
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   setupTokenRefresh();
 }
 

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Problem as SocketProblem } from '@/lib/socket';
+import React from "react";
+import { Problem as SocketProblem } from "@/lib/socket";
 
 interface QuestionProps {
   problem: SocketProblem;
@@ -12,11 +12,15 @@ const Question = ({ problem }: QuestionProps) => {
         <div className="sticky top-0 bg-[#1A1D24] py-4 z-10">
           <h1 className="text-2xl font-bold flex items-center gap-4">
             {problem.title}
-            <span className={`text-base px-3 py-1 rounded ${
-              problem.difficulty === 'EASY' ? 'bg-green-500/20 text-green-500' :
-              problem.difficulty === 'MEDIUM' ? 'bg-yellow-500/20 text-yellow-500' :
-              'bg-red-500/20 text-red-500'
-            }`}>
+            <span
+              className={`text-base px-3 py-1 rounded ${
+                problem.difficulty === "EASY"
+                  ? "bg-green-500/20 text-green-500"
+                  : problem.difficulty === "MEDIUM"
+                    ? "bg-yellow-500/20 text-yellow-500"
+                    : "bg-red-500/20 text-red-500"
+              }`}
+            >
               {problem.difficulty}
             </span>
             <span className="text-base text-gray-400">
@@ -26,7 +30,9 @@ const Question = ({ problem }: QuestionProps) => {
         </div>
 
         {/* Content sections */}
-        <div className="space-y-8 pb-16"> {/* Added padding bottom for better scroll experience */}
+        <div className="space-y-8 pb-16">
+          {" "}
+          {/* Added padding bottom for better scroll experience */}
           {/* Description */}
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-white/90 sticky top-16 bg-[#1A1D24] py-2">
@@ -36,7 +42,6 @@ const Question = ({ problem }: QuestionProps) => {
               {problem.description}
             </div>
           </div>
-
           {/* Input Format */}
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-white/90 sticky top-16 bg-[#1A1D24] py-2">
@@ -46,7 +51,6 @@ const Question = ({ problem }: QuestionProps) => {
               {problem.inputFormat}
             </div>
           </div>
-
           {/* Output Format */}
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-white/90 sticky top-16 bg-[#1A1D24] py-2">
@@ -56,7 +60,6 @@ const Question = ({ problem }: QuestionProps) => {
               {problem.outputFormat}
             </div>
           </div>
-
           {/* Constraints */}
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-white/90 sticky top-16 bg-[#1A1D24] py-2">
@@ -66,7 +69,6 @@ const Question = ({ problem }: QuestionProps) => {
               {problem.constraints}
             </div>
           </div>
-
           {/* Time and Memory Limits */}
           <div className="flex gap-8 text-sm text-gray-400 sticky bottom-0 bg-[#1A1D24] py-4">
             <div>Time Limit: {problem.timeLimit}ms</div>

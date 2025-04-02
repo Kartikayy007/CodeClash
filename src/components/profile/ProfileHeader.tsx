@@ -1,5 +1,5 @@
 // components/ProfileHeader.tsx
-import { Edit } from 'lucide-react';
+import { Edit } from "lucide-react";
 
 interface ProfileHeaderProps {
   username: string;

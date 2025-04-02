@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import SubmissionDetail from './SubmissionDetail';
-import { LeaderboardEntry } from '@/features/contests/types/contest.types';
+import React, { useState } from "react";
+import SubmissionDetail from "./SubmissionDetail";
+import { LeaderboardEntry } from "@/features/contests/types/contest.types";
 
 interface ExtendedLeaderboardEntry extends LeaderboardEntry {
   unsolved: number;
@@ -20,9 +20,11 @@ interface UserPerformanceProps {
 }
 
 const UserPerformance = ({ user, onClose }: UserPerformanceProps) => {
-  const [selectedSubmission, setSelectedSubmission] = useState<typeof user.submissions[0] | null>(null);
+  const [selectedSubmission, setSelectedSubmission] = useState<
+    (typeof user.submissions)[0] | null
+  >(null);
 
-  const handleSubmissionClick = (submission: typeof user.submissions[0]) => {
+  const handleSubmissionClick = (submission: (typeof user.submissions)[0]) => {
     setSelectedSubmission(submission);
   };
 
@@ -32,7 +34,9 @@ const UserPerformance = ({ user, onClose }: UserPerformanceProps) => {
 
   return (
     <div className="p-6 rounded-lg bg-[#10141D]">
-      <h2 className="text-xl font-bold mb-4 text-white">Analyzing {user.username}&apos;s Performance</h2>
+      <h2 className="text-xl font-bold mb-4 text-white">
+        Analyzing {user.username}&apos;s Performance
+      </h2>
       <div className="text-white mb-4 flex justify-between px-4 py-4 bg-[#ffffff1d]">
         <p>Rank: {user.rank}</p>
         <p>Score: {user.score}</p>
@@ -43,7 +47,10 @@ const UserPerformance = ({ user, onClose }: UserPerformanceProps) => {
       </div>
       <h3 className="text-lg font-bold text-white mt-12">Submissions</h3>
       {selectedSubmission ? (
-        <SubmissionDetail submission={selectedSubmission} onClose={handleCloseSubmissionDetail} />
+        <SubmissionDetail
+          submission={selectedSubmission}
+          onClose={handleCloseSubmissionDetail}
+        />
       ) : (
         <table className="min-w-full mt-2">
           <thead>
@@ -57,20 +64,39 @@ const UserPerformance = ({ user, onClose }: UserPerformanceProps) => {
           </thead>
           <tbody>
             {user.submissions.map((submission, index) => (
-              <tr key={index} className={`${index % 2 !== 0 ? 'bg-[#1F232D]' : ''}`} onClick={() => handleSubmissionClick(submission)}>
-                <td className="text-white py-4 px-4 text-center">{submission.problemName}</td>
-                <td className="text-white py-4 px-4 text-center">{submission.language}</td>
-                <td className="text-white py-4 px-4 text-center">{submission.timeTaken}</td>
-                <td className="text-white py-4 px-4 text-center">{submission.status}</td>
-                <td className="text-white py-4 px-4 text-center">{submission.score}</td>
+              <tr
+                key={index}
+                className={`${index % 2 !== 0 ? "bg-[#1F232D]" : ""}`}
+                onClick={() => handleSubmissionClick(submission)}
+              >
+                <td className="text-white py-4 px-4 text-center">
+                  {submission.problemName}
+                </td>
+                <td className="text-white py-4 px-4 text-center">
+                  {submission.language}
+                </td>
+                <td className="text-white py-4 px-4 text-center">
+                  {submission.timeTaken}
+                </td>
+                <td className="text-white py-4 px-4 text-center">
+                  {submission.status}
+                </td>
+                <td className="text-white py-4 px-4 text-center">
+                  {submission.score}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
-      <button onClick={onClose} className="mt-4 bg-gray-500 text-white py-2 px-4 rounded">Close</button>
+      <button
+        onClick={onClose}
+        className="mt-4 bg-gray-500 text-white py-2 px-4 rounded"
+      >
+        Close
+      </button>
     </div>
   );
 };
 
-export default UserPerformance; 
+export default UserPerformance;

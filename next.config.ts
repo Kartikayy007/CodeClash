@@ -4,8 +4,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: '/oauth',
-        destination: '/oauth/callback',
+        source: "/oauth",
+        destination: "/oauth/callback",
         permanent: true,
       },
     ];
@@ -13,8 +13,8 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: '/oauth/callback',
-        destination: '/oauth/page',
+        source: "/oauth/callback",
+        destination: "/oauth/page",
       },
     ];
   },

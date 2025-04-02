@@ -1,6 +1,6 @@
-import React from 'react';
-import { X } from 'lucide-react';
-import { Modal as MuiModal, Box, Fade, Backdrop } from '@mui/material';
+import React from "react";
+import { X } from "lucide-react";
+import { Modal as MuiModal, Box, Fade, Backdrop } from "@mui/material";
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,14 +10,14 @@ interface ModalProps {
 }
 
 const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  outline: 'none',
-  width: 'auto',
-  minWidth: '400px',
-  overflow: 'hidden',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  outline: "none",
+  width: "auto",
+  minWidth: "400px",
+  overflow: "hidden",
 };
 
 const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
@@ -31,10 +31,10 @@ const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
         backdrop: {
           timeout: 500,
           style: {
-            backgroundColor: 'rgba(45, 39, 53, 0.5)',
-            backdropFilter: 'blur(5px)'
-          }
-        }
+            backgroundColor: "rgba(45, 39, 53, 0.5)",
+            backdropFilter: "blur(5px)",
+          },
+        },
       }}
     >
       <Fade in={isOpen}>
@@ -54,9 +54,7 @@ const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
                 <h2 className="text-3xl font-semibold text-[#E7E7E7]">
                   {title}
                 </h2>
-                <div className="flex flex-col gap-4">
-                  {children}
-                </div>
+                <div className="flex flex-col gap-4">{children}</div>
               </div>
             </div>
           </div>
@@ -66,4 +64,4 @@ const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   );
 };
 
-export default Modal; 
+export default Modal;

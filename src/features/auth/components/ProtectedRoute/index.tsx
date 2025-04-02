@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -14,14 +14,14 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   useEffect(() => {
     const checkAuth = () => {
-      const accessToken = localStorage.getItem('accessToken');
-      const cookieToken = document.cookie.includes('accessToken=');
-      
+      const accessToken = localStorage.getItem("accessToken");
+      const cookieToken = document.cookie.includes("accessToken=");
+
       if (!accessToken && !cookieToken) {
-        router.replace('/login');
+        router.replace("/login");
         return;
       }
-      
+
       setIsAuthenticated(true);
       setIsLoading(false);
     };

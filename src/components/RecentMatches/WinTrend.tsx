@@ -1,5 +1,5 @@
 // components/ui/WinTrend.tsx
-import React from 'react';
+import React from "react";
 
 interface WinTrendProps {
   winTrendData: string[][];
@@ -16,11 +16,11 @@ const WinTrend: React.FC<WinTrendProps> = ({ winTrendData }) => {
               <div
                 key={colIndex}
                 className={`w-8 h-8 rounded-sm ${
-                  status === 'win'
-                    ? 'bg-green-600'
-                    : status === 'loss'
-                    ? 'bg-red-500'
-                    : 'bg-[#282C34]'
+                  status === "win"
+                    ? "bg-green-600"
+                    : status === "loss"
+                      ? "bg-red-500"
+                      : "bg-[#282C34]"
                 }`}
               />
             ))}

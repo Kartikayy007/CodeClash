@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import LabelButton from '@/components/ui/LabelButton';
-import Image from 'next/image';
-import { contestApi } from '@/features/contests/api/contestApi';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import LabelButton from "@/components/ui/LabelButton";
+import Image from "next/image";
+import { contestApi } from "@/features/contests/api/contestApi";
 
 interface ApiError {
   response?: {
@@ -15,16 +15,16 @@ interface ApiError {
 }
 
 export default function JoinContest() {
-  const [contestCode, setContestCode] = useState('');
-  const [error, setError] = useState('');
+  const [contestCode, setContestCode] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleJoinContest = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!contestCode.trim()) {
-      setError('Please enter a contest code');
+      setError("Please enter a contest code");
       return;
     }
 
@@ -33,11 +33,11 @@ export default function JoinContest() {
       if (contestResponse.contest) {
         router.push(`/contest/join/${contestCode}`);
       } else {
-        setError('Contest not found');
+        setError("Contest not found");
       }
     } catch (error) {
       const err = error as ApiError;
-      setError(err?.response?.data?.message || 'Contest not found');
+      setError(err?.response?.data?.message || "Contest not found");
     }
   };
 
@@ -76,13 +76,15 @@ export default function JoinContest() {
                 className="text-white/60 hover:text-white pb-1 text-lg font-medium transition-colors"
               >
                 Create Contest
-              </button> */} 
+              </button> */}
             </div>
           </div>
 
           <form onSubmit={handleJoinContest} className="space-y-6 max-w-xl">
             <div className="form-item">
-              <label className="text-[#D1D1D1] text-[14px] block mb-2">Enter Code</label>
+              <label className="text-[#D1D1D1] text-[14px] block mb-2">
+                Enter Code
+              </label>
               <div className="flex flex-col w-full mt-2">
                 <input
                   type="text"
@@ -96,7 +98,7 @@ export default function JoinContest() {
                   rounded-md
                   bg-transparent
                   border-2
-                  ${error ? 'border-red-500' : 'border-[#D1D1D1]'}
+                  ${error ? "border-red-500" : "border-[#D1D1D1]"}
                   focus:outline-none
                   transition-all
                   duration-500
@@ -104,9 +106,7 @@ export default function JoinContest() {
                   text-white
                   placeholder:text-gray-400`}
                 />
-                {error && (
-                  <p className="text-red-500 text-sm mt-1">{error}</p>
-                )}
+                {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
               </div>
             </div>
 

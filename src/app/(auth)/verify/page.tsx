@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { BackButton } from '@/components/ui/BackButton';
-import CustomOtp from '@/components/CustomOtp';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { BackButton } from "@/components/ui/BackButton";
+import CustomOtp from "@/components/CustomOtp";
 
 const VerifyPage = () => {
   const router = useRouter();
-  const [userEmail, setUserEmail] = useState<string>('');
-  
+  const [userEmail, setUserEmail] = useState<string>("");
+
   useEffect(() => {
-    const registrationEmail = localStorage.getItem('registrationEmail');
+    const registrationEmail = localStorage.getItem("registrationEmail");
     if (!registrationEmail) {
-      router.push('/register');
+      router.push("/register");
     } else {
       setUserEmail(registrationEmail);
     }
@@ -22,7 +22,7 @@ const VerifyPage = () => {
   return (
     <div className="flex flex-col items-start justify-center gap-6 p-8">
       <Image
-        src='/logo.svg'
+        src="/logo.svg"
         alt="logo"
         width={160}
         height={32}
@@ -31,16 +31,16 @@ const VerifyPage = () => {
       />
       <div className="w-full max-w-md sm:max-w-none">
         <BackButton href="/register" />
-        <div className='space-y-2 mt-4'>
-          <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold text-white text-left'>
+        <div className="space-y-2 mt-4">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white text-left">
             Verify Your Email
           </h1>
-          <p className='text-sm sm:text-base text-white text-left'>
+          <p className="text-sm sm:text-base text-white text-left">
             We&apos;ve sent a 4-digit verification code to {userEmail}
           </p>
         </div>
       </div>
-      <div className='w-full max-w-md mt-4 sm:mt-8'>
+      <div className="w-full max-w-md mt-4 sm:mt-8">
         <CustomOtp />
       </div>
     </div>

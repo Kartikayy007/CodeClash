@@ -25,4 +25,4 @@ export interface DeleteAccountResponse {
 export interface SettingsError {
   success: boolean;
   message: string;
-} 
+}

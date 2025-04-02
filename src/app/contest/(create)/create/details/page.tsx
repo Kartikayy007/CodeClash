@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 // import LabelButton from '@/components/ui/LabelButton';
-import BasicDetailsForm from '@/components/Contest/createContest/detailsForm/BasicDetailsForm';
-import DescriptionForm from '@/components/Contest/createContest/detailsForm/DescriptionForm';
-import Problems from '@/components/Contest/createContest/problems/problems';
-import { ContestDetails, ContestSection } from '@/types/contest.types';
-import { ArrowLeft } from 'lucide-react';
-import { contestApi } from '@/features/contests/api/contestApi';
-import { toast } from 'react-hot-toast';
-import PreviewContest from '@/components/Contest/PreviewContest/PreviewContest';
-import { initializeForm } from '@/features/contests/slices/createContestSlice';
-import { useDispatch } from 'react-redux';
+import BasicDetailsForm from "@/components/Contest/createContest/detailsForm/BasicDetailsForm";
+import DescriptionForm from "@/components/Contest/createContest/detailsForm/DescriptionForm";
+import Problems from "@/components/Contest/createContest/problems/problems";
+import { ContestDetails, ContestSection } from "@/types/contest.types";
+import { ArrowLeft } from "lucide-react";
+import { contestApi } from "@/features/contests/api/contestApi";
+import { toast } from "react-hot-toast";
+import PreviewContest from "@/components/Contest/PreviewContest/PreviewContest";
+import { initializeForm } from "@/features/contests/slices/createContestSlice";
+import { useDispatch } from "react-redux";
 
 interface ApiError {
   response: {
@@ -60,28 +60,28 @@ interface Problem {
   }>;
 }
 
-type ActiveTab = 'details' | 'problems' | 'settings';
+type ActiveTab = "details" | "problems" | "settings";
 
 const Details = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState<ActiveTab>('details');
-  const [activeSection, setActiveSection] = useState<ContestSection>('basic');
+  const [activeTab, setActiveTab] = useState<ActiveTab>("details");
+  const [activeSection, setActiveSection] = useState<ContestSection>("basic");
   const [formData, setFormData] = useState<ContestDetails>({
-    name: '',
+    name: "",
     startTime: {
-      date: '',
-      time: ''
+      date: "",
+      time: "",
     },
     endTime: {
-      date: '',
-      time: ''
+      date: "",
+      time: "",
     },
-    organizationName: '',
-    description: '',
-    rules: '',
-    prizes: '',
-    score: ''
+    organizationName: "",
+    description: "",
+    rules: "",
+    prizes: "",
+    score: "",
   });
 
   const [problems, setProblems] = useState<Problem[]>([]);
@@ -90,46 +90,48 @@ const Details = () => {
   const dispatch = useDispatch();
 
   const [isDirty, setIsDirty] = useState(false);
-  const [initialFormData, setInitialFormData] = useState<ContestDetails | null>(null);
+  const [initialFormData, setInitialFormData] = useState<ContestDetails | null>(
+    null,
+  );
 
   useEffect(() => {
     const fetchContestDetails = async () => {
-      const contestId = searchParams?.get('contestId');
+      const contestId = searchParams?.get("contestId");
       if (!contestId) return;
 
       try {
         const response = await contestApi.getContestDetails(contestId);
-        console.log('Response:', response);
-        
+        console.log("Response:", response);
+
         if (!response.contest) {
-          throw new Error('No contest data received from API');
+          throw new Error("No contest data received from API");
         }
 
         const contestData = response.contest;
-        console.log('Contest Data:', contestData);
+        console.log("Contest Data:", contestData);
 
         const startTime = new Date(contestData.startTime);
         const endTime = new Date(contestData.endTime);
 
         if (!startTime.getTime() || !endTime.getTime()) {
-          throw new Error('Invalid date format received');
+          throw new Error("Invalid date format received");
         }
 
         const formattedData = {
-          name: contestData.title || '',
+          name: contestData.title || "",
           startTime: {
-            date: startTime.toISOString().split('T')[0],
-            time: startTime.toTimeString().slice(0, 5)
+            date: startTime.toISOString().split("T")[0],
+            time: startTime.toTimeString().slice(0, 5),
           },
           endTime: {
-            date: endTime.toISOString().split('T')[0],
-            time: endTime.toTimeString().slice(0, 5)
+            date: endTime.toISOString().split("T")[0],
+            time: endTime.toTimeString().slice(0, 5),
           },
-          organizationName: contestData.organizationName || '',
-          description: contestData.description || '',
-          rules: contestData.rules || '',
-          prizes: contestData.prizes || '',
-          score: contestData.score || ''
+          organizationName: contestData.organizationName || "",
+          description: contestData.description || "",
+          rules: contestData.rules || "",
+          prizes: contestData.prizes || "",
+          score: contestData.score || "",
         };
 
         setFormData(formattedData);
@@ -138,80 +140,97 @@ const Details = () => {
 
         // Set problems if they exist
         if (Array.isArray(contestData.questions)) {
-          setProblems((contestData.questions as QuestionResponse[]).map((q: QuestionResponse) => ({
-            id: q.id,
-            name: q.title || '',
-            title: q.title || '',
-            maxScore: Number(q.score) || 0,
-            score: Number(q.score) || 0,
-            rating: Number(q.rating) || 0,
-            description: q.description || '',
-            inputFormat: q.inputFormat || '',
-            constraints: q.constraints || '',
-            outputFormat: q.outputFormat || '',
-            testCases: Array.isArray(q.testCases) ? q.testCases.map((tc: TestCase) => ({
-              input: tc.input || '',
-              output: tc.output || '',
-              sample: !tc.isHidden,
-              strength: 1
-            })) : []
-          })));
+          setProblems(
+            (contestData.questions as QuestionResponse[]).map(
+              (q: QuestionResponse) => ({
+                id: q.id,
+                name: q.title || "",
+                title: q.title || "",
+                maxScore: Number(q.score) || 0,
+                score: Number(q.score) || 0,
+                rating: Number(q.rating) || 0,
+                description: q.description || "",
+                inputFormat: q.inputFormat || "",
+                constraints: q.constraints || "",
+                outputFormat: q.outputFormat || "",
+                testCases: Array.isArray(q.testCases)
+                  ? q.testCases.map((tc: TestCase) => ({
+                      input: tc.input || "",
+                      output: tc.output || "",
+                      sample: !tc.isHidden,
+                      strength: 1,
+                    }))
+                  : [],
+              }),
+            ),
+          );
         }
 
-        dispatch(initializeForm({
-          name: contestData.title,
-          description: contestData.description,
-          startTime: {
-            date: startTime.toISOString().split('T')[0],
-            time: startTime.toTimeString().slice(0, 5)
-          },
-          endTime: {
-            date: endTime.toISOString().split('T')[0],
-            time: endTime.toTimeString().slice(0, 5)
-          }
-        }));
-
+        dispatch(
+          initializeForm({
+            name: contestData.title,
+            description: contestData.description,
+            startTime: {
+              date: startTime.toISOString().split("T")[0],
+              time: startTime.toTimeString().slice(0, 5),
+            },
+            endTime: {
+              date: endTime.toISOString().split("T")[0],
+              time: endTime.toTimeString().slice(0, 5),
+            },
+          }),
+        );
       } catch (error) {
-        console.error('Error fetching contest details:', error);
-        toast.error(error instanceof Error ? error.message : 'Failed to fetch contest details');
+        console.error("Error fetching contest details:", error);
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch contest details",
+        );
       }
     };
 
     fetchContestDetails();
   }, [searchParams, dispatch]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     let newFormData: ContestDetails;
 
-    if (name.includes('.')) {
-      const [parent, child] = name.split('.');
+    if (name.includes(".")) {
+      const [parent, child] = name.split(".");
       newFormData = {
         ...formData,
         [parent]: {
-          ...(formData[parent as keyof ContestDetails] as Record<string, string>),
-          [child]: value
-        }
+          ...(formData[parent as keyof ContestDetails] as Record<
+            string,
+            string
+          >),
+          [child]: value,
+        },
       };
     } else {
       newFormData = {
         ...formData,
-        [name]: value
+        [name]: value,
       };
     }
 
     setFormData(newFormData);
-    
+
     // Check if form is dirty by comparing with initial data
     if (initialFormData) {
-      const isDifferent = JSON.stringify(newFormData) !== JSON.stringify(initialFormData);
+      const isDifferent =
+        JSON.stringify(newFormData) !== JSON.stringify(initialFormData);
       setIsDirty(isDifferent);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const contestId = searchParams?.get('contestId');
+    const contestId = searchParams?.get("contestId");
     if (!contestId || !isDirty) return;
 
     try {
@@ -223,15 +242,15 @@ const Details = () => {
         rules: formData.rules,
         prizes: formData.prizes,
         score: formData.score,
-        organizationName: formData.organizationName  
+        organizationName: formData.organizationName,
       });
-      
-      setInitialFormData(formData); 
+
+      setInitialFormData(formData);
       setIsDirty(false);
-      toast.success('Contest updated successfully!');
+      toast.success("Contest updated successfully!");
     } catch (error) {
       const err = error as ApiError;
-      toast.error(err?.response?.data?.message || 'Failed to update contest');
+      toast.error(err?.response?.data?.message || "Failed to update contest");
     }
   };
 
@@ -239,8 +258,7 @@ const Details = () => {
     setShowPreview(true);
   };
 
-  const handleAddProblem = () => {
-  };
+  const handleAddProblem = () => {};
 
   const handleCreateProblem = () => {
     setShowCreateProblem(true);
@@ -248,35 +266,35 @@ const Details = () => {
 
   const handleDeleteProblem = async (index: number) => {
     const problem = problems[index];
-    const contestId = searchParams?.get('contestId');
+    const contestId = searchParams?.get("contestId");
 
     if (!contestId) {
-      toast.error('Contest ID not found');
+      toast.error("Contest ID not found");
       return;
     }
 
     if (!problem.id) {
-      setProblems(prev => prev.filter((_, i) => i !== index));
+      setProblems((prev) => prev.filter((_, i) => i !== index));
       return;
     }
 
     try {
       await contestApi.deleteQuestion({
         contestId,
-        questionId: problem.id
+        questionId: problem.id,
       });
 
-      setProblems(prev => prev.filter((_, i) => i !== index));
+      setProblems((prev) => prev.filter((_, i) => i !== index));
     } catch (error) {
       const err = error as ApiError;
-      toast.error(err?.response?.data?.message || 'Failed to delete problem');
+      toast.error(err?.response?.data?.message || "Failed to delete problem");
     }
   };
 
   const handleSaveProblem = async (problemData: Problem) => {
-    const contestId = searchParams?.get('contestId');
+    const contestId = searchParams?.get("contestId");
     if (!contestId) {
-      toast.error('Contest ID not found');
+      toast.error("Contest ID not found");
       return;
     }
 
@@ -284,9 +302,9 @@ const Details = () => {
       if (problemData.id) {
         await contestApi.addQuestionFromLibrary({
           contestId,
-          questionId: problemData.id
+          questionId: problemData.id,
         });
-        toast.success('Problem added from library successfully!');
+        toast.success("Problem added from library successfully!");
       } else {
         await contestApi.addQuestion({
           contestId,
@@ -295,51 +313,55 @@ const Details = () => {
           inputFormat: problemData.inputFormat,
           outputFormat: problemData.outputFormat,
           constraints: problemData.constraints,
-          difficulty: problemData.rating < 1000 ? 'EASY' : 
-                      problemData.rating < 2000 ? 'MEDIUM' : 'HARD',
+          difficulty:
+            problemData.rating < 1000
+              ? "EASY"
+              : problemData.rating < 2000
+                ? "MEDIUM"
+                : "HARD",
           rating: problemData.rating,
           score: problemData.maxScore,
           timeLimit: 1000,
           memoryLimit: 256,
-          testCases: problemData.testCases.map(tc => ({
+          testCases: problemData.testCases.map((tc) => ({
             input: tc.input,
             output: tc.output,
-            isHidden: !tc.sample
-          }))
+            isHidden: !tc.sample,
+          })),
         });
-        toast.success('New problem added successfully!');
+        toast.success("New problem added successfully!");
       }
 
-      setProblems(prev => [...prev, problemData]);
+      setProblems((prev) => [...prev, problemData]);
     } catch (error) {
       const err = error as ApiError;
-      toast.error(err?.response?.data?.message || 'Failed to add problem');
+      toast.error(err?.response?.data?.message || "Failed to add problem");
     }
   };
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'details':
+      case "details":
         return (
           <div className=" flex flex-col lg:flex-row  gap-8 ">
             <div className="w-56">
               <div className="space-y-4">
-                <button 
-                  onClick={() => setActiveSection('basic')}
+                <button
+                  onClick={() => setActiveSection("basic")}
                   className={`w-full text-left px-4 py-2 rounded-lg ${
-                    activeSection === 'basic' 
-                      ? 'bg-[#1A1D24] text-white' 
-                      : 'text-gray-400 hover:text-white'
+                    activeSection === "basic"
+                      ? "bg-[#1A1D24] text-white"
+                      : "text-gray-400 hover:text-white"
                   }`}
                 >
                   Basic Details
                 </button>
-                <button 
-                  onClick={() => setActiveSection('description')}
+                <button
+                  onClick={() => setActiveSection("description")}
                   className={`w-full text-left px-4 py-2 rounded-lg ${
-                    activeSection === 'description' 
-                      ? 'bg-[#1A1D24] text-white' 
-                      : 'text-gray-400 hover:text-white'
+                    activeSection === "description"
+                      ? "bg-[#1A1D24] text-white"
+                      : "text-gray-400 hover:text-white"
                   }`}
                 >
                   Contest Description
@@ -348,23 +370,31 @@ const Details = () => {
             </div>
 
             <div className="flex-1">
-              {activeSection === 'basic' ? (
+              {activeSection === "basic" ? (
                 <>
                   <h2 className="text-white text-lg mb-6">Basic Details</h2>
-                  <BasicDetailsForm formData={formData} onChange={handleInputChange} />
+                  <BasicDetailsForm
+                    formData={formData}
+                    onChange={handleInputChange}
+                  />
                 </>
               ) : (
                 <>
-                  <h2 className="text-white text-lg mb-6">Contest Description</h2>
-                  <DescriptionForm formData={formData} onChange={handleInputChange} />
+                  <h2 className="text-white text-lg mb-6">
+                    Contest Description
+                  </h2>
+                  <DescriptionForm
+                    formData={formData}
+                    onChange={handleInputChange}
+                  />
                 </>
               )}
             </div>
           </div>
         );
-      case 'problems':
+      case "problems":
         return (
-          <Problems 
+          <Problems
             problems={problems}
             onAddProblem={handleAddProblem}
             onCreateProblem={handleCreateProblem}
@@ -372,7 +402,7 @@ const Details = () => {
             onSaveProblem={handleSaveProblem}
           />
         );
-      case 'settings':
+      case "settings":
         return <div>Settings Content</div>;
       default:
         return null;
@@ -380,9 +410,9 @@ const Details = () => {
   };
 
   if (showPreview) {
-    const contestId = searchParams?.get('contestId');
+    const contestId = searchParams?.get("contestId");
     if (!contestId) {
-      toast.error('Contest ID not found');
+      toast.error("Contest ID not found");
       return null;
     }
 
@@ -410,13 +440,13 @@ const Details = () => {
                 rules: formData.rules,
                 prizes: formData.prizes,
                 score: formData.score,
-                problems: problems.map(p => ({
+                problems: problems.map((p) => ({
                   ...p,
                   title: p.name,
                   maxScore: p.maxScore || 0,
                   score: p.score || 0,
-                  rating: p.rating || 0
-                }))
+                  rating: p.rating || 0,
+                })),
               }}
             />
           </div>
@@ -431,40 +461,40 @@ const Details = () => {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 md:mb-8">
           {/* Navigation Section */}
           <div className="flex flex-wrap items-center gap-4 md:gap-8">
-            <button 
+            <button
               onClick={() => router.back()}
               className="text-white hover:text-gray-300 pb-2 flex items-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
-            
+
             <div className="flex flex-wrap gap-4">
-              <button 
-                onClick={() => setActiveTab('details')}
+              <button
+                onClick={() => setActiveTab("details")}
                 className={`pb-2 ${
-                  activeTab === 'details' 
-                    ? 'text-[#C879EB] border-b-2 border-[#C879EB]' 
-                    : 'text-white hover:text-gray-400 transition-all duration-200'
+                  activeTab === "details"
+                    ? "text-[#C879EB] border-b-2 border-[#C879EB]"
+                    : "text-white hover:text-gray-400 transition-all duration-200"
                 }`}
               >
                 Details
               </button>
-              <button 
-                onClick={() => setActiveTab('problems')}
+              <button
+                onClick={() => setActiveTab("problems")}
                 className={`pb-2 ${
-                  activeTab === 'problems' 
-                    ? 'text-[#C879EB] border-b-2 border-[#C879EB]' 
-                    : 'text-white hover:text-gray-400 transition-all duration-200'
+                  activeTab === "problems"
+                    ? "text-[#C879EB] border-b-2 border-[#C879EB]"
+                    : "text-white hover:text-gray-400 transition-all duration-200"
                 }`}
               >
                 Problems
               </button>
-              <button 
-                onClick={() => setActiveTab('settings')}
+              <button
+                onClick={() => setActiveTab("settings")}
                 className={`pb-2 ${
-                  activeTab === 'settings' 
-                    ? 'text-[#C879EB] border-b-2 border-[#C879EB]' 
-                    : 'text-white hover:text-gray-400 transition-all duration-200'
+                  activeTab === "settings"
+                    ? "text-[#C879EB] border-b-2 border-[#C879EB]"
+                    : "text-white hover:text-gray-400 transition-all duration-200"
                 }`}
               >
                 Settings
@@ -474,16 +504,16 @@ const Details = () => {
 
           {/* Action Buttons */}
           <div className="flex items-center gap-4 mt-4 sm:mt-0">
-            <button 
+            <button
               onClick={handlePreview}
               className="px-4 py-2 border border-white text-white rounded hover:bg-white hover:bg-opacity-10 transition-all duration-200 text-sm md:text-base"
             >
               Live Preview
             </button>
-            <button 
+            <button
               onClick={handleSubmit}
               disabled={!isDirty}
-              className={`px-4 py-2 bg-[#C879EB] text-white rounded hover:bg-opacity-90 transition-all duration-200 text-sm md:text-base ${!isDirty ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`px-4 py-2 bg-[#C879EB] text-white rounded hover:bg-opacity-90 transition-all duration-200 text-sm md:text-base ${!isDirty ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               Save Changes
             </button>
@@ -495,6 +525,5 @@ const Details = () => {
     </div>
   );
 };
-
 
 export default Details;
