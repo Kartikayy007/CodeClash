@@ -77,7 +77,7 @@ const ProblemPage = () => {
 
   return (
     <div className="min-h-screen bg-[#10141D]">
-      <div className="flex flex-col sm:flex-row items-center justify-end gap-4 p-4 text-white bg-[#10151c]">
+      <div className="flex md:-mt-16 mt-0 flex-col sm:flex-row items-center justify-end gap-4 p-4 text-white bg-[#10151c]">
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#2A2F3E] h-9 w-full sm:w-auto">
           <Timer
             size={18}
@@ -92,7 +92,7 @@ const ProblemPage = () => {
           </span>
         </div>
         {endTime && (
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#2A2F3E] h-9 w-full sm:w-auto">
+          <div className="flex  items-center gap-2 px-3 py-1.5 rounded-lg bg-[#2A2F3E] h-9 w-full sm:w-auto">
             <Calendar size={18} className="text-gray-400" />
             <span className="text-sm text-gray-400">
               Contest ends {formatEndTime(endTime)}
