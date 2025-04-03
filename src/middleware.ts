@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
   const registrationEmail = request.cookies.get("registrationEmail");
 
   // Check if the path starts with /battle
-  if ((pathname.startsWith("/battle"))||(pathname.startsWith("/dashboard"))||(pathname.startsWith("/profile"))) {
+  if ((pathname.startsWith("/battle"))||(pathname.startsWith("/profile"))) {
     return NextResponse.redirect(new URL("/404", request.url));
   }
 

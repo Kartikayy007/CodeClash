@@ -247,8 +247,8 @@ export default function ContestPage() {
             </h1>
           </div>
           <div className="flex flex-col gap-4">
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#2A2F3E] h-9 w-full sm:w-auto">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#2A2F3E]">
                 <Timer
                   size={18}
                   className={timeLeft <= 300 ? "text-red-500 animate-pulse" : "text-blue-400"}
@@ -261,7 +261,7 @@ export default function ContestPage() {
                   {formatTime(timeLeft)}
                 </span>
               </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#2A2F3E] h-9 w-full sm:w-auto">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#2A2F3E]">
                 <Calendar size={18} className="text-gray-400" />
                 <span className="text-sm text-gray-400">
                   Contest ends {formatEndTime(contest.endTime)}

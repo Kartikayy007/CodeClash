@@ -334,30 +334,53 @@ export default function ContestDetails() {
         </div>
 
         {/* Content Section */}
-        <div className="flex flex-col md:flex-row px-4 md:px-8 gap-4 md:gap-8">
-          {/* Tabs */}
-          <div className="w-full md:w-[200px] rounded-lg h-fit">
-            {(["Description", "Rules", "Score", "Prizes"] as const).map(
-              (tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-base md:text-lg transition-colors ${
-                    activeTab === tab
-                      ? "text-white bg-[#282C33] rounded-lg"
-                      : "text-gray-400 hover:text-white"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ),
-            )}
+        <div className="flex flex-col md:flex-row px-4 md:px-8 gap-4 md:gap-8 py-4">
+          {/* Contest Info */}
+          <div className="w-full md:w-1/3">
+            <div className="bg-[#1A1D24] rounded-lg p-4 md:p-6 space-y-4">
+              <div className="space-y-2">
+                <h2 className="text-lg font-semibold">Contest Details</h2>
+                <p className="text-sm text-gray-400">
+                  {new Date(contest.startTime).toLocaleString()} to{" "}
+                  {new Date(contest.endTime).toLocaleString()}
+                </p>
+                <p className="text-sm text-gray-400">
+                  Created by {contest.creator.username}
+                </p>
+              </div>
+              {contest.isRegistered && contest.status === "UPCOMING" && (
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-400">Contest starts in</p>
+                  <Timer startTime={contest.startTime} contestId={contest.id} />
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Content */}
+          {/* Tabs and Content */}
           <div className="flex-1">
-            <div className="bg-[#1A1D24] rounded-lg p-4 md:p-8">
-              {renderTabContent()}
+            <div className="bg-[#1A1D24] rounded-lg p-4 md:p-6">
+              {/* Tabs */}
+              <div className="flex gap-4 mb-6 overflow-x-auto pb-2 scrollbar-hide">
+                {(["Description", "Rules", "Score", "Prizes"] as const).map(
+                  (tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`pb-2 whitespace-nowrap text-sm md:text-base ${
+                        activeTab === tab
+                          ? "text-white border-b-2 border-white"
+                          : "text-gray-400 hover:text-white"
+                      }`}
+                    >
+                      {tab}
+                    </button>
+                  ),
+                )}
+              </div>
+
+              {/* Content */}
+              <div className="text-gray-300">{renderTabContent()}</div>
             </div>
           </div>
         </div>
