@@ -9,10 +9,11 @@ import {
   LeaderboardEntry,
 } from "@/features/contests/types/contest.types";
 import LabelButton from "@/components/ui/LabelButton";
-import { Timer } from "lucide-react";
+import { Timer, Calendar } from "lucide-react";
 import ProblemSet from "@/components/Contest/PreviewContest/ProblemSet";
 import Leaderboard from "@/components/Contest/contestPage/Leaderboard";
 import MySubmissions from "@/components/Contest/contestPage/MySubmissions";
+
 interface ApiError {
   response: {
     data: {
@@ -20,6 +21,7 @@ interface ApiError {
     };
   };
 }
+
 type TabType = "Problem Set" | "Leaderboard" | "My Submissions";
 
 export default function ContestPage() {
@@ -144,9 +146,30 @@ export default function ContestPage() {
   }, [contestId, contest]);
 
   const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
+    const days = Math.floor(seconds / (24 * 60 * 60));
+    const hours = Math.floor((seconds % (24 * 60 * 60)) / (60 * 60));
+    const minutes = Math.floor((seconds % (60 * 60)) / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+
+    const parts = [];
+    if (days > 0) parts.push(`${days}d`);
+    if (hours > 0) parts.push(`${hours}h`);
+    if (minutes > 0) parts.push(`${minutes}m`);
+    parts.push(`${secs.toString().padStart(2, "0")}s`);
+
+    return parts.join(" ");
+  };
+
+  const formatEndTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
   };
 
   const handleSolveProblem = (problemId: string) => {
@@ -217,29 +240,43 @@ export default function ContestPage() {
   return (
     <div className="min-h-screen bg-[#10141D] text-white">
       <div className="flex flex-col h-full">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between p-4 md:p-8 gap-4">
-          <h1 className="text-4xl md:text-5xl h-fit font-bold truncate">
-            {contest.title}
-          </h1>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Timer
-                size={24}
-                className={timeLeft <= 300 ? "text-red-500 animate-pulse" : ""}
-              />
-              <span
-                className={`text-xl md:text-2xl font-bold ${timeLeft <= 300 ? "text-red-500" : ""}`}
-              >
-                {formatTime(timeLeft)}
-              </span>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between p-4 md:p-8 gap-4 bg-[#10151c] ">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-4xl md:text-5xl h-fit font-bold truncate">
+              {contest.title}
+            </h1>
+          </div>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#2A2F3E] h-9 w-full sm:w-auto">
+                <Timer
+                  size={18}
+                  className={timeLeft <= 300 ? "text-red-500 animate-pulse" : "text-blue-400"}
+                />
+                <span
+                  className={`text-base font-medium ${
+                    timeLeft <= 300 ? "text-red-500" : "text-blue-400"
+                  }`}
+                >
+                  {formatTime(timeLeft)}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#2A2F3E] h-9 w-full sm:w-auto">
+                <Calendar size={18} className="text-gray-400" />
+                <span className="text-sm text-gray-400">
+                  Contest ends {formatEndTime(contest.endTime)}
+                </span>
+              </div>
             </div>
-            <LabelButton
-              variant="red"
-              onClick={() => router.push("/contest/join")}
-              className="whitespace-nowrap"
-            >
-              END
-            </LabelButton>
+            <div className="flex justify-end">
+              <LabelButton
+                variant="red"
+                onClick={() => router.push("/contest/join")}
+                className="whitespace-nowrap"
+              >
+                END
+              </LabelButton>
+            </div>
           </div>
         </div>
 
@@ -264,9 +301,6 @@ export default function ContestPage() {
             </div>
             <div className="w-full">{renderTabContent()}</div>
           </div>
-          {/* <div className="lg:w-80">
-            <ContestInsights insights={dummyInsights} isLoading={loadingInsights} />
-          </div> */}
         </div>
       </div>
     </div>

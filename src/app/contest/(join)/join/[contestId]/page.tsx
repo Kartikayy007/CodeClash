@@ -166,36 +166,31 @@ export default function ContestDetails() {
   return (
     <div className="min-h-screen bg-[#10141D] text-white">
       <div className="flex flex-col h-full">
-        <div className="flex items-center justify-between p-8">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 text-white hover:text-gray-300 opacity-0"
-          >
-            {/* <ArrowLeft size={20} />
-            <span>Back</span> */}
-          </button>
-
-          <div className="bg-[#1A1D24] w-1/2 rounded-lg px-18 py-8 flex justify-center items-center">
-            <div className="text-center space-y-4">
-              <h1 className="text-2xl font-bold">{contest.title}</h1>
-              <p className="text-gray-400">
-                {new Date(contest.startTime).toLocaleString()} to{" "}
-                {new Date(contest.endTime).toLocaleString()}
-              </p>
-              <p className="text-white text-center text-sm">
-                {contest.creator.username}
-              </p>
-              {contest.isRegistered && contest.status === "UPCOMING" && (
-                <div className="mt-4">
-                  <p className="text-sm text-gray-400 mb-2">
-                    Contest starts in
-                  </p>
-                  <Timer startTime={contest.startTime} contestId={contest.id} />
-                </div>
-              )}
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row items-center justify-between p-4 md:p-8 gap-4">
+          <div className="w-full md:w-1/2">
+            <div className="bg-[#1A1D24] rounded-lg p-4 md:p-8 flex justify-center items-center">
+              <div className="text-center space-y-4">
+                <h1 className="text-xl md:text-2xl font-bold">{contest.title}</h1>
+                <p className="text-sm md:text-base text-gray-400">
+                  {new Date(contest.startTime).toLocaleString()} to{" "}
+                  {new Date(contest.endTime).toLocaleString()}
+                </p>
+                <p className="text-white text-center text-sm">
+                  {contest.creator.username}
+                </p>
+                {contest.isRegistered && contest.status === "UPCOMING" && (
+                  <div className="mt-4">
+                    <p className="text-sm text-gray-400 mb-2">
+                      Contest starts in
+                    </p>
+                    <Timer startTime={contest.startTime} contestId={contest.id} />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-          <div>
+          <div className="w-full md:w-auto">
             <LabelButton
               onClick={handleRegister}
               disabled={
@@ -203,20 +198,23 @@ export default function ContestDetails() {
                 contest.status !== "UPCOMING" ||
                 contest.isRegistered
               }
+              className="w-full md:w-auto"
             >
               {registering ? "Registering..." : "Register"}
             </LabelButton>
           </div>
         </div>
 
-        <div className="flex px-8 gap-8">
-          <div className="w-[200px] rounded-lg h-fit">
+        {/* Content Section */}
+        <div className="flex flex-col md:flex-row px-4 md:px-8 gap-4 md:gap-8">
+          {/* Tabs */}
+          <div className="w-full md:w-[200px] rounded-lg h-fit">
             {(["Description", "Rules", "Score", "Prizes"] as const).map(
               (tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-lg transition-colors ${
+                  className={`w-full text-left px-4 py-2 rounded-lg text-base md:text-lg transition-colors ${
                     activeTab === tab
                       ? "text-white bg-[#282C33] rounded-lg"
                       : "text-gray-400 hover:text-white"
@@ -228,8 +226,9 @@ export default function ContestDetails() {
             )}
           </div>
 
+          {/* Content */}
           <div className="flex-1">
-            <div className="bg-[#1A1D24] rounded-lg p-8">
+            <div className="bg-[#1A1D24] rounded-lg p-4 md:p-8">
               {renderTabContent()}
             </div>
           </div>
