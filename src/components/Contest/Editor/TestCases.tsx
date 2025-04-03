@@ -174,7 +174,7 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
           </div>
         </div>
 
-        <div className="flex-1 grid grid-rows-2 p-4 gap-4 overflow-hidden">
+        <div className="flex-1 grid grid-rows-2 p-4 gap-4 overflow-hidden scrollbar-hide">
           <div className="flex flex-col min-h-0">
             <h4 className="text-sm text-gray-400 mb-1">
               {isCustomInputMode ? "Custom Input:" : "Input:"}
@@ -195,7 +195,7 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
             </div>
           </div>
 
-          <div className="flex flex-col min-h-0">
+          <div className="flex flex-col min-h-0 scrollbar-hide">
             {!isCustomInputMode && (
               <>
                 <div className="flex justify-between items-center mb-1">
@@ -216,7 +216,7 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
 
             {((runResult !== null && runResult !== undefined) || runError) && (
               <div className={isCustomInputMode ? "" : "mt-2"} ref={resultsRef}>
-                <div className="flex justify-between items-center mb-1">
+                <div className="flex justify-between items-center mb-1 scrollbar-hide">
                   <h4 className="text-sm text-gray-400">Your Output:</h4>
                   {!isRunning &&
                     !runError &&
