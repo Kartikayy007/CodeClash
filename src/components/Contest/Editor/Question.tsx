@@ -81,7 +81,7 @@ const Question = ({ problem, isLoading }: QuestionProps) => {
   }
 
   return (
-    <div className="p-6 text-white">
+    <div className="p-6 text-white scrollbar-hide">
       <h1 className="text-2xl font-bold mb-4">
         {problem.title} ({problem.rating})
       </h1>

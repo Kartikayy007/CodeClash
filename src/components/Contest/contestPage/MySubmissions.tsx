@@ -154,10 +154,10 @@ const MySubmissions: React.FC<MySubmissionsProps> = ({ contestId }) => {
             </div>
           ) : (
             submissions.map((submission) => (
-              <div
-                key={submission.id}
-                className="grid grid-cols-5 p-4 items-center bg-[#1E2127] hover:bg-[#282C33] transition-colors"
-              >
+            <div
+              key={submission.id}
+              className="grid grid-cols-5 p-4 items-center bg-[#1E2127] hover:bg-[#282C33] transition-colors"
+            >
                 <div className="truncate flex items-center gap-1">
                   {submission.question?.title || "Unknown Problem"}
                   {submission.question?.difficulty && (
@@ -194,13 +194,13 @@ const MySubmissions: React.FC<MySubmissionsProps> = ({ contestId }) => {
                     .replace(",", "")}
                 </div>
                 <div>{submission.score !== null ? submission.score : "-"}</div>
-              </div>
+            </div>
             ))
           )}
         </div>
 
         {totalPages > 1 && (
-          <div className="flex justify-center gap-2 mt-4 text-gray-400">
+        <div className="flex justify-center gap-2 mt-4 text-gray-400">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
@@ -218,7 +218,7 @@ const MySubmissions: React.FC<MySubmissionsProps> = ({ contestId }) => {
             >
               <ChevronRight size={16} />
             </button>
-          </div>
+        </div>
         )}
       </div>
     </div>
