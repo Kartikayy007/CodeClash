@@ -63,7 +63,7 @@ export default function JoinContest() {
         </div>
       </div>
 
-      <div className="w-full md:w-1/2 p-8 bg-[#191C23]">
+      <div className="w-full md:w-1/2 p-8 md:bg-[#191C23]">
         <div className="max-w-md mx-auto w-full flex flex-col gap-16">
           <div className="flex justify-center items-center mb-12">
             <div className="flex gap-8">

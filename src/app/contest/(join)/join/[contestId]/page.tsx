@@ -298,8 +298,8 @@ export default function ContestDetails() {
             <span>Back</span> */}
           </button>
 
-          <div className="bg-[#1A1D24] w-1/2 rounded-lg px-18 py-8 flex justify-center items-center">
-            <div className="text-center space-y-4">
+          <div className=" w-1/2 rounded-lg px-18 py-8 flex justify-center items-center">
+            <div className="hidden text-center space-y-4">
               <h1 className="text-5xl font-bold">{contest.title}</h1>
               <p className="text-gray-400">
                 {new Date(contest.startTime).toLocaleString()} to{" "}
