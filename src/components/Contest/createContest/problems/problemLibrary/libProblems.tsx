@@ -165,7 +165,7 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
 
   return (
     <div className="min-h-screen bg-[#10141D] text-white p-4 md:p-8">
-      <div className="max-w-[1200px] mx-auto">
+      <div className=" mx-auto">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
           <button
             onClick={onBack}

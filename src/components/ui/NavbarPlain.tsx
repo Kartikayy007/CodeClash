@@ -2,12 +2,12 @@
 
 import React from "react";
 import Image from "next/image";
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { LogOut } from 'lucide-react';
 
 const Navbar = () => {
   const router = useRouter();
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
   const handleLogout = () => {
     // Clear local storage
