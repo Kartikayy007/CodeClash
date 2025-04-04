@@ -2,15 +2,27 @@
 
 import React from "react";
 import Image from "next/image";
-// import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation';
+import { LogOut } from 'lucide-react';
 
 const Navbar = () => {
-  // const router = useRouter();
-  // const pathname = usePathname();
+  const router = useRouter();
+  const pathname = usePathname();
 
-  // const isContestRoute = pathname && pathname.includes('/contest/') &&
-  //   !pathname.includes('/contest/join') &&
-  //   !pathname.includes('/contest/create');
+  const handleLogout = () => {
+    // Clear local storage
+    localStorage.clear();
+    
+    // Clear all cookies
+    document.cookie.split(";").forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, "")
+        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
+
+    // Redirect to login page
+    router.push("/login");
+  };
 
   return (
     <nav className="relative bg-[#10141D] z-50">
@@ -25,34 +37,15 @@ const Navbar = () => {
           />
         </div>
 
-        {/* {!isContestRoute && (
-          <div className='flex items-center gap-4'>
-            <button className='flex items-center gap-6'>
-              {pathname === '/dashboard' ? (
-                <Settings 
-                  size={30} 
-                  color='white' 
-                  className="hover:rotate-90 transition-transform duration-300"
-                  onClick={() => router.push('/settings')}
-                />
-              ) : (
-                <>
-                  <House 
-                    size={30} 
-                    color='white' 
-                    onClick={() => router.push('/dashboard')}
-                  />
-                  <Settings 
-                    size={30} 
-                    color='white' 
-                    className="hover:rotate-90 transition-transform duration-300"
-                    onClick={() => router.push('/settings')}
-                  />
-                </>
-              )}
-            </button>
-          </div>
-        )} */}
+        <div className="flex items-center gap-4">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#2A2F3E] hover:bg-[#3A3F4E] transition-colors"
+          >
+            <LogOut size={20} className="text-white" />
+            <span className="text-white text-sm font-medium">Logout</span>
+          </button>
+        </div>
       </div>
     </nav>
   );
