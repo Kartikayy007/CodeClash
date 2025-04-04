@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ContestDetails } from "@/types/contest.types";
 
 interface BasicDetailsFormProps {
@@ -16,6 +16,28 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({
   today.setHours(0, 0, 0, 0);
   const todayStr = today.toISOString().split("T")[0];
 
+  // Debug timezone information on component mount
+  useEffect(() => {
+    console.log('--- BASIC DETAILS FORM TIMEZONE DEBUG ---');
+    console.log('Current date (ISO):', new Date().toISOString());
+    console.log('Current date (Local):', new Date().toString());
+    console.log('Current timezone offset:', new Date().getTimezoneOffset() / -60);
+    console.log('Today string for min dates:', todayStr);
+    console.log('Form data dates:', {
+      startDate: formData.startTime.date,
+      startTime: formData.startTime.time,
+      endDate: formData.endTime.date,
+      endTime: formData.endTime.time
+    });
+    
+    // Test parsing the dates
+    if (formData.startTime.date && formData.startTime.time) {
+      const startDateTime = new Date(`${formData.startTime.date}T${formData.startTime.time}:00`);
+      console.log('Parsed start date (ISO):', startDateTime.toISOString());
+      console.log('Parsed start date (Local):', startDateTime.toString());
+    }
+  }, [formData, todayStr]);
+
   // Get minimum time for start time if date is today
   const getMinStartTime = (date: string) => {
     if (date === todayStr) {
@@ -32,7 +54,7 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({
     }
     return "00:00";
   };
-
+  console.log(formData.startTime);
   return (
     <div className="space-y-6">
       <div className="form-item">

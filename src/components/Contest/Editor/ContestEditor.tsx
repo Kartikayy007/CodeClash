@@ -19,6 +19,7 @@ import { javascript } from "@codemirror/lang-javascript";
 import { cpp } from "@codemirror/lang-cpp";
 import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
+import FollowCursor from "@/components/ui/FollowCursor";
 
 interface ContestEditorProps {
   problemId: string;
@@ -84,6 +85,7 @@ int main() {
   const [submittedLanguage, setSubmittedLanguage] = useState("");
   const [showSubmissionResult, setShowSubmissionResult] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showFailureMeme, setShowFailureMeme] = useState(false);
   const [activeTestCase, setActiveTestCase] = useState(0);
   const testCasesRef = useRef<HTMLDivElement>(null);
   const testCasesComponentRef = useRef<TestCasesRef>(null);
@@ -245,6 +247,8 @@ int main() {
           failedTestCase: response.failedTestCase,
           score: response.score,
         });
+        setShowFailureMeme(true);
+        setTimeout(() => setShowFailureMeme(false), 5000);
       } else {
         setSubmissionResult({
           status: response.status,
@@ -268,6 +272,8 @@ int main() {
         message: "Failed to run. Please try again.",
       });
       setShowSubmissionResult(true);
+      setShowFailureMeme(true);
+      setTimeout(() => setShowFailureMeme(false), 5000);
       console.error("Submit error:", error);
     } finally {
       setIsSubmitting(false);
@@ -429,6 +435,26 @@ int main() {
           style={{ zIndex: 1000 }}
           colors={["#22c55e"]}
         />
+      )}
+      
+      {showFailureMeme && (
+        <div className="fixed z-[1000]">
+          <FollowCursor
+            offsetX={20}
+            cardWidth='200px'
+            rotationFactor={20}
+            enableTilt={true}
+            enableDrag={false}
+            enableZoom={false}
+            hoverScale={1.1}
+            animationConfig={{ mass: 5, tension: 350, friction: 40 }}
+            wheelConfig={{ mass: 1, tension: 200, friction: 30 }}
+          >
+            <h1 className="text-white font-bold text-center">
+              
+            </h1>
+          </FollowCursor>
+        </div>
       )}
 
       <div className="overflow-scroll rounded-lg flex flex-col lg:w-[50%] w-full">

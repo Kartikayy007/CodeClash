@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import ContestEditor from "@/components/Contest/Editor/ContestEditor";
 import { useParams } from "next/navigation";
 import { contestApi } from "@/features/contests/api/contestApi";
-import { Timer, Calendar } from "lucide-react";
+import { Timer } from "lucide-react";
 
 const ProblemPage = () => {
   const params = useParams();
@@ -63,17 +63,17 @@ const ProblemPage = () => {
     return parts.join(" ");
   };
 
-  const formatEndTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    });
-  };
+  // const formatEndTime = (dateString: string) => {
+  //   const date = new Date(dateString);
+  //   return date.toLocaleDateString('en-US', {
+  //     weekday: 'short',
+  //     month: 'short',
+  //     day: 'numeric',
+  //     hour: '2-digit',
+  //     minute: '2-digit',
+  //     hour12: true
+  //   });
+  // };
 
   return (
     <div className="min-h-screen bg-[#10141D]">
@@ -91,14 +91,14 @@ const ProblemPage = () => {
             {formatTime(timeLeft)}
           </span>
         </div>
-        {endTime && (
+        {/* {endTime && (
           <div className="flex  items-center gap-2 px-3 py-1.5 rounded-lg bg-[#2A2F3E] h-9 w-full sm:w-auto">
             <Calendar size={18} className="text-gray-400" />
             <span className="text-sm text-gray-400">
               Contest ends {formatEndTime(endTime)}
             </span>
           </div>
-        )}
+        )} */}
       </div>
       <ContestEditor problemId={problemId} contestId={contestId} />
     </div>
