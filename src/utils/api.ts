@@ -62,7 +62,6 @@ const refreshTokenAndRetry = async (
 
     if (data.success && data.data?.tokens) {
       localStorage.setItem("accessToken", data.data.tokens.accessToken);
-      localStorage.setItem("refreshToken", data.data.tokens.refreshToken);
       api.defaults.headers.common["Authorization"] =
         `Bearer ${data.data.tokens.accessToken}`;
       processQueue();
@@ -79,8 +78,9 @@ const refreshTokenAndRetry = async (
     }
   } catch (error: unknown) {
     processQueue(error);
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+    localStorage.clear();
+    document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     redirectToLogin();
     return Promise.reject(error);
   } finally {
@@ -149,7 +149,6 @@ const setupTokenRefresh = () => {
 
           if (data.success && data.data?.tokens) {
             localStorage.setItem("accessToken", data.data.tokens.accessToken);
-            localStorage.setItem("refreshToken", data.data.tokens.refreshToken);
             api.defaults.headers.common["Authorization"] =
               `Bearer ${data.data.tokens.accessToken}`;
           }
