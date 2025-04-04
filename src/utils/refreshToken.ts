@@ -10,3 +10,12 @@ export const handleTokenRefresh = async () => {
     return false;
   }
 };
+
+/**
+ * Redirects the user to the login page.
+ */
+export const navigateToLogin = (): void => {
+  if (typeof window !== "undefined") {
+    window.location.href = "/login";
+  }
+};
