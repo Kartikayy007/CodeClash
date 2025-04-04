@@ -20,14 +20,26 @@ export default function Timer({
     seconds: 0,
   });
 
+  console.log("startTime", startTime);
+
   useEffect(() => {
     const calculateTimeLeft = () => {
       // Create Date objects
       const now = new Date();
       const start = new Date(startTime);
-
-      // Get time difference in milliseconds
+      
+      // Debug timezone info
+      console.log('--- TIMER COMPONENT TIMEZONE DEBUG ---');
+      console.log('Input startTime string:', startTime);
+      console.log('Current time (ISO):', now.toISOString());
+      console.log('Current time (Local):', now.toString());
+      console.log('Current timezone offset:', now.getTimezoneOffset() / -60);
+      console.log('Parsed start time (ISO):', start.toISOString());
+      console.log('Parsed start time (Local):', start.toString());
+      console.log('Time difference (ms):', start.getTime() - now.getTime());
+      
       const distance = start.getTime() - now.getTime();
+      console.log("start, now", start.getTime(), now.getTime());
 
       if (distance < 0) {
         clearInterval(timer);

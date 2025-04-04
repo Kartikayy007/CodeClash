@@ -81,8 +81,8 @@ export default function CreateContest() {
       const endDateTime = new Date(
         `${formData.endDate}T${formData.endTime}:00`,
       );
-
-      // Format dates to ISO string (UTC)
+      
+      console.log(startDateTime);
       const response = await contestApi.createContest({
         title: formData.name,
         description: formData.description,

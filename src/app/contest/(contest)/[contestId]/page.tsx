@@ -9,7 +9,7 @@ import {
   LeaderboardEntry,
 } from "@/features/contests/types/contest.types";
 import LabelButton from "@/components/ui/LabelButton";
-import { Timer, Calendar } from "lucide-react";
+import { Timer } from "lucide-react";
 import ProblemSet from "@/components/Contest/PreviewContest/ProblemSet";
 import Leaderboard from "@/components/Contest/contestPage/Leaderboard";
 import MySubmissions from "@/components/Contest/contestPage/MySubmissions";
@@ -160,17 +160,17 @@ export default function ContestPage() {
     return parts.join(" ");
   };
 
-  const formatEndTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    });
-  };
+  // const formatEndTime = (dateString: string) => {
+  //   const date = new Date(dateString);
+  //   return date.toLocaleDateString('en-US', {
+  //     weekday: 'short',
+  //     month: 'short',
+  //     day: 'numeric',
+  //     hour: '2-digit',
+  //     minute: '2-digit',
+  //     hour12: true
+  //   });
+  // };
 
   const handleSolveProblem = (problemId: string) => {
     router.push(`/contest/${contestId}/problem/${problemId}`);
@@ -259,12 +259,6 @@ export default function ContestPage() {
                   }`}
                 >
                   {formatTime(timeLeft)}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#2A2F3E]">
-                <Calendar size={18} className="text-gray-400" />
-                <span className="text-sm text-gray-400">
-                  Contest ends {formatEndTime(contest.endTime)}
                 </span>
               </div>
             </div>

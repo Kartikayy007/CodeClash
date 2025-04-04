@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/providers/redux-provider";
 import { Toaster } from "react-hot-toast";
 import ClickSpark from "@/components/ui/ClickSpark";
+// import FollowCursor from "@/components/ui/FollowCursor";
 
 const quicksand = Quicksand({ subsets: ["latin"] });
 
@@ -20,12 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={quicksand.className}>
-        <ClickSpark
-          sparkColor="#fff"
-          sparkSize={10}
-          sparkRadius={15}
-          sparkCount={8}
-          duration={400}
+          <ClickSpark
+            sparkColor="#fff"
+            sparkSize={10}
+            sparkRadius={15}
+            sparkCount={8}
+            duration={400}
           easing="ease-out"
         >
           <Providers>{children}</Providers>
