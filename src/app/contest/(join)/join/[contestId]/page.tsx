@@ -60,15 +60,15 @@ export default function ContestDetails() {
         ) {
           router.push(`/contest/${contestId}`);
         }
-        if (
-          response.contest.isRegistered === false &&
-          response.contest.status === "ONGOING"
-        ) {
-          toast.error("Contest has already started");
-          setTimeout(() => {
-            router.push(`/contest/join`);
-          }, 1000);
-        }
+        // if (
+        //   response.contest.isRegistered === false &&
+        //   response.contest.status === "ONGOING"
+        // ) {
+        //   toast.error("Contest has already started");
+        //   setTimeout(() => {
+        //     router.push(`/contest/join`);
+        //   }, 1000);
+        // }
         toast.success(response.message);
         if (response.contest) {
           setContest(response.contest);
@@ -93,6 +93,8 @@ export default function ContestDetails() {
 
       if (response.data) {
         toast.success(response.message || "Successfully joined the contest");
+        router.push(`/contest/${contestId}`);
+        
 
         const updatedDetails = await contestApi.getContestDetails(contestId);
         if (updatedDetails.contest) {
@@ -323,7 +325,6 @@ export default function ContestDetails() {
               onClick={handleRegister}
               disabled={
                 registering ||
-                contest.status !== "UPCOMING" ||
                 contest.isRegistered
               }
               className="w-full md:w-auto"
