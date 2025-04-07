@@ -106,10 +106,10 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
               <div
                 key={index}
                 className={`
-                ${isErrorLine ? "text-red-400 font-semibold" : ""}
-                ${isCodeLine ? "text-amber-300 pl-4" : ""}
-                ${isIndicatorLine ? "text-green-400 pl-4" : ""}
-              `}
+                  ${isErrorLine ? "text-red-400 font-semibold" : ""}
+                  ${isCodeLine ? "text-amber-300 pl-4" : ""}
+                  ${isIndicatorLine ? "text-green-400 pl-4" : ""}
+                `}
               >
                 {line}
               </div>
@@ -174,8 +174,9 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
           </div>
         </div>
 
-        <div className="flex-1 grid grid-rows-2 p-4 gap-4 overflow-hidden scrollbar-hide">
-          <div className="flex flex-col min-h-0">
+        <div className="flex-1 flex flex-col p-4 gap-4 overflow-auto scrollbar-hide">
+          {/* Input section with controlled height */}
+          <div className="flex flex-col h-32 max-h-32">
             <h4 className="text-sm text-gray-400 mb-1">
               {isCustomInputMode ? "Custom Input:" : "Input:"}
             </h4>
@@ -195,9 +196,10 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
             </div>
           </div>
 
-          <div className="flex flex-col min-h-0 scrollbar-hide">
+          {/* Output sections with remaining height */}
+          <div className="flex-1 flex flex-col min-h-0 scrollbar-hide">
             {!isCustomInputMode && (
-              <>
+              <div className="flex-1 min-h-0 mb-4">
                 <div className="flex justify-between items-center mb-1">
                   <h4 className="text-sm text-gray-400">Expected Output:</h4>
                   {isRunning && (
@@ -206,17 +208,17 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
                     </span>
                   )}
                 </div>
-                <div className="flex-1 overflow-auto">
+                <div className="h-32 overflow-auto">
                   <pre className="bg-[#292C33] p-2 rounded whitespace-pre-wrap font-mono text-sm text-white h-full">
                     {testCases[activeCase]?.output || ""}
                   </pre>
                 </div>
-              </>
+              </div>
             )}
 
             {((runResult !== null && runResult !== undefined) || runError) && (
-              <div className={isCustomInputMode ? "" : "mt-2"} ref={resultsRef}>
-                <div className="flex justify-between items-center mb-1 scrollbar-hide">
+              <div className="flex-1 min-h-0" ref={resultsRef}>
+                <div className="flex justify-between items-center mb-1">
                   <h4 className="text-sm text-gray-400">Your Output:</h4>
                   {!isRunning &&
                     !runError &&
@@ -246,12 +248,12 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
                     <span className="ml-2">Running code...</span>
                   </div>
                 ) : runError ? (
-                  <div className="bg-[#1A1D24] text-red-500 border border-red-600/30 rounded-md p-3 overflow-auto max-h-[200px]">
+                  <div className="bg-[#1A1D24] text-red-500 border border-red-600/30 rounded-md p-3 overflow-auto h-32">
                     {formatCompilerError(runError)}
                   </div>
                 ) : runResult !== null ? (
                   <div
-                    className={`rounded-md p-3 text-sm overflow-auto ${
+                    className={`rounded-md p-3 text-sm overflow-auto h-32 ${
                       isCorrect === true && !isCustomInputMode
                         ? "bg-green-900/20 border border-green-600/30 text-green-200"
                         : isCorrect === false && !isCustomInputMode
