@@ -81,3 +81,5 @@ export const config = {
     "/contest/create",
   ],
 };
+
+// Middleware to redirect to dashboard if user is not logged in
