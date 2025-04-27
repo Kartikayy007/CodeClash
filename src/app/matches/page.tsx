@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import NavbarPlain from "@/components/ui/NavbarPlain";
-import { Search, Edit, BarChart2, Trash, Share, Menu } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Search,Share, Menu } from "lucide-react";
+
 import ShareContestModal from "@/components/Contest/ShareContestModal";
 
 type ContestStatus = "All" | "Scheduled" | "Ongoing" | "Completed";
@@ -18,7 +18,7 @@ interface Contest {
 }
 
 export default function ContestsPage() {
-  const router = useRouter();
+  
   const [selectedStatus, setSelectedStatus] = useState<ContestStatus>("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [contests, setContests] = useState<Contest[]>([]);
