@@ -127,9 +127,9 @@ export default function ContestsPage() {
                 size={18}
               />
             </div>
-            <button className="bg-purple-500 text-black px-4 py-2 rounded-lg w-full sm:w-auto">
+            {/* <button className="bg-purple-500 text-black px-4 py-2 rounded-lg w-full sm:w-auto">
               Create Contest
-            </button>
+            </button> */}
           </div>
         </div>
 
@@ -186,10 +186,7 @@ export default function ContestsPage() {
                 filteredContests.map((contest) => (
                   <div
                     key={contest.contestId}
-                    className="grid grid-cols-2 md:grid-cols-4 p-4 text-white border-b border-gray-700 hover:bg-[#282C34] cursor-pointer"
-                    onClick={() =>
-                      router.push(`/contest/statistics/${contest.contestId}`)
-                    }
+                    className="grid grid-cols-2 md:grid-cols-4 p-4 text-white border-b border-gray-700 hover:bg-[#282C34]"
                   >
                     <div className="flex flex-col">
                       <span>{contest.title}</span>
@@ -215,7 +212,7 @@ export default function ContestsPage() {
                         >
                           <Share size={18} />
                         </button>
-                        <button className="text-gray-400 hover:text-white">
+                        {/* <button className="text-gray-400 hover:text-white">
                           <Edit size={18} />
                         </button>
                         <button className="text-gray-400 hover:text-white hidden md:block">
@@ -223,7 +220,7 @@ export default function ContestsPage() {
                         </button>
                         <button className="text-gray-400 hover:text-white hidden md:block">
                           <Trash size={18} />
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                   </div>

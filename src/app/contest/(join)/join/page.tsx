@@ -70,13 +70,13 @@ export default function JoinContest() {
               <button className="text-white hover:text-gray-300 border-b-2 border-white pb-1 text-lg font-medium">
                 Join Contest
               </button>
-              {/* <div className="w-px bg-gray-700" />
+              <div className="w-px bg-gray-700" />
                <button
                 onClick={() => router.push('/contest/create')}
                 className="text-white/60 hover:text-white pb-1 text-lg font-medium transition-colors"
               >
                 Create Contest
-              </button> */}
+              </button>
             </div>
           </div>
 
