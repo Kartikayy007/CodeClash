@@ -60,7 +60,7 @@ export function middleware(request: NextRequest) {
   ];
   if (publicRoutes.includes(pathname)) {
     if (accessToken) {
-      return NextResponse.redirect(new URL("/contest/join", request.url));
+      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
     return NextResponse.next();
   }
