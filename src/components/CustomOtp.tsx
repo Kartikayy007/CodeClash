@@ -173,7 +173,7 @@ const CustomOtp = () => {
         if (response.success) {
           setValidationState("success");
           if (response.data?.tokens) {
-            localStorage.setItem("token", response.data.tokens.accessToken);
+            localStorage.setItem("accessToken", response.data.tokens.accessToken);
             localStorage.setItem(
               "refreshToken",
               response.data.tokens.refreshToken,
@@ -181,11 +181,15 @@ const CustomOtp = () => {
             document.cookie = `accessToken=${response.data.tokens.accessToken}; path=/`;
             document.cookie = `refreshToken=${response.data.tokens.refreshToken}; path=/`;
             localStorage.removeItem("registrationEmail");
+            localStorage.removeItem("registrationTimestamp");
+            document.cookie = "isRegistering=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            document.cookie = "registrationEmail=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            document.cookie = "registrationTimestamp=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
           }
           toast.success("Success", "OTP verified successfully");
-          setTimeout(() => {
+            setTimeout(() => {
             router.push("/dashboard");
-          }, 200);
+            }, 200);
         }
       } else if (verifyOtp.rejected.match(resultAction)) {
         setValidationState("error");

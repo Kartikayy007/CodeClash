@@ -84,6 +84,9 @@ const LabelButton = ({
         rounded-md 
         text-base
         sm:text-lg
+        flex
+        items-center
+        justify-center
         ${sizeStyles}
         ${variantStyles[variant]}
         ${className || ""}

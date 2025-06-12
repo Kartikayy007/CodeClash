@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
-import { LogOut } from 'lucide-react';
+import { LogOut, Home, Settings } from 'lucide-react';
 
 const Navbar = () => {
   const router = useRouter();
@@ -24,6 +24,14 @@ const Navbar = () => {
     router.push("/login");
   };
 
+  const handleHome = () => {
+    router.push("/dashboard");
+  };
+
+  const handleSettings = () => {
+    router.push("/settings");
+  };
+
   return (
     <nav className="relative bg-[#10141D] z-50">
       <div className="flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
@@ -38,6 +46,22 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-4">
+          <button
+            onClick={handleHome}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#2A2F3E] hover:bg-[#3A3F4E] transition-colors"
+          >
+            <Home size={20} className="text-white" />
+            <span className="text-white text-sm font-medium">Home</span>
+          </button>
+          
+          <button
+            onClick={handleSettings}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#2A2F3E] hover:bg-[#3A3F4E] transition-colors"
+          >
+            <Settings size={20} className="text-white" />
+            <span className="text-white text-sm font-medium">Settings</span>
+          </button>
+          
           <button
             onClick={handleLogout}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#2A2F3E] hover:bg-[#3A3F4E] transition-colors"

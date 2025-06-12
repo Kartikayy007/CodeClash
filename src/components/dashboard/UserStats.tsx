@@ -39,7 +39,7 @@ export default function UserStats() {
 
       try {
         const response = await fetch(
-          "https://goyalshivansh.me/api/v1/user/profile",
+          "https://codeclash.goyalshivansh.tech/api/v1/user/profile",
           {
             method: "GET",
             headers: {

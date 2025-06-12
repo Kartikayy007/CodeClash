@@ -27,11 +27,14 @@ export default function JoinContest() {
       setError("Please enter a contest code");
       return;
     }
+    
 
     try {
       const contestResponse = await contestApi.getContestDetails(contestCode);
       if (contestResponse.contest) {
         router.push(`/contest/join/${contestCode}`);
+        localStorage.setItem("contestCode", contestCode);
+        setContestCode("");
       } else {
         setError("Contest not found");
       }

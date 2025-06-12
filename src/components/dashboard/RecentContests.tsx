@@ -19,6 +19,10 @@ export default function RecentContests({
   className = "",
 }: RecentContestsProps) {
   const [contests, setContests] = useState<Contest[]>([]);
+  const [debugData, setDebugData] = useState<null | object>(null);
+  const [showDebug, setShowDebug] = useState(false);
+
+  const isDev = process.env.NODE_ENV === 'development';
 
   useEffect(() => {
     const fetchContests = async () => {
@@ -31,7 +35,7 @@ export default function RecentContests({
 
       try {
         const response = await fetch(
-          "https://goyalshivansh.me/api/v1/contest/my-contests",
+          "https://codeclash.goyalshivansh.tech/api/v1/contest/my-contests",
           {
             method: "GET",
             headers: {
@@ -48,6 +52,11 @@ export default function RecentContests({
         const data = await response.json();
         console.log("Fetched contests data:", data);
 
+        // Store debug data
+        if (isDev) {
+          setDebugData(data);
+        }
+
         if (data.contests && Array.isArray(data.contests)) {
           setContests(data.contests);
         } else {
@@ -57,13 +66,16 @@ export default function RecentContests({
       } catch (error) {
         console.error("Error fetching contests:", error);
         setContests([]);
+        if (isDev) {
+          setDebugData({ error: error.message });
+        }
       }
     };
 
     fetchContests();
-  }, []);
+  }, [isDev]);
 
-  // Function to calculate duration
+    // Function to calculate duration
   const calculateDuration = (startTime: string, endTime: string) => {
     const start = new Date(startTime);
     const end = new Date(endTime);
@@ -77,10 +89,44 @@ export default function RecentContests({
 
   return (
     <div
-      className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`}
+      className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 duration-300 ${className}`}
     >
+      {/* Debug Overlay - Only shown in development */}
+      {isDev && debugData && (
+        <>
+          <button
+            onClick={() => setShowDebug(!showDebug)}
+            className="absolute top-2 right-2 z-10 bg-red-500 text-white text-xs px-2 py-1 rounded hover:bg-red-600"
+          >
+            {showDebug ? 'Hide' : 'API'}
+          </button>
+
+          
+          
+          {showDebug && (
+            <div className="absolute top-10 right-2 z-20 bg-black/90 border border-gray-600 rounded-lg p-3 max-w-sm max-h-80 overflow-auto">
+              <div>
+            isdev: {isDev ? 'true' : 'false'}
+            <br />
+            debugData: {debugData ? 'true' : 'false'}
+            <br />
+            showDebug: {showDebug ? 'true' : 'false'}
+            <br />
+            contests length: {contests.length}
+          </div>
+              <div className="text-xs text-white">
+                <div className="text-green-400 font-bold mb-2">API Response:</div>
+                <pre className="text-xs text-gray-300 whitespace-pre-wrap">
+                  {JSON.stringify(debugData, null, 2)}
+                </pre>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-lg font-semibold">Recent Contests</h2>
+        <h2 className="text-lg font-semibold">Past Contests</h2>
         <Link
           href="/recent-contests"
           className="text-base hover:text-white/80"
@@ -107,29 +153,36 @@ export default function RecentContests({
       </div>
 
       <div className="space-y-2">
-        {contests.slice(0, 3).map((contest, index) => (
-          <div
-            key={index}
-            className="grid grid-cols-5 bg-white/5 rounded-lg px-4 py-2"
-          >
-            <div className="flex items-center gap-2 col-span-2">
-              <div className="w-4 h-4" />
-              <span className="text-base font-medium">{contest.title}</span>
+        {contests.length > 0 ? (
+          contests.slice(0, 3).map((contest, index) => (
+            <div
+              key={index}
+              className="grid grid-cols-5 bg-white/5 rounded-lg px-4 py-2"
+            >
+              <div className="flex items-center gap-2 col-span-2">
+                <div className="w-4 h-4" />
+                <span className="text-base font-medium">{contest.title}</span>
+              </div>
+              <span className="text-sm">{contest.score}</span>
+              <span className="text-sm">{contest.participantCount}</span>
+              <div className="flex justify-between items-center">
+                <span className="text-sm">
+                  {calculateDuration(contest.startTime, contest.endTime)}
+                </span>
+                {contest.hasReview && (
+                  <button className="text-[#b0b0b0] text-sm font-medium hover:text-white">
+                    Review
+                  </button>
+                )}
+              </div>
             </div>
-            <span className="text-sm">{contest.score}</span>
-            <span className="text-sm">{contest.participantCount}</span>
-            <div className="flex justify-between items-center">
-              <span className="text-sm">
-                {calculateDuration(contest.startTime, contest.endTime)}
-              </span>
-              {contest.hasReview && (
-                <button className="text-[#b0b0b0] text-sm font-medium hover:text-white">
-                  Review
-                </button>
-              )}
-            </div>
+          ))
+        ) : (
+          <div className="text-center py-8 text-gray-400">
+            <p className="text-lg mb-2">No contests found</p>
+            <p className="text-sm">Join contests to see your participation history here</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

@@ -107,7 +107,7 @@ const PerformanceInsights: React.FC<PerformanceInsightsProps> = ({
       </div>
 
       <div className="h-[220px] mb-6 mt-[30%]">
-        <LineChart
+        {/* <LineChart
           xAxis={[
             {
               data: trendData.map((item) =>
@@ -187,7 +187,7 @@ const PerformanceInsights: React.FC<PerformanceInsightsProps> = ({
               filter: "drop-shadow(0 0 4px rgba(200, 121, 235, 0.6))",
             },
           }}
-        />
+        /> */}
       </div>
     </div>
   );

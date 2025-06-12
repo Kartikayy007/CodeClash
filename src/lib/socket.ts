@@ -118,7 +118,9 @@ class SocketService {
       return;
     }
 
-    this.socket = io("https://goyalshivansh.me", {
+    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL;
+    
+    this.socket = io(socketUrl, {
       path: "/socket/",
       transports: ["websocket"],
       reconnection: true,

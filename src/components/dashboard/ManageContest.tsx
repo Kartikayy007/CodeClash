@@ -1,92 +1,98 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronRight } from "lucide-react";
+import { Trophy, Users, Calendar, Copy, ExternalLink } from "lucide-react";
 
-interface Contest {
-  id: string;
-  title: string;
-  participantCount: number;
+interface ManageContestProps {
+  className?: string;
 }
 
-const ManageContest = () => {
+const ManageContest = ({ className = "" }: ManageContestProps) => {
   const router = useRouter();
-  const [contests, setContests] = useState<Contest[]>([]); // State for contests data
+  const [contestCode, setContestCode] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    const fetchContests = async () => {
-      const token = localStorage.getItem("accessToken"); // Adjust the key as necessary
-
-      if (!token) {
-        console.error("No access token found in local storage");
-        return;
-      }
-
-      try {
-        const response = await fetch(
-          "https://goyalshivansh.me/api/v1/contest/my-contests",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("Fetched contests data:", data);
-
-        if (data.contests && Array.isArray(data.contests)) {
-          setContests(data.contests); // Set the contests state
-        } else {
-          console.error("Expected contests array but got:", data);
-          setContests([]); // Reset state on failure
-        }
-      } catch (error) {
-        console.error("Error fetching contests:", error);
-        setContests([]); // Reset state on error
-      }
-    };
-
-    fetchContests();
+    const code = localStorage.getItem("contestCode");
+    setContestCode(code);
   }, []);
 
+  const handleCopyCode = async () => {
+    if (contestCode) {
+      await navigator.clipboard.writeText(contestCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
-    <div className="w-full bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-medium text-white">Manage Contest</h2>
-        <button
-          onClick={() => router.push("/matches")}
-          className="text-gray-400 hover:text-white transition-colors flex items-center gap-1"
-        >
-          View
-          <ChevronRight size={20} />
-        </button>
+    <div className={`w-full bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 border border-transparent hover:border-white/30 transition-all duration-300 ${className}`}>
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2 bg-purple-500/20 rounded-lg">
+          <Trophy className="w-5 h-5 text-purple-400" />
+        </div>
+        <h2 className="text-lg font-semibold text-white">Contest Status</h2>
       </div>
 
-      <div className="space-y-4">
-        {contests.slice(0, 2).map(
-          (
-            contest,
-            index, // Show only the top 2 contests
-          ) => (
-            <div
-              key={index}
-              className="bg-white/5 rounded-lg p-4 hover:bg-[#282C34] transition-colors cursor-pointer"
-              onClick={() => router.push("/matches")}
-            >
-              <h3 className="text-lg text-white mb-2">{contest.title}</h3>
-              <p className="text-gray-400">
-                Total participants: {contest.participantCount}
-              </p>
+      {contestCode ? (
+        <div className="space-y-4">
+          {/* Active Contest Card */}
+          <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-lg p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span className="text-green-400 text-sm font-medium">Active Contest</span>
+              </div>
+              <button
+                onClick={() => router.push("/contest/manage")}
+                className="flex items-center gap-1 text-green-400 hover:text-green-300 text-sm transition-colors"
+              >
+                Manage
+                <ExternalLink className="w-3 h-3" />
+              </button>
             </div>
-          ),
-        )}
-      </div>
+            
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-300 text-sm">Contest Code</span>
+                <div className="flex items-center gap-2">
+                  <code className="bg-black/30 px-3 py-1 rounded text-green-400 font-mono text-sm">
+                    {contestCode}
+                  </code>
+                  <button
+                    onClick={handleCopyCode}
+                    className="p-1 hover:bg-white/10 rounded transition-colors"
+                    title="Copy code"
+                  >
+                    <Copy className={`w-4 h-4 ${copied ? 'text-green-400' : 'text-gray-400'}`} />
+                  </button>
+                </div>
+              </div>
+              
+              {copied && (
+                <div className="text-green-400 text-xs text-center">
+                  ✓ Contest code copied to clipboard!
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="text-center py-8">
+          <div className="w-16 h-16 bg-gray-700/50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Trophy className="w-8 h-8 text-gray-500" />
+          </div>
+          <h3 className="text-lg font-medium text-gray-300 mb-2">No Active Contest</h3>
+          <p className="text-gray-500 text-sm mb-4">
+            Register for a contest to see your contest details here
+          </p>
+          <button
+            onClick={() => router.push("/contest/join")}
+            className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg text-sm font-medium transition-colors"
+          >
+            Join a Contest
+          </button>
+        </div>
+      )}
     </div>
   );
 };
