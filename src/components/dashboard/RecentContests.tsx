@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Trophy, Users, Clock, Target, ExternalLink, Calendar, Award, Eye, Gamepad2 } from "lucide-react"
+import { Trophy, Users, Clock, Target, ExternalLink, Calendar, Award, Eye } from "lucide-react"
 
 interface RecentContestsProps {
   className?: string
@@ -58,8 +58,6 @@ const LoadingSkeleton = () => (
 export default function RecentContests({ className = "" }: RecentContestsProps) {
   const [contests, setContests] = useState<Contest[]>([])
   const [loading, setLoading] = useState(true)
-  const [debugData, setDebugData] = useState<null | object>(null)
-  const [showDebug, setShowDebug] = useState(false)
 
   const isDev = process.env.NODE_ENV === "development"
 
@@ -89,10 +87,7 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
         const data = await response.json()
         console.log("Fetched contests data:", data)
 
-        // Store debug data
-        if (isDev) {
-          setDebugData(data)
-        }
+       
 
         if (data.contests && Array.isArray(data.contests)) {
           setContests(data.contests)
@@ -103,9 +98,7 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
       } catch (error) {
         console.error("Error fetching contests:", error)
         setContests([])
-        if (isDev) {
-          setDebugData({ error: error.message })
-        }
+        
       } finally {
         setLoading(false)
       }

@@ -62,7 +62,7 @@ export default function Dashboard() {
         </div>
 
         {/* Desktop Layout - 3 columns */}
-        <div className="hidden lg:grid lg:grid-cols-3 lg:gap-6">
+        <div className="hidden lg:grid lg:grid-cols-3 lg:gap-6 mb-6">
           {/* Column 1 */}
           <div className="flex flex-col gap-6">
             <UserStats />
@@ -92,13 +92,13 @@ export default function Dashboard() {
                 </LabelButton>
               </div>
             </div>
-            <PerformanceInsights className="flex-1" />
             <ManageContest />
+            <PerformanceInsights className="flex-1" />
           </div>
         </div>
 
         {/* Tablet Layout - 2 columns */}
-        <div className="hidden md:grid md:grid-cols-2 md:gap-6 lg:hidden">
+        <div className="hidden md:grid md:grid-cols-2 md:gap-6 lg:hidden mb-6">
           {/* Column 1 */}
           <div className="flex flex-col gap-6">
             <UserStats />
@@ -115,7 +115,7 @@ export default function Dashboard() {
         </div>
 
         {/* Mobile Layout - Single column */}
-        <div className="flex flex-col gap-6 md:hidden">
+        <div className="flex flex-col gap-6 px-4 md:hidden mb-6">
           <UserStats />
           <PerformanceInsights />
           <RecentMatches />
