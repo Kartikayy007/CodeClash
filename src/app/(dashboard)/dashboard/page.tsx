@@ -43,49 +43,84 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background p-4 ">
-      <div className="flex flex-col lg:flex-row lg:gap-4">
-        {/* First Column */}
-        <div className="flex flex-col gap-4 flex-1 ">
+    <div className="min-h-screen bg-background py-2 md:p-2">
+      <div className="max-w-7xl mx-auto">
+        {/* Mobile Action Buttons */}
+        <div className="flex flex-col sm:flex-row justify-center gap-3 mb-6 lg:hidden">
+          <div className="flex-1">
+            <PlayButton />
+          </div>
+          <div className="flex-1">
+            <LabelButton
+              variant="filled"
+              onClick={() => router.push("/contest/join")}
+              className="w-full"
+            >
+              Play Contest
+            </LabelButton>
+          </div>
+        </div>
+
+        {/* Desktop Layout - 3 columns */}
+        <div className="hidden lg:grid lg:grid-cols-3 lg:gap-6">
+          {/* Column 1 */}
+          <div className="flex flex-col gap-6">
+            <UserStats />
+            <Leaderboard className="flex-1" />
+          </div>
+
+          {/* Column 2 */}
+          <div className="flex flex-col gap-6">
+            <RecentContests className="flex-1" />
+            <RecentMatches className="flex-1" />
+          </div>
+
+          {/* Column 3 */}
+          <div className="flex flex-col gap-6">
+            {/* Desktop Action Buttons */}
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <PlayButton />
+              </div>
+              <div className="flex-1">
+                <LabelButton
+                  variant="filled"
+                  onClick={() => router.push("/contest/join")}
+                  className="w-full"
+                >
+                  Play Contest
+                </LabelButton>
+              </div>
+            </div>
+            <PerformanceInsights className="flex-1" />
+            <ManageContest />
+          </div>
+        </div>
+
+        {/* Tablet Layout - 2 columns */}
+        <div className="hidden md:grid md:grid-cols-2 md:gap-6 lg:hidden">
+          {/* Column 1 */}
+          <div className="flex flex-col gap-6">
+            <UserStats />
+            <RecentMatches className="flex-1" />
+            <ManageContest />
+          </div>
+
+          {/* Column 2 */}
+          <div className="flex flex-col gap-6">
+            <PerformanceInsights className="flex-1" />
+            <Leaderboard className="flex-1" />
+            <RecentContests className="flex-1" />
+          </div>
+        </div>
+
+        {/* Mobile Layout - Single column */}
+        <div className="flex flex-col gap-6 md:hidden">
           <UserStats />
-          <div className="flex justify-center gap-4 lg:hidden">
-            <div className="w-1/2">
-              <PlayButton />
-            </div>
-            <div className="w-1/2">
-              <LabelButton
-                variant="filled"
-                onClick={() => router.push("/contest/join")}
-              >
-                Play Contest
-              </LabelButton>
-            </div>
-          </div>
-          <Leaderboard className="flex-1 min-h-0" />
-        </div>
-
-        {/* Second Column */}
-        <div className="flex flex-col gap-4 flex-1 pt-4 lg:p-0">
-          <RecentMatches className="flex-1 min-h-0" />
-          <RecentContests className="flex-1 min-h-0" />
-        </div>
-
-        {/* Third Column */}
-        <div className="flex flex-col gap-4 flex-1">
-          <div className=" justify-center gap-4 hidden lg:flex">
-            <div className="w-1/2">
-              <PlayButton />
-            </div>
-            <div className="w-1/2">
-              <LabelButton
-                variant="filled"
-                onClick={() => router.push("/contest/join")}
-              >
-                Play Contest
-              </LabelButton>
-            </div>
-          </div>
-          <PerformanceInsights className="flex-1 min-h-0 mt-4 lg:m-0" />
+          <PerformanceInsights />
+          <RecentMatches />
+          <Leaderboard />
+          <RecentContests />
           <ManageContest />
         </div>
       </div>

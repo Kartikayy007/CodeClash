@@ -15,6 +15,7 @@
 @layer base {
   :root {
     --radius: 0.5rem;
+    
   }
   .theme {
     --animate-meteor: meteor 5s linear infinite;
@@ -35,4 +36,34 @@
     opacity: 0;
     }
   }
+}
+
+@keyframes neon-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+  }
+  50% {
+    box-shadow: 0 0 2px currentColor, 0 0 5px currentColor, 0 0 8px currentColor;
+  }
+}
+
+.neon-glow {
+  animation: neon-pulse 2s ease-in-out infinite;
+}
+
+/* Enhance the existing gradient backgrounds */
+.neon-border {
+  position: relative;
+}
+
+.neon-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ffff);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
 }

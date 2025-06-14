@@ -9,27 +9,15 @@ interface ManageContestProps {
 const ManageContest = ({ className = "" }: ManageContestProps) => {
   const router = useRouter();
   const [contestCode, setContestCode] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const code = localStorage.getItem("contestCode");
     setContestCode(code);
   }, []);
 
-  const handleCopyCode = async () => {
-    if (contestCode) {
-      await navigator.clipboard.writeText(contestCode);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
   return (
     <div className={`w-full bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 border border-transparent hover:border-white/30 transition-all duration-300 ${className}`}>
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 bg-purple-500/20 rounded-lg">
-          <Trophy className="w-5 h-5 text-purple-400" />
-        </div>
         <h2 className="text-lg font-semibold text-white">Contest Status</h2>
       </div>
 
@@ -53,26 +41,15 @@ const ManageContest = ({ className = "" }: ManageContestProps) => {
             
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-gray-300 text-sm">Contest Code</span>
-                <div className="flex items-center gap-2">
-                  <code className="bg-black/30 px-3 py-1 rounded text-green-400 font-mono text-sm">
-                    {contestCode}
-                  </code>
-                  <button
-                    onClick={handleCopyCode}
-                    className="p-1 hover:bg-white/10 rounded transition-colors"
-                    title="Copy code"
-                  >
-                    <Copy className={`w-4 h-4 ${copied ? 'text-green-400' : 'text-gray-400'}`} />
-                  </button>
-                </div>
+                <span className="text-gray-300 text-sm">Contest Access</span>
+                <button
+                  onClick={() => router.push(`/contest/${contestCode}`)}
+                  className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                >
+                  Go to Contest
+                  <ExternalLink className="w-4 h-4" />
+                </button>
               </div>
-              
-              {copied && (
-                <div className="text-green-400 text-xs text-center">
-                  ✓ Contest code copied to clipboard!
-                </div>
-              )}
             </div>
           </div>
         </div>

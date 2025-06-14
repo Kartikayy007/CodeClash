@@ -1,21 +1,27 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { LineChart } from "@mui/x-charts";
-import axios from "axios";
+import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
-interface WinTrendData {
-  date: string;
-  wins: number;
-  losses: number;
-}
-
-interface WinTrendResponse {
-  success: boolean;
-  trend: WinTrendData[];
-  winStreak: number;
-  maxWinStreak: number;
-}
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface PerformanceInsightsProps {
   className?: string;
@@ -24,170 +30,129 @@ interface PerformanceInsightsProps {
 const PerformanceInsights: React.FC<PerformanceInsightsProps> = ({
   className = "",
 }) => {
-  const [trendData, setTrendData] = useState<WinTrendData[]>([]);
-  const [, setWinStreak] = useState(0);
-  const [, setMaxWinStreak] = useState(0);
+  const [chartWidth, setChartWidth] = useState(400);
   const [loading, setLoading] = useState(true);
-  const [chartWidth, setChartWidth] = useState<number>(0); // Default width
 
-  // const stats = [
-  //   { label: 'Win Streak', value: winStreak },
-  //   { label: 'Max Win Streak', value: maxWinStreak },
-  //   { label: 'Contest Participation', value: trendData.reduce((acc, curr) => acc + curr.wins + curr.losses, 0) },
-  // ];
+  // Mock data - replace with actual API call
+  const mockData = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    datasets: [
+      {
+        label: "Rating",
+        data: [1200, 1250, 1180, 1320, 1280, 1350],
+        borderColor: "#8B5CF6",
+        backgroundColor: "rgba(139, 92, 246, 0.1)",
+        tension: 0.4,
+      },
+    ],
+  };
 
-  useEffect(() => {
-    const fetchWinTrend = async () => {
-      try {
-        const token = localStorage.getItem("accessToken");
-        const response = await axios.get<WinTrendResponse>(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/win-trend`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        backgroundColor: "#1F2937",
+        titleColor: "#fff",
+        bodyColor: "#fff",
+        borderColor: "#374151",
+        borderWidth: 1,
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          color: "#374151",
+        },
+        ticks: {
+          color: "#9CA3AF",
+          font: {
+            size: 12,
           },
-        );
-
-        if (response.data.success) {
-          setTrendData(response.data.trend);
-          setWinStreak(response.data.winStreak);
-          setMaxWinStreak(response.data.maxWinStreak);
-        }
-      } catch (error) {
-        console.error("Failed to fetch win trend:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchWinTrend();
-  }, []);
+        },
+      },
+      y: {
+        grid: {
+          color: "#374151",
+        },
+        ticks: {
+          color: "#9CA3AF",
+          font: {
+            size: 12,
+          },
+        },
+      },
+    },
+  };
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 1024) {
-        const width = window.innerWidth * 0.7;
-        setChartWidth(width);
+      if (window.innerWidth < 640) {
+        // Mobile
+        setChartWidth(window.innerWidth * 0.85);
+      } else if (window.innerWidth < 1024) {
+        // Tablet
+        setChartWidth(window.innerWidth * 0.4);
       } else {
-        const width = window.innerWidth * 0.3; // Set to 90% of the window width
-        setChartWidth(width);
+        // Desktop
+        setChartWidth(window.innerWidth * 0.25);
       }
     };
 
-    handleResize(); // Set initial width
-    window.addEventListener("resize", handleResize); // Update width on resize
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    // Simulate loading
+    const timer = setTimeout(() => setLoading(false), 1000);
 
     return () => {
-      window.removeEventListener("resize", handleResize); // Cleanup listener
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(timer);
     };
   }, []);
 
   if (loading) {
     return (
       <div
-        className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`}
+        className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-4 md:p-6 ${className}`}
       >
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-lg font-semibold">Performance Insights</h2>
+        <div className="flex justify-between items-center mb-4 md:mb-6">
+          <div className="h-6 bg-gray-700 rounded w-40 animate-pulse"></div>
         </div>
-        <div className="h-[220px] flex items-center justify-center">
-          <p className="text-gray-400">Loading performance data...</p>
-        </div>
+        <div className="h-48 md:h-56 bg-gray-700 rounded animate-pulse"></div>
       </div>
     );
   }
 
   return (
     <div
-      className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`}
+      className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-4 md:p-6 border border-transparent hover:border-white/30 transition-all duration-300 ${className}`}
     >
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-lg font-semibold">Performance Insights</h2>
+      <div className="flex justify-between items-center mb-4 md:mb-6">
+        <h2 className="text-lg md:text-xl font-semibold">Performance Insights</h2>
       </div>
 
-      <div className="h-[220px] mb-6 mt-[30%]">
-        {/* <LineChart
-          xAxis={[
-            {
-              data: trendData.map((item) =>
-                item.date.split("/").slice(0, 2).join("/"),
-              ),
-              scaleType: "point",
-              tickLabelStyle: {
-                fill: "#D1D1D1",
-              },
-              tickSize: 0,
-              disableLine: true,
-            },
-          ]}
-          yAxis={[
-            {
-              min: 0,
-              max: 8,
-              tickLabelStyle: {
-                fill: "#D1D1D1",
-              },
-              tickSize: 0,
-              disableLine: true,
-            },
-          ]}
-          series={[
-            {
-              data: trendData.map((item) => item.wins),
-              showMark: true,
-              color: "#C879EB",
-              curve: "linear",
-              valueFormatter: (value: number | null) =>
-                value === null ? "" : value > 0 ? "W" : "L",
-            },
-          ]}
-          width={chartWidth} // Use the measured width
-          height={220}
-          margin={{ top: 20, right: 20, bottom: 30, left: 40 }}
-          disableAxisListener
-          slots={{
-            axisContent: () => (
-              <g>
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <line
-                    key={`h-${i}`}
-                    x1="0"
-                    x2="100%"
-                    y1={`${(i / 7) * 100}%`}
-                    y2={`${(i / 7) * 100}%`}
-                    stroke="rgba(255, 255, 255, 0.1)"
-                    strokeDasharray="3 3"
-                  />
-                ))}
-                {Array.from({ length: 7 }).map((_, i) => (
-                  <line
-                    key={`v-${i}`}
-                    x1={`${(i / 6) * 100}%`}
-                    x2={`${(i / 6) * 100}%`}
-                    y1="0"
-                    y2="100%"
-                    stroke="rgba(255, 255, 255, 0.1)"
-                    strokeDasharray="3 3"
-                  />
-                ))}
-              </g>
-            ),
-          }}
-          sx={{
-            "& .MuiLineElement-root": {
-              strokeWidth: 2,
-              filter: "drop-shadow(0 0 6px rgba(200, 121, 235, 0.6))",
-            },
-            "& .MuiMarkElement-root": {
-              stroke: "#C879EB",
-              fill: "#C879EB",
-              strokeWidth: 2,
-              r: 4,
-              filter: "drop-shadow(0 0 4px rgba(200, 121, 235, 0.6))",
-            },
-          }}
-        /> */}
+      <div className="h-48 md:h-56 lg:h-64">
+        <Line data={mockData} options={options} />
+      </div>
+
+      {/* Mobile stats summary */}
+      <div className="mt-4 grid grid-cols-3 gap-3 sm:hidden">
+        <div className="bg-white/5 rounded-lg p-2 text-center">
+          <p className="text-xs text-gray-400">Current</p>
+          <p className="text-sm font-bold">1350</p>
+        </div>
+        <div className="bg-white/5 rounded-lg p-2 text-center">
+          <p className="text-xs text-gray-400">Peak</p>
+          <p className="text-sm font-bold">1350</p>
+        </div>
+        <div className="bg-white/5 rounded-lg p-2 text-center">
+          <p className="text-xs text-gray-400">Growth</p>
+          <p className="text-sm font-bold text-green-400">+150</p>
+        </div>
       </div>
     </div>
   );
