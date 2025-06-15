@@ -121,7 +121,7 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
 
   const formatScore = (score: number) => {
     if (score >= 1000) return `${(score / 1000).toFixed(1)}K`
-    return score.toString()
+    return 5
   }
 
   const getScoreColor = (score: number) => {

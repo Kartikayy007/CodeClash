@@ -79,9 +79,9 @@ export default function UserStats({ className = "" }: UserStatsProps) {
           },
         })
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`)
-        }
+        // if (!response.ok) {
+        //   throw new Error(`HTTP error! Status: ${response.status}`)
+        // }
 
         const data = await response.json()
         console.log("Fetched user profile data:", data.data)
@@ -117,9 +117,9 @@ export default function UserStats({ className = "" }: UserStatsProps) {
           },
         })
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch user stats")
-        }
+        // if (!response.ok) {
+        //   throw new Error("Failed to fetch user stats")
+        // }
 
         const data = await response.json()
         if (data.success) {
