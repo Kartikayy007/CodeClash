@@ -35,10 +35,12 @@ const submitCode = async (
 
   console.log("Submitting code with data:", data);
   const response = await api.post<SubmitCodeResponse>(
-    `${BASE_URL}/api/v1/contest/${data.contestId}/questions/${data.questionId}/submit`,
+    `${BASE_URL}/api/v1/match/submit`,
     {
       code: data.code,
       language: data.language,
+      matchId: data.matchId,
+      questionId: data.questionId,
     },
     {
       headers: {

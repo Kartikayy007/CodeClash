@@ -118,7 +118,7 @@ class SocketService {
       return;
     }
 
-    this.socket = io("https://goyalshivansh.me", {
+    this.socket = io("https://Codeclash.goyalshivansh.tech", {
       path: "/socket/",
       transports: ["websocket"],
       reconnection: true,

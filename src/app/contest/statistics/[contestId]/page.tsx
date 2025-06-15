@@ -71,7 +71,7 @@ const CodingContestDashboard = () => {
 
         try {
           const response = await fetch(
-            `https://goyalshivansh.me/api/v1/contest/${contestId}/leaderboard`,
+            `https://Codeclash.goyalshivansh.tech/api/v1/contest/${contestId}/leaderboard`,
             {
               headers: {
                 "Content-Type": "application/json",

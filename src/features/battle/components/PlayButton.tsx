@@ -1,19 +1,31 @@
 import { useState } from "react";
 import LabelButton from "@/components/ui/LabelButton";
-import { GameModeModal } from "./GameModeModal";
+import { MatchmakingPopup } from "@/components/ui/MatchmakingPopup";
+import { useBattleWebSocket } from "../hooks/useBattleWebSocket";
 
 export const PlayButton = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMatchmaking, setIsMatchmaking] = useState(false);
+  const { findMatch, cancelMatchmaking } = useBattleWebSocket();
+
+  const handlePlayNow = () => {
+    setIsMatchmaking(true);
+    findMatch("STANDARD");
+  };
+
+  const handleCancelMatchmaking = () => {
+    setIsMatchmaking(false);
+    cancelMatchmaking();
+  };
 
   return (
     <>
       <div className="flex flex-col items-center gap-4">
-        <LabelButton onClick={() => setIsModalOpen(true)}>Play Now</LabelButton>
+        <LabelButton onClick={handlePlayNow}>Play Now</LabelButton>
       </div>
 
-      <GameModeModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+      <MatchmakingPopup 
+        isOpen={isMatchmaking} 
+        onClose={handleCancelMatchmaking} 
       />
     </>
   );

@@ -61,7 +61,7 @@ export interface RunCodeResponse {
 export interface SubmitCodePayload {
   code: string;
   language: string;
-  contestId: string;
+  matchId: string;
   questionId: string;
 }
 

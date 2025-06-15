@@ -24,7 +24,7 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
 
       try {
         const response = await fetch(
-          "https://goyalshivansh.me/api/v1/user/leaderboard?page=1&limit=10",
+          "https://Codeclash.goyalshivansh.tech/api/v1/user/leaderboard?page=1&limit=10",
           {
             method: "GET",
             headers: {

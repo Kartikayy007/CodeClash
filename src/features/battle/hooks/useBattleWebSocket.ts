@@ -200,6 +200,7 @@ export const useBattleWebSocket = () => {
       }));
 
       console.log("🎯 Joining match:", data.matchId);
+      dispatch(setMatchId(data.matchId));
       socketService.joinRoom(data.matchId);
     };
 
@@ -318,15 +319,12 @@ export const useBattleWebSocket = () => {
       socketService.off("game_state_update", onGameStateUpdate);
       socketService.off("game_end", handleGameEnd);
 
-      if (
-        !window.location.pathname.includes("/battle") &&
-        socketService.isConnected()
-      ) {
+      if (state.isSearching) {
         socketService.leaveMatchmaking();
         currentMatchId.current = null;
       }
     };
-  }, [router, dispatch, onGameStart]);
+  }, [router, dispatch, onGameStart, state.isSearching]);
 
   const findMatch = (mode: "STANDARD" | "SPEED" | "ACCURACY") => {
     const token = localStorage.getItem("accessToken");
@@ -351,8 +349,16 @@ export const useBattleWebSocket = () => {
     }
   };
 
+  const cancelMatchmaking = () => {
+    if (socketService.isConnected()) {
+      socketService.leaveMatchmaking();
+      setState((prev) => ({ ...prev, isSearching: false }));
+    }
+  };
+
   return {
     ...state,
     findMatch,
+    cancelMatchmaking,
   };
 };

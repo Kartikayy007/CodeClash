@@ -23,7 +23,7 @@ const ManageContest = () => {
 
       try {
         const response = await fetch(
-          "https://goyalshivansh.me/api/v1/contest/my-contests",
+          "https://Codeclash.goyalshivansh.tech/api/v1/contest/my-contests",
           {
             method: "GET",
             headers: {

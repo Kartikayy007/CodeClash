@@ -17,7 +17,7 @@ export default function RecentMatches() {
 
       try {
         const response = await fetch(
-          "https://goyalshivansh.me/api/v1/user/recent-matches?page=1&limit=12",
+          "https://Codeclash.goyalshivansh.tech/api/v1/user/recent-matches?page=1&limit=12",
           {
             method: "GET",
             headers: {
