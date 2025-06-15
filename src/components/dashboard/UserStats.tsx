@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react"
 import { Trophy, Target, Zap, TrendingUp, Award, User, Mail, Flame, X } from "lucide-react"
 
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL
+
 interface UserProfile {
   data: {
     username: string
@@ -10,6 +12,10 @@ interface UserProfile {
     maxWinStreak: number
     losses: number
     totalMatches: number
+    rating: number
+    rank: number
+    wins: number
+    winRate: number
   }
 }
 
@@ -71,7 +77,7 @@ export default function UserStats({ className = "" }: UserStatsProps) {
       }
 
       try {
-        const response = await fetch("https://codeclash.goyalshivansh.tech/api/v1/user/profile", {
+        const response = await fetch(`${BASE_URL}/api/v1/user/profile`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -89,6 +95,14 @@ export default function UserStats({ className = "" }: UserStatsProps) {
         if (data.success) {
           console.log("Setting user profile:")
           setUserProfile(data)
+          // Set stats from profile data
+          setUserStats({
+            rating: data.data.rating || 0,
+            rank: data.data.rank || 0,
+            totalMatches: data.data.totalMatches || 0,
+            wins: data.data.wins || 0,
+            winRate: data.data.winRate || 0,
+          })
         } else {
           console.error("Failed to fetch user profile:", data)
           setUserProfile(null)
@@ -101,39 +115,7 @@ export default function UserStats({ className = "" }: UserStatsProps) {
       }
     }
 
-    const fetchUserStats = async () => {
-      const token = localStorage.getItem("accessToken")
-      if (!token) {
-        console.error("No access token found")
-        setIsLoading(false)
-        return
-      }
-
-      try {
-        const response = await fetch("https://codeclash.goyalshivansh.tech/api/v1/user/stats", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        })
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch user stats")
-        }
-
-        const data = await response.json()
-        if (data.success) {
-          setUserStats(data.stats)
-        }
-      } catch (error) {
-        console.error("Error fetching user stats:", error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
     fetchUserProfile()
-    fetchUserStats()
   }, [])
 
   useEffect(() => {

@@ -119,15 +119,17 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
     return `${hours}h ${minutes}m`
   }
 
-  const formatScore = (score: number) => {
+  const formatScore = (score: number | undefined | null) => {
+    if (score === undefined || score === null) return "0"
     if (score >= 1000) return `${(score / 1000).toFixed(1)}K`
     return score.toString()
   }
 
-  const getScoreColor = (score: number) => {
-    if (score >= 90) return "text-emerald-400"
-    if (score >= 70) return "text-cyan-400"
-    if (score >= 50) return "text-yellow-400"
+  const getScoreColor = (score: number | undefined | null) => {
+    if (score === undefined || score === null) return "text-gray-400"
+    if (score >= 80) return "text-emerald-400"
+    if (score >= 60) return "text-cyan-400"
+    if (score >= 40) return "text-yellow-400"
     return "text-red-400"
   }
 

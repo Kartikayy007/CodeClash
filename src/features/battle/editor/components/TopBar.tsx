@@ -192,7 +192,7 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
       submitCode({
         code,
         language,
-        contestId: matchId,
+        matchId: matchId,
         questionId: currentProblem.id,
       }),
     ).then((action) => {

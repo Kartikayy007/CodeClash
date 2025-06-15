@@ -16,7 +16,7 @@ import {
   X,
   CheckCircle,
 } from "lucide-react"
-import type { Match } from "./types/matches.types"
+import type { Match, Player } from "./types/matches.types"
 
 interface RecentMatchesProps {
   className?: string
@@ -202,7 +202,7 @@ export default function RecentMatches({ className = "" }: RecentMatchesProps) {
         {matches.length > 0 ? (
           matches.slice(0, 3).map((match, index) => {
             const modeColors = getModeColors(match.mode)
-            const winner = match.players.find((player) => player.id === match.winnerId)
+            const winner = match.players.find((player: Player) => player.id === match.winnerId)
 
             return (
               <div
@@ -232,7 +232,7 @@ export default function RecentMatches({ className = "" }: RecentMatchesProps) {
                       <span className="text-xs text-white/50 uppercase tracking-wide font-medium">Players</span>
                     </div>
                     <div className="space-y-1">
-                      {match.players.slice(0, 2).map((player, playerIndex) => (
+                      {match.players.slice(0, 2).map((player: Player, playerIndex: number) => (
                         <div key={player.id} className="flex items-center gap-1">
                           <span className="text-sm font-medium text-white truncate">{player.username}</span>
                           {player.id === match.winnerId && <Crown className="w-3 h-3 text-yellow-400" />}
