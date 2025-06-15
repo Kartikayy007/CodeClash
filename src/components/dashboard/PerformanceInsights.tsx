@@ -17,8 +17,16 @@ interface Announcement {
   isContest?: boolean
 }
 
+interface PerformanceData {
+  date: string;
+  score: number;
+  matches: number;
+  wins: number;
+}
+
 const SimpleAnnouncements: React.FC<SimpleAnnouncementsProps> = ({ className = "" }) => {
   const [loading, setLoading] = useState(true)
+  const [performanceData, setPerformanceData] = useState<PerformanceData[]>([])
 
   // Simple announcements - manually update these
   const announcements: Announcement[] = [

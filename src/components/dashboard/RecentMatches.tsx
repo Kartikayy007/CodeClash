@@ -166,12 +166,6 @@ export default function RecentMatches({ className = "" }: RecentMatchesProps) {
     return duration
   }
 
-  const isWinner = (match: Match, currentUserId?: string) => {
-    // This would need to be determined based on your auth system
-    // For now, we'll show if there's a winner
-    return match.winnerId !== null
-  }
-
   if (loading) {
     return (
       <div className={`bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-4 backdrop-blur-sm ${className}`}>
@@ -202,7 +196,6 @@ export default function RecentMatches({ className = "" }: RecentMatchesProps) {
         {matches.length > 0 ? (
           matches.slice(0, 3).map((match, index) => {
             const modeColors = getModeColors(match.mode)
-            const winner = match.players.find((player: Player) => player.id === match.winnerId)
 
             return (
               <div
@@ -232,7 +225,7 @@ export default function RecentMatches({ className = "" }: RecentMatchesProps) {
                       <span className="text-xs text-white/50 uppercase tracking-wide font-medium">Players</span>
                     </div>
                     <div className="space-y-1">
-                      {match.players.slice(0, 2).map((player: Player, playerIndex: number) => (
+                      {match.players.slice(0, 2).map((player: Player) => (
                         <div key={player.id} className="flex items-center gap-1">
                           <span className="text-sm font-medium text-white truncate">{player.username}</span>
                           {player.id === match.winnerId && <Crown className="w-3 h-3 text-yellow-400" />}
@@ -240,27 +233,6 @@ export default function RecentMatches({ className = "" }: RecentMatchesProps) {
                       ))}
                       {match.players.length > 2 && (
                         <span className="text-xs text-white/60">+{match.players.length - 2} more</span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Winner */}
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1">
-                      <Trophy className="w-3 h-3 text-white/40" />
-                      <span className="text-xs text-white/50 uppercase tracking-wide font-medium">Winner</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      {winner ? (
-                        <>
-                          <CheckCircle className="w-4 h-4 text-emerald-400" />
-                          <span className="text-sm font-bold text-emerald-400 truncate">{winner.username}</span>
-                        </>
-                      ) : (
-                        <>
-                          <X className="w-4 h-4 text-red-400" />
-                          <span className="text-sm font-medium text-red-400">No Winner</span>
-                        </>
                       )}
                     </div>
                   </div>
@@ -279,12 +251,12 @@ export default function RecentMatches({ className = "" }: RecentMatchesProps) {
                 <div className="flex justify-end">
                   <div
                     className={`px-2 py-1 rounded-full border text-xs font-medium ${
-                      winner
+                      match.winnerId
                         ? "border-emerald-400/50 bg-emerald-400/10 text-emerald-400"
                         : "border-gray-400/50 bg-gray-400/10 text-gray-400"
                     }`}
                   >
-                    {winner ? "Completed" : "Incomplete"}
+                    {match.winnerId ? "Completed" : "Incomplete"}
                   </div>
                 </div>
 

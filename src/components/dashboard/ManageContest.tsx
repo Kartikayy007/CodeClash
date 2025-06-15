@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
+import { Plus, Settings, Trash2 } from "lucide-react"
 import { useRouter } from "next/navigation";
 import { Trophy, Users, Calendar, Copy, ExternalLink } from "lucide-react";
 
