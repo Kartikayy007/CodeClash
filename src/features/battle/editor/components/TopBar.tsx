@@ -16,6 +16,8 @@ import {
 import { socketService } from "@/lib/socket";
 import toast from "react-hot-toast";
 import { setGameEnd } from "@/features/battle/slices/gameEndSlice";
+import { usePathname } from "next/navigation";
+import { submitBattleCode } from "../api/editorApi";
 
 interface TopBarProps {
   matchId: string;
@@ -44,6 +46,7 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
     (state: RootState) => state.battle,
   );
   const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const pathname = usePathname();
   console.log("userId", userId);
 
   console.log("🔍 Current state:", {
@@ -188,25 +191,56 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
 
     dispatch(setActiveTab("submissions"));
 
-    dispatch(
-      submitCode({
+    const isBattle = pathname?.startsWith("/battle/");
+    // const submitAction = isBattle
+    //   ? submitBattleCode
+    //   : submitCode;
+
+    // const submitThunk = isBattle
+    //   ? (payload: any) => submitBattleCode(payload)
+    //   : submitCode;
+
+    //   submitAction;
+    //   submitThunk;
+
+    // If using thunk, dispatch as before; if direct promise, handle manually
+    if (isBattle) {
+      submitBattleCode({
         code,
         language,
         contestId: matchId,
         questionId: currentProblem.id,
-      }),
-    ).then((action) => {
-      console.log("📥 Submit code response:", action);
-      if (submitCode.fulfilled.match(action)) {
-        const status = action.payload.status;
+      }).then((response) => {
+        // Simulate the same response handling as the thunk
+        const status = response.status;
         if (status === "ACCEPTED") {
           toast.success("All test cases passed!");
           checkGameCompletion();
         } else if (status) {
           toast.error(`Submission failed: ${status}`);
         }
-      }
-    });
+      });
+    } else {
+      dispatch(
+        submitCode({
+          code,
+          language,
+          contestId: matchId,
+          questionId: currentProblem.id,
+        }),
+      ).then((action) => {
+        console.log("📥 Submit code response:", action);
+        if (submitCode.fulfilled.match(action)) {
+          const status = action.payload.status;
+          if (status === "ACCEPTED") {
+            toast.success("All test cases passed!");
+            checkGameCompletion();
+          } else if (status) {
+            toast.error(`Submission failed: ${status}`);
+          }
+        }
+      });
+    }
   };
 
   const handleProblemClick = (index: number) => {

@@ -336,27 +336,49 @@ export default function ContestDetails() {
 
         {/* Content Section */}
         <div className="flex flex-col md:flex-row px-4 md:px-8 gap-4 md:gap-8 py-4">
-          {/* Contest Info */}
-          <div className="w-full md:w-1/3">
-            <div className="bg-[#1A1D24] rounded-lg p-4 md:p-6 space-y-4">
-              <div className="space-y-2">
-                <h2 className="text-lg font-semibold">Contest Details</h2>
-                <p className="text-sm text-gray-400">
-                  {new Date(contest.startTime).toLocaleString()} to{" "}
-                  {new Date(contest.endTime).toLocaleString()}
-                </p>
-                <p className="text-sm text-gray-400">
-                  Created by {contest.creator.username}
-                </p>
-              </div>
-              {contest.isRegistered && contest.status === "UPCOMING" && (
-                <div className="space-y-2">
-                  <p className="text-sm text-gray-400">Contest starts in</p>
+          {/* Sidebar Info */}
+          <aside className="md:col-span-1 flex flex-col gap-6">
+            {/* Timer Card */}
+            {contest.isRegistered && contest.status === "UPCOMING" && (
+              <div className="bg-[#23263a] rounded-xl p-6 mb-2 flex flex-col items-center border border-[#292c3c] w-full">
+                <span className="text-base font-semibold text-gray-200 mb-2">Contest starts in</span>
+                <div className="flex justify-center items-center w-full">
                   <Timer startTime={contest.startTime} contestId={contest.id} />
                 </div>
-              )}
+              </div>
+            )}
+            <div className="bg-[#181B23] rounded-2xl p-6 shadow border border-[#232323] flex flex-col gap-4">
+              <h2 className="text-lg font-semibold text-white mb-2">Contest Details</h2>
+              <div className="flex flex-col gap-2 text-gray-400 text-sm">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-white">Start:</span>
+                  <span>{new Date(contest.startTime).toLocaleString()}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-white">End:</span>
+                  <span>{new Date(contest.endTime).toLocaleString()}</span>
+                </div>
+                {contest.organizationName && (
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-white">Organization:</span>
+                    <span>{contest.organizationName}</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-white">Created by:</span>
+                  <span>{contest.creator.username}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-white">Participants:</span>
+                  <span>{contest.participantCount}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-white">Questions:</span>
+                  <span>{contest.questionCount}</span>
+                </div>
+              </div>
             </div>
-          </div>
+          </aside>
 
           {/* Tabs and Content */}
           <div className="flex-1">

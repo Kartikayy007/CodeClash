@@ -51,4 +51,28 @@ const submitCode = async (
   return response.data;
 };
 
-export { runCode, submitCode };
+const submitBattleCode = async (
+  data: SubmitCodePayload,
+): Promise<SubmitCodeResponse> => {
+  const token = localStorage.getItem("accessToken");
+
+  // Use the /match/submit API for battle mode
+  const response = await api.post<SubmitCodeResponse>(
+    `${BASE_URL}/api/v1/match/submit`,
+    {
+      code: data.code,
+      language: data.language,
+      matchId: data.contestId, // contestId is actually matchId in battle mode
+      questionId: data.questionId,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  return response.data;
+};
+
+export { runCode, submitCode, submitBattleCode };
