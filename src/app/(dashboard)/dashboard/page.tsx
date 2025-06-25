@@ -44,12 +44,12 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background py-2 md:p-2">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto ">
         {/* Mobile Action Buttons */}
-        <div className="flex flex-col sm:flex-row justify-center gap-3 mb-6 lg:hidden">
-          <div className="flex-1">
+        <div className="flex flex-col w-[90%] ml-[5%] sm:flex-row justify-center gap-3 mb-6 lg:hidden">
+          {/* <div className="flex-1">
             <PlayButton />
-          </div>
+          </div> */}
           <div className="flex-1">
             <LabelButton
               variant="filled"
@@ -79,9 +79,9 @@ export default function Dashboard() {
           <div className="flex flex-col gap-6">
             {/* Desktop Action Buttons */}
             <div className="flex gap-3">
-              <div className="flex-1">
+              {/* <div className="flex-1">
                 <PlayButton />
-              </div>
+              </div> */}
               <div className="flex-1">
                 <LabelButton
                   variant="filled"

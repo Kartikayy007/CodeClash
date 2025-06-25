@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Quicksand } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/providers/redux-provider";
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "@/components/ui/toaster";
 import ClickSpark from "@/components/ui/ClickSpark";
 // import FollowCursor from "@/components/ui/FollowCursor";
 
@@ -27,11 +27,11 @@ export default function RootLayout({
             sparkRadius={15}
             sparkCount={8}
             duration={400}
-          easing="ease-out"
-        >
-          <Providers>{children}</Providers>
-        </ClickSpark>
-        <Toaster />
+            easing="ease-out"
+          >
+            <Providers>{children}</Providers>
+          </ClickSpark>
+          <Toaster />
       </body>
     </html>
   );
