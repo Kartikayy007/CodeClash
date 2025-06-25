@@ -1,5 +1,5 @@
 import type { LeaderboardPlayer } from "@/features/home/leaderboard/types/leaderboard.types"
-import { Trophy, User, Zap, TrendingUp } from "lucide-react"
+import { Trophy, User, TrendingUp } from "lucide-react"
 
 interface PlayerListProps {
   players: LeaderboardPlayer[]
@@ -26,9 +26,6 @@ const PlayerList = ({ players }: PlayerListProps) => (
     {/* Player rows */}
     <div className="divide-y divide-cyan-500/10">
       {players.map((player, index) => {
-        const isTopTier = player.wins > 50
-        const isElite = player.wins > 100
-
         return (
           <div
             key={player.id}

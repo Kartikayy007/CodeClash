@@ -16,7 +16,7 @@ import {
   X,
   CheckCircle,
 } from "lucide-react"
-import type { Match } from "./types/matches.types"
+import type { Match } from "@/features/home/matches/types/matches.types"
 
 interface RecentMatchesProps {
   className?: string
@@ -166,11 +166,7 @@ export default function RecentMatches({ className = "" }: RecentMatchesProps) {
     return duration
   }
 
-  const isWinner = (match: Match, currentUserId?: string) => {
-    // This would need to be determined based on your auth system
-    // For now, we'll show if there's a winner
-    return match.winnerId !== null
-  }
+
 
   if (loading) {
     return (
@@ -232,7 +228,7 @@ export default function RecentMatches({ className = "" }: RecentMatchesProps) {
                       <span className="text-xs text-white/50 uppercase tracking-wide font-medium">Players</span>
                     </div>
                     <div className="space-y-1">
-                      {match.players.slice(0, 2).map((player, playerIndex) => (
+                      {match.players.slice(0, 2).map((player) => (
                         <div key={player.id} className="flex items-center gap-1">
                           <span className="text-sm font-medium text-white truncate">{player.username}</span>
                           {player.id === match.winnerId && <Crown className="w-3 h-3 text-yellow-400" />}

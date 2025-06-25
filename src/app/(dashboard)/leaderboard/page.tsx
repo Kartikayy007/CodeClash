@@ -5,13 +5,12 @@ import { useDispatch, useSelector } from "react-redux"
 import type { AppDispatch, RootState } from "@/store/store"
 import TopPlayers from "@/components/leaderboard/TopPlayers"
 import PlayerList from "@/components/leaderboard/PlayerList"
-import SearchInput from "@/components/leaderboard/SearchInput"
 import PlayerRankCard from "@/components/leaderboard/PlayerRankCard"
 import { fetchLeaderboard } from "@/features/home/leaderboard/thunks/leaderboardThunks"
-import { ChevronLeft, ChevronRight, Trophy, Zap } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 export default function LeaderboardPage() {
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const PAGE_SIZE = 10
 

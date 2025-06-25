@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Trophy, Crown, Medal, TrendingUp, Users, ExternalLink } from "lucide-react"
+import {Crown, Medal, TrendingUp, Users, ExternalLink } from "lucide-react"
 
 interface LeaderboardEntry {
   rank: number

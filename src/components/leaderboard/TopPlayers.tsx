@@ -59,7 +59,7 @@ const TopPlayers: React.FC<TopPlayersProps> = ({ topPlayers }) => {
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* Podium arrangement: 2nd, 1st, 3rd */}
-        {topPlayers.length >= 3 && [topPlayers[1], topPlayers[0], topPlayers[2]].map((player, displayIndex) => {
+        {topPlayers.length >= 3 && [topPlayers[1], topPlayers[0], topPlayers[2]].map((player) => {
           const actualIndex = topPlayers.indexOf(player)
           const config = getMedalConfig(actualIndex)
           const IconComponent = config.icon

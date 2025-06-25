@@ -12,7 +12,7 @@ interface Announcement {
   id: number
   title: string
   description: string
-  icon: any
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
   color: string
   isContest?: boolean
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Trophy, Users, Calendar, Copy, ExternalLink } from "lucide-react";
+import { Trophy,  ExternalLink } from "lucide-react";
 
 interface ManageContestProps {
   className?: string;
