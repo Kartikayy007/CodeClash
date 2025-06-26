@@ -13,7 +13,7 @@ export default function SettingsPage() {
     useState<SettingsSection>("General Settings");
 
   return (
-    <div className="min-h-screen bg-[#15171B]">
+    <div className="min-h-screen">
       {/* <NavbarPlain /> */}
       <div className="p-8">
         <div className="mb-8">

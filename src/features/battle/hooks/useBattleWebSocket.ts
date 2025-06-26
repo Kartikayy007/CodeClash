@@ -71,6 +71,7 @@ export const useBattleWebSocket = () => {
     error: null,
     hasStartedGame: false,
   });
+  const [isMatchmakingModalOpen, setIsMatchmakingModalOpen] = useState(false);
   const currentMatchId = useRef<string | null>(null);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -85,13 +86,13 @@ export const useBattleWebSocket = () => {
           ...prev,
           error: "Failed to start game: No match ID",
         }));
+        setIsMatchmakingModalOpen(false);
         router.push("/dashboard");
         return;
       }
 
       try {
         console.log("🚀 Navigating to:", `/battle/${currentMatchId.current}`);
-
         const problemPromises = data.problems.map((problemId) =>
           fetchProblem(problemId),
         );
@@ -142,10 +143,12 @@ export const useBattleWebSocket = () => {
           );
         }
 
+        setIsMatchmakingModalOpen(false);
         router.push(`/battle/${currentMatchId.current}`);
       } catch (error) {
         console.error("❌ Failed to handle game start:", error);
         setState((prev) => ({ ...prev, error: "Failed to start game" }));
+        setIsMatchmakingModalOpen(false);
       }
     },
     [currentMatchId, router, dispatch],
@@ -336,6 +339,7 @@ export const useBattleWebSocket = () => {
     }
 
     setState((prev) => ({ ...prev, isSearching: true, error: null }));
+    setIsMatchmakingModalOpen(true);
     console.log("🎮 Starting matchmaking...");
 
     if (!socketService.isConnected()) {
@@ -354,5 +358,6 @@ export const useBattleWebSocket = () => {
   return {
     ...state,
     findMatch,
+    isMatchmakingModalOpen,
   };
 };

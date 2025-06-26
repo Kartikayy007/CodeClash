@@ -58,7 +58,7 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({
   return (
     <div className="space-y-6">
       <div className="form-item">
-        <label className="text-[#D1D1D1] text-[14px] block mb-2">
+        <label className="text-[#D1D1D1] text-[14px] block mb-2 font-medium">
           Contest Name
         </label>
         <input
@@ -67,14 +67,14 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({
           value={formData.name}
           onChange={onChange}
           required
-          className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-white 
-            focus:outline-none transition-all duration-500 text-sm sm:text-base text-white focus:border-[#C879EB]"
+          className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-lg bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border border-cyan-500/20 
+            focus:outline-none focus:border-cyan-500/40 transition-all duration-200 text-sm sm:text-base text-white shadow-lg shadow-cyan-500/10"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-6">
         <div className="form-item">
-          <label className="text-[#D1D1D1] text-[14px] block mb-2">
+          <label className="text-[#D1D1D1] text-[14px] block mb-2 font-medium">
             Start Date
           </label>
           <input
@@ -84,12 +84,12 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({
             onChange={onChange}
             min={todayStr}
             required
-            className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-white
-              focus:outline-none transition-all duration-500 text-sm sm:text-base text-white focus:border-[#C879EB]"
+            className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-lg bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border border-cyan-500/20
+              focus:outline-none focus:border-cyan-500/40 transition-all duration-200 text-sm sm:text-base text-white shadow-lg shadow-cyan-500/10"
           />
         </div>
         <div className="form-item">
-          <label className="text-[#D1D1D1] text-[14px] block mb-2">
+          <label className="text-[#D1D1D1] text-[14px] block mb-2 font-medium">
             Start Time
           </label>
           <input
@@ -103,15 +103,15 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({
                 : undefined
             }
             required
-            className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-white 
-              focus:outline-none transition-all duration-500 text-sm sm:text-base text-white focus:border-[#C879EB]"
+            className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-lg bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border border-cyan-500/20 
+              focus:outline-none focus:border-cyan-500/40 transition-all duration-200 text-sm sm:text-base text-white shadow-lg shadow-cyan-500/10"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-6">
         <div className="form-item">
-          <label className="text-[#D1D1D1] text-[14px] block mb-2">
+          <label className="text-[#D1D1D1] text-[14px] block mb-2 font-medium">
             End Date
           </label>
           <input
@@ -121,12 +121,12 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({
             onChange={onChange}
             min={formData.startTime.date || todayStr}
             required
-            className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-white 
-              focus:outline-none transition-all duration-500 text-sm sm:text-base text-white focus:border-[#C879EB]"
+            className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-lg bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border border-cyan-500/20 
+              focus:outline-none focus:border-cyan-500/40 transition-all duration-200 text-sm sm:text-base text-white shadow-lg shadow-cyan-500/10"
           />
         </div>
         <div className="form-item">
-          <label className="text-[#D1D1D1] text-[14px] block mb-2">
+          <label className="text-[#D1D1D1] text-[14px] block mb-2 font-medium">
             End Time
           </label>
           <input
@@ -136,14 +136,14 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({
             onChange={onChange}
             min={getMinEndTime()}
             required
-            className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-white
-              focus:outline-none transition-all duration-500 text-sm sm:text-base text-white focus:border-[#C879EB]"
+            className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-lg bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border border-cyan-500/20
+              focus:outline-none focus:border-cyan-500/40 transition-all duration-200 text-sm sm:text-base text-white shadow-lg shadow-cyan-500/10"
           />
         </div>
       </div>
 
       <div className="form-item">
-        <label className="text-[#D1D1D1] text-[14px] block mb-2">
+        <label className="text-[#D1D1D1] text-[14px] block mb-2 font-medium">
           Organization Name
         </label>
         <input
@@ -151,8 +151,8 @@ const BasicDetailsForm: React.FC<BasicDetailsFormProps> = ({
           name="organizationName"
           value={formData.organizationName}
           onChange={onChange}
-          className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-white
-            focus:outline-none transition-all duration-500 text-sm sm:text-base text-white focus:border-[#C879EB]"
+          className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-lg bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border border-cyan-500/20
+            focus:outline-none focus:border-cyan-500/40 transition-all duration-200 text-sm sm:text-base text-white shadow-lg shadow-cyan-500/10"
         />
       </div>
     </div>

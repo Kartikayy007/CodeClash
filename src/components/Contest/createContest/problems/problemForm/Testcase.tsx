@@ -57,28 +57,29 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
 
   return (
     <div className="space-y-6">
-      <div className="bg-[#1A1D24] rounded-lg overflow-hidden">
-        <div className="grid grid-cols-6 p-4 text-white border-b border-gray-700">
-          <div className="text-center">S.No</div>
-          <div className="text-center">Input</div>
-          <div className="text-center">Output</div>
-          <div className="text-center">Sample</div>
-          <div className="text-center">Strength</div>
-          <div className="text-center">Action</div>
+      <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl overflow-hidden border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
+        <div className="grid grid-cols-6 p-4 text-white border-b border-cyan-500/20 bg-gradient-to-r from-cyan-500/10 to-blue-500/10">
+          <div className="text-center font-semibold">S.No</div>
+          <div className="text-center font-semibold">Input</div>
+          <div className="text-center font-semibold">Output</div>
+          <div className="text-center font-semibold">Sample</div>
+          <div className="text-center font-semibold">Strength</div>
+          <div className="text-center font-semibold">Action</div>
         </div>
 
-        <div className="divide-y divide-gray-700">
+        <div className="divide-y divide-cyan-500/20">
           {testCases.map((testCase, index) => (
-            <div key={index} className="grid grid-cols-6 p-4 items-center">
-              <div className="text-center">{index + 1}</div>
+            <div key={index} className="grid grid-cols-6 p-4 items-center hover:bg-gradient-to-r hover:from-cyan-500/5 hover:to-blue-500/5 transition-all duration-200">
+              <div className="text-center text-cyan-400 font-medium">{index + 1}</div>
               <div className="px-2">
                 <input
                   type="text"
                   value={testCase.input}
                   onChange={(e) => onChange(index, "input", e.target.value)}
                   data-error={errors[`testCase${index}`] || undefined}
-                  className={`w-full bg-transparent border rounded px-2 py-1
-                    ${errors[`testCase${index}`] && !testCase.input ? "border-red-500 error-outline" : "border-gray-700"}`}
+                  className={`w-full bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border rounded-lg px-2 py-1 text-white shadow-lg shadow-cyan-500/10
+                    ${errors[`testCase${index}`] && !testCase.input ? "border-red-500 error-outline" : "border-cyan-500/20"}
+                    focus:outline-none focus:border-cyan-500/40 transition-all duration-200`}
                 />
                 {errors[`testCase${index}`] && !testCase.input && (
                   <p className="text-red-500 text-xs mt-1">Input is required</p>
@@ -90,8 +91,9 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
                   value={testCase.output}
                   onChange={(e) => onChange(index, "output", e.target.value)}
                   data-error={errors[`testCase${index}`] || undefined}
-                  className={`w-full bg-transparent border rounded px-2 py-1
-                    ${errors[`testCase${index}`] && !testCase.output ? "border-red-500 error-outline" : "border-gray-700"}`}
+                  className={`w-full bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border rounded-lg px-2 py-1 text-white shadow-lg shadow-cyan-500/10
+                    ${errors[`testCase${index}`] && !testCase.output ? "border-red-500 error-outline" : "border-cyan-500/20"}
+                    focus:outline-none focus:border-cyan-500/40 transition-all duration-200`}
                 />
                 {errors[`testCase${index}`] && !testCase.output && (
                   <p className="text-red-500 text-xs mt-1">
@@ -104,7 +106,7 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
                   type="checkbox"
                   checked={testCase.sample}
                   onChange={(e) => onChange(index, "sample", e.target.checked)}
-                  className="form-checkbox"
+                  className="form-checkbox w-4 h-4 text-cyan-500 bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border-cyan-500/20 rounded focus:ring-cyan-500/40 focus:ring-offset-0"
                 />
               </div>
               <div className="px-2">
@@ -114,13 +116,13 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
                   onChange={(e) =>
                     onChange(index, "strength", parseInt(e.target.value))
                   }
-                  className="w-full bg-transparent border border-gray-700 rounded px-2 py-1"
+                  className="w-full bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border border-cyan-500/20 rounded-lg px-2 py-1 text-white shadow-lg shadow-cyan-500/10 focus:outline-none focus:border-cyan-500/40 transition-all duration-200"
                 />
               </div>
               <div className="text-center">
                 <button
                   onClick={() => handleDeleteTestCase(index)}
-                  className={`p-1 rounded ${testCases.length <= 2 ? "text-gray-500 cursor-not-allowed hover:bg-transparent" : "text-red-500 hover:bg-white/10"}`}
+                  className={`p-1 rounded transition-all duration-200 ${testCases.length <= 2 ? "text-gray-500 cursor-not-allowed hover:bg-transparent" : "text-red-400 hover:bg-red-500/20"}`}
                   disabled={testCases.length <= 2}
                   title={
                     testCases.length <= 2
@@ -138,7 +140,7 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
 
       <button
         onClick={handleAddTestCase}
-        className="px-4 py-2 text-[#C879EB] hover:text-white transition-colors"
+        className="px-4 py-2 text-cyan-400 hover:text-white transition-colors duration-200 font-medium"
       >
         + Add TestCase
       </button>

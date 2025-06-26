@@ -10,11 +10,15 @@ const ContestFilters: React.FC<ContestFiltersProps> = ({
   setSelectedStatus,
 }) => {
   return (
-    <div className="mb-6 w-[20%]">
-      <h2 className="text-white mb-4 flex items-center gap-2">
-        <span className="text-lg">Filters</span>
-      </h2>
-      <div className="space-y-2 flex  md:block">
+    <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-6 backdrop-blur-sm border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold text-white mb-2 flex items-center gap-2">
+          <span>Filters</span>
+        </h2>
+        <p className="text-gray-400 text-sm">Filter contests by status</p>
+      </div>
+      
+      <div className="space-y-3">
         {(
           ["All", "Scheduled", "Ongoing", "Completed"] as (
             | "All"
@@ -26,10 +30,10 @@ const ContestFilters: React.FC<ContestFiltersProps> = ({
           <button
             key={status}
             onClick={() => setSelectedStatus(status)}
-            className={`block w-auto  text-left px-4 py-2 rounded ${
+            className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 font-medium ${
               selectedStatus === status
-                ? "bg-[#282C34] text-white"
-                : "text-gray-400"
+                ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 border border-cyan-500/30 shadow-lg shadow-cyan-500/25"
+                : "text-gray-400 hover:text-cyan-400/80 hover:bg-cyan-500/10 border border-transparent hover:border-cyan-500/20"
             }`}
           >
             {status}

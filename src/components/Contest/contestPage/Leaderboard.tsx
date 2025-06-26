@@ -20,15 +20,15 @@ interface LeaderboardProps {
 
 // Shimmer loading for leaderboard entries
 const LeaderboardSkeleton = () => (
-  <div className="grid grid-cols-2 md:grid-cols-5 p-4 items-center bg-[#1E2127] animate-pulse">
+  <div className="grid grid-cols-2 md:grid-cols-5 p-4 items-center bg-gradient-to-r from-cyan-500/10 to-blue-500/10 animate-pulse rounded-lg border border-cyan-500/10">
     <div className="flex items-center gap-2 mb-2 md:mb-0">
-      <div className="h-5 w-5 bg-gray-700 rounded-full"></div>
-      <div className="h-5 w-8 bg-gray-700 rounded"></div>
+      <div className="h-5 w-5 bg-cyan-500/20 rounded-full"></div>
+      <div className="h-5 w-8 bg-cyan-500/10 rounded"></div>
     </div>
-    <div className="h-5 w-24 bg-gray-700 rounded mb-2 md:mb-0"></div>
-    <div className="h-5 w-20 bg-gray-700 rounded mb-2 md:mb-0"></div>
-    <div className="h-5 w-16 bg-gray-700 rounded mb-2 md:mb-0"></div>
-    <div className="h-5 w-10 bg-gray-700 rounded"></div>
+    <div className="h-5 w-24 bg-cyan-500/10 rounded mb-2 md:mb-0"></div>
+    <div className="h-5 w-20 bg-cyan-500/10 rounded mb-2 md:mb-0"></div>
+    <div className="h-5 w-16 bg-cyan-500/10 rounded mb-2 md:mb-0"></div>
+    <div className="h-5 w-10 bg-cyan-500/10 rounded"></div>
   </div>
 );
 
@@ -62,11 +62,11 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
   };
 
   return (
-    <div className="bg-[#1A1D24] rounded-lg p-4 md:p-6 mb-10">
+    <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-6 md:p-8 border border-cyan-500/20 shadow-lg shadow-cyan-500/10 mb-10">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
         <div className="space-y-1">
           <h2 className="text-3xl font-semibold text-white">Leaderboard</h2>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-cyan-400/80">
             Next update in {formatUpdateTime(nextUpdate)}
           </p>
         </div>
@@ -74,14 +74,13 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
 
       {isLoading ? (
         <div className="rounded-lg overflow-hidden">
-          <div className="grid grid-cols-2 md:grid-cols-5 bg-[#282C33] p-4 text-sm font-medium">
+          <div className="grid grid-cols-2 md:grid-cols-5 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 p-4 text-sm font-semibold text-cyan-400 uppercase tracking-wider">
             <div>Rank</div>
             <div>Username</div>
             <div className="hidden md:block">Time Taken</div>
             <div className="hidden md:block">Score</div>
             <div className="hidden md:block">Questions Solved</div>
           </div>
-
           <div className="space-y-2 mt-2">
             <LeaderboardSkeleton />
             <LeaderboardSkeleton />
@@ -93,7 +92,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
       ) : leaderboard.length > 0 ? (
         <>
           <div className="rounded-lg overflow-hidden">
-            <div className="grid grid-cols-2 md:grid-cols-5 bg-[#282C33] p-4 text-sm font-medium">
+            <div className="grid grid-cols-2 md:grid-cols-5 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 p-4 text-sm font-semibold text-cyan-400 uppercase tracking-wider">
               <div>Rank</div>
               <div>Username</div>
               <div className="hidden md:block">Time Taken</div>
@@ -105,61 +104,79 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
               {leaderboard.map((entry, index) => (
                 <div
                   key={`${entry.username}-${index}`}
-                  className="grid grid-cols-2 md:grid-cols-5 p-4 items-center bg-[#1E2127] hover:bg-[#282C33] transition-colors"
+                  className="grid grid-cols-2 md:grid-cols-5 p-4 items-center bg-gradient-to-r from-white/5 to-white/10 hover:from-cyan-500/10 hover:to-blue-500/10 border border-cyan-500/10 rounded-lg transition-all duration-200 hover:scale-[1.01]"
                 >
                   <div className="flex items-center gap-2">
                     {index < 3 && (
-                      <Image
-                        src={
-                          index === 0
-                            ? "/gold.svg"
-                            : index === 1
+                      <span className={`w-5 h-5 rounded-full flex items-center justify-center shadow-md ${
+                        index === 0
+                          ? "bg-gradient-to-r from-yellow-400 to-yellow-600"
+                          : index === 1
+                          ? "bg-gradient-to-r from-gray-300 to-gray-500"
+                          : "bg-gradient-to-r from-orange-400 to-orange-600"
+                      }`}>
+                        <Image
+                          src={
+                            index === 0
+                              ? "/gold.svg"
+                              : index === 1
                               ? "/silver.svg"
                               : "/bronze.svg"
-                        }
-                        alt="medal"
-                        className="w-5 h-5"
-                        width={20}
-                        height={20}
-                      />
+                          }
+                          alt="medal"
+                          className="w-4 h-4"
+                          width={16}
+                          height={16}
+                        />
+                      </span>
                     )}
-                    {entry.rank}
+                    <span className="font-bold text-white">{entry.rank}</span>
                   </div>
-                  <div className="truncate">{entry.username}</div>
-                  <div className="hidden md:block">{entry.timeTaken}</div>
-                  <div className="hidden md:block">
+                  <div className="truncate text-cyan-400 font-medium">{entry.username}</div>
+                  <div className="hidden md:block text-gray-300">{entry.timeTaken}</div>
+                  <div className="hidden md:block text-emerald-400 font-semibold">
                     {entry.score.toFixed(2)}
                   </div>
-                  <div className="hidden md:block">{entry.questionsSolved}</div>
+                  <div className="hidden md:block text-blue-400 font-semibold">{entry.questionsSolved}</div>
                 </div>
               ))}
             </div>
           </div>
 
           {totalPages > 1 && (
-            <div className="flex justify-center gap-2 mt-4 text-gray-400">
+            <div className="flex justify-center gap-2 mt-4">
               <button
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className={`${currentPage === 1 ? "text-gray-600 cursor-not-allowed" : "hover:text-white"}`}
+                className={`p-2 rounded-lg transition-all duration-200 ${
+                  currentPage === 1
+                    ? "bg-cyan-500/20 text-cyan-400/40 cursor-not-allowed"
+                    : "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 hover:from-cyan-500/30 hover:to-blue-500/30 hover:scale-105 shadow-lg shadow-cyan-500/25"
+                }`}
               >
-                <ChevronLeft size={16} />
+                <ChevronLeft size={20} />
               </button>
-              <span className="text-gray-400">
-                Page {currentPage} of {totalPages}
-              </span>
+              <div className="flex items-center px-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-lg border border-cyan-500/30">
+                <span className="text-cyan-400 font-medium">
+                  Page {currentPage} of {totalPages}
+                </span>
+              </div>
               <button
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className={`${currentPage === totalPages ? "text-gray-600 cursor-not-allowed" : "hover:text-white"}`}
+                className={`p-2 rounded-lg transition-all duration-200 ${
+                  currentPage === totalPages
+                    ? "bg-cyan-500/20 text-cyan-400/40 cursor-not-allowed"
+                    : "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 hover:from-cyan-500/30 hover:to-blue-500/30 hover:scale-105 shadow-lg shadow-cyan-500/25"
+                }`}
               >
-                <ChevronRight size={16} />
+                <ChevronRight size={20} />
               </button>
             </div>
           )}
         </>
       ) : (
-        <div className="text-gray-400 text-center py-8">
+        <div className="text-cyan-400/60 text-center py-8">
           No participants yet
         </div>
       )}

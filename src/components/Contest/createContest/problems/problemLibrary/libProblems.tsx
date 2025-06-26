@@ -37,6 +37,8 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
   const [ratingFilter, setRatingFilter] = useState("all");
   const [customRating, setCustomRating] = useState({ from: "", to: "" });
 
+  const [addLoading, setAddLoading] = useState(false);
+
   const fetchProblems = React.useCallback(async () => {
     try {
       setLoading(true);
@@ -85,27 +87,33 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
   };
 
   const handleAddSelected = () => {
-    const selectedProblemsList = Array.from(selectedProblems).map((id) => {
-      const problem = selectedProblemDetails[id];
-      return {
-        name: problem.title,
-        title: problem.title,
-        maxScore: 100,
-        score: 0,
-        rating: problem.rating,
-        description: problem.description,
-        inputFormat: problem.inputFormat,
-        constraints: problem.constraints,
-        outputFormat: problem.outputFormat,
-        testCases: problem.testCases.map((tc) => ({
-          input: tc.input,
-          output: tc.output,
-          sample: !tc.isHidden,
-          strength: 1,
-        })),
-      };
-    });
-    onAddProblems(selectedProblemsList);
+    setAddLoading(true);
+    try {
+      const selectedProblemsList = Array.from(selectedProblems).map((id) => {
+        const problem = selectedProblemDetails[id];
+        return {
+          id: problem.id,
+          name: problem.title,
+          title: problem.title,
+          maxScore: 100,
+          score: 0,
+          rating: problem.rating,
+          description: problem.description,
+          inputFormat: problem.inputFormat,
+          constraints: problem.constraints,
+          outputFormat: problem.outputFormat,
+          testCases: problem.testCases.map((tc) => ({
+            input: tc.input,
+            output: tc.output,
+            sample: !tc.isHidden,
+            strength: 1,
+          })),
+        };
+      });
+      onAddProblems(selectedProblemsList);
+    } finally {
+      setAddLoading(false);
+    }
   };
 
   const handleProblemClick = async (problemId: string) => {
@@ -164,12 +172,12 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#10141D] text-white p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#0f1419] via-[#1a1d26] to-[#1e222c] text-white p-4 md:p-8">
       <div className=" mx-auto">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 text-white hover:text-gray-300"
+            className="flex items-center gap-2 text-white hover:text-cyan-400 transition-colors duration-200"
           >
             <ArrowLeft size={20} />
             <span>Back</span>
@@ -183,7 +191,7 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
                 placeholder="Enter Problem Name"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full md:w-80 h-[45px] pl-10 pr-4 rounded-lg bg-[#1A1D24] border-none focus:outline-none text-white"
+                className="w-full md:w-80 h-[45px] pl-10 pr-4 rounded-lg bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border border-cyan-500/20 focus:outline-none focus:border-cyan-500/40 text-white shadow-lg shadow-cyan-500/10 transition-all duration-200"
               />
             </div>
           </div>
@@ -191,46 +199,46 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
           <LabelButton
             variant="light"
             onClick={handleAddSelected}
-            disabled={selectedProblems.size === 0}
+            disabled={selectedProblems.size === 0 || addLoading}
             className="w-full md:w-auto"
           >
-            Add Questions
+            {addLoading ? "Adding..." : "Add Questions"}
           </LabelButton>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-6">
-          <div className="w-full lg:w-56 bg-[#1A1D24] rounded-lg p-4">
-            <h2 className="text-lg font-medium mb-4">Filters</h2>
+          <div className="w-full lg:w-56 bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-4 border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
+            <h2 className="text-lg font-medium mb-4 text-white">Filters</h2>
             <div className="space-y-4">
               <button
                 onClick={() => setSelectedFilter("all")}
-                className={`w-full text-left px-4 py-2 rounded-lg ${
-                  selectedFilter === "all" ? "bg-[#2A2F3E] text-white" : "text-gray-400 hover:text-white"
+                className={`w-full text-left px-4 py-2 rounded-lg transition-all duration-200 ${
+                  selectedFilter === "all" ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/25" : "text-gray-400 hover:text-white hover:bg-cyan-500/10"
                 }`}
               >
                 All
               </button>
               <button
                 onClick={() => setSelectedFilter("created")}
-                className={`w-full text-left px-4 py-2 rounded-lg ${
-                  selectedFilter === "created" ? "bg-[#2A2F3E] text-white" : "text-gray-400 hover:text-white"
+                className={`w-full text-left px-4 py-2 rounded-lg transition-all duration-200 ${
+                  selectedFilter === "created" ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/25" : "text-gray-400 hover:text-white hover:bg-cyan-500/10"
                 }`}
               >
                 Your Created Problems
               </button>
               
               <div className="py-4">
-                <h3 className="text-gray-400 mb-2">Rating</h3>
+                <h3 className="text-gray-400 mb-2 font-medium">Rating</h3>
                 <div className="space-y-2">
                   {["all", "less1000", "greater1000", "greater1500", "custom"].map((value) => (
-                    <label key={value} className="flex items-center gap-2 text-gray-400 hover:text-white cursor-pointer">
+                    <label key={value} className="flex items-center gap-2 text-gray-400 hover:text-white cursor-pointer transition-colors duration-200">
                       <input
                         type="radio"
                         name="rating"
                         value={value}
                         checked={ratingFilter === value}
                         onChange={(e) => setRatingFilter(e.target.value)}
-                        className="form-radio"
+                        className="form-radio text-cyan-500 bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border-cyan-500/20 focus:ring-cyan-500/40 focus:ring-offset-0"
                       />
                       <span className="capitalize">{value.replace(/([A-Z])/g, ' $1').trim()}</span>
                     </label>
@@ -243,14 +251,14 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
                         placeholder="from"
                         value={customRating.from}
                         onChange={(e) => setCustomRating(prev => ({ ...prev, from: e.target.value }))}
-                        className="w-20 px-2 py-1 bg-[#2A2F3E] rounded border border-gray-700"
+                        className="w-20 px-2 py-1 bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg border border-cyan-500/20 text-white shadow-lg shadow-cyan-500/10 focus:outline-none focus:border-cyan-500/40 transition-all duration-200"
                       />
                       <input
                         type="number"
                         placeholder="to"
                         value={customRating.to}
                         onChange={(e) => setCustomRating(prev => ({ ...prev, to: e.target.value }))}
-                        className="w-20 px-2 py-1 bg-[#2A2F3E] rounded border border-gray-700"
+                        className="w-20 px-2 py-1 bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg border border-cyan-500/20 text-white shadow-lg shadow-cyan-500/10 focus:outline-none focus:border-cyan-500/40 transition-all duration-200"
                       />
                     </div>
                   )}
@@ -260,14 +268,14 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
           </div>
 
           <div className="flex-1">
-            <div className="bg-[#1A1D24] rounded-lg overflow-hidden">
-              <div className="grid grid-cols-3 p-4 text-white border-b border-gray-700">
-                <div className="text-center">Select</div>
-                <div className="text-center">Problem Name</div>
-                <div className="text-center">Rating</div>
+            <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl overflow-hidden border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
+              <div className="grid grid-cols-3 p-4 text-white border-b border-cyan-500/20 bg-gradient-to-r from-cyan-500/10 to-blue-500/10">
+                <div className="text-center font-semibold">Select</div>
+                <div className="text-center font-semibold">Problem Name</div>
+                <div className="text-center font-semibold">Rating</div>
               </div>
 
-              <div className="divide-y divide-gray-700">
+              <div className="divide-y divide-cyan-500/20">
                 {loading ? (
                   <div className="p-4 text-center text-gray-400">
                     Loading problems...
@@ -276,38 +284,38 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
                   getFilteredProblems(problems).map((problem) => (
                     <div
                       key={problem.id}
-                      className="grid grid-cols-3 p-4 items-center hover:bg-[#2A2F3E]"
+                      className="grid grid-cols-3 p-4 items-center hover:bg-gradient-to-r hover:from-cyan-500/5 hover:to-blue-500/5 transition-all duration-200"
                     >
                       <div className="text-center">
                         <input
                           type="checkbox"
                           checked={selectedProblems.has(problem.id)}
                           onChange={() => handleToggleSelect(problem.id)}
-                          className="form-checkbox"
+                          className="form-checkbox w-4 h-4 text-cyan-500 bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border-cyan-500/20 rounded focus:ring-cyan-500/40 focus:ring-offset-0"
                         />
                       </div>
                       <div
-                        className="text-center cursor-pointer hover:text-purple-400"
+                        className="text-center cursor-pointer hover:text-cyan-400 transition-colors duration-200"
                         onClick={() => handleProblemClick(problem.id)}
                       >
                         {problem.title}
                       </div>
-                      <div className="text-center">{problem.rating}</div>
+                      <div className="text-center text-emerald-400 font-medium">{problem.rating}</div>
                     </div>
                   ))
                 )}
               </div>
 
               {totalPages > 1 && (
-                <div className="flex justify-left md:justify-center gap-2 p-4 border-t border-gray-700 overflow-scroll">
+                <div className="flex justify-left md:justify-center gap-2 p-4 border-t border-cyan-500/20 overflow-scroll">
                   {Array.from({ length: totalPages }, (_, i) => (
                     <button
                       key={i + 1}
                       onClick={() => setCurrentPage(i + 1)}
-                      className={`px-3 py-1 rounded ${
+                      className={`px-3 py-1 rounded-lg transition-all duration-200 ${
                         currentPage === i + 1
-                          ? "bg-purple-500 text-white"
-                          : "text-gray-400 hover:text-white"
+                          ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/25"
+                          : "text-gray-400 hover:text-white hover:bg-cyan-500/10"
                       }`}
                     >
                       {i + 1}
