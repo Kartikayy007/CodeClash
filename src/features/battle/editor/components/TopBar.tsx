@@ -306,7 +306,7 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
       <div className="flex items-center gap-4">
         <div className="w-10 h-10 bg-gray-600 rounded-full"></div>
         <div className="text-white text-base font-medium leading-normal">
-          Player 1 (You)
+          {currentPlayer?.name} (You)
         </div>
         <div className="flex gap-2">
           {problems.map((_, index) => (
@@ -362,7 +362,7 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
           ))}
         </div>
         <div className="text-white text-base font-medium font-['Quicksand'] leading-normal">
-          Player 2
+          {opponentPlayer?.name || "Opponent"}
         </div>
         <div className="w-10 h-10 bg-gray-600 rounded-full"></div>
       </div>

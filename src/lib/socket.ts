@@ -4,7 +4,7 @@ type GameMode = "STANDARD" | "SPEED" | "ACCURACY";
 
 interface Player {
   id: string;
-  name: string;
+  username: string;
   rating: number;
   isConnected: boolean;
   isReady: boolean;
