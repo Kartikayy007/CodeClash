@@ -27,7 +27,7 @@ interface MatchStateData {
   matchId: string;
   players: Array<{
     id: string;
-    name: string;
+    username: string;
     isReady: boolean;
   }>;
   status: BattleStatus;
@@ -73,6 +73,7 @@ export const useBattleWebSocket = () => {
   });
   const [isMatchmakingModalOpen, setIsMatchmakingModalOpen] = useState(false);
   const currentMatchId = useRef<string | null>(null);
+  const playerInfo = useRef<MatchStateData["players"] | null>(null);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -111,12 +112,15 @@ export const useBattleWebSocket = () => {
         dispatch(setMatchId(currentMatchId.current as string));
         dispatch(setStatus("in-progress"));
 
-        const [player1, player2] = data.gameState;
-        if (player1) {
+        const [player1Data, player2Data] = data.gameState;
+        if (player1Data) {
+          const p1Info = playerInfo.current?.find(
+            (p) => p.id === player1Data.userId
+          );
           dispatch(
             setPlayer1({
-              id: player1.userId,
-              name: player1.userId,
+              id: player1Data.userId,
+              name: p1Info ? p1Info.username : player1Data.userId,
               isReady: true,
               code: "",
               language: "cpp",
@@ -127,11 +131,14 @@ export const useBattleWebSocket = () => {
             }),
           );
         }
-        if (player2) {
+        if (player2Data) {
+          const p2Info = playerInfo.current?.find(
+            (p) => p.id === player2Data.userId
+          );
           dispatch(
             setPlayer2({
-              id: player2.userId,
-              name: player2.userId,
+              id: player2Data.userId,
+              name: p2Info ? p2Info.username : player2Data.userId,
               isReady: true,
               code: "",
               language: "cpp",
@@ -151,7 +158,7 @@ export const useBattleWebSocket = () => {
         setIsMatchmakingModalOpen(false);
       }
     },
-    [currentMatchId, router, dispatch],
+    [currentMatchId, router, dispatch]
   );
 
   useEffect(() => {
@@ -209,6 +216,7 @@ export const useBattleWebSocket = () => {
     const onMatchState = (response: MatchStateData) => {
       console.log("📊 Match state received in PlayButton:", response);
       currentMatchId.current = response.matchId;
+      playerInfo.current = response.players;
 
       if (response.status) {
         console.log("✅ Successfully joined match, starting game");
