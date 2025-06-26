@@ -22,12 +22,12 @@ interface MySubmissionsProps {
 }
 
 const SubmissionSkeleton = () => (
-  <div className="grid grid-cols-5 p-4 items-center bg-[#1E2127] animate-pulse">
-    <div className="h-5 bg-gray-700 rounded w-3/4"></div>
-    <div className="h-5 bg-gray-700 rounded w-1/2"></div>
-    <div className="h-5 bg-gray-700 rounded w-3/4"></div>
-    <div className="h-5 bg-gray-700 rounded w-1/2"></div>
-    <div className="h-5 bg-gray-700 rounded w-1/2"></div>
+  <div className="grid grid-cols-5 p-4 items-center bg-gradient-to-r from-cyan-500/10 to-blue-500/10 animate-pulse rounded-lg border border-cyan-500/10">
+    <div className="h-5 bg-cyan-500/20 rounded w-3/4"></div>
+    <div className="h-5 bg-cyan-500/10 rounded w-1/2"></div>
+    <div className="h-5 bg-cyan-500/10 rounded w-3/4"></div>
+    <div className="h-5 bg-cyan-500/10 rounded w-1/2"></div>
+    <div className="h-5 bg-cyan-500/10 rounded w-1/2"></div>
   </div>
 );
 
@@ -128,10 +128,10 @@ const MySubmissions: React.FC<MySubmissionsProps> = ({ contestId }) => {
   }, [contestId, fetchSubmissions]);
 
   return (
-    <div className="bg-[#1A1D24] rounded-lg p-6 mb-10">
+    <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-6 mb-10 border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
       <div className="rounded-lg overflow-hidden">
-        <h2 className="text-3xl font-semibold mb-6">My Submissions</h2>
-        <div className="grid grid-cols-5 bg-[#282C33] p-4 text-sm font-medium text-white">
+        <h2 className="text-3xl font-semibold text-white mb-6">My Submissions</h2>
+        <div className="grid grid-cols-5 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 p-4 text-sm font-semibold text-cyan-400 uppercase tracking-wider">
           <div>Problem</div>
           <div>Language</div>
           <div>Status</div>
@@ -149,40 +149,52 @@ const MySubmissions: React.FC<MySubmissionsProps> = ({ contestId }) => {
           ) : error ? (
             <div className="text-center py-8 text-red-400">{error}</div>
           ) : submissions.length === 0 ? (
-            <div className="text-center py-8 text-gray-400">
+            <div className="text-center py-8 text-cyan-400/60">
               No submissions yet
             </div>
           ) : (
             submissions.map((submission) => (
             <div
               key={submission.id}
-              className="grid grid-cols-5 p-4 items-center bg-[#1E2127] hover:bg-[#282C33] transition-colors"
+              className="grid grid-cols-5 p-4 items-center bg-gradient-to-r from-white/5 to-white/10 hover:from-cyan-500/10 hover:to-blue-500/10 border border-cyan-500/10 rounded-lg transition-all duration-200 hover:scale-[1.01]"
             >
-                <div className="truncate flex items-center gap-1">
-                  {submission.question?.title || "Unknown Problem"}
+                <div className="truncate flex items-center gap-2">
+                  <span className="font-medium text-white">
+                    {submission.question?.title || "Unknown Problem"}
+                  </span>
                   {submission.question?.difficulty && (
                     <span
-                      className={`text-xs px-1.5 py-0.5 rounded ${
+                      className={`text-xs px-2 py-0.5 rounded-full font-semibold border transition-all duration-200 ${
                         submission.question.difficulty === "EASY"
-                          ? "bg-green-900/40 text-green-400"
+                          ? "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 border-green-500/30"
                           : submission.question.difficulty === "MEDIUM"
-                            ? "bg-yellow-900/40 text-yellow-400"
-                            : "bg-red-900/40 text-red-400"
+                            ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border-yellow-500/30"
+                            : "bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border-red-500/30"
                       }`}
                     >
                       {submission.question.difficulty}
                     </span>
                   )}
                 </div>
-                <div>
+                <div className="text-cyan-400 font-medium">
                   {submission.language.charAt(0).toUpperCase() +
                     submission.language.slice(1)}
                 </div>
                 <div className="flex items-center gap-2">
                   {getStatusIcon(submission.status)}
-                  <span>{getStatusText(submission.status)}</span>
+                  <span className={`font-semibold text-xs px-2 py-0.5 rounded-full border transition-all duration-200 ${
+                    submission.status === "ACCEPTED"
+                      ? "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 border-green-500/30"
+                      : submission.status === "WRONG_ANSWER"
+                        ? "bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border-red-500/30"
+                        : submission.status === "TIME_LIMIT_EXCEEDED"
+                          ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border-yellow-500/30"
+                          : "bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-400 border-blue-500/30"
+                  }`}>
+                    {getStatusText(submission.status)}
+                  </span>
                 </div>
-                <div>
+                <div className="text-gray-300 font-mono text-xs">
                   {new Date(submission.createdAt)
                     .toLocaleString("en-US", {
                       day: "2-digit",
@@ -193,34 +205,46 @@ const MySubmissions: React.FC<MySubmissionsProps> = ({ contestId }) => {
                     })
                     .replace(",", "")}
                 </div>
-                <div>{submission.score !== null ? submission.score : "-"}</div>
+                <div className="text-emerald-400 font-bold">
+                  {submission.score !== null ? submission.score : "-"}
+                </div>
             </div>
             ))
           )}
         </div>
-
-        {totalPages > 1 && (
-        <div className="flex justify-center gap-2 mt-4 text-gray-400">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className={`${currentPage === 1 ? "text-gray-600 cursor-not-allowed" : "hover:text-white"}`}
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <span className="text-gray-400">
+      </div>
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-2 mt-6">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className={`p-2 rounded-lg transition-all duration-200 ${
+              currentPage === 1
+                ? "bg-cyan-500/20 text-cyan-400/40 cursor-not-allowed"
+                : "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 hover:from-cyan-500/30 hover:to-blue-500/30 hover:scale-105 shadow-lg shadow-cyan-500/25"
+            }`}
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <div className="flex items-center px-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-lg border border-cyan-500/30">
+            <span className="text-cyan-400 font-medium">
               Page {currentPage} of {totalPages}
             </span>
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className={`${currentPage === totalPages ? "text-gray-600 cursor-not-allowed" : "hover:text-white"}`}
-            >
-              <ChevronRight size={16} />
-            </button>
+          </div>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className={`p-2 rounded-lg transition-all duration-200 ${
+              currentPage === totalPages
+                ? "bg-cyan-500/20 text-cyan-400/40 cursor-not-allowed"
+                : "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 hover:from-cyan-500/30 hover:to-blue-500/30 hover:scale-105 shadow-lg shadow-cyan-500/25"
+            }`}
+          >
+            <ChevronRight size={20} />
+          </button>
         </div>
-        )}
-      </div>
+      )}
     </div>
   );
 };

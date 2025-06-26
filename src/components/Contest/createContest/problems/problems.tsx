@@ -24,6 +24,7 @@ interface ProblemComponentProps {
   onCreateProblem: () => void;
   onDeleteProblem: (index: number) => void;
   onSaveProblem: (problemData: {
+    id?: string;
     name: string;
     title: string;
     maxScore: number;
@@ -56,6 +57,7 @@ const Problems: React.FC<ProblemComponentProps> = ({
   const [showCreateProblem, setShowCreateProblem] = useState(false);
   const [showLibrary, setShowLibrary] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
 
   const handleEditClick = (problem: Problem) => {
     setEditingProblem(problem);
@@ -78,9 +80,10 @@ const Problems: React.FC<ProblemComponentProps> = ({
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editedProblem) return;
-
+    setActionLoading(true);
     try {
       await onSaveProblem({
+        id: editedProblem.id,
         name: editedProblem.name,
         title: editedProblem.name,
         maxScore: editedProblem.maxScore,
@@ -98,6 +101,8 @@ const Problems: React.FC<ProblemComponentProps> = ({
       toast.error(
         error instanceof Error ? error.message : "Failed to update problem",
       );
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -110,6 +115,7 @@ const Problems: React.FC<ProblemComponentProps> = ({
     if (selectedProblemIndex !== null) {
       const problem = problems[selectedProblemIndex];
       if (problem.id) {
+        setActionLoading(true);
         try {
           await onDeleteProblem(selectedProblemIndex);
           toast.success("Problem deleted successfully");
@@ -118,6 +124,8 @@ const Problems: React.FC<ProblemComponentProps> = ({
           toast.error(
             err?.response?.data?.message || "Failed to delete problem",
           );
+        } finally {
+          setActionLoading(false);
         }
       }
       setShowDeleteConfirm(false);
@@ -130,8 +138,10 @@ const Problems: React.FC<ProblemComponentProps> = ({
   };
 
   const handleSaveProblem = async (data: Problem) => {
+    setActionLoading(true);
     try {
       await onSaveProblem({
+        id: data.id,
         name: data.name,
         title: data.name,
         maxScore: data.maxScore || 0,
@@ -154,6 +164,8 @@ const Problems: React.FC<ProblemComponentProps> = ({
     } catch (error) {
       toast.error("Failed to add problem");
       console.error("Error adding problem:", error);
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -166,8 +178,10 @@ const Problems: React.FC<ProblemComponentProps> = ({
   };
 
   const handleAddProblems = (selectedProblems: Problem[]) => {
-    selectedProblems.forEach((problem) => {
+    setActionLoading(true);
+    Promise.all(selectedProblems.map((problem) =>
       onSaveProblem({
+        id: problem.id,
         name: problem.name,
         title: problem.name,
         maxScore: problem.maxScore || 100,
@@ -184,9 +198,12 @@ const Problems: React.FC<ProblemComponentProps> = ({
             sample: tc.sample,
             strength: tc.strength || 1,
           })) || [],
-      });
-    });
-    setShowLibrary(false);
+      })
+    ))
+      .then(() => {
+        setShowLibrary(false);
+      })
+      .finally(() => setActionLoading(false));
   };
 
   if (showLibrary) {
@@ -215,6 +232,7 @@ const Problems: React.FC<ProblemComponentProps> = ({
           variant="light"
           onClick={handleAddFromLibrary}
           className="flex-1 md:w-full"
+          disabled={actionLoading}
         >
           Add from Library
         </LabelButton>
@@ -222,6 +240,7 @@ const Problems: React.FC<ProblemComponentProps> = ({
           variant="outlined"
           onClick={handleCreateProblemClick}
           className="flex-1 md:w-full"
+          disabled={actionLoading}
         >
           Create New Problem
         </LabelButton>
@@ -248,47 +267,49 @@ const Problems: React.FC<ProblemComponentProps> = ({
             </p>
           </div>
         ) : (
-          <div className="bg-[#1A1D24] rounded-lg overflow-hidden w-full">
+          <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl overflow-hidden w-full border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
             {/* Table header - hide "Rating" column on smallest screens */}
-            <div className="grid grid-cols-6 md:grid-cols-8 p-3 md:p-4 text-white border-b border-gray-700 text-sm md:text-base">
-              <div className="col-span-4 md:col-span-5">Problem Name</div>
-              <div className="col-span-2 md:col-span-2 text-center">
+            <div className="grid grid-cols-6 md:grid-cols-8 p-3 md:p-4 text-white border-b border-cyan-500/20 text-sm md:text-base bg-gradient-to-r from-cyan-500/10 to-blue-500/10">
+              <div className="col-span-4 md:col-span-5 font-semibold">Problem Name</div>
+              <div className="col-span-2 md:col-span-2 text-center font-semibold">
                 Max Score
               </div>
-              <div className="hidden md:block col-span-1 text-center">
+              <div className="hidden md:block col-span-1 text-center font-semibold">
                 Rating
               </div>
             </div>
 
             {/* Problems list with responsive layout */}
-            <div className="divide-y divide-[#282C33]">
+            <div className="divide-y divide-cyan-500/20">
               {problems.map((problem, index) => (
                 <div
                   key={index}
-                  className="grid grid-cols-6 md:grid-cols-8 px-3 md:px-6 py-3 md:py-4 text-white items-center hover:bg-[#282C33] transition-colors group"
+                  className="grid grid-cols-6 md:grid-cols-8 px-3 md:px-6 py-3 md:py-4 text-white items-center hover:bg-gradient-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-200 group"
                 >
                   <div className="col-span-4 md:col-span-5 font-medium truncate pr-2 text-sm md:text-base">
                     {problem.name}
                   </div>
-                  <div className="col-span-1 md:col-span-2 text-center text-white/80 text-sm md:text-base">
+                  <div className="col-span-1 md:col-span-2 text-center text-cyan-400 text-sm md:text-base font-medium">
                     {problem.maxScore}
                   </div>
                   <div className="col-span-1 flex items-center justify-end md:justify-between">
-                    <span className="hidden md:block flex-1 text-center text-white/80">
+                    <span className="hidden md:block flex-1 text-center text-emerald-400 font-medium">
                       {problem.rating}
                     </span>
                     <div className="flex gap-1 md:gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => handleEditClick(problem)}
-                        className="p-1 hover:bg-white/10 rounded"
+                        className="p-1 hover:bg-cyan-500/20 rounded transition-colors duration-200"
                         aria-label="Edit problem"
+                        disabled={actionLoading}
                       >
-                        <Pencil size={14} className="md:size-6" />
+                        <Pencil size={14} className="md:size-6 text-cyan-400" />
                       </button>
                       <button
                         onClick={() => handleDeleteClick(index)}
-                        className="p-1 hover:bg-white/10 rounded text-red-500"
+                        className="p-1 hover:bg-red-500/20 rounded text-red-400 transition-colors duration-200"
                         aria-label="Delete problem"
+                        disabled={actionLoading}
                       >
                         <Trash size={14} className="md:size-6" />
                       </button>
@@ -309,7 +330,7 @@ const Problems: React.FC<ProblemComponentProps> = ({
       >
         <form onSubmit={handleEditSubmit} className="space-y-4 md:space-y-6">
           <div className="form-group">
-            <label className="text-[#D1D1D1] text-xs md:text-sm block mb-1 md:mb-2">
+            <label className="text-[#D1D1D1] text-xs md:text-sm block mb-1 md:mb-2 font-medium">
               Problem Title
             </label>
             <input
@@ -317,14 +338,14 @@ const Problems: React.FC<ProblemComponentProps> = ({
               name="name"
               value={editedProblem?.name || ""}
               onChange={handleEditInputChange}
-              className="w-full h-10 md:h-[45px] px-3 md:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
-              focus:outline-none transition-all duration-500 text-sm text-white placeholder:text-gray-400"
+              className="w-full h-10 md:h-[45px] px-3 md:px-4 py-2 rounded-lg bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border border-cyan-500/20 
+              focus:outline-none focus:border-cyan-500/40 transition-all duration-200 text-sm text-white placeholder:text-gray-400 shadow-lg shadow-cyan-500/10"
             />
           </div>
 
           <div className="flex flex-col gap-3 md:gap-4">
             <div className="form-group">
-              <label className="text-[#D1D1D1] text-xs md:text-sm block mb-1 md:mb-2">
+              <label className="text-[#D1D1D1] text-xs md:text-sm block mb-1 md:mb-2 font-medium">
                 Max Score
               </label>
               <input
@@ -332,13 +353,13 @@ const Problems: React.FC<ProblemComponentProps> = ({
                 name="maxScore"
                 value={editedProblem?.maxScore || ""}
                 onChange={handleEditInputChange}
-                className="w-full h-10 md:h-[45px] px-3 md:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
-                focus:outline-none transition-all duration-500 text-sm text-white placeholder:text-gray-400"
+                className="w-full h-10 md:h-[45px] px-3 md:px-4 py-2 rounded-lg bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border border-cyan-500/20 
+                focus:outline-none focus:border-cyan-500/40 transition-all duration-200 text-sm text-white placeholder:text-gray-400 shadow-lg shadow-cyan-500/10"
               />
             </div>
 
             <div className="form-group">
-              <label className="text-[#D1D1D1] text-xs md:text-sm block mb-1 md:mb-2">
+              <label className="text-[#D1D1D1] text-xs md:text-sm block mb-1 md:mb-2 font-medium">
                 Rating
               </label>
               <input
@@ -346,8 +367,8 @@ const Problems: React.FC<ProblemComponentProps> = ({
                 name="rating"
                 value={editedProblem?.rating || ""}
                 onChange={handleEditInputChange}
-                className="w-full h-10 md:h-[45px] px-3 md:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
-                focus:outline-none transition-all duration-500 text-sm text-white placeholder:text-gray-400"
+                className="w-full h-10 md:h-[45px] px-3 md:px-4 py-2 rounded-lg bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border border-cyan-500/20 
+                focus:outline-none focus:border-cyan-500/40 transition-all duration-200 text-sm text-white placeholder:text-gray-400 shadow-lg shadow-cyan-500/10"
               />
             </div>
           </div>
@@ -361,7 +382,7 @@ const Problems: React.FC<ProblemComponentProps> = ({
             >
               Cancel
             </LabelButton>
-            <LabelButton type="submit" className="text-sm">
+            <LabelButton type="submit" className="text-sm" disabled={actionLoading}>
               Save Changes
             </LabelButton>
           </div>
@@ -371,8 +392,8 @@ const Problems: React.FC<ProblemComponentProps> = ({
       {/* Delete confirmation - made responsive */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#1A1D24] p-4 md:p-6 rounded-lg w-full max-w-xs md:max-w-md">
-            <h3 className="text-base md:text-lg font-medium mb-2 md:mb-4">
+          <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] p-4 md:p-6 rounded-xl w-full max-w-xs md:max-w-md border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
+            <h3 className="text-base md:text-lg font-medium mb-2 md:mb-4 text-white">
               Delete Problem
             </h3>
             <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-6">
@@ -381,13 +402,14 @@ const Problems: React.FC<ProblemComponentProps> = ({
             <div className="flex justify-end gap-3 md:gap-4">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                className="px-3 md:px-4 py-1.5 md:py-2 text-gray-400 hover:text-white text-sm md:text-base"
+                className="px-3 md:px-4 py-1.5 md:py-2 text-gray-400 hover:text-white text-sm md:text-base transition-colors duration-200"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="px-3 md:px-4 py-1.5 md:py-2 bg-red-500 text-white rounded hover:bg-red-600 text-sm md:text-base"
+                className="px-3 md:px-4 py-1.5 md:py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 text-sm md:text-base transition-all duration-200 shadow-lg shadow-red-500/25"
+                disabled={actionLoading}
               >
                 Delete
               </button>

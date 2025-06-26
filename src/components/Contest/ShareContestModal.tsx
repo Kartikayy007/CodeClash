@@ -43,17 +43,17 @@ const ShareContestModal: React.FC<ShareContestModalProps> = ({
     <Modal isOpen={isOpen} onClose={onClose} title="Share Contest">
       <div className="space-y-6">
         <div className="space-y-2">
-          <label className="text-[#D1D1D1] text-sm">Contest Link</label>
+          <label className="text-[#D1D1D1] text-sm font-medium">Contest Link</label>
           <div className="flex items-center gap-2">
             <input
               type="text"
               value={contestLink}
               readOnly
-              className="flex-1 bg-[#1A1D24] text-white px-4 py-3 rounded-lg border border-gray-700"
+              className="flex-1 bg-gradient-to-br from-[#1a1d26] to-[#1e222c] text-white px-4 py-3 rounded-lg border border-cyan-500/20 shadow-lg shadow-cyan-500/10 focus:border-cyan-500/40 focus:outline-none transition-all duration-200"
             />
             <button
               onClick={handleCopyLink}
-              className="p-3 bg-[#1A1D24] text-white rounded-lg hover:bg-[#282C34] transition-colors"
+              className="p-3 bg-gradient-to-br from-cyan-500 to-blue-600 text-white rounded-lg hover:from-cyan-600 hover:to-blue-700 transition-all duration-200 shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40"
             >
               <Copy size={20} />
             </button>
@@ -61,17 +61,17 @@ const ShareContestModal: React.FC<ShareContestModalProps> = ({
         </div>
 
         <div className="space-y-2">
-          <label className="text-[#D1D1D1] text-sm">Contest Code</label>
+          <label className="text-[#D1D1D1] text-sm font-medium">Contest Code</label>
           <div className="flex items-center gap-2">
             <input
               type="text"
               value={contestId}
               readOnly
-              className="flex-1 bg-[#1A1D24] text-white px-4 py-3 rounded-lg border border-gray-700"
+              className="flex-1 bg-gradient-to-br from-[#1a1d26] to-[#1e222c] text-white px-4 py-3 rounded-lg border border-cyan-500/20 shadow-lg shadow-cyan-500/10 focus:border-cyan-500/40 focus:outline-none transition-all duration-200"
             />
             <button
               onClick={handleCopyCode}
-              className="p-3 bg-[#1A1D24] text-white rounded-lg hover:bg-[#282C34] transition-colors"
+              className="p-3 bg-gradient-to-br from-cyan-500 to-blue-600 text-white rounded-lg hover:from-cyan-600 hover:to-blue-700 transition-all duration-200 shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40"
             >
               <Copy size={20} />
             </button>

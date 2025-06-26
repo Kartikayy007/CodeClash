@@ -135,16 +135,16 @@ export default function PreviewContest({ contest }: PreviewContestProps) {
         );
       case "Leaderboard":
         return (
-          <div>
-            <h1 className="text-2xl font-bold text-center">
+          <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-8 border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
+            <h1 className="text-2xl font-bold text-center text-white">
               Leaderboard will be shown here
             </h1>
           </div>
         );
       case "My Submissions":
         return (
-          <div>
-            <h1 className="text-2xl font-bold text-center">
+          <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-8 border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
+            <h1 className="text-2xl font-bold text-center text-white">
               My Submissions will be shown here
             </h1>
           </div>
@@ -155,20 +155,20 @@ export default function PreviewContest({ contest }: PreviewContestProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#10141D] text-white">
+    <div className="min-h-screen bg-gradient-to-br from-[#0f1419] via-[#1a1d26] to-[#1e222c] text-white">
       <div className="flex flex-col h-full">
         <div className="flex px-8 gap-8">
-          <div className="w-[200px] rounded-lg h-fit">
+          <div className="w-[200px] rounded-xl h-fit bg-gradient-to-br from-[#1a1d26] to-[#1e222c] p-2 border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
             {(
               ["Problem Set", "Leaderboard", "My Submissions"] as TabType[]
             ).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`w-full text-left px-4 py-2 rounded-lg text-lg transition-colors ${
+                className={`w-full text-left px-4 py-3 rounded-lg text-lg transition-all duration-200 ${
                   activeTab === tab
-                    ? "text-white bg-[#282C33] rounded-lg"
-                    : "text-gray-400 hover:text-white "
+                    ? "text-white bg-gradient-to-r from-cyan-500 to-blue-600 shadow-lg shadow-cyan-500/25"
+                    : "text-gray-400 hover:text-white hover:bg-cyan-500/10"
                 }`}
               >
                 {tab}

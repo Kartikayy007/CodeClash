@@ -165,14 +165,32 @@ export default function ContestDetails() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#10141D] text-white flex items-center justify-center">
-        <p>Loading contest details...</p>
+      <div className="min-h-screen   py-2 md:p-2 relative overflow-hidden">
+        {/* Animated Background Blobs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse animation-delay-300"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-128 h-128 bg-purple-500/3 rounded-full blur-3xl animate-pulse animation-delay-700"></div>
+        </div>
+
+        <div className="container mx-auto p-6 relative z-10">
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="text-cyan-400 text-xl font-semibold">Loading contest details...</div>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#10141D] text-white">
+    <div className="min-h-screen   py-2 md:p-2 relative overflow-hidden">
+      {/* Animated Background Blobs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse animation-delay-300"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-128 h-128 bg-purple-500/3 rounded-full blur-3xl animate-pulse animation-delay-700"></div>
+      </div>
+
       <style jsx global>{`
         .markdown-content {
           /* Base text styling */
@@ -290,110 +308,99 @@ export default function ContestDetails() {
           border-radius: 0.375rem;
         }
       `}</style>
-      <div className="flex flex-col h-full">
-        <div className="flex items-center justify-between p-8">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 text-white hover:text-gray-300 opacity-0"
-          >
-            {/* <ArrowLeft size={20} />
-            <span>Back</span> */}
-          </button>
 
-          <div className=" w-1/2 rounded-lg px-18 py-8 flex justify-center items-center">
-            <div className="hidden text-center space-y-4">
-              <h1 className="text-5xl font-bold">{contest.title}</h1>
-              <p className="text-gray-400">
+      <div className="container mx-auto p-6 relative z-10">
+        {/* Header Section */}
+        <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-6 backdrop-blur-sm border border-cyan-500/20 shadow-lg shadow-cyan-500/10 mb-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex-1 text-center md:text-left">
+              <h1 className="text-3xl font-bold text-white mb-2">{contest.title}</h1>
+              <p className="text-cyan-400/80">
                 {new Date(contest.startTime).toLocaleString()} to{" "}
                 {new Date(contest.endTime).toLocaleString()}
               </p>
-              {contest.isRegistered && contest.status === "UPCOMING" && (
-                <div className="mt-4">
-                  <p className="text-sm text-gray-400 mb-2">
-                    Contest starts in
-                  </p>
-                  <Timer startTime={contest.startTime} contestId={contest.id} />
-                </div>
+              {contest.organizationName && (
+                <p className="text-gray-400 text-sm mt-1">
+                  Organized by {contest.organizationName}
+                </p>
               )}
-              <p className="text-white text-center text-xl">
-                {contest.organizationName}
-              </p>
             </div>
-          </div>
-          <div>
-            <LabelButton
-              onClick={handleRegister}
-              disabled={
-                registering ||
-                contest.isRegistered
-              }
-              className="w-full md:w-auto"
-            >
-              {registering ? "Registering..." : "Register"}
-            </LabelButton>
+            <div className="flex-shrink-0">
+              <LabelButton
+                onClick={handleRegister}
+                disabled={
+                  registering ||
+                  contest.isRegistered
+                }
+                className="w-full md:w-auto bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-105"
+              >
+                {registering ? "Registering..." : contest.isRegistered ? "Registered" : "Register"}
+              </LabelButton>
+            </div>
           </div>
         </div>
 
-        {/* Content Section */}
-        <div className="flex flex-col md:flex-row px-4 md:px-8 gap-4 md:gap-8 py-4">
-          {/* Sidebar Info */}
-          <aside className="md:col-span-1 flex flex-col gap-6">
-            {/* Timer Card */}
-            {contest.isRegistered && contest.status === "UPCOMING" && (
-              <div className="bg-[#23263a] rounded-xl p-6 mb-2 flex flex-col items-center border border-[#292c3c] w-full">
-                <span className="text-base font-semibold text-gray-200 mb-2">Contest starts in</span>
-                <div className="flex justify-center items-center w-full">
-                  <Timer startTime={contest.startTime} contestId={contest.id} />
-                </div>
+        {/* Timer Section */}
+        {contest.isRegistered && contest.status === "UPCOMING" && (
+          <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-6 backdrop-blur-sm border border-cyan-500/20 shadow-lg shadow-cyan-500/10 mb-6">
+            <div className="text-center">
+              <h2 className="text-xl font-semibold text-white mb-4">Contest starts in</h2>
+              <div className="flex justify-center">
+                <Timer startTime={contest.startTime} contestId={contest.id} />
               </div>
-            )}
-            <div className="bg-[#181B23] rounded-2xl p-6 shadow border border-[#232323] flex flex-col gap-4">
-              <h2 className="text-lg font-semibold text-white mb-2">Contest Details</h2>
-              <div className="flex flex-col gap-2 text-gray-400 text-sm">
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-white">Start:</span>
-                  <span>{new Date(contest.startTime).toLocaleString()}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Content Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Sidebar Info */}
+          <div className="lg:col-span-1">
+            <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-6 backdrop-blur-sm border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
+              <h2 className="text-xl font-semibold text-white mb-4">Contest Details</h2>
+              <div className="space-y-4">
+                <div className="flex flex-col gap-1">
+                  <span className="text-cyan-400 text-sm font-medium">Start Time</span>
+                  <span className="text-gray-300 text-sm">{new Date(contest.startTime).toLocaleString()}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-white">End:</span>
-                  <span>{new Date(contest.endTime).toLocaleString()}</span>
+                <div className="flex flex-col gap-1">
+                  <span className="text-cyan-400 text-sm font-medium">End Time</span>
+                  <span className="text-gray-300 text-sm">{new Date(contest.endTime).toLocaleString()}</span>
                 </div>
-                {contest.organizationName && (
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-white">Organization:</span>
-                    <span>{contest.organizationName}</span>
-                  </div>
-                )}
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-white">Created by:</span>
-                  <span>{contest.creator.username}</span>
+                <div className="flex flex-col gap-1">
+                  <span className="text-cyan-400 text-sm font-medium">Created by</span>
+                  <span className="text-gray-300 text-sm">{contest.creator.username}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-white">Participants:</span>
-                  <span>{contest.participantCount}</span>
+                <div className="flex flex-col gap-1">
+                  <span className="text-cyan-400 text-sm font-medium">Participants</span>
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border border-purple-500/30 w-fit">
+                    {contest.participantCount}
+                  </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-white">Questions:</span>
-                  <span>{contest.questionCount}</span>
+                <div className="flex flex-col gap-1">
+                  <span className="text-cyan-400 text-sm font-medium">Questions</span>
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-400 border border-blue-500/30 w-fit">
+                    {contest.questionCount}
+                  </span>
                 </div>
               </div>
             </div>
-          </aside>
+          </div>
 
           {/* Tabs and Content */}
-          <div className="flex-1">
-            <div className="bg-[#1A1D24] rounded-lg p-4 md:p-6">
+          <div className="lg:col-span-3">
+            <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-6 backdrop-blur-sm border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
               {/* Tabs */}
-              <div className="flex gap-4 mb-6 overflow-x-auto pb-2 scrollbar-hide">
+              <div className="flex gap-1 mb-6 overflow-x-auto pb-2 scrollbar-hide">
                 {(["Description", "Rules", "Score", "Prizes"] as const).map(
                   (tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`pb-2 whitespace-nowrap text-sm md:text-base ${
+                      className={`px-4 py-2 rounded-lg whitespace-nowrap text-sm font-medium transition-all duration-200 ${
                         activeTab === tab
-                          ? "text-white border-b-2 border-white"
-                          : "text-gray-400 hover:text-white"
+                          ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 border border-cyan-500/30 shadow-lg shadow-cyan-500/25"
+                          : "text-gray-400 hover:text-cyan-400/80 hover:bg-cyan-500/10 border border-transparent hover:border-cyan-500/20"
                       }`}
                     >
                       {tab}

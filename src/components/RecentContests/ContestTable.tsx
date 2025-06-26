@@ -22,10 +22,10 @@ export default function ContestTable({
 }: ContestTableProps) {
   if (loading) {
     return (
-      <div className="flex-1 bg-[#1A1D24] rounded-lg p-6 ">
+      <div className="w-full">
         <div className="animate-pulse space-y-4">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-16 bg-gray-700/20 rounded" />
+            <div key={i} className="h-16 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-lg border border-cyan-500/20" />
           ))}
         </div>
       </div>
@@ -34,59 +34,83 @@ export default function ContestTable({
 
   if (error) {
     return (
-      <div className="flex-1 bg-[#1A1D24] rounded-lg p-6">
-        <div className="text-red-500 text-center">{error}</div>
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="text-red-400 text-lg font-medium mb-2">Error Loading Contests</div>
+          <div className="text-red-300 text-sm">{error}</div>
+        </div>
       </div>
     );
   }
 
   if (!contests.length) {
     return (
-      <div className="flex-1 bg-[#1A1D24] rounded-lg p-6">
-        <div className="text-gray-400 text-center">No contests found</div>
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="text-cyan-400/60 text-lg font-medium mb-2">No contests found</div>
+          <div className="text-gray-500 text-sm">Join or create contests to see them here</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex-1 bg-[#1A1D24] rounded-lg p-6">
+    <div className="w-full">
       <div className="overflow-x-auto">
         <table className="min-w-full">
           <thead>
-            <tr>
-              <th className="text-center">Name</th>
-              <th className="text-center">Start Date</th>
-              <th className="text-center">Duration</th>
-              <th className="text-center">Participants</th>
-              <th className="text-center">Status</th>
+            <tr className="border-b border-cyan-500/20">
+              <th className="text-left py-4 px-6 text-cyan-400 font-semibold text-sm uppercase tracking-wider">
+                Name
+              </th>
+              <th className="text-left py-4 px-6 text-cyan-400 font-semibold text-sm uppercase tracking-wider">
+                Start Date
+              </th>
+              <th className="text-center py-4 px-6 text-cyan-400 font-semibold text-sm uppercase tracking-wider">
+                Duration
+              </th>
+              <th className="text-center py-4 px-6 text-cyan-400 font-semibold text-sm uppercase tracking-wider">
+                Participants
+              </th>
+              <th className="text-center py-4 px-6 text-cyan-400 font-semibold text-sm uppercase tracking-wider">
+                Status
+              </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-cyan-500/10">
             {contests.map((contest, index) => (
               <tr
                 key={index}
-                className="h-[50px] p-4 hover:bg-[#31343C] transition-colors cursor-pointer"
+                className="hover:bg-gradient-to-r hover:from-cyan-500/5 hover:to-blue-500/5 transition-all duration-200 group cursor-pointer"
               >
-                <td className="text-gray-400 text-center px-4">
-                  {contest.name}
+                <td className="py-4 px-6">
+                  <div className="text-white font-medium group-hover:text-cyan-400 transition-colors duration-200">
+                    {contest.name}
+                  </div>
                 </td>
-                <td className="text-gray-400 text-center px-4">
-                  {contest.startDate}
+                <td className="py-4 px-6">
+                  <div className="text-gray-300 group-hover:text-cyan-400/80 transition-colors duration-200">
+                    {contest.startDate}
+                  </div>
                 </td>
-                <td className="text-gray-400 text-center px-4">
-                  {contest.duration}
+                <td className="py-4 px-6 text-center">
+                  <div className="text-gray-300 group-hover:text-cyan-400/80 transition-colors duration-200 font-mono text-sm">
+                    {contest.duration}
+                  </div>
                 </td>
-                <td className="text-gray-400 text-center px-4">
-                  {contest.participants}
+                <td className="py-4 px-6 text-center">
+                  <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border border-purple-500/30">
+                    {contest.participants}
+                  </div>
                 </td>
-                <td className="px-4">
+                <td className="py-4 px-6 text-center">
                   <span
-                    className={`px-2 py-1 rounded text-sm ${
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold transition-all duration-200 ${
                       contest.status === "ONGOING"
-                        ? "bg-green-500/20 text-green-500"
+                        ? "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 border border-green-500/30 shadow-lg shadow-green-500/25"
                         : contest.status === "COMPLETED"
-                          ? "bg-blue-500/20 text-blue-500"
-                          : "bg-yellow-500/20 text-yellow-500"
+                          ? "bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-400 border border-blue-500/30 shadow-lg shadow-blue-500/25"
+                          : "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border border-yellow-500/30 shadow-lg shadow-yellow-500/25"
                     }`}
                   >
                     {contest.status.charAt(0) +

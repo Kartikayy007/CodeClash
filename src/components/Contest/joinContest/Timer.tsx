@@ -76,28 +76,28 @@ export default function Timer({
 
   return (
     <div className={`flex items-center justify-center gap-4 ${className}`}>
-      <div className="flex flex-col items-center bg-[#db83d8] p-4 rounded-lg text-black">
+      <div className="flex flex-col items-center bg-gradient-to-br from-cyan-500 to-blue-600 p-4 rounded-xl text-white border border-cyan-400/30 shadow-lg shadow-cyan-500/25">
         <span className="text-2xl font-bold">{padNumber(timeLeft.days)}</span>
-        <span className="text-xs">Days</span>
+        <span className="text-xs font-medium">Days</span>
       </div>
-      <div className="text-xl font-bold">:</div>
-      <div className="flex flex-col items-center bg-[#db83d8] p-4 rounded-lg text-black">
+      <div className="text-xl font-bold text-cyan-400">:</div>
+      <div className="flex flex-col items-center bg-gradient-to-br from-cyan-500 to-blue-600 p-4 rounded-xl text-white border border-cyan-400/30 shadow-lg shadow-cyan-500/25">
         <span className="text-2xl font-bold">{padNumber(timeLeft.hours)}</span>
-        <span className="text-xs">Hours</span>
+        <span className="text-xs font-medium">Hours</span>
       </div>
-      <div className="text-xl font-bold">:</div>
-      <div className="flex flex-col items-center bg-[#db83d8] p-4 rounded-lg text-black">
+      <div className="text-xl font-bold text-cyan-400">:</div>
+      <div className="flex flex-col items-center bg-gradient-to-br from-cyan-500 to-blue-600 p-4 rounded-xl text-white border border-cyan-400/30 shadow-lg shadow-cyan-500/25">
         <span className="text-2xl font-bold">
           {padNumber(timeLeft.minutes)}
         </span>
-        <span className="text-xs">Minutes</span>
+        <span className="text-xs font-medium">Minutes</span>
       </div>
-      <div className="text-xl font-bold">:</div>
-      <div className="flex flex-col items-center bg-[#db83d8] p-4 rounded-lg text-black">
+      <div className="text-xl font-bold text-cyan-400">:</div>
+      <div className="flex flex-col items-center bg-gradient-to-br from-cyan-500 to-blue-600 p-4 rounded-xl text-white border border-cyan-400/30 shadow-lg shadow-cyan-500/25">
         <span className="text-2xl font-bold">
           {padNumber(timeLeft.seconds)}
         </span>
-        <span className="text-xs">Seconds</span>
+        <span className="text-xs font-medium">Seconds</span>
       </div>
     </div>
   );

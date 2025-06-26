@@ -2,11 +2,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import ModeSelector from "@/components/RecentMatches/ModeSelector";
 import MatchTable from "@/components/RecentMatches/MatchTable";
-import WinsOverview from "@/components/RecentMatches/WinsOverview";
-import WinningMomentum from "@/components/RecentMatches/WinningMomentum";
-import WinTrend from "@/components/RecentMatches/WinTrend";
+// import WinsOverview from "@/components/RecentMatches/WinsOverview";
+// import WinningMomentum from "@/components/RecentMatches/WinningMomentum";
+// import WinTrend from "@/components/RecentMatches/WinTrend";
 import { fetchMatches } from "@/features/home/matches/thunks/matchesThunks";
 import { MatchMode } from "@/features/home/matches/types/matches.types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -86,35 +85,77 @@ export default function MatchesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen  flex items-center justify-center">
-        <div className="text-white text-xl">Loading performance data...</div>
+      <div className="min-h-screen  py-2 md:p-2 relative overflow-hidden">
+        {/* Animated Background Blobs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse animation-delay-300"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-128 h-128 bg-purple-500/3 rounded-full blur-3xl animate-pulse animation-delay-700"></div>
+        </div>
+
+        <div className="container mx-auto p-6 relative z-10">
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="text-cyan-400 text-xl font-semibold">Loading performance data...</div>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen  flex items-center justify-center">
-        <div className="text-red-500 text-xl">{error}</div>
+      <div className="min-h-screen py-2 md:p-2 relative overflow-hidden">
+        {/* Animated Background Blobs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse animation-delay-300"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-128 h-128 bg-purple-500/3 rounded-full blur-3xl animate-pulse animation-delay-700"></div>
+        </div>
+
+        <div className="container mx-auto p-6 relative z-10">
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-6 backdrop-blur-sm border border-red-500/20 shadow-lg shadow-red-500/10">
+              <div className="text-red-400 text-center">
+                <p className="text-lg font-semibold mb-2">Error Loading Matches</p>
+                <p className="text-sm text-red-300">{error}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen">
-      <div className="container mx-auto p-6">
-        <ModeSelector
-          selectedMode={selectedMode}
-          setSelectedMode={setSelectedMode}
-        />
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-          <div className="col-span-1 md:col-span-8 space-y-4">
-            <MatchTable matches={formatMatches} />
+    <div className="min-h-screen   py-2 md:p-2 relative overflow-hidden">
+      {/* Animated Background Blobs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse animation-delay-300"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-128 h-128 bg-purple-500/3 rounded-full blur-3xl animate-pulse animation-delay-700"></div>
+      </div>
 
-            {/* Pagination Controls */}
-            {pagination.totalPages > 1 && (
-              <div className="flex flex-col md:flex-row justify-between items-center bg-[#1A1D24] rounded-lg p-4">
-                <div className="text-gray-400">
+      <div className="container mx-auto p-6 relative z-10">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Recent Matches</h1>
+          <p className="text-cyan-400/80">Track your competitive coding performance</p>
+        </div>
+
+        <div className="space-y-6">
+          <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-8 backdrop-blur-sm border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-white mb-2">Match History</h2>
+              <p className="text-gray-400 text-sm">Your recent competitive matches and results</p>
+            </div>
+            <MatchTable matches={formatMatches} />
+          </div>
+
+          {/* Pagination Controls */}
+          {pagination.totalPages > 1 && (
+            <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-6 backdrop-blur-sm border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
+              <div className="flex flex-col md:flex-row justify-between items-center">
+                <div className="text-cyan-400/80 text-sm mb-4 md:mb-0">
                   Showing {(currentPage - 1) * PAGE_SIZE + 1} to{" "}
                   {Math.min(currentPage * PAGE_SIZE, pagination.totalCount)} of{" "}
                   {pagination.totalCount} matches
@@ -123,46 +164,34 @@ export default function MatchesPage() {
                   <button
                     onClick={handlePreviousPage}
                     disabled={currentPage === 1}
-                    className={`p-2 rounded-lg transition-colors ${
+                    className={`p-2 rounded-lg transition-all duration-200 ${
                       currentPage === 1
-                        ? "bg-[#292C33] text-gray-500 cursor-not-allowed"
-                        : "bg-[#292C33] text-white hover:bg-[#31343C]"
+                        ? "bg-cyan-500/20 text-cyan-400/40 cursor-not-allowed"
+                        : "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 hover:from-cyan-500/30 hover:to-blue-500/30 hover:scale-105 shadow-lg shadow-cyan-500/25"
                     }`}
                   >
                     <ChevronLeft size={20} />
                   </button>
-                  <div className="flex items-center px-4 bg-[#292C33] rounded-lg">
-                    <span className="text-white">
+                  <div className="flex items-center px-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-lg border border-cyan-500/30">
+                    <span className="text-cyan-400 font-medium">
                       Page {currentPage} of {pagination.totalPages}
                     </span>
                   </div>
                   <button
                     onClick={handleNextPage}
                     disabled={currentPage === pagination.totalPages}
-                    className={`p-2 rounded-lg transition-colors ${
+                    className={`p-2 rounded-lg transition-all duration-200 ${
                       currentPage === pagination.totalPages
-                        ? "bg-[#292C33] text-gray-500 cursor-not-allowed"
-                        : "bg-[#292C33] text-white hover:bg-[#31343C]"
+                        ? "bg-cyan-500/20 text-cyan-400/40 cursor-not-allowed"
+                        : "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 hover:from-cyan-500/30 hover:to-blue-500/30 hover:scale-105 shadow-lg shadow-cyan-500/25"
                     }`}
                   >
                     <ChevronRight size={20} />
                   </button>
                 </div>
               </div>
-            )}
-          </div>
-          <div className="col-span-1 md:col-span-4 flex flex-col gap-5">
-            <div className="flex flex-col md:flex-row justify-between">
-              <WinsOverview winRate={winRate} />
-              <div className="mt-5 lg:m-0">
-                <WinningMomentum
-                  currentStreak={currentStreak}
-                  longestStreak={longestStreak}
-                />
-              </div>
             </div>
-            <WinTrend winTrendData={winTrendData} />
-          </div>
+          )}
         </div>
       </div>
     </div>
