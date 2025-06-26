@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { MatchStatus } from "@/features/home/matches/types/matches.types";
 import { Search, Plus } from "lucide-react";
-import LabelButton from "@/components/ui/LabelButton";
+// import LabelButton from "@/components/ui/LabelButton";
 
 export default function ContestsPage() {
   const [selectedStatus, setSelectedStatus] = useState<MatchStatus | "All">(

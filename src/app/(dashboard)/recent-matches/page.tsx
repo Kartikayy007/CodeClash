@@ -10,38 +10,38 @@ import { fetchMatches } from "@/features/home/matches/thunks/matchesThunks";
 import { MatchMode } from "@/features/home/matches/types/matches.types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const winTrendData = [
-  Array(8).fill("inactive"),
-  [
-    "inactive",
-    "inactive",
-    "inactive",
-    "inactive",
-    "loss",
-    "inactive",
-    "inactive",
-    "inactive",
-  ],
-  [
-    "inactive",
-    "inactive",
-    "inactive",
-    "inactive",
-    "inactive",
-    "win",
-    "win",
-    "inactive",
-  ],
-  Array(8).fill("inactive"),
-];
+// const winTrendData = [
+//   Array(8).fill("inactive"),
+//   [
+//     "inactive",
+//     "inactive",
+//     "inactive",
+//     "inactive",
+//     "loss",
+//     "inactive",
+//     "inactive",
+//     "inactive",
+//   ],
+//   [
+//     "inactive",
+//     "inactive",
+//     "inactive",
+//     "inactive",
+//     "inactive",
+//     "win",
+//     "win",
+//     "inactive",
+//   ],
+//   Array(8).fill("inactive"),
+// ];
 
 export default function MatchesPage() {
-  const [selectedMode, setSelectedMode] = useState<MatchMode | "All">("All");
+  const [selectedMode] = useState<MatchMode | "All">("All");
   const [currentPage, setCurrentPage] = useState(1);
   const PAGE_SIZE = 12;
 
   const dispatch = useDispatch<AppDispatch>();
-  const { matches, loading, error, winsCount, totalMatches, pagination } =
+  const { matches, loading, error,  pagination } =
     useSelector((state: RootState) => state.matches);
 
   useEffect(() => {
@@ -66,10 +66,10 @@ export default function MatchesPage() {
     date: new Date(match.createdAt).toLocaleDateString(),
   }));
 
-  const winRate =
-    totalMatches > 0 ? Math.round((winsCount / totalMatches) * 10) : 0;
-  const currentStreak = 0; // This should come from API
-  const longestStreak = 0; // This should come from API
+  // const winRate =
+  //   totalMatches > 0 ? Math.round((winsCount / totalMatches) * 10) : 0;
+  // const currentStreak = 0; // This should come from API
+  // const longestStreak = 0; // This should come from API
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
