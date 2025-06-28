@@ -20,9 +20,11 @@ export interface LeaderboardResponse {
 
 export interface LeaderboardState {
   players: LeaderboardPlayer[];
+  topPlayers: LeaderboardPlayer[];
   userRank: number;
   pagination: PaginationInfo;
   loading: boolean;
+  playersLoading: boolean;
   error: string | null;
 }
 

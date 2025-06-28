@@ -6,8 +6,10 @@ import type { AppDispatch, RootState } from "@/store/store"
 import TopPlayers from "@/components/leaderboard/TopPlayers"
 import PlayerList from "@/components/leaderboard/PlayerList"
 import PlayerRankCard from "@/components/leaderboard/PlayerRankCard"
-import { fetchLeaderboard } from "@/features/home/leaderboard/thunks/leaderboardThunks"
+import { fetchLeaderboard, fetchTopPlayers } from "@/features/home/leaderboard/thunks/leaderboardThunks"
+import PlayerListSkeleton from "@/components/leaderboard/PlayerListSkeleton"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import PercentileChart from '../../../components/leaderboard/PercentileChart';
 
 export default function LeaderboardPage() {
   const [searchQuery] = useState("")
@@ -15,9 +17,15 @@ export default function LeaderboardPage() {
   const PAGE_SIZE = 10
 
   const dispatch = useDispatch<AppDispatch>()
-  const { players, loading, error, userRank, pagination } = useSelector((state: RootState) => state.leaderboard)
+  const { players, topPlayers, loading, playersLoading, error, userRank, pagination } = useSelector((state: RootState) => state.leaderboard)
 
   useEffect(() => {
+    // Fetch top players only once when component mounts
+    if (topPlayers.length === 0) {
+      dispatch(fetchTopPlayers())
+    }
+    
+    // Fetch current page players
     dispatch(
       fetchLeaderboard({
         page: currentPage,
@@ -25,7 +33,7 @@ export default function LeaderboardPage() {
         searchQuery: searchQuery || undefined,
       }),
     )
-  }, [dispatch, currentPage, searchQuery])
+  }, [dispatch, currentPage, searchQuery, topPlayers.length])
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
@@ -39,9 +47,7 @@ export default function LeaderboardPage() {
     }
   }
 
-  const topPlayers = players.slice(0, 3)
-
-  if (loading) {
+  if (loading && topPlayers.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-white text-xl">Loading leaderboard...</div>
@@ -61,61 +67,97 @@ export default function LeaderboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background py-2 md:p-2">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Main Content */}
-          <div className="w-full lg:w-2/3 flex flex-col gap-6">
-            <div className="bg-[#1A1D24] rounded-xl p-6">
-              <TopPlayers topPlayers={topPlayers} />
+    <div className="min-h-screen bg-background">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        
+        {/* Header Section */}
+        <div className="mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">Leaderboard</h1>
+              <p className="text-cyan-400/80">Compete with the best developers worldwide</p>
             </div>
-            <div className="bg-[#1A1D24] rounded-xl p-6">
+            <div className="flex flex-wrap gap-3">
+              <PlayerRankCard title="Your Rank" value={userRank} iconSrc="/current.svg" />
+            </div>
+          </div>
+        </div>
+
+        {/* Top Players Podium */}
+        <div className="mb-8">
+          <TopPlayers topPlayers={topPlayers} />
+        </div>
+
+        {/* Main Leaderboard Section */}
+        <div className="bg-[#1A1D24] rounded-xl border border-cyan-500/20 overflow-hidden">
+          
+          {/* Leaderboard Header */}
+          <div className="px-6 py-4 border-b border-cyan-500/20 bg-gradient-to-r from-cyan-500/5 to-blue-500/5">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-white">Global Rankings</h2>
+              <div className="text-sm text-cyan-400/80">
+                {pagination.totalCount} players competing
+              </div>
+            </div>
+          </div>
+
+          {/* Player List */}
+          <div className="p-6">
+            {playersLoading ? (
+              <PlayerListSkeleton />
+            ) : (
               <PlayerList players={players} />
-            </div>
-            {pagination.totalPages > 1 && (
-              <div className="bg-[#1A1D24] rounded-xl p-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div className="text-cyan-300/80 font-medium">
-                  Showing <span className="text-cyan-400 font-bold">{(currentPage - 1) * PAGE_SIZE + 1}</span> to {" "}
-                  <span className="text-cyan-400 font-bold">{Math.min(currentPage * PAGE_SIZE, pagination.totalCount)}</span> of {" "}
+            )}
+          </div>
+
+          {/* Pagination Footer */}
+          {pagination.totalPages > 1 && (
+            <div className="px-6 py-4 border-t border-cyan-500/20 bg-gradient-to-r from-cyan-500/5 to-blue-500/5">
+              <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div className="text-cyan-300/80 font-medium text-sm">
+                  Showing <span className="text-cyan-400 font-bold">{(currentPage - 1) * PAGE_SIZE + 1}</span> to{" "}
+                  <span className="text-cyan-400 font-bold">{Math.min(currentPage * PAGE_SIZE, pagination.totalCount)}</span> of{" "}
                   <span className="text-cyan-400 font-bold">{pagination.totalCount}</span> players
                 </div>
-                <div className="flex gap-3">
+                <div className="flex items-center gap-3">
                   <button
                     onClick={handlePreviousPage}
                     disabled={currentPage === 1}
-                    className={`group p-3 rounded-lg transition-all duration-300 ${
+                    className={`group px-4 py-2 rounded-lg transition-all duration-300 flex items-center gap-2 text-sm ${
                       currentPage === 1
                         ? "bg-gray-800/50 text-gray-500 cursor-not-allowed border border-gray-700/50"
-                        : "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 hover:from-cyan-500/30 hover:to-blue-500/30 border border-cyan-500/30 hover:border-cyan-400/50 hover:shadow-lg hover:shadow-cyan-500/20 hover:scale-105"
+                        : "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 hover:from-cyan-500/30 hover:to-blue-500/30 border border-cyan-500/30 hover:border-cyan-400/50"
                     }`}
                   >
-                    <ChevronLeft size={20} className="group-hover:animate-pulse" />
+                    <ChevronLeft size={16} />
+                    Previous
                   </button>
-                  <div className="flex items-center px-6 py-3 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-lg border border-cyan-500/30 backdrop-blur-sm">
-                    <span className="text-cyan-400 font-bold">
+                  
+                  <div className="flex items-center px-4 py-2 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-lg border border-cyan-500/30 backdrop-blur-sm">
+                    <span className="text-cyan-400 font-medium text-sm">
                       Page {currentPage} of {pagination.totalPages}
                     </span>
                   </div>
+                  
                   <button
                     onClick={handleNextPage}
                     disabled={currentPage === pagination.totalPages}
-                    className={`group p-3 rounded-lg transition-all duration-300 ${
+                    className={`group px-4 py-2 rounded-lg transition-all duration-300 flex items-center gap-2 text-sm ${
                       currentPage === pagination.totalPages
                         ? "bg-gray-800/50 text-gray-500 cursor-not-allowed border border-gray-700/50"
-                        : "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 hover:from-cyan-500/30 hover:to-blue-500/30 border border-cyan-500/30 hover:border-cyan-400/50 hover:shadow-lg hover:shadow-cyan-500/20 hover:scale-105"
+                        : "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 hover:from-cyan-500/30 hover:to-blue-500/30 border border-cyan-500/30 hover:border-cyan-400/50"
                     }`}
                   >
-                    <ChevronRight size={20} className="group-hover:animate-pulse" />
+                    Next
+                    <ChevronRight size={16} />
                   </button>
                 </div>
               </div>
-            )}
-          </div>
-          {/* Sidebar */}
-          <div className="w-full lg:w-1/3 flex flex-col gap-6 mt-8 lg:mt-0">
-            <PlayerRankCard title="Current Rank" value={userRank} iconSrc="/current.svg" />
-            <PlayerRankCard title="Your Highest Rank" value={userRank} iconSrc="/highest.svg" />
-          </div>
+            </div>
+          )}
+        </div>
+        <div className="mt-4">
+          <PercentileChart userRank={userRank} totalPlayers={pagination.totalCount} />
         </div>
       </div>
     </div>

@@ -198,6 +198,7 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
 
                 {/* Hover Effect Overlay */}
                 <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
+                
               </div>
             )
           })
@@ -212,11 +213,6 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
             </div>
           </div>
         )}
-      </div>
-
-      {/* Footer */}
-      <div className="mt-4 pt-3 border-t border-cyan-500/20 text-center">
-        {/* <span className="text-cyan-400/60 text-xs font-mono">Top {leaderboard.length} of all competitors</span> */}
       </div>
     </div>
   )

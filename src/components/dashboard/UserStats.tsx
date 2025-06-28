@@ -1,15 +1,22 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Trophy, Target, Zap, TrendingUp, Award, User, Mail, Flame, X } from "lucide-react"
+import { Trophy, Target, Zap, TrendingUp, User, Mail, Flame, X, GraduationCap } from "lucide-react"
 
 interface UserProfile {
+  success: boolean
   data: {
+    id: string
     username: string
     email: string
+    wins: number
+    skillLevel: string
+    rating: number
+    winStreak: number
     maxWinStreak: number
-    losses: number
     totalMatches: number
+    losses: number
+    winRate: number
   }
 }
 
@@ -39,7 +46,6 @@ const LoadingSkeleton = () => (
 
 interface UserStats {
   rating: number
-  rank: number
   totalMatches: number
   wins: number
   winRate: number
@@ -53,7 +59,6 @@ export default function UserStats({ className = "" }: UserStatsProps) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [userStats, setUserStats] = useState<UserStats>({
     rating: 0,
-    rank: 0,
     totalMatches: 0,
     wins: 0,
     winRate: 0,
@@ -71,7 +76,7 @@ export default function UserStats({ className = "" }: UserStatsProps) {
       }
 
       try {
-        const response = await fetch("https://codeclash.goyalshivansh.tech/api/v1/user/profile", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/profile`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -79,16 +84,19 @@ export default function UserStats({ className = "" }: UserStatsProps) {
           },
         })
 
-        // if (!response.ok) {
-        //   throw new Error(`HTTP error! Status: ${response.status}`)
-        // }
-
         const data = await response.json()
         console.log("Fetched user profile data:", data.data)
 
         if (data.success) {
           console.log("Setting user profile:")
           setUserProfile(data)
+          // Since the new API returns all stats in one call, we can set user stats too
+          setUserStats({
+            rating: data.data.rating,
+            totalMatches: data.data.totalMatches,
+            wins: data.data.wins,
+            winRate: data.data.winRate,
+          })
         } else {
           console.error("Failed to fetch user profile:", data)
           setUserProfile(null)
@@ -101,39 +109,8 @@ export default function UserStats({ className = "" }: UserStatsProps) {
       }
     }
 
-    const fetchUserStats = async () => {
-      const token = localStorage.getItem("accessToken")
-      if (!token) {
-        console.error("No access token found")
-        setIsLoading(false)
-        return
-      }
-
-      try {
-        const response = await fetch("https://codeclash.goyalshivansh.tech/api/v1/user/stats", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        })
-
-        // if (!response.ok) {
-        //   throw new Error("Failed to fetch user stats")
-        // }
-
-        const data = await response.json()
-        if (data.success) {
-          setUserStats(data.stats)
-        }
-      } catch (error) {
-        console.error("Error fetching user stats:", error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
     fetchUserProfile()
-    fetchUserStats()
+    // fetchUserStats() - Not needed anymore as profile API returns all stats
   }, [])
 
   useEffect(() => {
@@ -167,6 +144,41 @@ export default function UserStats({ className = "" }: UserStatsProps) {
     return "text-red-400"
   }
 
+  const getSkillLevelStyle = (skillLevel: string) => {
+    switch (skillLevel.toLowerCase()) {
+      case "beginner":
+        return {
+          color: "text-green-400",
+          borderColor: "border-green-400/50",
+          bgColor: "bg-green-400/10",
+        }
+      case "intermediate":
+        return {
+          color: "text-yellow-400",
+          borderColor: "border-yellow-400/50",
+          bgColor: "bg-yellow-400/10",
+        }
+      case "advanced":
+        return {
+          color: "text-red-400",
+          borderColor: "border-red-400/50",
+          bgColor: "bg-red-400/10",
+        }
+      case "expert":
+        return {
+          color: "text-purple-400",
+          borderColor: "border-purple-400/50",
+          bgColor: "bg-purple-400/10",
+        }
+      default:
+        return {
+          color: "text-cyan-400",
+          borderColor: "border-cyan-400/50",
+          bgColor: "bg-cyan-400/10",
+        }
+    }
+  }
+
   const stats = [
     {
       label: "Rating",
@@ -176,11 +188,11 @@ export default function UserStats({ className = "" }: UserStatsProps) {
       borderColor: "border-yellow-400/50",
     },
     {
-      label: "Rank",
-      value: `#${formatNumber(userStats.rank)}`,
-      icon: Award,
-      color: "text-purple-400",
-      borderColor: "border-purple-400/50",
+      label: "Wins",
+      value: formatNumber(userStats.wins),
+      icon: TrendingUp,
+      color: "text-emerald-400",
+      borderColor: "border-emerald-400/50",
     },
     {
       label: "Matches",
@@ -190,11 +202,11 @@ export default function UserStats({ className = "" }: UserStatsProps) {
       borderColor: "border-blue-400/50",
     },
     {
-      label: "Wins",
-      value: formatNumber(userStats.wins),
-      icon: TrendingUp,
-      color: "text-emerald-400",
-      borderColor: "border-emerald-400/50",
+      label: "Streak",
+      value: formatNumber(userProfile?.data.winStreak || 0),
+      icon: Flame,
+      color: "text-orange-400",
+      borderColor: "border-orange-400/50",
     },
     {
       label: "Win Rate",
@@ -227,7 +239,7 @@ export default function UserStats({ className = "" }: UserStatsProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 text-xs">
+          <div className="flex items-center gap-2 text-xs flex-wrap">
             <div className="flex items-center gap-1 px-2 py-1 rounded-full border border-orange-400/50 bg-orange-400/10">
               <Flame className="w-3 h-3 text-orange-400" />
               <span className="text-orange-400 font-medium">{userProfile.data.maxWinStreak}</span>
@@ -236,6 +248,14 @@ export default function UserStats({ className = "" }: UserStatsProps) {
               <X className="w-3 h-3 text-red-400" />
               <span className="text-red-400 font-medium">{userProfile.data.losses}</span>
             </div>
+            {userProfile.data.skillLevel && (
+              <div className={`flex items-center gap-1 px-2 py-1 rounded-full border ${getSkillLevelStyle(userProfile.data.skillLevel).borderColor} ${getSkillLevelStyle(userProfile.data.skillLevel).bgColor}`}>
+                <GraduationCap className={`w-3 h-3 ${getSkillLevelStyle(userProfile.data.skillLevel).color}`} />
+                <span className={`${getSkillLevelStyle(userProfile.data.skillLevel).color} font-medium capitalize`}>
+                  {userProfile.data.skillLevel.toLowerCase()}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       )}

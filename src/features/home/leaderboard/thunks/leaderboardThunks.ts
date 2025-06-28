@@ -11,6 +11,7 @@ interface ApiError {
     };
   };
 }
+
 export const fetchLeaderboard = createAsyncThunk<
   LeaderboardResponse,
   FetchLeaderboardParams
@@ -22,6 +23,24 @@ export const fetchLeaderboard = createAsyncThunk<
     const err = error as ApiError;
     return rejectWithValue(
       err.response?.data?.message || "Failed to fetch leaderboard",
+    );
+  }
+});
+
+export const fetchTopPlayers = createAsyncThunk<
+  LeaderboardResponse,
+  void
+>("leaderboard/fetchTopPlayers", async (_, { rejectWithValue }) => {
+  try {
+    const response = await leaderboardApi.getLeaderboard({
+      page: 1,
+      limit: 3,
+    });
+    return response;
+  } catch (error) {
+    const err = error as ApiError;
+    return rejectWithValue(
+      err.response?.data?.message || "Failed to fetch top players",
     );
   }
 });
