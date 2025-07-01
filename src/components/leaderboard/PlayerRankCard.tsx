@@ -61,9 +61,6 @@ const PlayerRankCard = ({ title, value }: PlayerRankCardProps) => {
           </div>
         </div>
 
-        {/* Decorative elements */}
-        <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-white/20 animate-ping"></div>
-        <div className="absolute bottom-2 left-2 w-1 h-1 rounded-full bg-white/30"></div>
 
         {/* Bottom accent line */}
         <div

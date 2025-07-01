@@ -9,9 +9,6 @@ import {
   Clock,
   Calendar,
   ExternalLink,
-  Zap,
-  Target,
-  Gamepad2,
   Trophy,
   X,
   CheckCircle,
@@ -58,6 +55,26 @@ const LoadingSkeleton = () => (
     ))}
   </div>
 )
+
+const parseDate = (dateString: string) => {
+  // Convert "DD/MM/YYYY" to "YYYY-MM-DD" for proper parsing
+  const [day, month, year] = dateString.split("/")
+  return new Date(`${year}-${month}-${day}`)
+}
+
+const formatDate = (dateString: string) => {
+  const date = parseDate(dateString)
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  })
+}
+
+const formatDuration = (duration: string) => {
+  return duration
+}
 
 export default function RecentMatches({ className = "" }: RecentMatchesProps) {
   const [matches, setMatches] = useState<Match[]>([])
@@ -109,63 +126,6 @@ export default function RecentMatches({ className = "" }: RecentMatchesProps) {
     fetchRecentMatches()
   }, [])
 
-  const getModeIcon = (mode: string) => {
-    switch (mode.toLowerCase()) {
-      case "standard":
-        return <Target className="w-4 h-4 text-blue-400" />
-      case "accuracy":
-        return <Zap className="w-4 h-4 text-yellow-400" />
-      case "speed":
-        return <Clock className="w-4 h-4 text-red-400" />
-      default:
-        return <Gamepad2 className="w-4 h-4 text-cyan-400" />
-    }
-  }
-
-  const getModeColors = (mode: string) => {
-    switch (mode.toLowerCase()) {
-      case "standard":
-        return {
-          bg: "bg-blue-400/10",
-          border: "border-blue-400/50",
-          text: "text-blue-400",
-        }
-      case "accuracy":
-        return {
-          bg: "bg-yellow-400/10",
-          border: "border-yellow-400/50",
-          text: "text-yellow-400",
-        }
-      case "speed":
-        return {
-          bg: "bg-red-400/10",
-          border: "border-red-400/50",
-          text: "text-red-400",
-        }
-      default:
-        return {
-          bg: "bg-cyan-400/10",
-          border: "border-cyan-400/50",
-          text: "text-cyan-400",
-        }
-    }
-  }
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    })
-  }
-
-  const formatDuration = (duration: string) => {
-    // Assuming duration is in format like "5m 30s" or similar
-    return duration
-  }
-
 
 
   if (loading) {
@@ -197,7 +157,6 @@ export default function RecentMatches({ className = "" }: RecentMatchesProps) {
       <div className="space-y-3">
         {matches.length > 0 ? (
           matches.slice(0, 3).map((match, index) => {
-            const modeColors = getModeColors(match.mode)
             const winner = match.players.find((player) => player.id === match.winnerId)
 
             return (
@@ -207,12 +166,6 @@ export default function RecentMatches({ className = "" }: RecentMatchesProps) {
               >
                 {/* Match Header */}
                 <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    {getModeIcon(match.mode)}
-                    <div className={`px-2 py-1 rounded-full border ${modeColors.border} ${modeColors.bg}`}>
-                      <span className={`text-xs font-medium ${modeColors.text}`}>{match.mode}</span>
-                    </div>
-                  </div>
                   <div className="flex items-center gap-1 text-xs text-white/60">
                     <Calendar className="w-3 h-3" />
                     <span className="font-mono">{formatDate(match.createdAt)}</span>

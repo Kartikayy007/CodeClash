@@ -210,7 +210,7 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
                 </div>
                 <div className="h-32 overflow-auto">
                   <pre className="bg-[#292C33] p-2 rounded whitespace-pre-wrap font-mono text-sm text-white h-full">
-                    {testCases[activeCase]?.output || ""}
+                    {(testCases[activeCase]?.output || "").replace(/\\n/g, '\n')}
                   </pre>
                 </div>
               </div>

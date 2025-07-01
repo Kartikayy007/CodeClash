@@ -180,13 +180,6 @@ export default function PercentileChart({ userRank, totalPlayers, className = ""
           <span className="text-white text-sm font-medium">Your position</span>
         </div>
       </div>
-
-      {/* Footer with additional context */}
-      <div className="mt-4 pt-4 border-t border-cyan-500/20 text-center">
-        <p className="text-cyan-400/60 text-xs font-mono">
-          Ranking updated in real-time • {totalPlayers.toLocaleString()} active players
-        </p>
-      </div>
     </div>
   )
 }

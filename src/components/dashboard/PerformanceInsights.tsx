@@ -20,7 +20,6 @@ interface Announcement {
 const SimpleAnnouncements: React.FC<SimpleAnnouncementsProps> = ({ className = "" }) => {
   const [loading, setLoading] = useState(true)
 
-  // Simple announcements - manually update these
   const announcements: Announcement[] = [
     {
       id: 1,
@@ -97,7 +96,6 @@ const SimpleAnnouncements: React.FC<SimpleAnnouncementsProps> = ({ className = "
         })}
       </div>
 
-      {/* Footer */}
       <div className="mt-6 pt-4 border-t border-white/10 text-center">
         <span className="text-white/40 text-xs font-mono">Last updated: 2:42 PM</span>
       </div>

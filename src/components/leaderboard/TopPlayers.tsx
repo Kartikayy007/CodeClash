@@ -128,9 +128,6 @@ const TopPlayers: React.FC<TopPlayersProps> = ({ topPlayers }) => {
                 className={`absolute inset-0 rounded-xl border ${config.border} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
               ></div>
 
-              {/* Particle effect */}
-              <div className="absolute top-2 left-2 w-1 h-1 bg-cyan-400 rounded-full animate-ping"></div>
-              <div className="absolute bottom-2 right-2 w-1 h-1 bg-blue-400 rounded-full animate-ping animation-delay-300"></div>
             </div>
           )
         })}
@@ -202,9 +199,6 @@ const TopPlayers: React.FC<TopPlayersProps> = ({ topPlayers }) => {
                 className={`absolute inset-0 rounded-xl border ${config.border} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
               ></div>
 
-              {/* Particle effect */}
-              <div className="absolute top-2 left-2 w-1 h-1 bg-cyan-400 rounded-full animate-ping"></div>
-              <div className="absolute bottom-2 right-2 w-1 h-1 bg-blue-400 rounded-full animate-ping animation-delay-300"></div>
             </div>
           )
         })}
