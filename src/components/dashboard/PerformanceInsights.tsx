@@ -96,8 +96,8 @@ const SimpleAnnouncements: React.FC<SimpleAnnouncementsProps> = ({ className = "
         })}
       </div>
 
-      <div className="mt-6 pt-4 border-t border-white/10 text-center">
-        <span className="text-white/40 text-xs font-mono">Last updated: 2:42 PM</span>
+      <div className="mt-6 pt-4 border-t border-cyan-400/10 text-center">
+        <span className="text-cyan-400/50 text-xs font-mono">Last updated: 2:42 PM</span>
       </div>
 
       <style jsx>{`

@@ -164,10 +164,6 @@ const editorSlice = createSlice({
         state.error = null;
       })
       .addCase(submitCode.fulfilled, (state, action) => {
-        console.log(
-          "✨ Submission fulfilled, updating state with:",
-          action.payload,
-        );
         state.isSubmitting = false;
         if (action.payload) {
           state.submissionResponse = {

@@ -225,7 +225,7 @@ export default function RecentMatches({ className = "" }: RecentMatchesProps) {
                 </div>
 
                 {/* Match Result Indicator */}
-                <div className="flex justify-end">
+                {/* <div className="flex justify-end">
                   <div
                     className={`px-2 py-1 rounded-full border text-xs font-medium ${
                       winner
@@ -235,7 +235,7 @@ export default function RecentMatches({ className = "" }: RecentMatchesProps) {
                   >
                     {winner ? "Completed" : "Incomplete"}
                   </div>
-                </div>
+                </div> */}
 
                 {/* Hover Effect Overlay */}
                 <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />

@@ -27,7 +27,7 @@ const LoadingSkeleton = () => (
     </div>
 
     {/* Stats skeleton */}
-    {Array.from({ length: 5 }).map((_, i) => (
+    {Array.from({ length: 10 }).map((_, i) => (
       <div key={i} className="flex items-center gap-3 p-3 border border-cyan-500/20 rounded-lg">
         <div className="w-8 h-8 bg-cyan-500/20 rounded-full"></div>
         <div className="flex-1 space-y-2">
@@ -54,7 +54,7 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
       }
 
       try {
-        const response = await fetch("https://codeclash.goyalshivansh.tech/api/v1/user/leaderboard?page=1&limit=5", {
+        const response = await fetch("https://codeclash.goyalshivansh.tech/api/v1/user/leaderboard?page=1&limit=10", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -67,7 +67,7 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
 
         const data = await response.json()
         if (data.success && Array.isArray(data.leaderboard)) {
-          setLeaderboard(data.leaderboard.slice(0, 5))
+          setLeaderboard(data.leaderboard)
         }
       } catch (error) {
         console.error("Error fetching leaderboard:", error)
@@ -142,9 +142,9 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
   }
 
   return (
-    <div className={`bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-4 md:p-6 backdrop-blur-sm ${className}`}>
+    <div className={`bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-4 md:p-6 backdrop-blur-sm h-full flex flex-col ${className}`}>
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 pb-3 border-b border-cyan-500/20">
+      <div className="flex items-center justify-between mb-4 pb-3 border-b border-cyan-500/20 flex-shrink-0">
         <div className="flex items-center gap-2">
           
           <h2 className="text-lg md:text-xl font-semibold">Top Players</h2>
@@ -160,7 +160,7 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
       </div>
 
       {/* Leaderboard Entries */}
-      <div className="space-y-2">
+      <div className="space-y-2 flex-1 ">
         {leaderboard.length > 0 ? (
           leaderboard.map((player, index) => {
             const colors = getRankColors(player.rank)
