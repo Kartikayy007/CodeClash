@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface Contest {
-  name: string;
-  startDate: string;
-  duration: string;
-  participants: number;
-  status: string;
-  mode: string;
+  id: string;
+  title: string;
+  startTime: string;
+  endTime: string;
+  score: number;
+  participantCount: number;
+  hasReview: boolean;
 }
 
 interface ContestTableProps {
@@ -20,6 +21,11 @@ export default function ContestTable({
   loading,
   error,
 }: ContestTableProps) {
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 10;
+  const totalPages = Math.ceil(contests.length / PAGE_SIZE);
+  const paginatedContests = contests.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
   if (loading) {
     return (
       <div className="w-full">
@@ -72,56 +78,71 @@ export default function ContestTable({
               <th className="text-center py-4 px-6 text-cyan-400 font-semibold text-sm uppercase tracking-wider">
                 Participants
               </th>
-              <th className="text-center py-4 px-6 text-cyan-400 font-semibold text-sm uppercase tracking-wider">
-                Status
-              </th>
+              
             </tr>
           </thead>
           <tbody className="divide-y divide-cyan-500/10">
-            {contests.map((contest, index) => (
-              <tr
-                key={index}
-                className="hover:bg-gradient-to-r hover:from-cyan-500/5 hover:to-blue-500/5 transition-all duration-200 group cursor-pointer"
-              >
-                <td className="py-4 px-6">
-                  <div className="text-white font-medium group-hover:text-cyan-400 transition-colors duration-200">
-                    {contest.name}
-                  </div>
-                </td>
-                <td className="py-4 px-6">
-                  <div className="text-gray-300 group-hover:text-cyan-400/80 transition-colors duration-200">
-                    {contest.startDate}
-                  </div>
-                </td>
-                <td className="py-4 px-6 text-center">
-                  <div className="text-gray-300 group-hover:text-cyan-400/80 transition-colors duration-200 font-mono text-sm">
-                    {contest.duration}
-                  </div>
-                </td>
-                <td className="py-4 px-6 text-center">
-                  <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border border-purple-500/30">
-                    {contest.participants}
-                  </div>
-                </td>
-                <td className="py-4 px-6 text-center">
-                  <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold transition-all duration-200 ${
-                      contest.status === "ONGOING"
-                        ? "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 border border-green-500/30 shadow-lg shadow-green-500/25"
-                        : contest.status === "COMPLETED"
-                          ? "bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-400 border border-blue-500/30 shadow-lg shadow-blue-500/25"
-                          : "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border border-yellow-500/30 shadow-lg shadow-yellow-500/25"
-                    }`}
-                  >
-                    {contest.status.charAt(0) +
-                      contest.status.slice(1).toLowerCase()}
-                  </span>
-                </td>
-              </tr>
-            ))}
+            {paginatedContests.map((contest) => {
+              const start = new Date(contest.startTime);
+              const end = new Date(contest.endTime);
+              const durationMs = end.getTime() - start.getTime();
+              const hours = Math.floor(durationMs / (1000 * 60 * 60));
+              const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+              const duration = `${hours}h ${minutes}m`;
+              return (
+                <tr
+                  key={contest.id}
+                  className="hover:bg-gradient-to-r hover:from-cyan-500/5 hover:to-blue-500/5 transition-all duration-200 group cursor-pointer"
+                >
+                  <td className="py-4 px-6">
+                    <div className="text-white font-medium group-hover:text-cyan-400 transition-colors duration-200">
+                      {contest.title}
+                    </div>
+                  </td>
+                  <td className="py-4 px-6">
+                    <div className="text-gray-300 group-hover:text-cyan-400/80 transition-colors duration-200">
+                      {start.toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+                    </div>
+                  </td>
+                  <td className="py-4 px-6 text-center">
+                    <div className="text-gray-300 group-hover:text-cyan-400/80 transition-colors duration-200 font-mono text-sm">
+                      {duration}
+                    </div>
+                  </td>
+                  <td className="py-4 px-6 text-center">
+                    <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border border-purple-500/30">
+                      {contest.participantCount}
+                    </div>
+                  </td>
+                  
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-6">
+          <button
+            className="px-3 py-1 rounded border border-cyan-500/30 text-cyan-400 disabled:opacity-50"
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+          >
+            Previous
+          </button>
+          <span className="text-cyan-400 font-mono text-sm">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            className="px-3 py-1 rounded border border-cyan-500/30 text-cyan-400 disabled:opacity-50"
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }
