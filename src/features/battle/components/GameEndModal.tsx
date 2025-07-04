@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Box, Fade, Backdrop } from "@mui/material";
-import { Trophy, TrendingUp, TrendingDown } from "lucide-react";
+import { Trophy } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
@@ -71,6 +72,14 @@ export const GameEndModal = () => {
       const timer = setTimeout(() => {
         console.log("GameEndModal: Redirecting to dashboard...");
         dispatch(resetGameEnd());
+        // Use window.location.href for more reliable navigation
+        try {
+          window.location.href = "/dashboard";
+        } catch (error) {
+          console.error("Navigation error:", error);
+          // Fallback to router
+          router.push("/dashboard");
+        }
         // Use window.location.href for more reliable navigation
         try {
           window.location.href = "/dashboard";

@@ -44,7 +44,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background py-2 md:p-2">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-auto mx-auto">
         {/* Mobile Action Buttons */}
         <div className="flex flex-col sm:flex-row justify-center gap-3 mb-6 lg:hidden">
           <div className="flex-1">

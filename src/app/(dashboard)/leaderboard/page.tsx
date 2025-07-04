@@ -86,7 +86,7 @@ export default function LeaderboardPage() {
         {/* Top Players Podium */}
         <div className="mb-8">
           <TopPlayers topPlayers={topPlayers} />
-        </div>
+      </div>
 
         {/* Main Leaderboard Section */}
         <div className="bg-[#1A1D24] rounded-xl border border-cyan-500/20 overflow-hidden">
@@ -111,7 +111,7 @@ export default function LeaderboardPage() {
           </div>
 
           {/* Pagination Footer */}
-          {pagination.totalPages > 1 && (
+            {pagination.totalPages > 1 && (
             <div className="px-6 py-4 border-t border-cyan-500/20 bg-gradient-to-r from-cyan-500/5 to-blue-500/5">
               <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div className="text-cyan-300/80 font-medium text-sm">
@@ -152,10 +152,10 @@ export default function LeaderboardPage() {
                     <ChevronRight size={16} />
                   </button>
                 </div>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
         <div className="mt-4">
           <PercentileChart userRank={userRank} totalPlayers={pagination.totalCount} />
         </div>
