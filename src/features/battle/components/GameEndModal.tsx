@@ -135,7 +135,7 @@ export const GameEndModal = () => {
                   <>
                     🏆 CHAMPION! 🏆
                     <br />
-                    <span className="text-lg text-yellow-400 animate-pulse">You're unstoppable!</span>
+                    <span className="text-lg text-yellow-400 animate-pulse">You&apos;re unstoppable!</span>
                     <br />
                     <span className="text-sm text-green-400 mt-2">Rating boosted! 🚀</span>
                   </>
