@@ -143,17 +143,21 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
+      const unescapeNewlines = (text: string): string => {
+        return text.replace(/\\n/g, '\n');
+      };
+
       const problemData: Problem = {
         name: formData.name,
         maxScore: parseInt(formData.maxScore),
         rating: parseInt(formData.rating),
-        description: formData.description,
-        inputFormat: formData.inputFormat,
-        constraints: formData.constraints,
-        outputFormat: formData.outputFormat,
+        description: unescapeNewlines(formData.description),
+        inputFormat: unescapeNewlines(formData.inputFormat),
+        constraints: unescapeNewlines(formData.constraints),
+        outputFormat: unescapeNewlines(formData.outputFormat),
         testCases: formData.testCases.map((tc) => ({
-          input: tc.input,
-          output: tc.output,
+          input: unescapeNewlines(tc.input),
+          output: unescapeNewlines(tc.output),
           sample: tc.sample,
           strength: tc.strength,
         })),
