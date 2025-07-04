@@ -3,9 +3,11 @@ import { Trophy, User } from "lucide-react"
 
 interface PlayerListProps {
   players: LeaderboardPlayer[]
+  currentPage: number
+  pageSize: number
 }
 
-const PlayerList = ({ players }: PlayerListProps) => (
+const PlayerList = ({ players, currentPage, pageSize }: PlayerListProps) => (
   <div className="space-y-2">
     {/* Table Header */}
     <div className="grid grid-cols-12 gap-4 px-4 py-3 text-sm font-medium text-cyan-400/80 border-b border-cyan-500/20">
@@ -18,7 +20,7 @@ const PlayerList = ({ players }: PlayerListProps) => (
     {/* Player rows */}
     <div className="space-y-1">
       {players.map((player, index) => {
-        const globalRank = index + 1
+        const globalRank = (currentPage - 1) * pageSize + index + 1
         const winRate = player.wins > 0 ? Math.round((player.wins / (player.wins + 2)) * 100) : 0 // Mock calculation
         
         return (

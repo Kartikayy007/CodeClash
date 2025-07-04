@@ -210,7 +210,7 @@ export default function UserStats({ className = "" }: UserStatsProps) {
     },
     {
       label: "Win Rate",
-      value: `${userStats.winRate}%`,
+      value: `${userStats.winRate.toFixed(1)}%`,
       icon: Zap,
       color: getWinRateColor(userStats.winRate),
       borderColor: `border-${getWinRateColor(userStats.winRate).split("-")[1]}-400/50`,

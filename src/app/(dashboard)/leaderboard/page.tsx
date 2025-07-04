@@ -106,7 +106,7 @@ export default function LeaderboardPage() {
             {playersLoading ? (
               <PlayerListSkeleton />
             ) : (
-              <PlayerList players={players} />
+              <PlayerList players={players} currentPage={currentPage} pageSize={PAGE_SIZE} />
             )}
           </div>
 
