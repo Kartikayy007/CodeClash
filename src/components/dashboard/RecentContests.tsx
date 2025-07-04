@@ -2,20 +2,19 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Trophy, Users, Clock, Target, ExternalLink, Calendar, Award, Eye } from "lucide-react"
+import { Trophy, Users, Clock, Target, ExternalLink, Calendar, Award } from "lucide-react"
 
 interface RecentContestsProps {
   className?: string
 }
 
 interface Contest {
-  id: string
+  contestId: string
   title: string
   startTime: string
   endTime: string
-  score: number
+  status: "UPCOMING" | "ONGOING" | "ENDED"
   participantCount: number
-  hasReview: boolean
 }
 
 const LoadingSkeleton = () => (
@@ -111,24 +110,37 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
   const calculateDuration = (startTime: string, endTime: string) => {
     const start = new Date(startTime)
     const end = new Date(endTime)
-    const duration = end.getTime() - start.getTime() // Duration in milliseconds
+    const durationMs = end.getTime() - start.getTime() // Duration in milliseconds
 
-    const hours = Math.floor((duration % (1000 * 3600 * 24)) / (1000 * 3600))
-    const minutes = Math.floor((duration % (1000 * 3600)) / (1000 * 60))
+    const days = Math.floor(durationMs / (1000 * 60 * 60 * 24))
+    const hours = Math.floor((durationMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60))
 
-    return `${hours}h ${minutes}m`
+    let duration = ""
+    if (days > 0) duration += `${days}d `
+    if (hours > 0) duration += `${hours}h `
+    if (minutes > 0) duration += `${minutes}m`
+    if (!duration) duration = "0m"
+
+    return duration.trim()
   }
 
-  const formatScore = (score: number) => {
-    if (score >= 1000) return `${(score / 1000).toFixed(1)}K`
-    return 5
+  const formatScore = (participantCount: number) => {
+    if (participantCount >= 1000) return `${(participantCount / 1000).toFixed(1)}K`
+    return participantCount.toString()
   }
 
-  const getScoreColor = (score: number) => {
-    if (score >= 90) return "text-emerald-400"
-    if (score >= 70) return "text-cyan-400"
-    if (score >= 50) return "text-yellow-400"
-    return "text-red-400"
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "UPCOMING":
+        return "text-blue-400"
+      case "ONGOING":
+        return "text-green-400"
+      case "ENDED":
+        return "text-gray-400"
+      default:
+        return "text-cyan-400"
+    }
   }
 
   const formatDate = (dateString: string) => {
@@ -173,9 +185,9 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
       {/* Contest Cards */}
       <div className="space-y-3">
         {contests.length > 0 ? (
-          contests.slice(0, 3).map((contest, index) => (
+          contests.slice(0, 3).map((contest) => (
             <div
-              key={index}
+              key={contest.contestId}
               className="group relative p-4 rounded-lg border border-cyan-500/30 bg-white/5 hover:bg-white/10 transition-all duration-200 hover:scale-[1.02] shadow-lg shadow-cyan-500/10"
             >
               {/* Contest Header */}
@@ -192,14 +204,14 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
 
               {/* Contest Stats */}
               <div className="grid grid-cols-3 gap-4 mb-3">
-                {/* Score */}
+                {/* Status */}
                 <div className="space-y-1">
                   <div className="flex items-center gap-1">
                     <Target className="w-3 h-3 text-white/40" />
-                    <span className="text-xs text-white/50 uppercase tracking-wide font-medium">Score</span>
+                    <span className="text-xs text-white/50 uppercase tracking-wide font-medium">Status</span>
                   </div>
-                  <div className={`text-lg font-bold ${getScoreColor(contest.score)}`}>
-                    {formatScore(contest.score)}
+                  <div className={`text-lg font-bold ${getStatusColor(contest.status)}`}>
+                    {contest.status}
                   </div>
                 </div>
 
@@ -209,7 +221,7 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
                     <Users className="w-3 h-3 text-white/40" />
                     <span className="text-xs text-white/50 uppercase tracking-wide font-medium">Players</span>
                   </div>
-                  <div className="text-lg font-bold text-cyan-400">{contest.participantCount}</div>
+                  <div className="text-lg font-bold text-cyan-400">{formatScore(contest.participantCount)}</div>
                 </div>
 
                 {/* Duration */}
@@ -223,16 +235,6 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
                   </div>
                 </div>
               </div>
-
-              {/* Review Button */}
-              {contest.hasReview && (
-                <div className="flex justify-end pt-2 border-t border-cyan-500/20">
-                  <button className="flex items-center gap-1 px-3 py-1 rounded-full border border-cyan-400/50 bg-cyan-400/10 text-cyan-400 text-xs font-medium hover:bg-cyan-400/20 transition-colors">
-                    <Eye className="w-3 h-3" />
-                    <span>Review</span>
-                  </button>
-                </div>
-              )}
 
               {/* Hover Effect Overlay */}
               <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />

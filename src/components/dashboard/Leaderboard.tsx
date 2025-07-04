@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import {Crown, Medal, TrendingUp, Users, ExternalLink } from "lucide-react"
+import { Crown, Medal, TrendingUp, Users, ExternalLink } from "lucide-react"
 
 interface LeaderboardEntry {
-  rank: number
+  id: string
   username: string
-  rating: number
-  avatar?: string
+  wins: number
+  rank?: number
 }
+
 
 interface LeaderboardProps {
   className?: string
@@ -25,7 +26,6 @@ const LoadingSkeleton = () => (
       </div>
       <div className="h-3 w-16 bg-cyan-500/10 rounded"></div>
     </div>
-
     {/* Stats skeleton */}
     {Array.from({ length: 10 }).map((_, i) => (
       <div key={i} className="flex items-center gap-3 p-3 border border-cyan-500/20 rounded-lg">
@@ -42,6 +42,7 @@ const LoadingSkeleton = () => (
 
 export default function Leaderboard({ className = "" }: LeaderboardProps) {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
+  const [userRank, setUserRank] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
       }
 
       try {
-        const response = await fetch("https://codeclash.goyalshivansh.tech/api/v1/user/leaderboard?page=1&limit=10", {
+        const response = await fetch("https://codeclash.goyalshivansh.tech/api/v1/user/leaderboard?page=1&limit=8", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -67,7 +68,13 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
 
         const data = await response.json()
         if (data.success && Array.isArray(data.leaderboard)) {
-          setLeaderboard(data.leaderboard)
+          // Add rank to each player based on their position
+          const playersWithRank = data.leaderboard.map((player: LeaderboardEntry, index: number) => ({
+            ...player,
+            rank: index + 1,
+          }))
+          setLeaderboard(playersWithRank)
+          setUserRank(data.userRank)
         }
       } catch (error) {
         console.error("Error fetching leaderboard:", error)
@@ -101,6 +108,7 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
           border: "border-yellow-400/50",
           text: "text-yellow-400",
           glow: "shadow-yellow-400/20",
+          rankBg: "from-yellow-500/30 to-amber-500/30",
         }
       case 2:
         return {
@@ -108,6 +116,7 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
           border: "border-gray-300/50",
           text: "text-gray-300",
           glow: "shadow-gray-300/20",
+          rankBg: "from-gray-400/30 to-slate-400/30",
         }
       case 3:
         return {
@@ -115,6 +124,7 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
           border: "border-amber-600/50",
           text: "text-amber-600",
           glow: "shadow-amber-600/20",
+          rankBg: "from-amber-600/30 to-orange-500/30",
         }
       default:
         return {
@@ -122,15 +132,16 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
           border: "border-cyan-500/30",
           text: "text-cyan-400",
           glow: "shadow-cyan-500/10",
+          rankBg: "from-cyan-500/20 to-blue-500/20",
         }
     }
   }
 
-  const formatRating = (rating: number) => {
-    if (!rating || rating === undefined || rating === null) return "0"
-    if (rating >= 1000000) return `${(rating / 1000000).toFixed(1)}M`
-    if (rating >= 1000) return `${(rating / 1000).toFixed(1)}K`
-    return rating.toLocaleString()
+  const formatWins = (wins: number) => {
+    if (!wins || wins === undefined || wins === null) return "0"
+    if (wins >= 1000000) return `${(wins / 1000000).toFixed(1)}M`
+    if (wins >= 1000) return `${(wins / 1000).toFixed(1)}K`
+    return wins.toLocaleString()
   }
 
   if (loading) {
@@ -142,28 +153,36 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
   }
 
   return (
-    <div className={`bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-4 md:p-6 backdrop-blur-sm h-full flex flex-col ${className}`}>
+    <div
+      className={`bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-4 md:p-6 backdrop-blur-sm h-full flex flex-col ${className}`}
+    >
       {/* Header */}
       <div className="flex items-center justify-between mb-4 pb-3 border-b border-cyan-500/20 flex-shrink-0">
         <div className="flex items-center gap-2">
-          
           <h2 className="text-lg md:text-xl font-semibold">Top Players</h2>
         </div>
-        <Link
-          href="/leaderboard"
-          className="flex items-center gap-1 text-xs text-cyan-400/80 hover:text-cyan-400 transition-colors group"
-          prefetch={true}
-        >
-          <span>View All</span>
-          <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-        </Link>
+        <div className="flex items-center gap-3">
+          {userRank && (
+            <div className="text-xs text-cyan-400/80">
+              Your Rank: <span className="font-bold text-cyan-400">#{userRank}</span>
+            </div>
+          )}
+          <Link
+            href="/leaderboard"
+            className="flex items-center gap-1 text-xs text-cyan-400/80 hover:text-cyan-400 transition-colors group"
+            prefetch={true}
+          >
+            <span>View All</span>
+            <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </div>
       </div>
 
       {/* Leaderboard Entries */}
-      <div className="space-y-2 flex-1 ">
+      <div className="space-y-2 flex-1">
         {leaderboard.length > 0 ? (
           leaderboard.map((player, index) => {
-            const colors = getRankColors(player.rank)
+            const colors = getRankColors(player.rank || 0)
             return (
               <div
                 key={index}
@@ -171,34 +190,33 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
               >
                 <div className="flex items-center gap-3">
                   {/* Rank Badge */}
-                  {/* <div
-                    className={`flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r ${player.rank <= 3 ? "from-white/20 to-white/10" : "from-cyan-500/20 to-blue-500/20"} border ${colors.border} shadow-md`}
+                  <div
+                    className={`flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r ${colors.rankBg} border ${colors.border} shadow-md flex-shrink-0`}
                   >
-                    <span className={`text-xs font-bold ${colors.text}`}>#{player.rank}</span>
-                  </div> */}
+                    <span className={`text-sm font-bold ${colors.text}`}>#{player.rank}</span>
+                  </div>
 
                   {/* Player Info */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-bold text-white truncate">{player.username}</p>
-                      {getRankIcon(player.rank)}
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="text-base font-bold text-white truncate">{player.username}</p>
+                      {getRankIcon(player.rank || 0)}
                     </div>
-                    <div className="flex items-center gap-1 mt-1">
+                    {/* <div className="flex items-center gap-1">
                       <Users className="w-3 h-3 text-white/40" />
-                      <span className="text-xs text-white/60 font-mono">Rating: {formatRating(player.rating)}</span>
-                    </div>
+                      <span className="text-xs text-white/60">Player</span>
+                    </div> */}
                   </div>
 
-                  {/* Rating Display */}
-                  <div className="text-right">
-                    <div className={`text-lg font-bold ${colors.text}`}>{formatRating(player.rating)}</div>
-                    <div className="text-xs text-white/40 uppercase tracking-wide">Points</div>
+                  {/* Wins Display */}
+                  <div className="text-right flex-shrink-0">
+                    <div className={`text-xl font-bold ${colors.text}`}>{formatWins(player.wins)}</div>
+                    <div className="text-xs text-white/40 uppercase tracking-wide">Wins</div>
                   </div>
                 </div>
 
                 {/* Hover Effect Overlay */}
                 <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
-                
               </div>
             )
           })
