@@ -326,16 +326,16 @@ export default function ContestDetails() {
               )}
             </div>
             <div className="flex-shrink-0">
-              <LabelButton
-                onClick={handleRegister}
-                disabled={
-                  registering ||
-                  contest.isRegistered
-                }
+            <LabelButton
+              onClick={handleRegister}
+              disabled={
+                registering ||
+                contest.isRegistered
+              }
                 className="w-full md:w-auto bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-105"
-              >
+            >
                 {registering ? "Registering..." : contest.isRegistered ? "Registered" : "Register"}
-              </LabelButton>
+            </LabelButton>
             </div>
           </div>
         </div>
@@ -376,7 +376,7 @@ export default function ContestDetails() {
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border border-purple-500/30 w-fit">
                     {contest.participantCount}
                   </span>
-                </div>
+              </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-cyan-400 text-sm font-medium">Questions</span>
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-400 border border-blue-500/30 w-fit">
