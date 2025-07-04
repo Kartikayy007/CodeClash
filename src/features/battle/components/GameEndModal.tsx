@@ -133,9 +133,11 @@ export const GameEndModal = () => {
               <h2 className="text-3xl font-bold text-white text-center">
                 {isWinner ? (
                   <>
-                    🎉 Victory! 🎉
+                    🏆 CHAMPION! 🏆
                     <br />
-                    <span className="text-lg text-yellow-400">You crushed it!</span>
+                    <span className="text-lg text-yellow-400 animate-pulse">You're unstoppable!</span>
+                    <br />
+                    <span className="text-sm text-green-400 mt-2">Rating boosted! 🚀</span>
                   </>
                 ) : (
                   <>
@@ -147,17 +149,22 @@ export const GameEndModal = () => {
               </h2>
 
               {newRating !== null && (
-                <div className="flex items-center gap-2 text-xl">
+                <div className={`flex items-center gap-3 text-xl p-4 rounded-lg ${isWinner ? 'bg-green-500/10 border border-green-500/30' : 'bg-red-500/10 border border-red-500/30'}`}>
                   <span className="text-gray-300">New Rating</span>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-2">
                     {isWinner ? (
-                      <TrendingUp className="w-5 h-5 text-green-500" />
+                      <TrendingUp className="w-6 h-6 text-green-500 animate-bounce" />
                     ) : (
-                      <TrendingDown className="w-5 h-5 text-red-500" />
+                      <TrendingDown className="w-6 h-6 text-red-500" />
                     )}
-                    <span className={`font-bold ${isWinner ? "text-green-500" : "text-red-500"}`}>
+                    <span className={`font-bold text-2xl ${isWinner ? "text-green-500" : "text-red-500"}`}>
                       {newRating}
                     </span>
+                    {isWinner && userId && (
+                      <span className="text-green-400 text-sm">
+                        +{gameEndState.ratingChanges[userId] || 0}
+                      </span>
+                    )}
                   </div>
                 </div>
               )}
