@@ -45,7 +45,7 @@ const Navbar = () => {
           />
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-1">
           <button
             onClick={handleHome}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#2A2F3E] hover:bg-[#3A3F4E] transition-colors"
