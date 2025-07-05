@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Trophy, Users, Clock, Target, ExternalLink, Calendar, Award } from "lucide-react"
 
 interface RecentContestsProps {
@@ -57,6 +58,7 @@ const LoadingSkeleton = () => (
 export default function RecentContests({ className = "" }: RecentContestsProps) {
   const [contests, setContests] = useState<Contest[]>([])
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
   const isDev = process.env.NODE_ENV === "development"
 
@@ -153,6 +155,16 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
     })
   }
 
+  const handleContestClick = (contestId: string, status: string) => {
+    if (status === "ONGOING") {
+      router.push(`/contest/${contestId}`)
+    } else if (status === "UPCOMING") {
+      router.push(`/contest/join/${contestId}`)
+    } else {
+      router.push(`/contest-history/${contestId}`)
+    }
+  }
+
   if (loading) {
     return (
       <div className={`bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-4 backdrop-blur-sm ${className}`}>
@@ -170,7 +182,7 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
       <div className="flex items-center justify-between mb-4 pb-3 border-b border-cyan-500/20">
         <div className="flex items-center gap-2">
 
-          <h2 className="text-lg md:text-xl font-semibold">Recent Contests</h2>
+          <h2 className="text-lg md:text-xl font-semibold">My Contest</h2>
         </div>
         <Link
           href="/recent-contests"
@@ -188,7 +200,8 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
           contests.slice(0, 3).map((contest) => (
             <div
               key={contest.contestId}
-              className="group relative p-4 rounded-lg border border-cyan-500/30 bg-white/5 hover:bg-white/10 transition-all duration-200 hover:scale-[1.02] shadow-lg shadow-cyan-500/10"
+              onClick={() => handleContestClick(contest.contestId, contest.status)}
+              className="group relative p-4 rounded-lg border border-cyan-500/30 bg-white/5 hover:bg-white/10 transition-all duration-200 hover:scale-[1.02] shadow-lg shadow-cyan-500/10 cursor-pointer"
             >
               {/* Contest Header */}
               <div className="flex items-center justify-between mb-3">
@@ -257,7 +270,7 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
       <div className="mt-4 pt-3 border-t border-cyan-500/20 text-center">
         <span className="text-cyan-400/60 text-xs font-mono">
           {contests.length > 0
-            ? `Showing ${Math.min(contests.length, 3)} of ${contests.length} contests`
+            ? `Showing ${Math.min(contests.length, 3)} of ${contests.length} contests created by you`
             : "Ready for your first contest?"}
         </span>
       </div>

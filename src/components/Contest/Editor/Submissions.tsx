@@ -164,14 +164,13 @@ const Submissions = ({
       <div className="px-6">
         <div className="rounded-lg overflow-hidden">
           {isLoading ? (
-            // Skeleton loading state
             <>
               <SubmissionSkeleton />
               <SubmissionSkeleton />
               <SubmissionSkeleton />
             </>
           ) : error ? (
-            <div className="text-center py-8 text-red-400">{error}</div>
+            <div className="text-center py-8 text-cyan-400/60">{error}</div>
           ) : submissions.length === 0 ? (
             <div className="text-center py-8 text-gray-400">
               No submissions yet

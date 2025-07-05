@@ -163,33 +163,53 @@ export default function ContestDetails() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen   py-2 md:p-2 relative overflow-hidden">
-        {/* Animated Background Blobs */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse animation-delay-300"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-128 h-128 bg-purple-500/3 rounded-full blur-3xl animate-pulse animation-delay-700"></div>
-        </div>
+// Add this array of quotes at the top of your component
+const loadingQuotes = [
+  "Every expert was once a beginner. Every pro was once an amateur.",
+  "The only way to do great work is to love what you do.",
+  "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+  "Victory belongs to the most persevering.",
+  "Champions are made when nobody's watching.",
+  "The battlefield is won in the mind before it's won in the field.",
+  "Preparation prevents poor performance.",
+  "Train hard, fight easy.",
+  "Excellence is never an accident. It is always the result of high intention.",
+  "The harder you work, the luckier you get.",
+  "Discipline is the bridge between goals and accomplishment.",
+  "Focus on the process, not the outcome.",
+  "Great things never come from comfort zones.",
+  "Your only limit is your mindset.",
+  "Winners never quit, quitters never win."
+];
 
-        <div className="container mx-auto p-6 relative z-10">
-          <div className="flex items-center justify-center min-h-[60vh]">
-            <div className="text-cyan-400 text-xl font-semibold">Loading contest details...</div>
-          </div>
+// Add this function to get a random quote
+const getRandomQuote = () => {
+  return loadingQuotes[Math.floor(Math.random() * loadingQuotes.length)];
+};
+
+// Replace your loading return statement with this:
+if (loading) {
+  return (
+    <div className="min-h-screen bg-[#10141D] text-white flex flex-col items-center justify-center px-4">
+      <div className="text-center max-w-2xl">
+        <div className="flex items-center justify-center mb-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
         </div>
+        
+        {/* Random quote */}
+        <div className="mb-6">
+          <p className="text-lg md:text-xl font-medium text-gray-300">
+            &quot;{getRandomQuote()}&quot;
+          </p>
+        </div>
+      
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   return (
     <div className="min-h-screen   py-2 md:p-2 relative overflow-hidden">
-      {/* Animated Background Blobs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse animation-delay-300"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-128 h-128 bg-purple-500/3 rounded-full blur-3xl animate-pulse animation-delay-700"></div>
-      </div>
 
       <style jsx global>{`
         .markdown-content {
@@ -310,7 +330,6 @@ export default function ContestDetails() {
       `}</style>
 
       <div className="container mx-auto p-6 relative z-10">
-        {/* Header Section */}
         <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-6 backdrop-blur-sm border border-cyan-500/20 shadow-lg shadow-cyan-500/10 mb-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex-1 text-center md:text-left">

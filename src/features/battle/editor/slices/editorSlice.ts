@@ -76,9 +76,14 @@ export const submitCode = createAsyncThunk<
   } catch (error: unknown) {
     const axiosError = error as AxiosError<ErrorResponse>;
     console.log("❌ Submission error:", axiosError.response?.data);
-    return rejectWithValue(
-      axiosError.response?.data?.message || "Failed to submit code",
-    );
+    
+    // Check for contest inactive error and provide user-friendly message
+    const errorMessage = axiosError.response?.data?.message || "Failed to submit code";
+    if (errorMessage.includes("Contest not found or not active")) {
+      return rejectWithValue("Contest is over. Submissions are no longer accepted for this contest.");
+    }
+    
+    return rejectWithValue(errorMessage);
   }
 });
 

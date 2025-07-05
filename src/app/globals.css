@@ -15,26 +15,28 @@
 @layer base {
   :root {
     --radius: 0.5rem;
-    
+    --chart-1: 142 71% 65%;
+    --chart-2: 0 73% 59%;
+    --chart-3: 197 82% 75%;
+    --chart-4: 43 86% 62%;
+    --chart-5: 27 87% 67%;
   }
   .theme {
     --animate-meteor: meteor 5s linear infinite;
   }
 }
 
-@theme inline {
-  @keyframes meteor {
+@keyframes meteor {
   0% {
     transform: rotate(var(--angle)) translateX(0);
     opacity: 1;
-    }
+  }
   70% {
     opacity: 1;
-    }
+  }
   100% {
     transform: rotate(var(--angle)) translateX(-500px);
     opacity: 0;
-    }
   }
 }
 

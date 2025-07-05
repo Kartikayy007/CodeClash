@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 interface Contest {
   contestId: string
@@ -19,9 +20,20 @@ interface ContestTableProps {
 
 export default function ContestTable({ contests, loading, error }: ContestTableProps) {
   const [page, setPage] = useState(1)
+  const router = useRouter()
   const PAGE_SIZE = 10
   const totalPages = Math.ceil(contests.length / PAGE_SIZE)
   const paginatedContests = contests.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+
+  const handleContestClick = (contestId: string, status: string) => {
+    if (status === "ONGOING") {
+      router.push(`/contest/${contestId}`)
+    } else if (status === "UPCOMING") {
+      router.push(`/contest/join/${contestId}`)
+    } else {
+      router.push(`/contest-history/${contestId}`)
+    }
+  }
 
   if (loading) {
     return (
@@ -118,6 +130,7 @@ export default function ContestTable({ contests, loading, error }: ContestTableP
               return (
                 <tr
                   key={contest.contestId}
+                  onClick={() => handleContestClick(contest.contestId, contest.status)}
                   className="hover:bg-gradient-to-r hover:from-cyan-500/5 hover:to-blue-500/5 transition-all duration-200 group cursor-pointer"
                 >
                   <td className="py-4 px-6">

@@ -60,7 +60,7 @@ export default function ContestsPage() {
     fetchContests()
   }, [])
 
-  // Filter contests based on selected status
+  // Filter contests to show only past contests (ENDED status)
   const filteredContests: Contest[] = contests.filter((contest) => {
     return selectedStatus === "All" || contest.status === selectedStatus
   })
@@ -71,8 +71,8 @@ export default function ContestsPage() {
 
       <div className="max-w-7xl mx-auto relative z-10 space-y-6">
       <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Recent Contests</h1>
-          <p className="text-cyan-400/80">Track your competitive coding performance</p>
+            <h1 className="text-3xl font-bold text-white mb-2">My Contests</h1>
+            <p className="text-cyan-400/80">Past contests created by you</p>
         </div>
         {/* Filters Section - Now at the top */}
         <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl px-6 py-4 backdrop-blur-sm border border-cyan-500/20 shadow-lg shadow-cyan-500/10">

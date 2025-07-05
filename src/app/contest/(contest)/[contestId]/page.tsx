@@ -225,13 +225,45 @@ export default function ContestPage() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#10141D] text-white flex items-center justify-center">
-        <p>Loading contest...</p>
+const loadingQuotes = [
+  "Every expert was once a beginner. Every pro was once an amateur.",
+  "The only way to do great work is to love what you do.",
+  "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+  "Victory belongs to the most persevering.",
+  "Champions are made when nobody's watching.",
+  "The battlefield is won in the mind before it's won in the field.",
+  "Preparation prevents poor performance.",
+  "Train hard, fight easy.",
+  "Excellence is never an accident. It is always the result of high intention.",
+  "The harder you work, the luckier you get.",
+  "Discipline is the bridge between goals and accomplishment.",
+  "Focus on the process, not the outcome.",
+  "Great things never come from comfort zones.",
+  "Your only limit is your mindset.",
+  "Winners never quit, quitters never win."
+];
+
+const getRandomQuote = () => {
+  return loadingQuotes[Math.floor(Math.random() * loadingQuotes.length)];
+};
+
+if (loading) {
+  return (
+    <div className="min-h-screen bg-[#10141D] text-white flex flex-col items-center justify-center px-4">
+      <div className="text-center max-w-2xl">
+        <div className="flex items-center justify-center mb-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+        </div>
+        
+        <div className="mb-6">
+          <p className="text-lg md:text-xl font-medium text-gray-300">
+            &quot;{getRandomQuote()}&quot;
+          </p>
+        </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   if (!contest || contest.status !== "ONGOING") {
     return null;
@@ -268,7 +300,7 @@ export default function ContestPage() {
                 onClick={() => router.push("/contest/join")}
                 className="whitespace-nowrap"
               >
-                END
+                LEAVE
               </LabelButton>
             </div>
           </div>

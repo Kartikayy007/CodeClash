@@ -103,7 +103,7 @@ const MySubmissions: React.FC<MySubmissionsProps> = ({ contestId }) => {
       }
     } catch (err) {
       console.error("Failed to fetch submissions:", err);
-      setError("Failed to load submissions. Please try again.");
+      setError("No submissions found");
     } finally {
       setIsLoading(false);
     }
@@ -131,7 +131,7 @@ const MySubmissions: React.FC<MySubmissionsProps> = ({ contestId }) => {
     <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-6 mb-10 border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
       <div className="rounded-lg overflow-hidden">
         <h2 className="text-3xl font-semibold text-white mb-6">My Submissions</h2>
-        <div className="grid grid-cols-5 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 p-4 text-sm font-semibold text-cyan-400 uppercase tracking-wider">
+        <div className="grid grid-cols-5 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 p-4 text-sm font-semibold text-cyan-400 uppercase tracking-wider rounded-t-lg">
           <div>Problem</div>
           <div>Language</div>
           <div>Status</div>
@@ -147,7 +147,7 @@ const MySubmissions: React.FC<MySubmissionsProps> = ({ contestId }) => {
               <SubmissionSkeleton />
             </>
           ) : error ? (
-            <div className="text-center py-8 text-red-400">{error}</div>
+            <div className="text-center py-8 text-cyan-400/60">{error}</div>
           ) : submissions.length === 0 ? (
             <div className="text-center py-8 text-cyan-400/60">
               No submissions yet

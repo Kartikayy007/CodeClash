@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import {
   Problem,
@@ -27,7 +28,7 @@ interface ContestEditorProps {
 }
 
 interface SubmissionResult {
-  status: "ACCEPTED" | "WRONG_ANSWER" | "RUNTIME_ERROR" | "COMPILATION_ERROR";
+  status: "ACCEPTED" | "WRONG_ANSWER" | "RUNTIME_ERROR" | "COMPILATION_ERROR" | "CONTEST_OVER";
   runtime: number;
   message?: string;
   submissionId?: string;
@@ -39,6 +40,7 @@ interface SubmissionResult {
 }
 
 const ContestEditor = ({ problemId, contestId }: ContestEditorProps) => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<"description" | "submissions">(
     "description",
   );
@@ -127,7 +129,6 @@ int main() {
         setCodeByLanguage(parsed.codeByLanguage);
         setLanguage(parsed.language);
         setCode(parsed.codeByLanguage[parsed.language] || "");
-        // Reset isInitialLoad after loading saved code to prevent overwriting with defaults
         isInitialLoad.current = false;
       } catch (error) {
         console.error("Error parsing saved code:", error);
@@ -265,15 +266,32 @@ int main() {
         setTimeout(() => setShowConfetti(false), 8000);
       }
       setShowSubmissionResult(true);
-    } catch (error) {
-      setSubmissionResult({
-        status: "RUNTIME_ERROR",
-        runtime: 0,
-        message: "Failed to run. Please try again.",
-      });
-      setShowSubmissionResult(true);
-      setShowFailureMeme(true);
-      setTimeout(() => setShowFailureMeme(false), 5000);
+    } catch (error: unknown) {
+      // Check for contest inactive error
+      const axiosError = error as { response?: { data?: { error?: string, message?: string } }; message?: string };
+      const errorMessage = axiosError?.response?.data?.error || axiosError?.response?.data?.message || axiosError?.message || "";
+      
+      if (errorMessage.includes("You have not joined this contest")) {
+        router.push(`/contest/join/${contestId}`);
+        return;
+      } else if (errorMessage.includes("Contest not found or not active")) {
+        setSubmissionResult({
+          status: "CONTEST_OVER", // Use a different status to distinguish from runtime errors
+          runtime: 0,
+          message: "Contest is over. Submissions are no longer accepted for this contest.",
+        });
+        setShowSubmissionResult(true);
+      } else {
+        setSubmissionResult({
+          status: "RUNTIME_ERROR",
+          runtime: 0,
+          message: "Failed to submit code. Please try again.",
+        });
+        setShowFailureMeme(true);
+        setTimeout(() => setShowFailureMeme(false), 5000);
+        setShowSubmissionResult(true);
+      }
+      
       console.error("Submit error:", error);
     } finally {
       setIsSubmitting(false);
