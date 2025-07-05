@@ -90,8 +90,6 @@ export default function CreateContest() {
         endTime: endDateTime.toISOString(),
       });
 
-      toast.success("Contest created successfully!");
-
       const params = new URLSearchParams({
         contestId: response.contest.id,
         title: response.contest.title,

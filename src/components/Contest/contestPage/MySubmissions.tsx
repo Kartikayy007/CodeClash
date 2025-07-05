@@ -22,13 +22,32 @@ interface MySubmissionsProps {
 }
 
 const SubmissionSkeleton = () => (
-  <div className="grid grid-cols-5 p-4 items-center bg-gradient-to-r from-cyan-500/10 to-blue-500/10 animate-pulse rounded-lg border border-cyan-500/10">
-    <div className="h-5 bg-cyan-500/20 rounded w-3/4"></div>
-    <div className="h-5 bg-cyan-500/10 rounded w-1/2"></div>
-    <div className="h-5 bg-cyan-500/10 rounded w-3/4"></div>
-    <div className="h-5 bg-cyan-500/10 rounded w-1/2"></div>
-    <div className="h-5 bg-cyan-500/10 rounded w-1/2"></div>
-  </div>
+  <>
+    {/* Desktop Skeleton */}
+    <div className="hidden md:grid grid-cols-5 p-4 items-center bg-gradient-to-r from-cyan-500/10 to-blue-500/10 animate-pulse rounded-lg border border-cyan-500/10">
+      <div className="h-5 bg-cyan-500/20 rounded w-3/4"></div>
+      <div className="h-5 bg-cyan-500/10 rounded w-1/2"></div>
+      <div className="h-5 bg-cyan-500/10 rounded w-3/4"></div>
+      <div className="h-5 bg-cyan-500/10 rounded w-1/2"></div>
+      <div className="h-5 bg-cyan-500/10 rounded w-1/2"></div>
+    </div>
+    
+    {/* Mobile Skeleton */}
+    <div className="md:hidden p-4 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 animate-pulse rounded-lg border border-cyan-500/10 space-y-3">
+      <div className="flex items-center justify-between">
+        <div className="h-5 bg-cyan-500/20 rounded w-32"></div>
+        <div className="h-4 bg-cyan-500/10 rounded w-16"></div>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="h-4 w-4 bg-cyan-500/20 rounded-full"></div>
+        <div className="h-4 bg-cyan-500/10 rounded w-24"></div>
+      </div>
+      <div className="flex justify-between text-sm">
+        <div className="h-4 bg-cyan-500/10 rounded w-20"></div>
+        <div className="h-4 bg-cyan-500/10 rounded w-16"></div>
+      </div>
+    </div>
+  </>
 );
 
 const getStatusIcon = (status: string) => {
@@ -128,10 +147,12 @@ const MySubmissions: React.FC<MySubmissionsProps> = ({ contestId }) => {
   }, [contestId, fetchSubmissions]);
 
   return (
-    <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-6 mb-10 border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
+    <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-4 sm:p-6 mb-10 border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
       <div className="rounded-lg overflow-hidden">
-        <h2 className="text-3xl font-semibold text-white mb-6">My Submissions</h2>
-        <div className="grid grid-cols-5 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 p-4 text-sm font-semibold text-cyan-400 uppercase tracking-wider rounded-t-lg">
+        <h2 className="text-2xl sm:text-3xl font-semibold text-white mb-4 sm:mb-6">My Submissions</h2>
+        
+        {/* Desktop Header */}
+        <div className="hidden md:grid grid-cols-5 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 p-4 text-sm font-semibold text-cyan-400 uppercase tracking-wider rounded-t-lg">
           <div>Problem</div>
           <div>Language</div>
           <div>Status</div>
@@ -154,94 +175,164 @@ const MySubmissions: React.FC<MySubmissionsProps> = ({ contestId }) => {
             </div>
           ) : (
             submissions.map((submission) => (
-            <div
-              key={submission.id}
-              className="grid grid-cols-5 p-4 items-center bg-gradient-to-r from-white/5 to-white/10 hover:from-cyan-500/10 hover:to-blue-500/10 border border-cyan-500/10 rounded-lg transition-all duration-200 hover:scale-[1.01]"
-            >
-                <div className="truncate flex items-center gap-2">
-                  <span className="font-medium text-white">
-                    {submission.question?.title || "Unknown Problem"}
-                  </span>
-                  {submission.question?.difficulty && (
-                    <span
-                      className={`text-xs px-2 py-0.5 rounded-full font-semibold border transition-all duration-200 ${
-                        submission.question.difficulty === "EASY"
-                          ? "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 border-green-500/30"
-                          : submission.question.difficulty === "MEDIUM"
-                            ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border-yellow-500/30"
-                            : "bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border-red-500/30"
-                      }`}
-                    >
-                      {submission.question.difficulty}
+              <div key={submission.id}>
+                {/* Desktop Layout */}
+                <div className="hidden md:grid grid-cols-5 p-4 items-center bg-gradient-to-r from-white/5 to-white/10 hover:from-cyan-500/10 hover:to-blue-500/10 border border-cyan-500/10 rounded-lg transition-all duration-200 hover:scale-[1.01]">
+                  <div className="truncate flex items-center gap-2">
+                    <span className="font-medium text-white">
+                      {submission.question?.title || "Unknown Problem"}
                     </span>
-                  )}
+                    {submission.question?.difficulty && (
+                      <span
+                        className={`text-xs px-2 py-0.5 rounded-full font-semibold border transition-all duration-200 ${
+                          submission.question.difficulty === "EASY"
+                            ? "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 border-green-500/30"
+                            : submission.question.difficulty === "MEDIUM"
+                              ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border-yellow-500/30"
+                              : "bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border-red-500/30"
+                        }`}
+                      >
+                        {submission.question.difficulty}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-cyan-400 font-medium">
+                    {submission.language.charAt(0).toUpperCase() +
+                      submission.language.slice(1)}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {getStatusIcon(submission.status)}
+                    <span className={`font-semibold text-xs px-2 py-0.5 rounded-full border transition-all duration-200 ${
+                      submission.status === "ACCEPTED"
+                        ? "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 border-green-500/30"
+                        : submission.status === "WRONG_ANSWER"
+                          ? "bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border-red-500/30"
+                          : submission.status === "TIME_LIMIT_EXCEEDED"
+                            ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border-yellow-500/30"
+                            : "bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-400 border-blue-500/30"
+                    }`}>
+                      {getStatusText(submission.status)}
+                    </span>
+                  </div>
+                  <div className="text-gray-300 font-mono text-xs">
+                    {new Date(submission.createdAt)
+                      .toLocaleString("en-US", {
+                        day: "2-digit",
+                        month: "short",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })
+                      .replace(",", "")}
+                  </div>
+                  <div className="text-emerald-400 font-bold">
+                    {submission.score !== null ? submission.score : "-"}
+                  </div>
                 </div>
-                <div className="text-cyan-400 font-medium">
-                  {submission.language.charAt(0).toUpperCase() +
-                    submission.language.slice(1)}
+
+                {/* Mobile Layout */}
+                <div className="md:hidden p-4 bg-gradient-to-r from-white/5 to-white/10 hover:from-cyan-500/10 hover:to-blue-500/10 border border-cyan-500/10 rounded-lg transition-all duration-200 hover:scale-[1.01] space-y-3">
+                  {/* Top row: Problem name and Score */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-white text-lg truncate">
+                        {submission.question?.title || "Unknown Problem"}
+                      </div>
+                      {submission.question?.difficulty && (
+                        <span
+                          className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full font-semibold border transition-all duration-200 ${
+                            submission.question.difficulty === "EASY"
+                              ? "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 border-green-500/30"
+                              : submission.question.difficulty === "MEDIUM"
+                                ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border-yellow-500/30"
+                                : "bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border-red-500/30"
+                          }`}
+                        >
+                          {submission.question.difficulty}
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-emerald-400 font-bold text-lg">
+                      {submission.score !== null ? submission.score : "-"}
+                    </div>
+                  </div>
+                  
+                  {/* Status row */}
+                  <div className="flex items-center gap-2">
+                    {getStatusIcon(submission.status)}
+                    <span className={`font-semibold text-xs px-2 py-1 rounded-full border transition-all duration-200 ${
+                      submission.status === "ACCEPTED"
+                        ? "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 border-green-500/30"
+                        : submission.status === "WRONG_ANSWER"
+                          ? "bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border-red-500/30"
+                          : submission.status === "TIME_LIMIT_EXCEEDED"
+                            ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border-yellow-500/30"
+                            : "bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-400 border-blue-500/30"
+                    }`}>
+                      {getStatusText(submission.status)}
+                    </span>
+                  </div>
+                  
+                  {/* Bottom row: Language and Time */}
+                  <div className="flex justify-between text-sm">
+                    <div className="text-cyan-400 font-medium">
+                      <span className="text-gray-500">Language:</span> {submission.language.charAt(0).toUpperCase() + submission.language.slice(1)}
+                    </div>
+                    <div className="text-gray-300 font-mono">
+                      {new Date(submission.createdAt)
+                        .toLocaleString("en-US", {
+                          day: "2-digit",
+                          month: "short",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        })
+                        .replace(",", "")}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  {getStatusIcon(submission.status)}
-                  <span className={`font-semibold text-xs px-2 py-0.5 rounded-full border transition-all duration-200 ${
-                    submission.status === "ACCEPTED"
-                      ? "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 border-green-500/30"
-                      : submission.status === "WRONG_ANSWER"
-                        ? "bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border-red-500/30"
-                        : submission.status === "TIME_LIMIT_EXCEEDED"
-                          ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border-yellow-500/30"
-                          : "bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-400 border-blue-500/30"
-                  }`}>
-                    {getStatusText(submission.status)}
-                  </span>
-                </div>
-                <div className="text-gray-300 font-mono text-xs">
-                  {new Date(submission.createdAt)
-                    .toLocaleString("en-US", {
-                      day: "2-digit",
-                      month: "short",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true,
-                    })
-                    .replace(",", "")}
-                </div>
-                <div className="text-emerald-400 font-bold">
-                  {submission.score !== null ? submission.score : "-"}
-                </div>
-            </div>
+              </div>
             ))
           )}
         </div>
       </div>
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex justify-center gap-2 mt-6">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mt-6">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`p-2 rounded-lg transition-all duration-200 ${
+            className={`w-full sm:w-auto p-3 sm:p-2 rounded-lg transition-all duration-200 ${
               currentPage === 1
                 ? "bg-cyan-500/20 text-cyan-400/40 cursor-not-allowed"
                 : "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 hover:from-cyan-500/30 hover:to-blue-500/30 hover:scale-105 shadow-lg shadow-cyan-500/25"
             }`}
           >
-            <ChevronLeft size={20} />
+            <div className="flex items-center justify-center gap-2">
+              <ChevronLeft size={20} />
+              <span className="sm:hidden">Previous</span>
+            </div>
           </button>
-          <div className="flex items-center px-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-lg border border-cyan-500/30">
-            <span className="text-cyan-400 font-medium">
+          
+          <div className="flex items-center px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-lg border border-cyan-500/30">
+            <span className="text-cyan-400 font-medium text-sm sm:text-base">
               Page {currentPage} of {totalPages}
             </span>
           </div>
+          
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className={`p-2 rounded-lg transition-all duration-200 ${
+            className={`w-full sm:w-auto p-3 sm:p-2 rounded-lg transition-all duration-200 ${
               currentPage === totalPages
                 ? "bg-cyan-500/20 text-cyan-400/40 cursor-not-allowed"
                 : "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 hover:from-cyan-500/30 hover:to-blue-500/30 hover:scale-105 shadow-lg shadow-cyan-500/25"
             }`}
           >
-            <ChevronRight size={20} />
+            <div className="flex items-center justify-center gap-2">
+              <span className="sm:hidden">Next</span>
+              <ChevronRight size={20} />
+            </div>
           </button>
         </div>
       )}

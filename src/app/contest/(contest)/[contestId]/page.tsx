@@ -192,7 +192,7 @@ export default function ContestPage() {
                 rating: q.rating || 0,
                 score: q.score || 0,
                 difficulty: q.difficulty,
-                status: null,
+                status: q.submissions?.accepted && q.submissions.accepted > 0 ? "SOLVED" : null,
               })) || []
             }
             onSolveProblem={handleSolveProblem}
@@ -272,38 +272,38 @@ if (loading) {
   return (
     <div className="min-h-screen bg-[#10141D] text-white">
       <div className="flex flex-col h-full">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between p-4 md:p-8 gap-4 bg-[#10151c] ">
-          <div className="flex flex-col gap-2">
-            <h1 className="text-4xl md:text-5xl h-fit font-bold truncate">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 sm:p-6 md:p-8 gap-4 bg-[#10151c]">
+          <div className="flex flex-col gap-2 min-w-0 flex-1">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold truncate">
               {contest.title}
             </h1>
           </div>
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-center">
-                <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-gray-900 shadow-lg border border-gray-700">
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+            <div className="w-full sm:w-auto flex items-center justify-center">
+              <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 md:px-5 py-2 sm:py-3 rounded-lg sm:rounded-xl bg-gray-900 shadow-lg border border-gray-700 min-w-0">
                 <Timer
-                size={24}
-                className={timeLeft <= 300 
-                ? "text-red-500 animate-pulse" 
-                : "text-white"
-                }
-                />
-                <span
-                className={`text-xl md:text-2xl font-bold tracking-wider ${
-                timeLeft <= 300 
+                  size={20}
+                  className={`sm:w-6 sm:h-6 flex-shrink-0 ${timeLeft <= 300 
                   ? "text-red-500 animate-pulse" 
                   : "text-white"
-                }`}
+                  }`}
+                />
+                <span
+                  className={`text-lg sm:text-xl md:text-2xl font-bold tracking-wider min-w-0 ${
+                  timeLeft <= 300 
+                    ? "text-red-500 animate-pulse" 
+                    : "text-white"
+                  }`}
                 >
-                {formatTime(timeLeft)}
+                  {formatTime(timeLeft)}
                 </span>
               </div>
             </div>
-            {/* <div className="flex justify-end">
+            {/* <div className="flex justify-end w-full sm:w-auto">
               <LabelButton
                 variant="red"
                 onClick={() => router.push("/contest/join")}
-                className="whitespace-nowrap"
+                className="whitespace-nowrap w-full sm:w-auto"
               >
                 LEAVE
               </LabelButton>
@@ -311,16 +311,16 @@ if (loading) {
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-4 md:gap-8 px-4 md:px-8">
+        <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 md:gap-8 px-4 sm:px-6 md:px-8">
           <div className="flex-1 w-full overflow-hidden">
-            <div className="flex gap-4 md:gap-8 mb-4 md:mb-8 overflow-x-auto pb-2 scrollbar-hide">
+            <div className="flex gap-3 sm:gap-4 md:gap-8 mb-4 md:mb-8 overflow-x-auto pb-2 scrollbar-hide">
               {(
                 ["Problem Set", "Leaderboard", "My Submissions"] as TabType[]
               ).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`pb-2 whitespace-nowrap ${
+                  className={`pb-2 whitespace-nowrap text-sm sm:text-base transition-colors duration-200 ${
                     activeTab === tab
                       ? "text-white border-b-2 border-white"
                       : "text-gray-400 hover:text-white"

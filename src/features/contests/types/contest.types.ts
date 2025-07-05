@@ -41,6 +41,9 @@ export interface Contest {
     difficulty: "EASY" | "MEDIUM" | "HARD";
     rating: number;
     score: number;
+    submissions?: {
+      accepted?: number;
+    };
   }>;
 }
 

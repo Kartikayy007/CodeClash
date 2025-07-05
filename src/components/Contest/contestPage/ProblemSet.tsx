@@ -46,7 +46,6 @@ const ProblemSet: React.FC<ProblemSetProps> = ({
                   ? "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 border border-green-500/30"
                   : "bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-none hover:from-cyan-600 hover:to-blue-600 shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-105"
               }`}
-              disabled={problem.status === "SOLVED"}
             >
               {problem.status === "SOLVED" ? "Solved" : "Solve"}
             </LabelButton>

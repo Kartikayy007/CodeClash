@@ -106,14 +106,18 @@ const Question = ({ problem, isLoading }: QuestionProps) => {
             .map((testCase, index) => (
               <div key={testCase.id} className="space-y-2">
                 <h3 className="font-medium text-2xl">Example {index + 1}:</h3>
-                <div className="bg-[#292C33] rounded-lg p-4 space-y-2">
+                <div className="bg-[#292C33] rounded-lg p-4 space-y-4">
                   <div>
-                    <span className="text-gray-400">Input: </span>
-                    <code className="text-white">{testCase.input}</code>
+                    <span className="text-gray-400 font-medium">Input:</span>
+                    <pre className="text-white font-mono text-sm mt-2 bg-[#1e2127] p-3 rounded border overflow-x-auto whitespace-pre-wrap">
+                      {testCase.input.replace(/\\n/g, '\n')}
+                    </pre>
                   </div>
                   <div>
-                    <span className="text-gray-400">Output: </span>
-                    <code className="text-white">{testCase.output}</code>
+                    <span className="text-gray-400 font-medium">Output:</span>
+                    <pre className="text-white font-mono text-sm mt-2 bg-[#1e2127] p-3 rounded border overflow-x-auto whitespace-pre-wrap">
+                      {testCase.output.replace(/\\n/g, '\n')}
+                    </pre>
                   </div>
                 </div>
               </div>
