@@ -50,12 +50,12 @@ const TopPlayers: React.FC<TopPlayersProps> = ({ topPlayers }) => {
 
   return (
     <div className="mb-8">
-      <div className="text-center mb-6">
+      {/* <div className="text-center mb-6">
         <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">
           🏆 Hall of Fame
         </h2>
         <p className="text-cyan-300/60">The ultimate coding champions</p>
-      </div>
+      </div> */}
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* Podium arrangement: 2nd, 1st, 3rd */}
@@ -109,16 +109,6 @@ const TopPlayers: React.FC<TopPlayersProps> = ({ topPlayers }) => {
                   <div className="flex items-center gap-2 mt-1">
                     <Trophy className="w-4 h-4 text-cyan-400" />
                     <span className="text-cyan-300 font-medium">{player.wins} Victories</span>
-                  </div>
-
-                  {/* Win streak indicator */}
-                  <div className="flex items-center gap-1 mt-2">
-                    <div className="flex gap-1">
-                      {Array.from({ length: Math.min(5, Math.floor(player.wins / 10)) }).map((_, i) => (
-                        <Star key={i} className="w-3 h-3 text-yellow-400 fill-current" />
-                      ))}
-                    </div>
-                    <span className="text-xs text-cyan-400/60 ml-1">Elite Status</span>
                   </div>
                 </div>
               </div>

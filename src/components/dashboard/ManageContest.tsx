@@ -1,136 +1,163 @@
-import React from "react";
-import { Trophy, Clock, CheckCircle, ChevronUp, ChevronDown } from "lucide-react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/Carousel";
+"use client"
+import { ChevronUp, ChevronDown } from "lucide-react"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/Carousel"
+import { Button } from "@/components/ui/button"
 
 interface ContestItem {
-  title: string;
-  description: string;
-  id: number;
-  icon: React.ReactNode;
-  status: "ONGOING" | "UPCOMING" | "ENDED";
+  title: string
+  description: string
+  id: number
+  status: "ONGOING" | "UPCOMING" | "ENDED"
+  date: string
+  time: string
 }
 
 interface ManageContestProps {
-  className?: string;
+  className?: string
 }
 
 const ManageContest = ({ className = "" }: ManageContestProps) => {
-  // Example contest items with status
   const contestItems: ContestItem[] = [
+    // Past contests
+   
+    // Current/Next upcoming (center)
     {
-      title: "Weekly Coding Challenge",
-      description: "Compete in the ongoing weekly challenge!",
-      id: 1,
-      icon: <Trophy className="h-[28px] w-[28px] text-yellow-300 drop-shadow-lg" />,
-      status: "ONGOING",
-    },
-    {
-      title: "Algorithm Masterclass",
-      description: "Starts soon! Register now to participate.",
-      id: 2,
-      icon: <Clock className="h-[28px] w-[28px] text-cyan-300" />,
-      status: "UPCOMING",
-    },
-    {
-      title: "Past Contest",
-      description: "Browse through your contest history and achievements.",
+      title: "Weekly Clash",
+      description: "Join every week for our weekly clash contest!",
       id: 3,
-      icon: <CheckCircle className="h-[28px] w-[28px] text-gray-400" />,
-      status: "ENDED",
+      status: "UPCOMING",
+      date: "Keep an eye out for updates!",
+      time: "Coming Soon",
     },
-  ];
 
-  // Sort: ONGOING first, then soonest UPCOMING, then others
-  const sortedItems = [
-    ...contestItems.filter((c) => c.status === "ONGOING"),
-    ...contestItems.filter((c) => c.status === "UPCOMING" && !contestItems.some((cc) => cc.status === "ONGOING")),
-    ...contestItems.filter((c) => c.status === "ENDED"),
-  ];
+    {
+      title: "Upcoming Contests",
+      description: "",
+      id: 1,
+      status: "UPCOMING",
+      date: "Keep an eye out for updates!",
+      time: "Coming Soon",
+    }
 
-  // Custom CarouselPrevious and CarouselNext with ChevronUp/Down
-  const CustomPrev = React.forwardRef<HTMLButtonElement, React.ComponentProps<typeof CarouselPrevious>>((props, ref) => (
-    <CarouselPrevious
-      {...props}
-      ref={ref}
-      className="absolute left-1/2 -translate-x-1/2 top-0 z-10 bg-[#23263a] rounded-full p-2 border border-cyan-500/30 hover:bg-cyan-500/10 transition"
-    >
-      <ChevronUp className="h-6 w-6 text-cyan-300" />
-    </CarouselPrevious>
-  ));
-  CustomPrev.displayName = "CustomPrev";
+  ]
 
-  const CustomNext = React.forwardRef<HTMLButtonElement, React.ComponentProps<typeof CarouselNext>>((props, ref) => (
-    <CarouselNext
-      {...props}
-      ref={ref}
-      className="absolute left-1/2 -translate-x-1/2 bottom-0 z-10 bg-[#23263a] rounded-full p-2 border border-cyan-500/30 hover:bg-cyan-500/10 transition"
-    >
-      <ChevronDown className="h-6 w-6 text-cyan-300" />
-    </CarouselNext>
-  ));
-  CustomNext.displayName = "CustomNext";
+  const mainUpcomingIndex = contestItems.findIndex((item) => item.status === "UPCOMING" && item.id === 3)
+
 
   return (
-    <div className={`w-full bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-6 ${className}`}>
-      <div className="flex items-center justify-between mb-4 pb-3 border-b border-cyan-500/20 flex-shrink-0">
-        <h2 className="text-lg font-semibold text-white">Contest Status</h2>
+    <div
+      className={`w-full max-w-md mx-auto bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-3xl p-6 ${className}`}
+    >
+      <div className="flex items-center justify-between mb-6 pb-4 border-b border-cyan-500/20">
+        <h2 className="text-xl font-bold text-white">Contest Timeline</h2>
       </div>
-      <div className="relative w-full max-w-md mx-auto">
-        <Carousel orientation="vertical" className="w-full">
-          <CustomPrev />
-          <CarouselContent className="h-[140px]">
-            {sortedItems.map((item, idx) => (
-              <CarouselItem key={item.id} className="flex items-center justify-center basis-full shrink-0 grow-0">
-                <div
-                  className={
-                    "w-full h-[120px] rounded-2xl p-4 flex items-center gap-6 shadow-2xl transition-all duration-300 " +
-                    (idx === 0
-                      ? "bg-gradient-to-br from-yellow-400/40 via-cyan-400/40 to-blue-600/60 border-2 border-cyan-300/80 ring-4 ring-cyan-300/30 scale-105"
-                      : "bg-[#23263a] border border-cyan-500/10 opacity-70")
-                  }
-                >
-                  <div className="flex-shrink-0 flex flex-col items-center justify-center">
-                    {item.icon}
-                    {(item.status === "ONGOING" || item.status === "UPCOMING") && (
-                      <span className={
-                        "mt-2 px-2 py-0.5 rounded-full text-xs font-bold " +
-                        (item.status === "ONGOING"
-                          ? "bg-green-500/20 text-green-300 border border-green-400/40"
-                          : "bg-cyan-500/20 text-cyan-300 border border-cyan-400/40")
-                      }>
-                        {item.status}
-                      </span>
+
+      <div className="relative">
+        <Carousel
+          orientation="vertical"
+          className="w-full"
+          opts={{
+            align: "center",
+            loop: false,
+            startIndex: mainUpcomingIndex,
+          }}
+        >
+          <CarouselPrevious className="absolute left-1/2 -translate-x-1/2 -top-4 z-10 bg-[#23263a] hover:bg-[#2a2f42] rounded-full p-2 border border-cyan-500/30 hover:border-cyan-400/50 transition-all duration-200">
+            <ChevronUp className="h-4 w-4 text-cyan-300" />
+          </CarouselPrevious>
+
+          <CarouselContent className="h-[280px] sm:h-[300px] py-4">
+            {contestItems.map((item, idx) => {
+              const isCenter = idx === mainUpcomingIndex
+              const isPast = item.status === "ENDED"
+
+              return (
+                <CarouselItem key={item.id} className="flex items-center justify-center basis-full">
+                  <div
+                    className={`w-full rounded-3xl  transition-all duration-500 ${
+                      isCenter
+                        ? "bg-gradient-to-br from-cyan-500/20 via-blue-500/20 p-4 to-purple-600/30 border-2 border-cyan-400/60 shadow-2xl shadow-cyan-500/20 "
+                        : isPast
+                          ? "bg-gradient-to-br p-6 from-[#1f2229] to-[#23263a] border border-gray-600/20 opacity-60"
+                          : "bg-gradient-to-br p-6 from-[#23263a] to-[#2a2f42] border border-cyan-500/20 opacity-80"
+                    }`}
+                  >
+                    {/* Title */}
+                    <h3
+                      className={`font-bold mb-3 leading-tight ${
+                        isCenter
+                          ? "text-white text-xl sm:text-2xl"
+                          : isPast
+                            ? "text-gray-300 text-lg"
+                            : "text-cyan-100 text-lg sm:text-xl"
+                      }`}
+                    >
+                      {item.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p
+                      className={`mb-4 leading-relaxed ${
+                        isCenter
+                          ? "text-cyan-100/90 text-sm sm:text-base"
+                          : isPast
+                            ? "text-gray-400 text-sm"
+                            : "text-cyan-200/70 text-sm"
+                      }`}
+                    >
+                      {item.description}
+                    </p>
+
+                    {/* Date and Time */}
+                    <div className="mb-6 space-y-1">
+                      <div
+                        className={`text-sm font-medium ${
+                          isCenter ? "text-cyan-200" : isPast ? "text-gray-400" : "text-cyan-300/80"
+                        }`}
+                      >
+                        {item.date}
+                      </div>
+                      <div
+                        className={`text-sm ${
+                          isCenter ? "text-yellow-300 font-semibold" : isPast ? "text-gray-500" : "text-cyan-400/70"
+                        }`}
+                      >
+                        {item.time}
+                      </div>
+                    </div>
+
+                    {/* Join Button */}
+                    {!isPast && (
+                      <Button
+                        disabled
+                        className={`w-full rounded-2xl font-semibold transition-all duration-200 ${
+                          isCenter
+                            ? "bg-gradient-to-r from-gray-400 to-gray-500 text-gray-300 cursor-not-allowed"
+                            : "bg-gray-600/80 text-gray-300 cursor-not-allowed"
+                        }`}
+                      >
+                        Join Contest
+                      </Button>
+                    )}
+
+                    {isPast && (
+                      <div className="w-full text-center py-3 rounded-2xl bg-gray-600/20 text-gray-400 text-sm font-medium">
+                        Contest Ended
+                      </div>
                     )}
                   </div>
-                  <div>
-                    <div className={
-                      "font-extrabold text-xl mb-1 " +
-                      (idx === 0 ? "text-white drop-shadow-lg" : "text-cyan-200/80")
-                    }>
-                      {item.title}
-                    </div>
-                    <div className={
-                      "text-base " +
-                      (idx === 0 ? "text-cyan-100/90 font-semibold" : "text-cyan-200/60")
-                    }>
-                      {item.description}
-                    </div>
-                  </div>
-                </div>
-              </CarouselItem>
-            ))}
+                </CarouselItem>
+              )
+            })}
           </CarouselContent>
-          <CustomNext />
+
+          <CarouselNext className="absolute left-1/2 -translate-x-1/2 -bottom-4 z-10 bg-[#23263a] hover:bg-[#2a2f42] rounded-full p-2 border border-cyan-500/30 hover:border-cyan-400/50 transition-all duration-200">
+            <ChevronDown className="h-4 w-4 text-cyan-300" />
+          </CarouselNext>
         </Carousel>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ManageContest;
+export default ManageContest

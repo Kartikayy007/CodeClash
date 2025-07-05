@@ -21,14 +21,14 @@ const SimpleAnnouncements: React.FC<SimpleAnnouncementsProps> = ({ className = "
   const [loading, setLoading] = useState(true)
 
   const announcements: Announcement[] = [
-    {
-      id: 1,
-      title: "Next Contest: Weekly Challenge #15",
-      description: "Sunday, 8:00 PM IST • Register now",
-      icon: Calendar,
-      color: "text-cyan-400",
-      isContest: true,
-    }
+    // {
+    //   id: 1,
+    //   title: "Next Contest: Weekly Challenge #15",
+    //   description: "Sunday, 8:00 PM IST • Register now",
+    //   icon: Calendar,
+    //   color: "text-cyan-400",
+    //   isContest: true,
+    // }
   ]
 
   useEffect(() => {
@@ -54,51 +54,62 @@ const SimpleAnnouncements: React.FC<SimpleAnnouncementsProps> = ({ className = "
 
   return (
     <div
-      className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-4 md:p-6 border border-transparent hover:border-white/30 transition-all duration-300 ${className}`}
+      className={`relative bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-lg p-4 md:p-6 ${className}`}
     >
       <div className="flex justify-between items-center mb-4 md:mb-6">
         <h2 className="text-lg md:text-xl font-semibold text-white">Announcements</h2>
-        <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
       </div>
 
       <div className="space-y-3">
-        {announcements.map((announcement, index) => {
-          const IconComponent = announcement.icon
-          return (
-            <div
-              key={announcement.id}
-              className={`flex items-center gap-4 p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-200 hover:scale-[1.01] cursor-pointer ${
-                announcement.isContest ? "border border-cyan-400/40 bg-cyan-400/5" : ""
-              }`}
-              style={{
-                animationDelay: `${index * 100}ms`,
-                animation: "fadeInUp 0.5s ease-out forwards",
-              }}
-            >
+        {announcements.length > 0 ? (
+          announcements.map((announcement, index) => {
+            const IconComponent = announcement.icon
+            return (
               <div
-                className={`p-2 rounded-lg ${
-                  announcement.isContest ? "bg-cyan-400/20 border border-cyan-400/30" : "bg-white/10"
-                } flex-shrink-0`}
+                key={announcement.id}
+                className={`flex items-center gap-4 p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-200 hover:scale-[1.01] cursor-pointer ${
+                  announcement.isContest ? "border border-cyan-400/40 bg-cyan-400/5" : ""
+                }`}
+                style={{
+                  animationDelay: `${index * 100}ms`,
+                  animation: "fadeInUp 0.5s ease-out forwards",
+                }}
               >
-                <IconComponent className={`w-5 h-5 ${announcement.color}`} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className={`font-semibold text-base ${announcement.color} leading-tight`}>{announcement.title}</h3>
-                <p className="text-white/70 text-sm mt-1">{announcement.description}</p>
-              </div>
-              {announcement.isContest && (
-                <div className="flex-shrink-0">
-                  <div className="w-3 h-3 bg-cyan-400 rounded-full animate-pulse"></div>
+                <div
+                  className={`p-2 rounded-lg ${
+                    announcement.isContest ? "bg-cyan-400/20 border border-cyan-400/30" : "bg-white/10"
+                  } flex-shrink-0`}
+                >
+                  <IconComponent className={`w-5 h-5 ${announcement.color}`} />
                 </div>
-              )}
+                <div className="flex-1 min-w-0">
+                  <h3 className={`font-semibold text-base ${announcement.color} leading-tight`}>{announcement.title}</h3>
+                  <p className="text-white/70 text-sm mt-1">{announcement.description}</p>
+                </div>
+                {announcement.isContest && (
+                  <div className="flex-shrink-0">
+                    <div className="w-3 h-3 bg-cyan-400 rounded-full animate-pulse"></div>
+                  </div>
+                )}
+              </div>
+            )
+          })
+        ) : (
+          <div className="flex flex-col items-center justify-center py-8 px-4">
+            <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4">
+              <Calendar className="w-8 h-8 text-white/30" />
             </div>
-          )
-        })}
+            <h3 className="text-white/70 font-medium text-base mb-2">No announcements</h3>
+            <p className="text-white/50 text-sm text-center">
+              Check back later for updates and contest announcements.
+            </p>
+          </div>
+        )}
       </div>
 
-      <div className="mt-6 pt-4 border-t border-cyan-400/10 text-center">
+      {/* <div className="mt-6 pt-4 border-t border-cyan-400/10 text-center">
         <span className="text-cyan-400/50 text-xs font-mono">Last updated: 2:42 PM</span>
-      </div>
+      </div> */}
 
       <style jsx>{`
         @keyframes fadeInUp {

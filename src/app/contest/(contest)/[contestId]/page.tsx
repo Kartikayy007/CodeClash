@@ -8,7 +8,7 @@ import {
   Contest,
   LeaderboardEntry,
 } from "@/features/contests/types/contest.types";
-import LabelButton from "@/components/ui/LabelButton";
+// import LabelButton from "@/components/ui/LabelButton";
 import { Timer } from "lucide-react";
 import ProblemSet from "@/components/Contest/PreviewContest/ProblemSet";
 import Leaderboard from "@/components/Contest/contestPage/Leaderboard";
@@ -279,22 +279,27 @@ if (loading) {
             </h1>
           </div>
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#2A2F3E]">
+            <div className="flex items-center justify-center">
+                <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-gray-900 shadow-lg border border-gray-700">
                 <Timer
-                  size={18}
-                  className={timeLeft <= 300 ? "text-red-500 animate-pulse" : "text-blue-400"}
+                size={24}
+                className={timeLeft <= 300 
+                ? "text-red-500 animate-pulse" 
+                : "text-white"
+                }
                 />
                 <span
-                  className={`text-base font-medium ${
-                    timeLeft <= 300 ? "text-red-500" : "text-blue-400"
-                  }`}
+                className={`text-xl md:text-2xl font-bold tracking-wider ${
+                timeLeft <= 300 
+                  ? "text-red-500 animate-pulse" 
+                  : "text-white"
+                }`}
                 >
-                  {formatTime(timeLeft)}
+                {formatTime(timeLeft)}
                 </span>
               </div>
             </div>
-            <div className="flex justify-end">
+            {/* <div className="flex justify-end">
               <LabelButton
                 variant="red"
                 onClick={() => router.push("/contest/join")}
@@ -302,7 +307,7 @@ if (loading) {
               >
                 LEAVE
               </LabelButton>
-            </div>
+            </div> */}
           </div>
         </div>
 

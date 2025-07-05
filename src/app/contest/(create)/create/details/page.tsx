@@ -273,9 +273,6 @@ const Details = () => {
     }
   };
 
-  const handlePreview = () => {
-    setShowPreview(true);
-  };
 
   const handleAddProblem = () => {};
 
@@ -549,14 +546,13 @@ const Details = () => {
             </button>
           </div>
 
-          {/* Action Buttons */}
           <div className="flex items-center gap-4 mt-4 sm:mt-0">
-            <button
+            {/* <button
               onClick={handlePreview}
               className="px-4 py-2 border border-white text-white rounded hover:bg-white hover:bg-opacity-10 transition-all duration-200 text-sm md:text-base"
             >
               Live Preview
-            </button>
+            </button> */}
             <button
               onClick={handleSubmit}
               disabled={!isDirty}

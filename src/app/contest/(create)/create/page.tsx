@@ -109,14 +109,14 @@ export default function CreateContest() {
   return (
     <div className="flex flex-col md:flex-row p-6 min-h-[calc(100vh-64px)]">
       <div className="hidden md:block w-1/2 bg-[#282D37] p-8">
-        <div className="flex items-center gap-2 mb-6">
+        {/* <div className="flex items-center gap-2 mb-6">
           <button
             onClick={() => router.back()}
             className="text-white hover:text-gray-300"
           >
             ← Back
           </button>
-        </div>
+        </div> */}
         <div className="flex justify-center items-center h-[calc(100%-48px)]">
           <Image
             src="/_0227_Coding_3.svg"
