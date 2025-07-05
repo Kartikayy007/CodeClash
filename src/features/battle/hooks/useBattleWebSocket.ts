@@ -112,43 +112,47 @@ export const useBattleWebSocket = () => {
         dispatch(setMatchId(currentMatchId.current as string));
         dispatch(setStatus("in-progress"));
 
-        const [player1Data, player2Data] = data.gameState;
-        if (player1Data) {
-          const p1Info = playerInfo.current?.find(
-            (p) => p.id === player1Data.userId
-          );
-          dispatch(
-            setPlayer1({
-              id: player1Data.userId,
-              name: p1Info ? p1Info.username : player1Data.userId,
-              isReady: true,
-              code: "",
-              language: "cpp",
-              output: null,
-              error: null,
-              score: 0,
-              solvedProblems: {},
-            }),
-          );
+
+        const myId = store.getState().auth.user?.id;
+        const [first, second] = data.gameState;
+        let me, opponent;
+        if (first.userId === myId) {
+          me = first;
+          opponent = second;
+        } else {
+          me = second;
+          opponent = first;
         }
-        if (player2Data) {
-          const p2Info = playerInfo.current?.find(
-            (p) => p.id === player2Data.userId
-          );
-          dispatch(
-            setPlayer2({
-              id: player2Data.userId,
-              name: p2Info ? p2Info.username : player2Data.userId,
-              isReady: true,
-              code: "",
-              language: "cpp",
-              output: null,
-              error: null,
-              score: 0,
-              solvedProblems: {},
-            }),
-          );
-        }
+        const meInfo = playerInfo.current?.find((p) => p.id === me.userId);
+        const opponentInfo = playerInfo.current?.find((p) => p.id === opponent.userId);
+
+        dispatch(
+          setPlayer1({
+            id: me.userId,
+            name: meInfo ? meInfo.username : me.userId,
+            isReady: true,
+            code: "",
+            language: "cpp",
+            output: null,
+            error: null,
+            score: 0,
+            solvedProblems: {},
+          })
+        );
+        dispatch(
+          setPlayer2({
+            id: opponent.userId,
+            name: opponentInfo ? opponentInfo.username : opponent.userId,
+            isReady: true,
+            code: "",
+            language: "cpp",
+            output: null,
+            error: null,
+            score: 0,
+            solvedProblems: {},
+          })
+        );
+        // --- END FIX ---
 
         setIsMatchmakingModalOpen(false);
         router.push(`/battle/${currentMatchId.current}`);

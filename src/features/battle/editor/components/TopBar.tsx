@@ -304,7 +304,6 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
   return (
     <div className="flex items-center justify-between rounded-lg px-8 py-3 bg-[#1A1D24]">
       <div className="flex items-center gap-4">
-        <div className="w-10 h-10 bg-gray-600 rounded-full"></div>
         <div className="text-white text-base font-medium leading-normal">
           {currentPlayer?.name} (You)
         </div>
@@ -364,7 +363,6 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
         <div className="text-white text-base font-medium font-['Quicksand'] leading-normal">
           {opponentPlayer?.name || "Opponent"}
         </div>
-        <div className="w-10 h-10 bg-gray-600 rounded-full"></div>
       </div>
     </div>
   );
