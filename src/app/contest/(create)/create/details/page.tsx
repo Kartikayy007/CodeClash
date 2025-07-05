@@ -418,8 +418,6 @@ const Details = () => {
             onSaveProblem={handleSaveProblem}
           />
         );
-      case "settings":
-        return <div>Settings Content</div>;
       default:
         return null;
     }
@@ -504,16 +502,6 @@ const Details = () => {
                 }`}
               >
                 Problems
-              </button>
-              <button
-                onClick={() => setActiveTab("settings")}
-                className={`pb-2 ${
-                  activeTab === "settings"
-                    ? "text-[#C879EB] border-b-2 border-[#C879EB]"
-                    : "text-white hover:text-gray-400 transition-all duration-200"
-                }`}
-              >
-                Settings
               </button>
             </div>
           </div>

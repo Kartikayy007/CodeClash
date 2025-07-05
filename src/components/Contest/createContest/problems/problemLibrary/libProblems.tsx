@@ -20,7 +20,6 @@ interface LibProblemsProps {
 
 const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("all");
   const [selectedProblems, setSelectedProblems] = useState<Set<string>>(
     new Set(),
   );
@@ -34,8 +33,8 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
   const [viewingProblem, setViewingProblem] = useState<Problem | null>(null);
   const [loadingProblemDetail, setLoadingProblemDetail] = useState(false);
 
-  const [ratingFilter, setRatingFilter] = useState("all");
-  const [customRating, setCustomRating] = useState({ from: "", to: "" });
+  const [ratingFilter, ] = useState("all");
+  const [customRating, ] = useState({ from: "", to: "" });
 
   const [addLoading, setAddLoading] = useState(false);
 
@@ -207,7 +206,7 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-6">
-          <div className="w-full lg:w-56 bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-4 border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
+          {/* <div className="w-full lg:w-56 bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-4 border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
             <h2 className="text-lg font-medium mb-4 text-white">Filters</h2>
             <div className="space-y-4">
               <button
@@ -217,14 +216,6 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
                 }`}
               >
                 All
-              </button>
-              <button
-                onClick={() => setSelectedFilter("created")}
-                className={`w-full text-left px-4 py-2 rounded-lg transition-all duration-200 ${
-                  selectedFilter === "created" ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/25" : "text-gray-400 hover:text-white hover:bg-cyan-500/10"
-                }`}
-              >
-                Your Created Problems
               </button>
               
               <div className="py-4">
@@ -265,7 +256,7 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onBack, onAddProblems }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex-1">
             <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl overflow-hidden border border-cyan-500/20 shadow-lg shadow-cyan-500/10">

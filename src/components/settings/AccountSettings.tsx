@@ -20,7 +20,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
+// import { Badge } from "@/components/ui/badge"
 import { SettingsPasswordFormSchema, SettingsUsernameFormSchema } from "@/lib/schemas/authSchema"
 import type { SettingsPasswordFormData, SettingsUsernameFormData } from "@/features/auth/types/form.types"
 import { settingsApi } from "@/features/home/settings/apis/settingsApi"
@@ -161,9 +161,6 @@ export default function AccountSettings() {
                     <p className="text-sm text-gray-400">
                       Enter your current password and set a new one to update your credentials
                     </p>
-                    <Badge className="bg-cyan-500/10 text-cyan-400 border-cyan-500/20 hover:bg-cyan-500/20">
-                      Last changed 30 days ago
-                    </Badge>
                   </div>
                 </div>
                 <Button

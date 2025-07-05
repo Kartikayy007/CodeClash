@@ -14,7 +14,7 @@ export const settingsApi = {
     data: ChangePasswordPayload,
   ): Promise<SettingsResponse> => {
     const token = localStorage.getItem("accessToken");
-    const response = await api.post<SettingsResponse>(
+    const response = await api.patch<SettingsResponse>(
       `${BASE_URL}/api/v1/user/password`,
       data,
       {
