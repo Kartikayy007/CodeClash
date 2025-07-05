@@ -7,7 +7,7 @@ import {
   Clock,
   Users,
   Trophy,
-  ArrowLeft,
+ 
   Target,
   Award,
   Timer,
@@ -207,22 +207,6 @@ export default function PastContestPage() {
     return "text-red-400"
   }
 
-  const getDifficultyBadge = (rating: number) => {
-    if (rating < 1000) return { text: "Newbie", color: "bg-gray-500/20 text-gray-300 border-gray-500/30" }
-    if (rating < 1200) return { text: "Pupil", color: "bg-green-500/20 text-green-400 border-green-500/30" }
-    if (rating < 1400) return { text: "Specialist", color: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30" }
-    if (rating < 1600) return { text: "Expert", color: "bg-blue-500/20 text-blue-400 border-blue-500/30" }
-    if (rating < 1900)
-      return { text: "Candidate Master", color: "bg-purple-500/20 text-purple-400 border-purple-500/30" }
-    if (rating < 2100) return { text: "Master", color: "bg-orange-500/20 text-orange-400 border-orange-500/30" }
-    if (rating < 2300)
-      return { text: "International Master", color: "bg-orange-500/20 text-orange-400 border-orange-500/30" }
-    if (rating < 2400) return { text: "Grandmaster", color: "bg-red-500/20 text-red-400 border-red-500/30" }
-    if (rating < 2600)
-      return { text: "International Grandmaster", color: "bg-red-500/20 text-red-400 border-red-500/30" }
-    return { text: "Legendary Grandmaster", color: "bg-red-500/20 text-red-400 border-red-500/30" }
-  }
-
   const renderOverviewTab = () => (
     <div className="space-y-6">
       {/* Contest Header */}
@@ -324,18 +308,36 @@ export default function PastContestPage() {
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-400">Score</span>
-                <span className="text-lg font-semibold text-emerald-400">{(contest.userStats as any)?.score || 0}</span>
+                {(() => {
+                  const score = (contest.userStats as Record<string, unknown>)?.score;
+                  return (
+                    <span className="text-lg font-semibold text-emerald-400">
+                      {typeof score === "number" || typeof score === "string" ? score : 0}
+                    </span>
+                  );
+                })()}
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-400">Rank</span>
-                <span className="text-lg font-semibold text-cyan-400">{(contest.userStats as any)?.rank || "N/A"}</span>
+                {(() => {
+                  const rank = (contest.userStats as Record<string, unknown>)?.rank;
+                  return (
+                    <span className="text-lg font-semibold text-cyan-400">
+                      {typeof rank === "number" || typeof rank === "string" ? rank : "N/A"}
+                    </span>
+                  );
+                })()}
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-400">Joined</span>
                 <span className="text-sm text-gray-300">
-                  {(contest.userStats as any)?.joinedAt
-                    ? new Date((contest.userStats as any).joinedAt).toLocaleDateString()
-                    : "N/A"}
+                  {(() => {
+                    const joinedAt = (contest.userStats as Record<string, unknown>)?.joinedAt;
+                    if (typeof joinedAt === "string" || typeof joinedAt === "number") {
+                      return new Date(joinedAt).toLocaleDateString();
+                    }
+                    return "N/A";
+                  })()}
                 </span>
               </div>
             </div>

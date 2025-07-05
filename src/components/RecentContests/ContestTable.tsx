@@ -35,6 +35,16 @@ export default function ContestTable({ contests, loading, error }: ContestTableP
     }
   }
 
+  const handleEditClick = (e: React.MouseEvent, contest: Contest) => {
+    e.stopPropagation()
+    const params = new URLSearchParams({
+      contestId: contest.contestId,
+      title: contest.title,
+      endTime: contest.endTime
+    })
+    router.push(`/contest/create/details?${params.toString()}`)
+  }
+
   if (loading) {
     return (
       <div className="w-full">
@@ -96,6 +106,9 @@ export default function ContestTable({ contests, loading, error }: ContestTableP
               </th>
               <th className="text-center py-4 px-6 text-cyan-400 font-semibold text-sm uppercase tracking-wider">
                 Participants
+              </th>
+              <th className="text-center py-4 px-6 text-cyan-400 font-semibold text-sm uppercase tracking-wider">
+                Actions
               </th>
             </tr>
           </thead>
@@ -188,6 +201,18 @@ export default function ContestTable({ contests, loading, error }: ContestTableP
                     <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border border-purple-500/30">
                       {contest.participantCount}
                     </div>
+                  </td>
+                  <td className="py-4 px-6 text-center">
+                    {contest.status === "UPCOMING" ? (
+                      <button
+                        onClick={(e) => handleEditClick(e, contest)}
+                        className="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 border border-cyan-500/30 hover:from-cyan-500/30 hover:to-blue-500/30 transition-all duration-200"
+                      >
+                        Edit
+                      </button>
+                    ) : (
+                      <span className="text-xs text-gray-500 italic">No actions available</span>
+                    )}
                   </td>
                 </tr>
               )

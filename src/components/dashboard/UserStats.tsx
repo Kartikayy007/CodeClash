@@ -1,9 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Trophy, Target, Zap, TrendingUp, User, Mail, Flame, X, GraduationCap, Calendar, BarChart3 } from "lucide-react"
-import { ChartContainer, ChartConfig, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { LineChart, Line, XAxis, YAxis } from "recharts"
+import { Trophy, Target, Zap, TrendingUp, User, Mail, Flame, X, GraduationCap } from "lucide-react"
 
 interface UserProfile {
   success: boolean
@@ -20,19 +18,6 @@ interface UserProfile {
     losses: number
     winRate: number
   }
-}
-
-interface WinTrendData {
-  date: string
-  wins: number
-  losses: number
-}
-
-interface WinTrendResponse {
-  success: boolean
-  trend: WinTrendData[]
-  winStreak: number
-  maxWinStreak: number
 }
 
 const LoadingSkeleton = () => (
@@ -78,9 +63,7 @@ export default function UserStats({ className = "" }: UserStatsProps) {
     wins: 0,
     winRate: 0,
   })
-  const [winTrend, setWinTrend] = useState<WinTrendResponse | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [showChart, setShowChart] = useState(false)
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -125,38 +108,7 @@ export default function UserStats({ className = "" }: UserStatsProps) {
       }
     }
 
-    const fetchWinTrend = async () => {
-      const token = localStorage.getItem("accessToken")
-
-      if (!token) {
-        console.error("No access token found for win trend")
-        return
-      }
-
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/win-trend`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        })
-
-        const data = await response.json()
-        console.log("Fetched win trend data:", data)
-
-        if (data.success) {
-          setWinTrend(data)
-        } else {
-          console.error("Failed to fetch win trend:", data)
-        }
-      } catch (error) {
-        console.error("Error fetching win trend:", error)
-      }
-    }
-
     fetchUserProfile()
-    fetchWinTrend()
   }, [])
 
   useEffect(() => {
@@ -224,26 +176,6 @@ export default function UserStats({ className = "" }: UserStatsProps) {
         }
     }
   }
-
-  // Prepare chart data
-  const chartData = winTrend?.trend.map((item) => ({
-    date: item.date.split('/').slice(0, 2).join('/'), // Format to DD/MM
-    wins: item.wins,
-    losses: item.losses,
-    total: item.wins + item.losses,
-    winRate: item.wins + item.losses > 0 ? (item.wins / (item.wins + item.losses)) * 100 : 0
-  })) || []
-
-  const chartConfig = {
-    wins: {
-      label: "Wins",
-      color: "hsl(var(--chart-1))",
-    },
-    losses: {
-      label: "Losses", 
-      color: "hsl(var(--chart-2))",
-    },
-  } satisfies ChartConfig
 
   const stats = [
     {
@@ -366,104 +298,8 @@ export default function UserStats({ className = "" }: UserStatsProps) {
           <span className="text-cyan-400/60 text-xs font-mono">
             {userProfile?.data.totalMatches || userStats.totalMatches} total games
           </span>
-          {winTrend && (
-            <button
-              onClick={() => setShowChart(!showChart)}
-              className="flex items-center gap-1 px-2 py-1 rounded-md bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 hover:text-cyan-300 transition-all duration-200 text-xs"
-            >
-              <BarChart3 className="w-3 h-3" />
-              {showChart ? "Hide Chart" : "Win Trend"}
-            </button>
-          )}
         </div>
       </div>
-
-      {/* Win Trend Chart */}
-      {showChart && winTrend && chartData.length > 0 && (
-        <div className="mt-4 p-4 bg-white/5 rounded-lg border border-cyan-500/20">
-          <div className="flex items-center gap-2 mb-3">
-            <Calendar className="w-4 h-4 text-cyan-400" />
-            <h4 className="text-sm font-semibold text-white">7-Day Win Trend</h4>
-          </div>
-          
-          <ChartContainer config={chartConfig} className="h-[150px] w-full">
-            <LineChart
-              accessibilityLayer
-              data={chartData}
-              margin={{
-                left: 12,
-                right: 12,
-                top: 12,
-                bottom: 12,
-              }}
-            >
-              <XAxis
-                dataKey="date"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                tick={{ fontSize: 10, fill: 'rgba(134, 239, 172, 0.6)' }}
-              />
-              <YAxis
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                tick={{ fontSize: 10, fill: 'rgba(134, 239, 172, 0.6)' }}
-              />
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent />}
-              />
-              <Line
-                dataKey="wins"
-                type="monotone"
-                stroke="rgb(34, 197, 94)"
-                strokeWidth={2}
-                dot={{
-                  fill: "rgb(34, 197, 94)",
-                  strokeWidth: 2,
-                  r: 3,
-                }}
-                activeDot={{
-                  r: 4,
-                  stroke: "rgb(34, 197, 94)",
-                  strokeWidth: 2,
-                }}
-              />
-              <Line
-                dataKey="losses"
-                type="monotone"
-                stroke="rgb(239, 68, 68)"
-                strokeWidth={2}
-                dot={{
-                  fill: "rgb(239, 68, 68)",
-                  strokeWidth: 2,
-                  r: 3,
-                }}
-                activeDot={{
-                  r: 4,
-                  stroke: "rgb(239, 68, 68)",
-                  strokeWidth: 2,
-                }}
-              />
-            </LineChart>
-          </ChartContainer>
-
-          <div className="flex items-center justify-center gap-4 mt-2 text-xs">
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-green-500"></div>
-              <span className="text-green-400">Wins</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-red-500"></div>
-              <span className="text-red-400">Losses</span>
-            </div>
-            <div className="text-cyan-400/60">
-              Current Streak: {winTrend.winStreak}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

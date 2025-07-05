@@ -22,18 +22,26 @@ export const GameEndModal = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const gameEndState = useSelector((state: RootState) => state.gameEnd);
-  const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const authState = useSelector((state: RootState) => state.auth);
+  const userId = authState.user?.id;
   const [newRating, setNewRating] = useState<number | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
 
-  console.log("GameEndModal render:", { gameEndState, userId });
+  // LOGGING for debugging
+  useEffect(() => {
+    console.log("[GameEndModal] userId:", userId);
+    console.log("[GameEndModal] winnerId:", gameEndState.winnerId);
+    console.log("[GameEndModal] gameEndState:", gameEndState);
+    console.log("[GameEndModal] authState:", authState);
+    if (!userId && gameEndState.isOpen) {
+      console.warn("[GameEndModal] userId is missing when modal is open! This may cause winner/loser state to be wrong.");
+    }
+  }, [userId, gameEndState, authState]);
 
   const isWinner = userId === gameEndState.winnerId;
 
   useEffect(() => {
     if (gameEndState.isOpen) {
-      console.log("GameEndModal: Modal opened", gameEndState);
-
       // Show confetti for winner
       if (isWinner) {
         setShowConfetti(true);
@@ -61,35 +69,33 @@ export const GameEndModal = () => {
               console.log("New rating fetched:", data.data.rating);
             }
           }
-        } catch (error) {
-          console.error("Error fetching updated rating:", error);
+        } catch {
+          // Error fetching updated rating (ignored)
         }
       };
 
       fetchUpdatedRating();
 
       const timer = setTimeout(() => {
-        console.log("GameEndModal: Redirecting to dashboard...");
         dispatch(resetGameEnd());
-        // Use window.location.href for more reliable navigation
         try {
           window.location.href = "/dashboard";
-        } catch (error) {
-          console.error("Navigation error:", error);
-          // Fallback to router
+        } catch {
           router.push("/dashboard");
         }
       }, 5000);
 
       return () => {
         clearTimeout(timer);
-        console.log("GameEndModal: Cleanup timer");
       };
     }
   }, [gameEndState, router, dispatch, isWinner]);
 
-  if (!gameEndState.isOpen) {
-    console.log("GameEndModal: Not showing because isOpen is false");
+  // Only show modal if userId is set
+  if (!userId || !gameEndState.isOpen) {
+    if (!userId && gameEndState.isOpen) {
+      console.warn("[GameEndModal] Not showing modal because userId is missing!");
+    }
     return null;
   }
 
@@ -106,7 +112,6 @@ export const GameEndModal = () => {
           colors={["#22c55e"]}
         />
       )}
-      
       <Modal
         open={gameEndState.isOpen}
         closeAfterTransition
@@ -135,7 +140,7 @@ export const GameEndModal = () => {
                   <>
                     🏆 CHAMPION! 🏆
                     <br />
-                    <span className="text-lg text-yellow-400 animate-pulse">You&apos;re unstoppable!</span>
+                    <span className="text-lg text-yellow-400">You&apos;re unstoppable!</span>
                     <br />
                     <span className="text-sm text-green-400 mt-2">Rating boosted! 🚀</span>
                   </>

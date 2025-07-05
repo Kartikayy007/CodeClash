@@ -20,6 +20,7 @@ import RecentMatches from "@/components/dashboard/RecentMatches";
 import RecentContests from "@/components/dashboard/RecentContests";
 import ManageContest from "@/components/dashboard/ManageContest";
 import { PlayButton } from "@/features/battle/components/PlayButton";
+import WinTrendChart from '@/components/dashboard/WinTrendChart';
 
 ChartJS.register(
   CategoryScale,
@@ -33,6 +34,28 @@ ChartJS.register(
 
 export default function Dashboard() {
   const router = useRouter();
+  const [winTrend, setWinTrend] = React.useState(null);
+
+  React.useEffect(() => {
+    const fetchWinTrend = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) return;
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/win-trend`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await response.json();
+        if (data.success) setWinTrend(data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchWinTrend();
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -93,6 +116,7 @@ export default function Dashboard() {
               </div>
             </div>
             <ManageContest />
+            <WinTrendChart winTrend={winTrend} />
             <PerformanceInsights className="flex-1" />
           </div>
         </div>
@@ -104,6 +128,7 @@ export default function Dashboard() {
             <UserStats />
             <RecentMatches className="flex-1" />
             <ManageContest />
+            <WinTrendChart winTrend={winTrend} />
           </div>
 
           {/* Column 2 */}
@@ -122,6 +147,7 @@ export default function Dashboard() {
           <Leaderboard />
           <RecentContests />
           <ManageContest />
+          <WinTrendChart winTrend={winTrend} />
         </div>
       </div>
     </div>
