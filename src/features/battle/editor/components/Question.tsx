@@ -1,5 +1,6 @@
 import React from "react";
 import { Problem as SocketProblem } from "@/lib/socket";
+import { parseConstraints } from "@/utils/mathUtils";
 
 interface QuestionProps {
   problem: SocketProblem;
@@ -65,8 +66,8 @@ const Question = ({ problem }: QuestionProps) => {
             <h2 className="text-lg font-semibold text-white/90 sticky top-16 bg-[#1A1D24] py-2">
               Constraints
             </h2>
-            <div className="text-gray-300 whitespace-pre-wrap">
-              {problem.constraints}
+            <div className="text-gray-300">
+              {parseConstraints(problem.constraints)}
             </div>
           </div>
           {/* Time and Memory Limits */}
