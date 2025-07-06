@@ -54,9 +54,9 @@ const PlayerList = ({ players, currentPage, pageSize }: PlayerListProps) => (
                 <div className="text-white font-medium group-hover:text-cyan-400 transition-colors duration-300 truncate">
                   {player.username}
                 </div>
-                <div className="text-xs text-white/50">
+                {/* <div className="text-xs text-white/50">
                   Player since 2024
-                </div>
+                </div> */}
               </div>
             </div>
 
