@@ -26,7 +26,7 @@ const ManageContest = ({ className = "" }: ManageContestProps) => {
       description: "Join every week for our weekly clash contest!",
       id: 3,
       status: "UPCOMING",
-      date: "Keep an eye out for updates!",
+      date: "Keep an eye for updates!",
       time: "Coming Soon",
     },
 
@@ -35,7 +35,7 @@ const ManageContest = ({ className = "" }: ManageContestProps) => {
       description: "",
       id: 1,
       status: "UPCOMING",
-      date: "Keep an eye out for updates!",
+      date: "Keep an eye for updates!",
       time: "Coming Soon",
     }
 
