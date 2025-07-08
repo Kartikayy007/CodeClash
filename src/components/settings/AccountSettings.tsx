@@ -126,45 +126,45 @@ export default function AccountSettings() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8 px-4 md:px-6 lg:px-8">
       {/* Header */}
       <div className="space-y-2">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/30">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="p-2 rounded-lg bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 w-fit">
             <Settings className="h-6 w-6 text-cyan-400" />
           </div>
-          <h1 className="text-3xl font-bold text-white">Account Settings</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white">Account Settings</h1>
         </div>
-        <p className="text-gray-400">Manage your account security and preferences</p>
+        <p className="text-gray-400 text-sm sm:text-base">Manage your account security and preferences</p>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
         {/* Security Section */}
         <Card className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border-cyan-500/20 shadow-lg shadow-cyan-500/10">
-          <CardHeader>
+          <CardHeader className="p-4 md:p-6">
             <div className="flex items-center gap-3">
-              <Shield className="h-5 w-5 text-cyan-400" />
-              <CardTitle className="text-white">Security</CardTitle>
+              <Shield className="h-5 w-5 text-cyan-400 flex-shrink-0" />
+              <CardTitle className="text-white text-lg md:text-xl">Security</CardTitle>
             </div>
-            <CardDescription className="text-gray-400">Manage your account security settings</CardDescription>
+            <CardDescription className="text-gray-400 text-sm md:text-base">Manage your account security settings</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 p-4 md:p-6 pt-0 md:pt-0">
             {/* Change Password */}
-            <div className="bg-gradient-to-br from-[#23263a] to-[#2a2d3a] rounded-lg p-3 border border-cyan-500/10">
-              <div className="flex items-center justify-between">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+            <div className="bg-gradient-to-br from-[#23263a] to-[#2a2d3a] rounded-lg p-3 md:p-4 border border-cyan-500/10">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                <div className="flex items-start gap-3 flex-1">
+                  <div className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex-shrink-0">
                     <Lock className="h-4 w-4 text-cyan-400" />
                   </div>
-                  <div className="space-y-2">
-                    <h3 className="font-medium text-white">Change Password</h3>
-                    <p className="text-sm text-gray-400">
+                  <div className="space-y-1 md:space-y-2">
+                    <h3 className="font-medium text-white text-sm md:text-base">Change Password</h3>
+                    <p className="text-xs md:text-sm text-gray-400">
                       Enter your current password and set a new one to update your credentials
                     </p>
                   </div>
                 </div>
                 <Button
-                  className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border border-cyan-500/30 hover:from-cyan-500/30 hover:to-blue-500/30 hover:scale-105 transition-all duration-200 shadow-lg shadow-cyan-500/25"
+                  className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border border-cyan-500/30 hover:from-cyan-500/30 hover:to-blue-500/30 hover:scale-105 transition-all duration-200 shadow-lg shadow-cyan-500/25 text-xs md:text-sm px-3 md:px-4 py-2 w-full sm:w-auto flex-shrink-0"
                   onClick={() => setIsPasswordModalOpen(true)}
                   disabled={loading}
                 >
@@ -176,19 +176,19 @@ export default function AccountSettings() {
             <Separator className="bg-cyan-500/20" />
 
             {/* Logout All Devices */}
-            <div className="bg-gradient-to-br from-[#23263a] to-[#2a2d3a] rounded-lg p-3 border border-cyan-500/10">
-              <div className="flex items-center justify-between">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+            <div className="bg-gradient-to-br from-[#23263a] to-[#2a2d3a] rounded-lg p-3 md:p-4 border border-cyan-500/10">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                <div className="flex items-start gap-3 flex-1">
+                  <div className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex-shrink-0">
                     <LogOut className="h-4 w-4 text-cyan-400" />
                   </div>
                   <div className="space-y-1">
-                    <h3 className="font-medium text-white">Log Out</h3>
-                    <p className="text-sm text-gray-400">Log out of your account to end your session securely</p>
+                    <h3 className="font-medium text-white text-sm md:text-base">Log Out</h3>
+                    <p className="text-xs md:text-sm text-gray-400">Log out of your account to end your session securely</p>
                   </div>
                 </div>
                 <Button
-                  className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border border-cyan-500/30 hover:from-cyan-500/30 hover:to-blue-500/30 hover:scale-105 transition-all duration-200 shadow-lg shadow-cyan-500/25"
+                  className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border border-cyan-500/30 hover:from-cyan-500/30 hover:to-blue-500/30 hover:scale-105 transition-all duration-200 shadow-lg shadow-cyan-500/25 text-xs md:text-sm px-3 md:px-4 py-2 w-full sm:w-auto flex-shrink-0"
                   onClick={handleLogout}
                   disabled={loading}
                 >
@@ -201,29 +201,29 @@ export default function AccountSettings() {
 
         {/* Profile Section */}
         <Card className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border-cyan-500/20 shadow-lg shadow-cyan-500/10">
-          <CardHeader>
+          <CardHeader className="p-4 md:p-6">
             <div className="flex items-center gap-3">
-              <User className="h-5 w-5 text-cyan-400" />
-              <CardTitle className="text-white">Profile Information</CardTitle>
+              <User className="h-5 w-5 text-cyan-400 flex-shrink-0" />
+              <CardTitle className="text-white text-lg md:text-xl">Profile Information</CardTitle>
             </div>
-            <CardDescription className="text-gray-400">Update your personal information</CardDescription>
+            <CardDescription className="text-gray-400 text-sm md:text-base">Update your personal information</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="bg-gradient-to-br from-[#23263a] to-[#2a2d3a] rounded-lg p-3 border border-cyan-500/10">
-              <div className="flex items-center justify-between">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+          <CardContent className="space-y-4 p-4 md:p-6 pt-0 md:pt-0">
+            <div className="bg-gradient-to-br from-[#23263a] to-[#2a2d3a] rounded-lg p-3 md:p-4 border border-cyan-500/10">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                <div className="flex items-start gap-3 flex-1">
+                  <div className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex-shrink-0">
                     <User className="h-4 w-4 text-cyan-400" />
                   </div>
                   <div className="space-y-1">
-                    <h3 className="font-medium text-white">Profile Information</h3>
-                    <p className="text-sm text-gray-400">
+                    <h3 className="font-medium text-white text-sm md:text-base">Profile Information</h3>
+                    <p className="text-xs md:text-sm text-gray-400">
                       Update your name, email, and contact details to keep your account current
                     </p>
                   </div>
                 </div>
                 <Button
-                  className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border border-cyan-500/30 hover:from-cyan-500/30 hover:to-blue-500/30 hover:scale-105 transition-all duration-200 shadow-lg shadow-cyan-500/25"
+                  className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border border-cyan-500/30 hover:from-cyan-500/30 hover:to-blue-500/30 hover:scale-105 transition-all duration-200 shadow-lg shadow-cyan-500/25 text-xs md:text-sm px-3 md:px-4 py-2 w-full sm:w-auto flex-shrink-0"
                   onClick={() => setIsProfileModalOpen(true)}
                   disabled={loading}
                 >
@@ -236,29 +236,29 @@ export default function AccountSettings() {
 
         {/* Danger Zone */}
         <Card className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border-red-500/20 shadow-lg shadow-red-500/10">
-          <CardHeader>
+          <CardHeader className="p-4 md:p-6">
             <div className="flex items-center gap-3">
-              <AlertTriangle className="h-5 w-5 text-red-400" />
-              <CardTitle className="text-red-400">Danger Zone</CardTitle>
+              <AlertTriangle className="h-5 w-5 text-red-400 flex-shrink-0" />
+              <CardTitle className="text-red-400 text-lg md:text-xl">Danger Zone</CardTitle>
             </div>
-            <CardDescription className="text-gray-400">Irreversible and destructive actions</CardDescription>
+            <CardDescription className="text-gray-400 text-sm md:text-base">Irreversible and destructive actions</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="bg-gradient-to-br from-[#23263a] to-[#2a2d3a] rounded-lg p-3 border border-red-500/20">
-              <div className="flex items-center justify-between">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-red-500/10 border border-red-500/20">
+          <CardContent className="space-y-4 p-4 md:p-6 pt-0 md:pt-0">
+            <div className="bg-gradient-to-br from-[#23263a] to-[#2a2d3a] rounded-lg p-3 md:p-4 border border-red-500/20">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                <div className="flex items-start gap-3 flex-1">
+                  <div className="p-2 rounded-lg bg-red-500/10 border border-red-500/20 flex-shrink-0">
                     <Trash2 className="h-4 w-4 text-red-400" />
                   </div>
                   <div className="space-y-1">
-                    <h3 className="font-medium text-red-400">Delete Account</h3>
-                    <p className="text-sm text-gray-400">
+                    <h3 className="font-medium text-red-400 text-sm md:text-base">Delete Account</h3>
+                    <p className="text-xs md:text-sm text-gray-400">
                       Deleting your account will permanently remove all data and cannot be undone
                     </p>
                   </div>
                 </div>
                 <Button
-                  className="bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border border-red-500/30 hover:from-red-500/30 hover:to-pink-500/30 hover:scale-105 transition-all duration-200 shadow-lg shadow-red-500/25"
+                  className="bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border border-red-500/30 hover:from-red-500/30 hover:to-pink-500/30 hover:scale-105 transition-all duration-200 shadow-lg shadow-red-500/25 text-xs md:text-sm px-3 md:px-4 py-2 w-full sm:w-auto flex-shrink-0"
                   onClick={() => setIsDeleteModalOpen(true)}
                   disabled={loading}
                 >
@@ -272,10 +272,10 @@ export default function AccountSettings() {
 
       {/* Change Password Modal */}
       <Dialog open={isPasswordModalOpen} onOpenChange={setIsPasswordModalOpen}>
-        <DialogContent className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border-cyan-500/20 text-white">
+        <DialogContent className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border-cyan-500/20 text-white w-[95vw] max-w-md mx-auto">
           <DialogHeader>
-            <DialogTitle className="text-white">Change Password</DialogTitle>
-            <DialogDescription className="text-gray-400">
+            <DialogTitle className="text-white text-lg md:text-xl">Change Password</DialogTitle>
+            <DialogDescription className="text-gray-400 text-sm md:text-base">
               Enter your current password and choose a new one
             </DialogDescription>
           </DialogHeader>
@@ -286,14 +286,14 @@ export default function AccountSettings() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-white">Current Password</FormLabel>
+                    <FormLabel className="text-white text-sm md:text-base">Current Password</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
                           {...field}
                           type={showCurrentPassword ? "text" : "password"}
                           placeholder="Enter current password"
-                          className="bg-[#23263a] border-cyan-500/20 text-white placeholder:text-gray-500 focus:border-cyan-500/50"
+                          className="bg-[#23263a] border-cyan-500/20 text-white placeholder:text-gray-500 focus:border-cyan-500/50 text-sm md:text-base pr-10"
                         />
                         <Button
                           type="button"
@@ -306,7 +306,7 @@ export default function AccountSettings() {
                         </Button>
                       </div>
                     </FormControl>
-                    <FormMessage className="text-red-400" />
+                    <FormMessage className="text-red-400 text-xs md:text-sm" />
                   </FormItem>
                 )}
               />
@@ -315,14 +315,14 @@ export default function AccountSettings() {
                 name="Newpassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-white">New Password</FormLabel>
+                    <FormLabel className="text-white text-sm md:text-base">New Password</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
                           {...field}
                           type={showNewPassword ? "text" : "password"}
                           placeholder="Enter new password"
-                          className="bg-[#23263a] border-cyan-500/20 text-white placeholder:text-gray-500 focus:border-cyan-500/50"
+                          className="bg-[#23263a] border-cyan-500/20 text-white placeholder:text-gray-500 focus:border-cyan-500/50 text-sm md:text-base pr-10"
                         />
                         <Button
                           type="button"
@@ -335,7 +335,7 @@ export default function AccountSettings() {
                         </Button>
                       </div>
                     </FormControl>
-                    <FormMessage className="text-red-400" />
+                    <FormMessage className="text-red-400 text-xs md:text-sm" />
                   </FormItem>
                 )}
               />
@@ -344,14 +344,14 @@ export default function AccountSettings() {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-white">Confirm New Password</FormLabel>
+                    <FormLabel className="text-white text-sm md:text-base">Confirm New Password</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
                           {...field}
                           type={showConfirmPassword ? "text" : "password"}
                           placeholder="Confirm new password"
-                          className="bg-[#23263a] border-cyan-500/20 text-white placeholder:text-gray-500 focus:border-cyan-500/50"
+                          className="bg-[#23263a] border-cyan-500/20 text-white placeholder:text-gray-500 focus:border-cyan-500/50 text-sm md:text-base pr-10"
                         />
                         <Button
                           type="button"
@@ -364,15 +364,15 @@ export default function AccountSettings() {
                         </Button>
                       </div>
                     </FormControl>
-                    <FormMessage className="text-red-400" />
+                    <FormMessage className="text-red-400 text-xs md:text-sm" />
                   </FormItem>
                 )}
               />
-              <DialogFooter>
+              <DialogFooter className="flex flex-col sm:flex-row gap-3 sm:gap-2">
                 <Button
                   type="button"
                   variant="outline"
-                  className="border-gray-600 text-gray-300 hover:bg-gray-700 bg-transparent"
+                  className="border-gray-600 text-gray-300 hover:bg-gray-700 bg-transparent text-sm md:text-base w-full sm:w-auto order-2 sm:order-1"
                   onClick={() => setIsPasswordModalOpen(false)}
                 >
                   Cancel
@@ -380,7 +380,7 @@ export default function AccountSettings() {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border border-cyan-500/30 hover:from-cyan-500/30 hover:to-blue-500/30"
+                  className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border border-cyan-500/30 hover:from-cyan-500/30 hover:to-blue-500/30 text-sm md:text-base w-full sm:w-auto order-1 sm:order-2"
                 >
                   {loading ? "Updating..." : "Update Password"}
                 </Button>
@@ -392,10 +392,10 @@ export default function AccountSettings() {
 
       {/* Edit Profile Modal */}
       <Dialog open={isProfileModalOpen} onOpenChange={setIsProfileModalOpen}>
-        <DialogContent className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border-cyan-500/20 text-white">
+        <DialogContent className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border-cyan-500/20 text-white w-[95vw] max-w-md mx-auto">
           <DialogHeader>
-            <DialogTitle className="text-white">Edit Profile</DialogTitle>
-            <DialogDescription className="text-gray-400">Update your profile information</DialogDescription>
+            <DialogTitle className="text-white text-lg md:text-xl">Edit Profile</DialogTitle>
+            <DialogDescription className="text-gray-400 text-sm md:text-base">Update your profile information</DialogDescription>
           </DialogHeader>
           <Form {...usernameForm}>
             <form onSubmit={usernameForm.handleSubmit(handleUsernameSubmit)} className="space-y-4">
@@ -404,23 +404,23 @@ export default function AccountSettings() {
                 name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-white">Username</FormLabel>
+                    <FormLabel className="text-white text-sm md:text-base">Username</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         placeholder="Enter username"
-                        className="bg-[#23263a] border-cyan-500/20 text-white placeholder:text-gray-500 focus:border-cyan-500/50"
+                        className="bg-[#23263a] border-cyan-500/20 text-white placeholder:text-gray-500 focus:border-cyan-500/50 text-sm md:text-base"
                       />
                     </FormControl>
-                    <FormMessage className="text-red-400" />
+                    <FormMessage className="text-red-400 text-xs md:text-sm" />
                   </FormItem>
                 )}
               />
-              <DialogFooter>
+              <DialogFooter className="flex flex-col sm:flex-row gap-3 sm:gap-2">
                 <Button
                   type="button"
                   variant="outline"
-                  className="border-gray-600 text-gray-300 hover:bg-gray-700 bg-transparent"
+                  className="border-gray-600 text-gray-300 hover:bg-gray-700 bg-transparent text-sm md:text-base w-full sm:w-auto order-2 sm:order-1"
                   onClick={() => setIsProfileModalOpen(false)}
                 >
                   Cancel
@@ -428,7 +428,7 @@ export default function AccountSettings() {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border border-cyan-500/30 hover:from-cyan-500/30 hover:to-blue-500/30"
+                  className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border border-cyan-500/30 hover:from-cyan-500/30 hover:to-blue-500/30 text-sm md:text-base w-full sm:w-auto order-1 sm:order-2"
                 >
                   {loading ? "Saving..." : "Save Changes"}
                 </Button>
@@ -440,31 +440,31 @@ export default function AccountSettings() {
 
       {/* Delete Account Modal */}
       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
-        <DialogContent className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border-red-500/20 text-white">
+        <DialogContent className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border-red-500/20 text-white w-[95vw] max-w-md mx-auto">
           <DialogHeader>
-            <DialogTitle className="text-red-400">Delete Account</DialogTitle>
-            <DialogDescription className="text-gray-400">
+            <DialogTitle className="text-red-400 text-lg md:text-xl">Delete Account</DialogTitle>
+            <DialogDescription className="text-gray-400 text-sm md:text-base">
               This action cannot be undone. This will permanently delete your account and remove all associated data.
             </DialogDescription>
           </DialogHeader>
-          <div className="flex items-center gap-3 p-4 border border-red-500/50 rounded-lg bg-red-500/5">
-            <AlertTriangle className="h-5 w-5 text-red-400 flex-shrink-0" />
-            <p className="text-sm text-gray-400">
+          <div className="flex items-start gap-3 p-3 md:p-4 border border-red-500/50 rounded-lg bg-red-500/5">
+            <AlertTriangle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
+            <p className="text-xs md:text-sm text-gray-400">
               Are you sure you want to delete your account? This action cannot be undone and will permanently remove all
               your data.
             </p>
           </div>
-          <DialogFooter>
+          <DialogFooter className="flex flex-col sm:flex-row gap-3 sm:gap-2">
             <Button
               type="button"
               variant="outline"
-              className="border-gray-600 text-gray-300 hover:bg-gray-700 bg-transparent"
+              className="border-gray-600 text-gray-300 hover:bg-gray-700 bg-transparent text-sm md:text-base w-full sm:w-auto order-2 sm:order-1"
               onClick={() => setIsDeleteModalOpen(false)}
             >
               Cancel
             </Button>
             <Button
-              className="bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border border-red-500/30 hover:from-red-500/30 hover:to-pink-500/30"
+              className="bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border border-red-500/30 hover:from-red-500/30 hover:to-pink-500/30 text-sm md:text-base w-full sm:w-auto order-1 sm:order-2"
               onClick={handleDeleteAccount}
               disabled={loading}
             >
