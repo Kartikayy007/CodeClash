@@ -11,6 +11,9 @@ const quicksand = Quicksand({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "CodeClash",
   description: "Real-time coding battles",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

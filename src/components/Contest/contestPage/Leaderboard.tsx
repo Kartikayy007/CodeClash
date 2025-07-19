@@ -261,7 +261,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
         </>
       ) : (
         <div className="text-cyan-400/60 text-center py-8">
-          No participants yet
+          No submissons yet
         </div>
       )}
     </div>
