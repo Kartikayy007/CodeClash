@@ -1,8 +1,7 @@
 "use client"
 
 import type React from "react"
-
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import axios from "axios"
 import toast from "react-hot-toast"
@@ -27,7 +26,7 @@ interface PaginationInfo {
 }
 
 // Shimmer loading component for problems
-const ProblemSkeleton = () => ( 
+const ProblemSkeleton = () => (
   <div className="flex items-center justify-between bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-4 animate-pulse border border-cyan-500/20">
     <div className="flex-1">
       <div className="h-5 bg-cyan-500/20 rounded w-3/4 mb-3"></div>
@@ -52,10 +51,10 @@ const EnhancedPagination = ({
 }) => {
   const { currentPage, totalPages, hasNext, hasPrev } = pagination
 
-  // Generate page numbers to display
-  const getPageNumbers = () => {
+  // Generate page numbers to display based on screen size
+  const getPageNumbers = (isMobile = false) => {
     const pages: (number | "ellipsis")[] = []
-    const maxVisiblePages = 7
+    const maxVisiblePages = isMobile ? 3 : 7
 
     if (totalPages <= maxVisiblePages) {
       // Show all pages if total is small
@@ -63,40 +62,59 @@ const EnhancedPagination = ({
         pages.push(i)
       }
     } else {
-      // Always show first page
-      pages.push(1)
+      if (isMobile) {
+        // Mobile: Show current page and adjacent pages only
+        pages.push(1)
+        if (currentPage > 3) {
+          pages.push("ellipsis")
+        }
 
-      if (currentPage <= 4) {
-        // Show pages 2-5 and ellipsis
-        for (let i = 2; i <= Math.min(5, totalPages - 1); i++) {
-          pages.push(i)
+        const start = Math.max(2, currentPage - 1)
+        const end = Math.min(totalPages - 1, currentPage + 1)
+
+        for (let i = start; i <= end; i++) {
+          if (!pages.includes(i)) {
+            pages.push(i)
+          }
         }
-        if (totalPages > 5) {
+
+        if (currentPage < totalPages - 2) {
           pages.push("ellipsis")
         }
-      } else if (currentPage >= totalPages - 3) {
-        // Show ellipsis and last 4 pages
-        if (totalPages > 5) {
-          pages.push("ellipsis")
-        }
-        for (let i = Math.max(2, totalPages - 4); i <= totalPages - 1; i++) {
-          pages.push(i)
+
+        if (totalPages > 1 && !pages.includes(totalPages)) {
+          pages.push(totalPages)
         }
       } else {
-        // Show ellipsis, current page area, ellipsis
-        pages.push("ellipsis")
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-          pages.push(i)
+        // Desktop: Full pagination logic
+        pages.push(1)
+        if (currentPage <= 4) {
+          for (let i = 2; i <= Math.min(5, totalPages - 1); i++) {
+            pages.push(i)
+          }
+          if (totalPages > 5) {
+            pages.push("ellipsis")
+          }
+        } else if (currentPage >= totalPages - 3) {
+          if (totalPages > 5) {
+            pages.push("ellipsis")
+          }
+          for (let i = Math.max(2, totalPages - 4); i <= totalPages - 1; i++) {
+            pages.push(i)
+          }
+        } else {
+          pages.push("ellipsis")
+          for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+            pages.push(i)
+          }
+          pages.push("ellipsis")
         }
-        pages.push("ellipsis")
-      }
 
-      // Always show last page (if not already included)
-      if (totalPages > 1 && !pages.includes(totalPages)) {
-        pages.push(totalPages)
+        if (totalPages > 1 && !pages.includes(totalPages)) {
+          pages.push(totalPages)
+        }
       }
     }
-
     return pages
   }
 
@@ -106,18 +124,21 @@ const EnhancedPagination = ({
     disabled = false,
     active = false,
     className = "",
+    size = "default",
   }: {
     children: React.ReactNode
     onClick: () => void
     disabled?: boolean
     active?: boolean
     className?: string
+    size?: "default" | "sm"
   }) => (
     <button
       onClick={onClick}
       disabled={disabled}
       className={`
-        px-3 py-2 min-w-[40px] h-10 rounded-lg border transition-all duration-200 flex items-center justify-center
+        ${size === "sm" ? "px-2 py-1 min-w-[32px] h-8 text-sm" : "px-3 py-2 min-w-[40px] h-10"}
+        rounded-lg border transition-all duration-200 flex items-center justify-center
         ${
           active
             ? "bg-cyan-500 border-cyan-500 text-white shadow-lg shadow-cyan-500/25"
@@ -132,82 +153,136 @@ const EnhancedPagination = ({
   )
 
   return (
-    <div className="flex flex-col lg:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-cyan-500/20">
-      {/* Page info */}
-      <div className="text-sm text-gray-400 order-2 lg:order-1">
-        <span className="hidden sm:inline">
-          Showing page {currentPage} of {totalPages} ({pagination.totalQuestions} total problems)
-        </span>
-        <span className="sm:hidden">
+    <div className="mt-8 pt-6 border-t border-cyan-500/20">
+      {/* Mobile Layout */}
+      <div className="block lg:hidden">
+        {/* Page info - Mobile */}
+        <div className="text-center text-sm text-gray-400 mb-4">
           Page {currentPage} of {totalPages}
-        </span>
-      </div>
-
-      {/* Main pagination controls */}
-      <div className="flex items-center gap-1 order-1 lg:order-2">
-        {/* First page button */}
-        <PaginationButton onClick={() => onPageChange(1)} disabled={currentPage === 1} className="hidden sm:flex">
-          <ChevronsLeft size={16} />
-        </PaginationButton>
-
-        {/* Previous button */}
-        <PaginationButton onClick={() => onPageChange(currentPage - 1)} disabled={!hasPrev}>
-          <ChevronLeft size={16} />
-          <span className="hidden sm:inline ml-1">Prev</span>
-        </PaginationButton>
-
-        {/* Page numbers */}
-        <div className="flex items-center gap-1">
-          {getPageNumbers().map((page, index) => (
-            <div key={index}>
-              {page === "ellipsis" ? (
-                <div className="px-3 py-2 text-gray-400 flex items-center justify-center">
-                  <MoreHorizontal size={16} />
-                </div>
-              ) : (
-                <PaginationButton onClick={() => onPageChange(page)} active={page === currentPage}>
-                  {page}
-                </PaginationButton>
-              )}
-            </div>
-          ))}
+          <span className="block text-xs mt-1">{pagination.totalQuestions} total problems</span>
         </div>
 
-        {/* Next button */}
-        <PaginationButton onClick={() => onPageChange(currentPage + 1)} disabled={!hasNext}>
-          <span className="hidden sm:inline mr-1">Next</span>
-          <ChevronRight size={16} />
-        </PaginationButton>
+        {/* Main pagination controls - Mobile */}
+        <div className="flex items-center justify-center gap-1 mb-4">
+          {/* Previous button */}
+          <PaginationButton onClick={() => onPageChange(currentPage - 1)} disabled={!hasPrev} size="sm">
+            <ChevronLeft size={14} />
+          </PaginationButton>
 
-        {/* Last page button */}
-        <PaginationButton
-          onClick={() => onPageChange(totalPages)}
-          disabled={currentPage === totalPages}
-          className="hidden sm:flex"
-        >
-          <ChevronsRight size={16} />
-        </PaginationButton>
+          {/* Page numbers - Mobile */}
+          <div className="flex items-center gap-1 mx-2">
+            {getPageNumbers(true).map((page, index) => (
+              <div key={index}>
+                {page === "ellipsis" ? (
+                  <div className="px-2 py-1 text-gray-400 flex items-center justify-center">
+                    <MoreHorizontal size={14} />
+                  </div>
+                ) : (
+                  <PaginationButton onClick={() => onPageChange(page)} active={page === currentPage} size="sm">
+                    {page}
+                  </PaginationButton>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Next button */}
+          <PaginationButton onClick={() => onPageChange(currentPage + 1)} disabled={!hasNext} size="sm">
+            <ChevronRight size={14} />
+          </PaginationButton>
+        </div>
+
+        {/* Quick jump input - Mobile */}
+        <div className="flex items-center justify-center gap-2 text-sm">
+          <span className="text-gray-400">Jump to:</span>
+          <input
+            type="number"
+            min="1"
+            max={totalPages}
+            placeholder="Page"
+            className="w-16 px-2 py-1 bg-[#1a1d26] border border-cyan-500/20 rounded text-white text-center focus:outline-none focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/20 text-sm"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const value = Number.parseInt((e.target as HTMLInputElement).value)
+                if (value >= 1 && value <= totalPages) {
+                  onPageChange(value)
+                  ;(e.target as HTMLInputElement).value = ""
+                }
+              }
+            }}
+          />
+        </div>
       </div>
 
-      {/* Quick jump input */}
-      <div className="flex items-center gap-2 text-sm order-3">
-        <span className="text-gray-400 hidden md:inline">Go to:</span>
-        <input
-          type="number"
-          min="1"
-          max={totalPages}
-          placeholder="Page"
-          className="w-16 px-2 py-1 bg-[#1a1d26] border border-cyan-500/20 rounded text-white text-center focus:outline-none focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/20"
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              const value = Number.parseInt((e.target as HTMLInputElement).value)
-              if (value >= 1 && value <= totalPages) {
-                onPageChange(value)
-                ;(e.target as HTMLInputElement).value = ""
+      {/* Desktop Layout */}
+      <div className="hidden lg:flex items-center justify-between gap-4">
+        {/* Page info - Desktop */}
+        <div className="text-sm text-gray-400">
+          Showing page {currentPage} of {totalPages} ({pagination.totalQuestions} total problems)
+        </div>
+
+        {/* Main pagination controls - Desktop */}
+        <div className="flex items-center gap-1">
+          {/* First page button */}
+          <PaginationButton onClick={() => onPageChange(1)} disabled={currentPage === 1}>
+            <ChevronsLeft size={16} />
+          </PaginationButton>
+
+          {/* Previous button */}
+          <PaginationButton onClick={() => onPageChange(currentPage - 1)} disabled={!hasPrev}>
+            <ChevronLeft size={16} />
+            <span className="ml-1">Prev</span>
+          </PaginationButton>
+
+          {/* Page numbers - Desktop */}
+          <div className="flex items-center gap-1 mx-2">
+            {getPageNumbers(false).map((page, index) => (
+              <div key={index}>
+                {page === "ellipsis" ? (
+                  <div className="px-3 py-2 text-gray-400 flex items-center justify-center">
+                    <MoreHorizontal size={16} />
+                  </div>
+                ) : (
+                  <PaginationButton onClick={() => onPageChange(page)} active={page === currentPage}>
+                    {page}
+                  </PaginationButton>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Next button */}
+          <PaginationButton onClick={() => onPageChange(currentPage + 1)} disabled={!hasNext}>
+            <span className="mr-1">Next</span>
+            <ChevronRight size={16} />
+          </PaginationButton>
+
+          {/* Last page button */}
+          <PaginationButton onClick={() => onPageChange(totalPages)} disabled={currentPage === totalPages}>
+            <ChevronsRight size={16} />
+          </PaginationButton>
+        </div>
+
+        {/* Quick jump input - Desktop */}
+        <div className="flex items-center gap-2 text-sm">
+          <span className="text-gray-400">Go to:</span>
+          <input
+            type="number"
+            min="1"
+            max={totalPages}
+            placeholder="Page"
+            className="w-16 px-2 py-1 bg-[#1a1d26] border border-cyan-500/20 rounded text-white text-center focus:outline-none focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/20"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const value = Number.parseInt((e.target as HTMLInputElement).value)
+                if (value >= 1 && value <= totalPages) {
+                  onPageChange(value)
+                  ;(e.target as HTMLInputElement).value = ""
+                }
               }
-            }
-          }}
-        />
+            }}
+          />
+        </div>
       </div>
     </div>
   )
@@ -225,7 +300,13 @@ export default function PracticePage() {
     hasPrev: false,
   })
 
-  const fetchQuestions = async (page = 1) => {
+  const getDifficultyFromRating = useCallback((rating: number): string => {
+    if (rating <= 1200) return "EASY"
+    if (rating <= 1600) return "MEDIUM"
+    return "HARD"
+  }, [])
+
+  const fetchQuestions = useCallback(async (page = 1) => {
     try {
       setLoading(true)
       const token = localStorage.getItem("accessToken")
@@ -276,17 +357,11 @@ export default function PracticePage() {
     } finally {
       setLoading(false)
     }
-  }
-
-  const getDifficultyFromRating = (rating: number): string => {
-    if (rating <= 1200) return "EASY"
-    if (rating <= 1600) return "MEDIUM"
-    return "HARD"
-  }
+  }, [router, getDifficultyFromRating])
 
   useEffect(() => {
     fetchQuestions(1)
-  }, [])
+  }, [fetchQuestions])
 
   const handleSolve = (id: string) => {
     router.push(`/practice/${id}`)
@@ -303,27 +378,14 @@ export default function PracticePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#10141D] text-white p-6">
+    <div className="min-h-screen bg-[#10141D] text-white p-4 sm:p-6">
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Practice Problems</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2">Practice Problems</h1>
           <p className="text-gray-400">Sharpen your coding skills with our curated problem set</p>
         </div>
 
         <div className="problems-container bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-4 md:p-6 border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
-          {/* <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
-            <h2 className="text-2xl font-semibold text-white mb-2 md:mb-0">Problem Set</h2>
-            <div className="text-sm text-gray-400">
-              {!loading && (
-                <span>
-                  Showing {(pagination.currentPage - 1) * 10 + 1}-
-                  {Math.min(pagination.currentPage * 10, pagination.totalQuestions)} of {pagination.totalQuestions}{" "}
-                  problems
-                </span>
-              )}
-            </div>
-          </div> */}
-
           {loading ? (
             <div className="space-y-4">
               <ProblemSkeleton />

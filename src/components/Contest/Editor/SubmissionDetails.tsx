@@ -58,7 +58,9 @@ const SubmissionDetails = ({ submission, onBack }: SubmissionDetailsProps) => {
                     ? "bg-red-900/30 text-red-400 shadow-red-500/50"
                     : submission.status === "RUNTIME_ERROR"
                       ? "bg-orange-900/30 text-orange-400 shadow-orange-500/50"
-                      : "bg-yellow-900/30 text-yellow-400 shadow-yellow-500/50"
+                      : submission.status === "TIME_LIMIT_EXCEEDED"
+                        ? "bg-red-900/30 text-red-400 shadow-red-500/50"
+                        : "bg-yellow-900/30 text-yellow-400 shadow-yellow-500/50"
               }`}
             >
               {submission.status.replace("_", " ")}

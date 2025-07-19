@@ -44,7 +44,7 @@ export default function WinTrendChart({ winTrend }: WinTrendChartProps) {
   if (!winTrend || chartData.length === 0) return null;
 
   return (
-    <div className="p-4 bg-white/5 rounded-lg border border-cyan-500/20">
+    <div className="p-4 bg-white/5 rounded-lg">
       <div className="flex items-center gap-2 mb-3">
         <Calendar className="w-4 h-4 text-cyan-400" />
         <h4 className="text-sm font-semibold text-white">7-Day Win Trend</h4>

@@ -299,9 +299,6 @@ export default function ContestDetails() {
 
             <div className="text-center md:text-left">
               <h1 className="text-3xl font-bold text-white mb-2">{contest.title}</h1>
-              <p className="text-cyan-400/80">
-                {new Date(contest.startTime).toLocaleString()} to {new Date(contest.endTime).toLocaleString()}
-              </p>
               {contest.organizationName && (
                 <p className="text-gray-400 text-sm mt-1">Organized by {contest.organizationName}</p>
               )}

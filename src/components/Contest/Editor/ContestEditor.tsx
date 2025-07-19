@@ -28,7 +28,7 @@ interface ContestEditorProps {
 }
 
 interface SubmissionResult {
-  status: "ACCEPTED" | "WRONG_ANSWER" | "RUNTIME_ERROR" | "COMPILATION_ERROR" | "CONTEST_OVER";
+  status: "ACCEPTED" | "WRONG_ANSWER" | "RUNTIME_ERROR" | "COMPILATION_ERROR" | "CONTEST_OVER" | "TIME_LIMIT_EXCEEDED";
   runtime: number;
   message?: string;
   submissionId?: string;
@@ -284,6 +284,15 @@ int main() {
           message: "Contest is over. Submissions are no longer accepted for this contest.",
         });
         setShowSubmissionResult(true);
+      } else if (errorMessage === "TIME_LIMIT_EXCEEDED") {
+        setSubmissionResult({
+          status: "TIME_LIMIT_EXCEEDED",
+          runtime: 0,
+          message: "Time limit exceeded for this submission.",
+        });
+        setShowFailureMeme(true);
+        setTimeout(() => setShowFailureMeme(false), 5000);
+        setShowSubmissionResult(true);
       } else {
         setSubmissionResult({
           status: "RUNTIME_ERROR",
@@ -342,7 +351,9 @@ int main() {
                         ? "bg-red-900/30 text-red-400 shadow-red-500/50"
                         : submissionResult.status === "RUNTIME_ERROR"
                           ? "bg-orange-900/30 text-orange-400 shadow-orange-500/50"
-                          : "bg-yellow-900/30 text-yellow-400 shadow-yellow-500/50"
+                          : submissionResult.status === "TIME_LIMIT_EXCEEDED"
+                            ? "bg-red-900/30 text-red-400 shadow-red-500/50"
+                            : "bg-yellow-900/30 text-yellow-400 shadow-yellow-500/50" 
                   }`}
                 >
                   {submissionResult.status.replace("_", " ")}
