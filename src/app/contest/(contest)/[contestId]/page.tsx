@@ -258,6 +258,7 @@ if (loading) {
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
             <div className="w-full sm:w-auto flex items-center justify-center">
+              
               <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 md:px-5 py-2 sm:py-3 rounded-lg sm:rounded-xl bg-gray-900 shadow-lg border border-gray-700 min-w-0">
                 <Timer
                   size={20}

@@ -38,6 +38,7 @@ const Header = () => {
 
       {!isContestMode && (
         <div className="flex justify-center items-center gap-4">
+          
           <Timer
             size={30}
             className={timeLeft <= 60 ? "text-red-500 animate-pulse" : ""}
