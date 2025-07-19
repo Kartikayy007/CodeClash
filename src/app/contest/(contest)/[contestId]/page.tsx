@@ -32,11 +32,11 @@ export default function ContestPage() {
   const [timeLeft, setTimeLeft] = useState(3600);
   const [contest, setContest] = useState<Contest | null>(null);
   const [loading, setLoading] = useState(true);
-  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
-  const [leaderboardPage, setLeaderboardPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
+  const [, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [leaderboardPage] = useState(1);
+  const [, setTotalPages] = useState(0);
   const [loadingProblems, setLoadingProblems] = useState(false);
-  const [loadingLeaderboard, setLoadingLeaderboard] = useState(false);
+  const [, setLoadingLeaderboard] = useState(false);
   const [, setLoadingInsights] = useState(false);
 
   useEffect(() => {
@@ -104,6 +104,7 @@ export default function ContestPage() {
           leaderboardPage,
         );
         setLeaderboard(response.leaderboard);
+        console.log(response)
         setTotalPages(response.pagination.pages);
       } catch (error) {
         const err = error as ApiError;
@@ -176,10 +177,6 @@ export default function ContestPage() {
     router.push(`/contest/${contestId}/problem/${problemId}`);
   };
 
-  const handlePageChange = (page: number) => {
-    setLeaderboardPage(page);
-  };
-
   const renderTabContent = () => {
     switch (activeTab) {
       case "Problem Set":
@@ -200,26 +197,7 @@ export default function ContestPage() {
           />
         );
       case "Leaderboard":
-        return (
-          <Leaderboard
-            leaderboard={leaderboard.map((entry, index) => ({
-              rank:
-                entry.rank !== null
-                  ? entry.rank.toString()
-                  : (index + 1).toString(),
-              username: entry.user?.username || entry.username,
-              timeTaken: entry.lastSubmissionTime
-                ? new Date(entry.lastSubmissionTime).toLocaleString()
-                : entry.timeTaken,
-              score: entry.score,
-              questionsSolved: entry.problemsSolved || entry.questionsSolved,
-            }))}
-            currentPage={leaderboardPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-            isLoading={loadingLeaderboard}
-          />
-        );
+        return <Leaderboard contestId={contestId} />;
       case "My Submissions":
         return <MySubmissions contestId={contestId} />;
     }

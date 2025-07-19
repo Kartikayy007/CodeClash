@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { Play, Send, Grid } from "lucide-react";
+import { Play, Send, Menu } from "lucide-react";
 import LabelButton from "@/components/ui/LabelButton";
 import Loader from "@/components/ui/Loader";
 import ProblemsSidebar from "./ProblemsSidebar";
@@ -73,7 +73,7 @@ const Topbar = ({
               className="p-2 text-[#999] hover:bg-[#292C33] hover:text-[#fff] rounded-lg"
               onClick={handleGridClick}
             >
-              <Grid size={20} />
+              <Menu size={20} />
             </button>
           )}
         </div>
@@ -128,6 +128,7 @@ const Topbar = ({
           isLoading={isLoading}
           onProblemSelect={navigateToProblem}
           onFetchProblems={fetchContestQuestions}
+          contestId={contestId}
         />
       )}
     </>
