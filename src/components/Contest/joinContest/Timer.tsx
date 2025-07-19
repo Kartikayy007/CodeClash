@@ -25,8 +25,8 @@ export default function Timer({ startTime, contestId, className = "" }: TimerPro
       // Create Date objects
       const now = new Date()
       const start = new Date(startTime)
-
       const distance = start.getTime() - now.getTime()
+
       console.log("start, now", start.getTime(), now.getTime())
 
       if (distance < 0) {
@@ -61,24 +61,24 @@ export default function Timer({ startTime, contestId, className = "" }: TimerPro
   const padNumber = (num: number) => num.toString().padStart(2, "0")
 
   return (
-    <div className={`flex items-center justify-center gap-4 ${className}`}>
-      <div className="flex flex-col items-center bg-gradient-to-br from-[#C879EB] to-[#da90ff] p-4 rounded-xl text-black border border-[#C879EB]/30 shadow-lg shadow-[#C879EB]/25">
-        <span className="text-2xl font-bold">{padNumber(timeLeft.days)}</span>
+    <div className={`flex items-center justify-center gap-2 sm:gap-4 ${className}`}>
+      <div className="flex flex-col items-center bg-gradient-to-br from-[#C879EB] to-[#da90ff] p-2 sm:p-4 rounded-xl text-black border border-[#C879EB]/30 shadow-lg shadow-[#C879EB]/25">
+        <span className="text-lg sm:text-2xl font-bold">{padNumber(timeLeft.days)}</span>
         <span className="text-xs font-medium">Days</span>
       </div>
-      <div className="text-xl font-bold text-[#C879EB]">:</div>
-      <div className="flex flex-col items-center bg-gradient-to-br from-[#C879EB] to-[#da90ff] p-4 rounded-xl text-black border border-[#C879EB]/30 shadow-lg shadow-[#C879EB]/25">
-        <span className="text-2xl font-bold">{padNumber(timeLeft.hours)}</span>
+      <div className="text-lg sm:text-xl font-bold text-[#C879EB]">:</div>
+      <div className="flex flex-col items-center bg-gradient-to-br from-[#C879EB] to-[#da90ff] p-2 sm:p-4 rounded-xl text-black border border-[#C879EB]/30 shadow-lg shadow-[#C879EB]/25">
+        <span className="text-lg sm:text-2xl font-bold">{padNumber(timeLeft.hours)}</span>
         <span className="text-xs font-medium">Hours</span>
       </div>
-      <div className="text-xl font-bold text-[#C879EB]">:</div>
-      <div className="flex flex-col items-center bg-gradient-to-br from-[#C879EB] to-[#da90ff] p-4 rounded-xl text-black border border-[#C879EB]/30 shadow-lg shadow-[#C879EB]/25">
-        <span className="text-2xl font-bold">{padNumber(timeLeft.minutes)}</span>
+      <div className="text-lg sm:text-xl font-bold text-[#C879EB]">:</div>
+      <div className="flex flex-col items-center bg-gradient-to-br from-[#C879EB] to-[#da90ff] p-2 sm:p-4 rounded-xl text-black border border-[#C879EB]/30 shadow-lg shadow-[#C879EB]/25">
+        <span className="text-lg sm:text-2xl font-bold">{padNumber(timeLeft.minutes)}</span>
         <span className="text-xs font-medium">Minutes</span>
       </div>
-      <div className="text-xl font-bold text-[#C879EB]">:</div>
-      <div className="flex flex-col items-center bg-gradient-to-br from-[#C879EB] to-[#da90ff] p-4 rounded-xl text-black border border-[#C879EB]/30 shadow-lg shadow-[#C879EB]/25">
-        <span className="text-2xl font-bold">{padNumber(timeLeft.seconds)}</span>
+      <div className="text-lg sm:text-xl font-bold text-[#C879EB]">:</div>
+      <div className="flex flex-col items-center bg-gradient-to-br from-[#C879EB] to-[#da90ff] p-2 sm:p-4 rounded-xl text-black border border-[#C879EB]/30 shadow-lg shadow-[#C879EB]/25">
+        <span className="text-lg sm:text-2xl font-bold">{padNumber(timeLeft.seconds)}</span>
         <span className="text-xs font-medium">Seconds</span>
       </div>
     </div>
