@@ -6,7 +6,7 @@ interface Problem {
   title: string;
   rating: number;
   score: number;
-  difficulty: string;
+  difficulty?: "EASY" | "MEDIUM" | "HARD";
   status?: "SOLVED" | "UNSOLVED" | null;
 }
 

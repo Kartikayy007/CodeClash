@@ -7,17 +7,12 @@ import {
   Clock,
   Users,
   Trophy,
- 
-  Target,
-  Award,
   Timer,
-  ChevronLeft,
-  ChevronRight,
-  Eye,
-  Crown,
-  Medal,
   User,
 } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Leaderboard from "@/components/Contest/contestPage/Leaderboard"
+import ProblemSet from "@/components/Contest/PreviewContest/ProblemSet"
 
 interface Contest {
   id: string
@@ -28,7 +23,7 @@ interface Contest {
   isPublic: boolean
   status: "UPCOMING" | "ONGOING" | "ENDED"
   createdAt: string
-  organizationName?: string | null
+  organizationName?: string| null
   creator: {
     id: string
     username: string
@@ -67,13 +62,13 @@ interface Question {
   memoryLimit?: number
 }
 
-type TabType = "Overview" | "Leaderboard" | "Questions"
+
 
 export default function PastContestPage() {
   const params = useParams()
   const router = useRouter()
   const contestId = params.contestId as string
-  const [activeTab, setActiveTab] = useState<TabType>("Overview")
+
   const [contest, setContest] = useState<Contest | null>(null)
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
   const [questions, setQuestions] = useState<Question[]>([])
@@ -165,11 +160,7 @@ export default function PastContestPage() {
     fetchContestDetails()
   }, [contestId, fetchContestDetails])
 
-  useEffect(() => {
-    if (activeTab === "Leaderboard" && contestId) {
-      fetchLeaderboard(1)
-    }
-  }, [activeTab, contestId, fetchLeaderboard])
+
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -291,10 +282,6 @@ export default function PastContestPage() {
               <span className="text-sm text-gray-400">Problems</span>
               <span className="text-lg font-semibold text-white">{contest?.questionCount || 0}</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-400">Visibility</span>
-              <span className="text-sm font-medium text-cyan-400">{contest?.isPublic ? "Public" : "Private"}</span>
-            </div>
           </div>
         </div>
 
@@ -348,137 +335,9 @@ export default function PastContestPage() {
   )
 
   const renderLeaderboardTab = () => (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl border border-cyan-500/30 shadow-lg shadow-cyan-500/10">
-        <div className="px-6 py-4 border-b border-cyan-500/20">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-yellow-400" />
-              Final Standings
-            </h3>
-            <div className="text-sm text-gray-400 bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20">
-              {contest?.participantCount || 0} participants
-            </div>
-          </div>
-        </div>
-
-        {leaderboardLoading ? (
-          <div className="p-6">
-            <div className="space-y-3">
-              {[...Array(10)].map((_, i) => (
-                <div key={i} className="h-12 bg-cyan-500/10 rounded animate-pulse border border-cyan-500/20" />
-              ))}
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border-b border-cyan-500/20">
-                  <tr>
-                    <th className="text-left py-3 px-6 text-sm font-semibold text-cyan-400 uppercase tracking-wide">
-                      Rank
-                    </th>
-                    <th className="text-left py-3 px-6 text-sm font-semibold text-cyan-400 uppercase tracking-wide">
-                      Participant
-                    </th>
-                    <th className="text-center py-3 px-6 text-sm font-semibold text-cyan-400 uppercase tracking-wide">
-                      Score
-                    </th>
-                    <th className="text-center py-3 px-6 text-sm font-semibold text-cyan-400 uppercase tracking-wide">
-                      Solved
-                    </th>
-                    <th className="text-center py-3 px-6 text-sm font-semibold text-cyan-400 uppercase tracking-wide">
-                      Last Submission
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-cyan-500/10">
-                  {leaderboard.map((entry, index) => {
-                    const isEven = index % 2 === 0
-                    const bgColor = isEven ? "bg-transparent" : "bg-cyan-500/5"
-
-                    return (
-                      <tr key={entry.id} className={`hover:bg-cyan-500/10 transition-colors ${bgColor}`}>
-                        <td className="py-3 px-6">
-                          <div className="flex items-center gap-2">
-                            {entry.rank === 1 && <Crown className="w-4 h-4 text-yellow-400" />}
-                            {entry.rank === 2 && <Medal className="w-4 h-4 text-gray-300" />}
-                            {entry.rank === 3 && <Award className="w-4 h-4 text-orange-400" />}
-                            <span
-                              className={`font-semibold ${
-                                entry.rank === 1
-                                  ? "text-yellow-400"
-                                  : entry.rank === 2
-                                    ? "text-gray-300"
-                                    : entry.rank === 3
-                                      ? "text-orange-400"
-                                      : "text-white"
-                              }`}
-                            >
-                              {entry.rank}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3 px-6">
-                          <div className="font-medium text-white">{entry.username}</div>
-                        </td>
-                        <td className="py-3 px-6 text-center">
-                          <div className="font-semibold text-emerald-400">{entry.score.toFixed(2)}</div>
-                        </td>
-                        <td className="py-3 px-6 text-center">
-                          <div className="font-semibold text-blue-400">{entry.questionsSolved}</div>
-                        </td>
-                        <td className="py-3 px-6 text-center">
-                          <div className="text-sm text-gray-300 font-mono">
-                            {entry.lastSubmissionTime
-                              ? new Date(entry.lastSubmissionTime).toLocaleString()
-                              : entry.timeTaken || "N/A"}
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Pagination */}
-            {totalLeaderboardPages > 1 && (
-              <div className="px-6 py-4 border-t border-cyan-500/20">
-                <div className="flex justify-center items-center gap-3">
-                  <button
-                    onClick={() => fetchLeaderboard(leaderboardPage - 1)}
-                    disabled={leaderboardPage === 1}
-                    className={`p-2 rounded border transition-colors ${
-                      leaderboardPage === 1
-                        ? "bg-gray-500/20 text-gray-500 border-gray-500/30 cursor-not-allowed"
-                        : "bg-cyan-500/20 text-cyan-400 border-cyan-500/30 hover:bg-cyan-500/30"
-                    }`}
-                  >
-                    <ChevronLeft size={16} />
-                  </button>
-                  <span className="text-sm text-gray-300 bg-cyan-500/10 px-3 py-1 rounded border border-cyan-500/20">
-                    Page {leaderboardPage} of {totalLeaderboardPages}
-                  </span>
-                  <button
-                    onClick={() => fetchLeaderboard(leaderboardPage + 1)}
-                    disabled={leaderboardPage === totalLeaderboardPages}
-                    className={`p-2 rounded border transition-colors ${
-                      leaderboardPage === totalLeaderboardPages
-                        ? "bg-gray-500/20 text-gray-500 border-gray-500/30 cursor-not-allowed"
-                        : "bg-cyan-500/20 text-cyan-400 border-cyan-500/30 hover:bg-cyan-500/30"
-                    }`}
-                  >
-                    <ChevronRight size={16} />
-                  </button>
-                </div>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-    </div>
+    <Leaderboard
+      contestId={contestId}
+    />  
   )
 
   const handleViewProblem = useCallback(
@@ -489,86 +348,14 @@ export default function PastContestPage() {
   )
 
   const renderQuestionsTab = () => (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl border border-cyan-500/30 shadow-lg shadow-cyan-500/10">
-        <div className="px-6 py-4 border-b border-cyan-500/20">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-              <Target className="w-5 h-5 text-purple-400" />
-              Problems
-            </h3>
-            <div className="text-sm text-gray-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20">
-              {questions.length} problem{questions.length !== 1 ? "s" : ""}
-            </div>
-          </div>
-        </div>
-
-        <div className="divide-y divide-cyan-500/10">
-          {questions.map((question) => {
-            return (
-              <div key={question.id} className="p-6 hover:bg-cyan-500/5 transition-colors">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-4 flex-1">
-                    <div className="flex-1">
-                      <h4 className="text-lg font-semibold text-white mb-2">{question.title}</h4>
-                      <div className="flex items-center gap-4 text-sm flex-wrap">
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-400">Rating:</span>
-                          <span className={`font-semibold ${getDifficultyColor(question.rating)}`}>
-                            {question.rating}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-400">Score:</span>
-                          <span className="font-semibold text-emerald-400">{question.score}</span>
-                        </div>
-                        {question.timeLimit && question.memoryLimit && (
-                          <div className="flex items-center gap-2">
-                            <span className="text-gray-400">Limits:</span>
-                            <span className="font-mono text-xs text-cyan-400">
-                              {question.timeLimit}ms / {question.memoryLimit}MB
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleViewProblem(question.id)}
-                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 border border-blue-500/30 text-blue-400 rounded hover:from-blue-500/30 hover:to-indigo-500/30 transition-all duration-200 text-sm font-medium"
-                  >
-                    <Eye className="w-4 h-4" />
-                    View
-                  </button>
-                </div>
-              </div>
-            )
-          })}
-
-          {questions.length === 0 && (
-            <div className="text-center py-12">
-              <Target className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-              <p className="text-gray-400 text-lg font-medium mb-2">No problems found</p>
-              <p className="text-gray-500 text-sm">This contest doesn&apos;t have any problems configured.</p>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+    <ProblemSet
+      problems={contest?.questions || []}
+      onSolveProblem={handleViewProblem}
+      isLoading={loading}
+    />
   )
 
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case "Overview":
-        return renderOverviewTab()
-      case "Leaderboard":
-        return renderLeaderboardTab()
-      case "Questions":
-        return renderQuestionsTab()
-      default:
-        return renderOverviewTab()
-    }
-  }
+
 
   if (loading) {
     return (
@@ -632,24 +419,40 @@ export default function PastContestPage() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
-          {(["Overview", "Leaderboard", "Questions"] as TabType[]).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 whitespace-nowrap ${
-                activeTab === tab
-                  ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/25 border border-cyan-500/50"
-                  : "text-gray-400 hover:text-white hover:bg-cyan-500/10 border border-transparent hover:border-cyan-500/20 bg-gradient-to-br from-[#1a1d26] to-[#1e222c]"
-              }`}
+        <Tabs defaultValue="overview" className="mb-8">
+          <TabsList className="grid w-full grid-cols-3 bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border border-cyan-500/20">
+            <TabsTrigger 
+              value="overview" 
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-cyan-500/25"
             >
-              {tab}
-            </button>
-          ))}
-        </div>
-
-        {/* Tab Content */}
-        <div className="mb-8">{renderTabContent()}</div>
+              Overview
+            </TabsTrigger>
+            <TabsTrigger 
+              value="leaderboard" 
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-cyan-500/25"
+            >
+              Leaderboard
+            </TabsTrigger>
+            <TabsTrigger 
+              value="questions" 
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-cyan-500/25"
+            >
+              Questions
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="overview" className="mt-8">
+            {renderOverviewTab()}
+          </TabsContent>
+          
+          <TabsContent value="leaderboard" className="mt-8">
+            {renderLeaderboardTab()}
+          </TabsContent>
+          
+          <TabsContent value="questions" className="mt-8">
+            {renderQuestionsTab()}
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   )
