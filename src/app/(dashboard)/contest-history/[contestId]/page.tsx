@@ -70,12 +70,12 @@ export default function PastContestPage() {
   const contestId = params.contestId as string
 
   const [contest, setContest] = useState<Contest | null>(null)
-  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
-  const [questions, setQuestions] = useState<Question[]>([])
+  const [, setLeaderboard] = useState<LeaderboardEntry[]>([])
+  const [, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
-  const [leaderboardLoading, setLeaderboardLoading] = useState(false)
-  const [leaderboardPage, setLeaderboardPage] = useState(1)
-  const [totalLeaderboardPages, setTotalLeaderboardPages] = useState(0)
+  const [, setLeaderboardLoading] = useState(false)
+  const [, setLeaderboardPage] = useState(1)
+  const [, setTotalLeaderboardPages] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
   const fetchContestDetails = useCallback(async () => {
@@ -117,43 +117,6 @@ export default function PastContestPage() {
     }
   }, [contestId, router])
 
-  const fetchLeaderboard = useCallback(
-    async (page: number) => {
-      try {
-        setLeaderboardLoading(true)
-        const token = localStorage.getItem("accessToken")
-        if (!token) {
-          throw new Error("No access token found")
-        }
-
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/contest/${contestId}/leaderboard?page=${page}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          },
-        )
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch leaderboard: ${response.status}`)
-        }
-
-        const data = await response.json()
-        if (data.leaderboard) {
-          setLeaderboard(data.leaderboard)
-          setTotalLeaderboardPages(data.pagination?.pages || 1)
-          setLeaderboardPage(page)
-        }
-      } catch (error) {
-        console.error("Error fetching leaderboard:", error)
-      } finally {
-        setLeaderboardLoading(false)
-      }
-    },
-    [contestId],
-  )
 
   useEffect(() => {
     if (!contestId) return
