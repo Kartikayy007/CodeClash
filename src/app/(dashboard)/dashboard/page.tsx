@@ -1,7 +1,7 @@
-"use client";
-import React, { useEffect } from "react";
-import { socketService } from "@/lib/socket";
-import { useRouter } from "next/navigation";
+"use client"
+import React, { useEffect } from "react"
+import { socketService } from "@/lib/socket"
+import { useRouter } from "next/navigation"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,75 +11,72 @@ import {
   Title,
   Tooltip,
   Legend,
-} from "chart.js";
-import LabelButton from "@/components/ui/LabelButton";
-import UserStats from "@/components/dashboard/UserStats";
-import PerformanceInsights from "@/components/dashboard/PerformanceInsights";
-import Leaderboard from "@/components/dashboard/Leaderboard";
-import RecentMatches from "@/components/dashboard/RecentMatches";
-import RecentContests from "@/components/dashboard/RecentContests";
-import ManageContest from "@/components/dashboard/ManageContest";
-import { PlayButton } from "@/features/battle/components/PlayButton";
-import WinTrendChart from '@/components/dashboard/WinTrendChart';
+} from "chart.js"
+import LabelButton from "@/components/ui/LabelButton"
+import UserStats from "@/components/dashboard/UserStats"
+import PerformanceInsights from "@/components/dashboard/PerformanceInsights"
+import Leaderboard from "@/components/dashboard/Leaderboard"
+import RecentMatches from "@/components/dashboard/RecentMatches"
+import RecentContests from "@/components/dashboard/RecentContests"
+import ManageContest from "@/components/dashboard/ManageContest"
+import { PlayButton } from "@/features/battle/components/PlayButton"
+import WinTrendChart from "@/components/dashboard/WinTrendChart"
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 export default function Dashboard() {
-  const router = useRouter();
-  const [winTrend, setWinTrend] = React.useState(null);
+  const router = useRouter()
+  const [winTrend, setWinTrend] = React.useState(null)
 
   React.useEffect(() => {
     const fetchWinTrend = async () => {
-      const token = localStorage.getItem('accessToken');
-      if (!token) return;
+      const token = localStorage.getItem("accessToken")
+      if (!token) return
+
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/win-trend`, {
-          method: 'GET',
+          method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-        });
-        const data = await response.json();
-        if (data.success) setWinTrend(data);
+        })
+        const data = await response.json()
+        if (data.success) setWinTrend(data)
       } catch (e) {
-        console.log(e);
+        console.log(e)
       }
-    };
-    fetchWinTrend();
-  }, []);
+    }
+
+    fetchWinTrend()
+  }, [])
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem("accessToken")
     if (token && !socketService.isConnected()) {
-      socketService.connect(token);
+      socketService.connect(token)
     }
-    return () => {};
-  }, []);
+    return () => {}
+  }, [])
 
   return (
     <div className="min-h-screen bg-background py-2 md:p-2">
       <div className="max-w-auto mx-auto">
         {/* Mobile Action Buttons */}
-        <div className="flex flex-col sm:flex-row justify-center gap-3 mb-6 lg:hidden">
-          <div className="flex-1">
-            <PlayButton />
+        <div className="flex flex-col gap-3 mb-6 lg:hidden">
+          <div className="flex gap-3">
+            <div className="flex-1">
+              <PlayButton />
+            </div>
+            <div className="flex-1">
+              <LabelButton variant="filled" onClick={() => router.push("/contest/join")} className="w-full">
+                Play Contest
+              </LabelButton>
+            </div>
           </div>
           <div className="flex-1">
-            <LabelButton
-              variant="filled"
-              onClick={() => router.push("/contest/join")}
-              className="w-full"
-            >
-              Play Contest
+            <LabelButton variant="filled" onClick={() => router.push("/practice")} className="w-full">
+              Practice Now
             </LabelButton>
           </div>
         </div>
@@ -101,17 +98,20 @@ export default function Dashboard() {
           {/* Column 3 */}
           <div className="flex flex-col gap-6">
             {/* Desktop Action Buttons */}
-            <div className="flex gap-3">
-              <div className="flex-1">
-                <PlayButton />
+            <div className="flex flex-col gap-3">
+              <div className="flex gap-3">
+                <div className="flex-1">
+                  <PlayButton />
+                </div>
+                <div className="flex-1">
+                  <LabelButton variant="filled" onClick={() => router.push("/contest/join")} className="w-full">
+                    Play Contest
+                  </LabelButton>
+                </div>
               </div>
               <div className="flex-1">
-                <LabelButton
-                  variant="filled"
-                  onClick={() => router.push("/contest/join")}
-                  className="w-full"
-                >
-                  Play Contest
+                <LabelButton variant="filled" onClick={() => router.push("/practice")} className="w-full">
+                  Practice Now
                 </LabelButton>
               </div>
             </div>
@@ -151,5 +151,5 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
-  );
+  )
 }

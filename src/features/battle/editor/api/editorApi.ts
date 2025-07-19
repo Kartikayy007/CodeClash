@@ -12,7 +12,7 @@ const runCode = async (data: RunCodePayload): Promise<RunCodeResponse> => {
   const token = localStorage.getItem("accessToken");
 
   const response = await api.post<RunCodeResponse>(
-    `${BASE_URL}/api/v1/contest/${data.contestId}/questions/${data.questionId}/run`,
+    `${BASE_URL}/api/v1/${data.contestId ? `contest/${data.contestId}/questions/` : "contest/practice/questions/"}${data.questionId}/run`,
     {
       code: data.code,
       language: data.language,
@@ -35,7 +35,7 @@ const submitCode = async (
 
   console.log("Submitting code with data:", data);
   const response = await api.post<SubmitCodeResponse>(
-    `${BASE_URL}/api/v1/contest/${data.contestId}/questions/${data.questionId}/submit`,
+    `${BASE_URL}/api/v1/${data.contestId ? `contest/${data.contestId}/questions/` : "question/"}${data.questionId}/submit`,
     {
       code: data.code,
       language: data.language,

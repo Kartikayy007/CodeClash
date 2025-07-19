@@ -13,7 +13,7 @@ interface TopbarProps {
   onSubmit: () => void;
   isRunning?: boolean;
   isSubmitting?: boolean;
-  contestId: string;
+  contestId?: string;
 }
 
 const Topbar = ({
@@ -36,7 +36,6 @@ const Topbar = ({
         setIsLoading(true);
         const contestResponse = await contestApi.getContestDetails(contestId);
 
-        // Map contest questions to ProblemPreview format
         if (contestResponse.contest?.questions) {
           const formattedQuestions: ProblemPreview[] =
             contestResponse.contest.questions.map((question) => ({
@@ -69,12 +68,14 @@ const Topbar = ({
     <>
       <div className="h-16 bg-[#1C202A] rounded-lg flex items-center justify-between px-4">
         <div className="flex items-center gap-4">
-          <button
-            className="p-2 text-[#999] hover:bg-[#292C33] hover:text-[#fff] rounded-lg"
-            onClick={handleGridClick}
-          >
-            <Grid size={20} />
-          </button>
+          {contestId && (
+            <button
+              className="p-2 text-[#999] hover:bg-[#292C33] hover:text-[#fff] rounded-lg"
+              onClick={handleGridClick}
+            >
+              <Grid size={20} />
+            </button>
+          )}
         </div>
 
         <div className="flex items-center gap-4">
@@ -96,35 +97,39 @@ const Topbar = ({
                 </>
               )}
             </LabelButton>
-            <LabelButton
-              onClick={onSubmit}
-              variant="filled"
-              className="flex items-center gap-2 px-4 py-2"
-              disabled={isSubmitting || isRunning}
-            >
-              {isSubmitting ? (
-                <div className="flex items-center justify-center">
-                  <Loader size="small" />
-                </div>
-              ) : (
-                <>
-                  <Send size={16} />
-                  Submit
-                </>
-              )}
-            </LabelButton>
+            {contestId && (
+              <LabelButton
+                onClick={onSubmit}
+                variant="filled"
+                className="flex items-center gap-2 px-4 py-2"
+                disabled={isSubmitting || isRunning}
+              >
+                {isSubmitting ? (
+                  <div className="flex items-center justify-center">
+                    <Loader size="small" />
+                  </div>
+                ) : (
+                  <>
+                    <Send size={16} />
+                    Submit
+                  </>
+                )}
+              </LabelButton>
+            )}
           </div>
         </div>
       </div>
 
-      <ProblemsSidebar
-        isOpen={showSidebar}
-        onClose={() => setShowSidebar(false)}
-        problems={contestQuestions}
-        isLoading={isLoading}
-        onProblemSelect={navigateToProblem}
-        onFetchProblems={fetchContestQuestions}
-      />
+      {contestId && (
+        <ProblemsSidebar
+          isOpen={showSidebar}
+          onClose={() => setShowSidebar(false)}
+          problems={contestQuestions}
+          isLoading={isLoading}
+          onProblemSelect={navigateToProblem}
+          onFetchProblems={fetchContestQuestions}
+        />
+      )}
     </>
   );
 };

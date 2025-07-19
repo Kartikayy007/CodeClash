@@ -24,7 +24,7 @@ import FollowCursor from "@/components/ui/FollowCursor";
 
 interface ContestEditorProps {
   problemId: string;
-  contestId: string;
+  contestId?: string;
 }
 
 interface SubmissionResult {
@@ -200,7 +200,7 @@ int main() {
         input: isCustomInputMode
           ? customInput
           : testCases[activeTestCase]?.input || "",
-        contestId,
+        contestId: contestId || "",
         questionId: problemId,
       });
 
@@ -219,6 +219,7 @@ int main() {
   };
 
   const handleSubmit = async () => {
+    if (!contestId) return;
     try {
       setIsSubmitting(true);
       setSubmissionResult(null);
@@ -228,7 +229,7 @@ int main() {
       const response = await submitCode({
         code,
         language,
-        contestId,
+        contestId: contestId || "",
         questionId: problemId,
       });
 
@@ -272,11 +273,13 @@ int main() {
       const errorMessage = axiosError?.response?.data?.error || axiosError?.response?.data?.message || axiosError?.message || "";
       
       if (errorMessage.includes("You have not joined this contest")) {
-        router.push(`/contest/join/${contestId}`);
+        if (contestId) {
+          router.push(`/contest/join/${contestId}`);
+        }
         return;
       } else if (errorMessage.includes("Contest not found or not active")) {
         setSubmissionResult({
-          status: "CONTEST_OVER", // Use a different status to distinguish from runtime errors
+          status: "CONTEST_OVER",
           runtime: 0,
           message: "Contest is over. Submissions are no longer accepted for this contest.",
         });
@@ -493,12 +496,14 @@ int main() {
             >
               Description
             </button>
-            <button
-              className={`${activeTab === "submissions" ? "text-white bg-white/10 rounded-md px-2 py-1" : "text-gray-500"} hover:text-gray-300 font-bold text-lg`}
-              onClick={() => setActiveTab("submissions")}
-            >
-              Submissions
-            </button>
+            {contestId ? (
+              <button
+                className={`${activeTab === "submissions" ? "text-white bg-white/10 rounded-md px-2 py-1" : "text-gray-500"} hover:text-gray-300 font-bold text-lg`}
+                onClick={() => setActiveTab("submissions")}
+              > 
+                Submissions
+              </button>
+            ) : null}
           </div>
         </div>
 
@@ -506,7 +511,7 @@ int main() {
           {activeTab === "description" ? (
             renderDescriptionContent()
           ) : (
-            <Submissions problemId={problemId} contestId={contestId} />
+            <Submissions problemId={problemId} contestId={contestId || ""} />
           )}
         </div>
       </div>
