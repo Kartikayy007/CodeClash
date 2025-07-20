@@ -1,5 +1,4 @@
 import React from "react";
-import { Calendar } from "lucide-react";
 import { ChartContainer, ChartConfig, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { LineChart, Line, XAxis, YAxis } from "recharts";
 
@@ -46,8 +45,8 @@ export default function WinTrendChart({ winTrend }: WinTrendChartProps) {
   return (
     <div className="p-4 bg-white/5 rounded-lg">
       <div className="flex items-center gap-2 mb-3">
-        <Calendar className="w-4 h-4 text-cyan-400" />
-        <h4 className="text-sm font-semibold text-white">7-Day Win Trend</h4>
+        {/* <Calendar className="w-4 h-4 text-cyan-400" /> */}
+        <h4 className="text-lg md:text-xl font-semibold">7-Day Win Trend</h4>
       </div>
       <ChartContainer config={chartConfig} className="h-[150px] w-full">
         <LineChart

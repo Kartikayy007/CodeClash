@@ -46,7 +46,7 @@ const ManageContest = ({ className = "" }: ManageContestProps) => {
 
   return (
     <div
-      className={`w-full max-w-md mx-auto bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-3xl p-6 ${className}`}
+      className={`w-full  bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-6 ${className}`}
     >
       <div className="flex items-center justify-between mb-6 pb-4 border-b border-cyan-500/20">
         <h2 className="text-xl font-bold text-white">Contest Timeline</h2>

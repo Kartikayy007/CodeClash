@@ -15,7 +15,6 @@ const ContestFilters: React.FC<ContestFiltersProps> = ({ contests, selectedStatu
 
   return (
     <div className="flex flex-wrap gap-3 items-center">
-      <span className="text-gray-400 text-sm font-medium mr-2">Filter by:</span>
       {statusOptions.map((status) => (
         <button
           key={status}

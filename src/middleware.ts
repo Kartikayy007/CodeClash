@@ -35,6 +35,17 @@ export function middleware(request: NextRequest) {
     "/profile",
     "/contest/join",
   ];
+
+  const adminRoutes = [
+    "/admin",
+  ];
+  
+  if (adminRoutes.some((route) => pathname.startsWith(route))) {
+    if (!accessToken) {
+      return NextResponse.redirect(new URL("/get-started", request.url));
+    }
+    return NextResponse.next();
+  }
   if (protectedRoutes.some((route) => pathname.startsWith(route))) {
     if (!accessToken) {
       return NextResponse.redirect(new URL("/get-started", request.url));

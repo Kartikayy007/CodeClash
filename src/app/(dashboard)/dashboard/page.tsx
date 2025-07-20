@@ -91,7 +91,7 @@ export default function Dashboard() {
 
           {/* Column 2 */}
           <div className="flex flex-col gap-6">
-            <RecentMatches className="flex-1" />
+            <PerformanceInsights className="flex-1" />
             <RecentContests className="flex-1" />
           </div>
 
@@ -117,7 +117,7 @@ export default function Dashboard() {
             </div>
             <ManageContest />
             <WinTrendChart winTrend={winTrend} />
-            <PerformanceInsights className="flex-1" />
+            <RecentMatches className="flex-1" />
           </div>
         </div>
 
@@ -127,8 +127,8 @@ export default function Dashboard() {
           <div className="flex flex-col gap-6">
             <UserStats />
             <RecentMatches className="flex-1" />
-            <ManageContest />
             <WinTrendChart winTrend={winTrend} />
+            <ManageContest />
           </div>
 
           {/* Column 2 */}

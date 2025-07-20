@@ -37,15 +37,6 @@ interface Contest {
   questions: Question[]
 }
 
-interface LeaderboardEntry {
-  id: string
-  username: string
-  score: number
-  rank: number
-  questionsSolved: number
-  timeTaken?: string
-  lastSubmissionTime?: string
-}
 
 interface Question {
   id: string
@@ -70,12 +61,8 @@ export default function PastContestPage() {
   const contestId = params.contestId as string
 
   const [contest, setContest] = useState<Contest | null>(null)
-  const [, setLeaderboard] = useState<LeaderboardEntry[]>([])
   const [, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
-  const [, setLeaderboardLoading] = useState(false)
-  const [, setLeaderboardPage] = useState(1)
-  const [, setTotalLeaderboardPages] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
   const fetchContestDetails = useCallback(async () => {
@@ -152,14 +139,6 @@ export default function PastContestPage() {
     return duration.trim() || "0m"
   }
 
-  const getDifficultyColor = (rating: number) => {
-    if (rating < 1000) return "text-green-400"
-    if (rating < 1600) return "text-cyan-400"
-    if (rating < 1900) return "text-blue-400"
-    if (rating < 2100) return "text-purple-400"
-    if (rating < 2400) return "text-orange-400"
-    return "text-red-400"
-  }
 
   const renderOverviewTab = () => (
     <div className="space-y-6">
