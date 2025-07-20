@@ -156,7 +156,7 @@ export default function AdminDashboard() {
   
     useEffect(() => {
       fetchContests()
-    }, [fetchContests])
+    }, [])
   
     const handleViewLeaderboard = (contest: Contest) => {
       setSelectedContest(contest)
