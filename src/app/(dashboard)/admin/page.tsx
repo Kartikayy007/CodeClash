@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { toast } from "react-hot-toast"
+
 import {
   Shield,
   Eye,
@@ -305,10 +305,6 @@ export default function AdminDashboard() {
       const data = await response.json()
 
       if (response.ok) {
-        toast({
-          title: "Success",
-          description: data.message || "Contest started successfully",
-        })
         // Update the contest status locally
         setContests(prev => prev.map(contest => 
           contest.id === contestId 
@@ -316,19 +312,11 @@ export default function AdminDashboard() {
             : contest
         ))
       } else {
-        toast({
-          title: "Error",
-          description: data.error || "Failed to start contest",
-          variant: "destructive",
-        })
+         
       }
     } catch (error) {
       console.error("Error starting contest:", error)
-      toast({
-        title: "Error",
-        description: "An error occurred while starting the contest",
-        variant: "destructive",
-      })
+       
     } finally {
       setStartingContest(null)
     }
@@ -355,10 +343,7 @@ export default function AdminDashboard() {
       const data = await response.json()
 
       if (response.ok) {
-        toast({
-          title: "Success",
-          description: data.message || "Contest ended successfully",
-        })
+         
         // Update the contest status locally
         setContests(prev => prev.map(contest => 
           contest.id === contestId 
@@ -366,19 +351,11 @@ export default function AdminDashboard() {
             : contest
         ))
       } else {
-        toast({
-          title: "Error",
-          description: data.error || "Failed to end contest",
-          variant: "destructive",
-        })
+         
       }
     } catch (error) {
       console.error("Error ending contest:", error)
-      toast({
-        title: "Error",
-        description: "An error occurred while ending the contest",
-        variant: "destructive",
-      })
+       
     } finally {
       setEndingContest(null)
     }
@@ -389,7 +366,7 @@ export default function AdminDashboard() {
     setKickingUser(participantId)
     try {
       const token = getAccessToken()
-      const response = await fetch(`${API_BASE_URL}/api/v1/contests/${contestId}/kick/${participantId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/admin/contests/${contestId}/kick/${participantId}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -403,28 +380,26 @@ export default function AdminDashboard() {
       }
 
       const data = await response.json()
+      if (
+        (data as { success: boolean; error?: string })?.success === false &&
+        String((data as { success: boolean; error?: string }).error ?? "")
+          .toLowerCase()
+          .includes("unauthorized")
+      ) {
+        router.push("/dashboard")
+        return
+      }
 
       if (response.ok) {
-        toast({
-          title: "Success",
-          description: data.message || "User kicked successfully",
-        })
+         
         // Remove user from leaderboard
         setLeaderboard(prev => prev.filter(entry => entry.user.id !== participantId))
       } else {
-        toast({
-          title: "Error",
-          description: data.error || "Failed to kick user",
-          variant: "destructive",
-        })
+         
       }
     } catch (error) {
       console.error("Error kicking user:", error)
-      toast({
-        title: "Error",
-        description: "An error occurred while kicking the user",
-        variant: "destructive",
-      })
+       
     } finally {
       setKickingUser(null)
     }
@@ -435,7 +410,7 @@ export default function AdminDashboard() {
     setBanningUser(participantId)
     try {
       const token = getAccessToken()
-      const response = await fetch(`${API_BASE_URL}/api/v1/contests/${contestId}/ban/${participantId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/admin/contests/${contestId}/ban/${participantId}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -449,28 +424,25 @@ export default function AdminDashboard() {
       }
 
       const data = await response.json()
-
+      if (
+        (data as { success: boolean; error?: string })?.success === false &&
+        String((data as { success: boolean; error?: string }).error ?? "")
+          .toLowerCase()
+          .includes("unauthorized")
+      ) {
+        router.push("/dashboard")
+        return
+      }
       if (response.ok) {
-        toast({
-          title: "Success",
-          description: data.message || "User banned successfully",
-        })
+         
         // Remove user from leaderboard
         setLeaderboard(prev => prev.filter(entry => entry.user.id !== participantId))
       } else {
-        toast({
-          title: "Error",
-          description: data.error || "Failed to ban user",
-          variant: "destructive",
-        })
+         
       }
     } catch (error) {
       console.error("Error banning user:", error)
-      toast({
-        title: "Error",
-        description: "An error occurred while banning the user",
-        variant: "destructive",
-      })
+       
     } finally {
       setBanningUser(null)
     }
