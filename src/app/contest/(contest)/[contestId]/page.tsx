@@ -39,6 +39,19 @@ export default function ContestPage() {
   const [, setLoadingLeaderboard] = useState(false);
   const [, setLoadingInsights] = useState(false);
 
+  // Toast theme configuration
+  const toastTheme = {
+    style: {
+      background: '#1F2937',
+      color: '#F3F4F6',
+      borderRadius: '0.5rem',
+      padding: '1rem',
+      fontSize: '0.875rem',
+      maxWidth: '100%',
+    },
+    duration: 4000,
+  };
+
   useEffect(() => {
     const fetchContestDetails = async () => {
       try {
@@ -65,6 +78,7 @@ export default function ContestPage() {
         const err = error as ApiError;
         toast.error(
           err?.response?.data?.message || "Failed to fetch contest details",
+          toastTheme
         );
         router.push("/dashboard");
       } finally {
@@ -77,10 +91,20 @@ export default function ContestPage() {
   }, [contestId, router]);
 
   useEffect(() => {
-    if (!contest || contest.status !== "ONGOING") return;
-
+    if (!contest) return;
+  
+    // Redirect if contest is finished
+    if (contest.status === "ENDED") {
+      console.log(" Contest has ended");
+      router.push(`/contest-history/${contestId}`);
+      return;
+    }
+  
+    // Only run timer while contest is ongoing
+    if (contest.status !== "ONGOING") return;
+  
     const timer = setInterval(() => {
-      setTimeLeft((prev) => {
+      setTimeLeft(prev => {
         if (prev <= 1) {
           clearInterval(timer);
           router.push("/contest/join");
@@ -89,7 +113,7 @@ export default function ContestPage() {
         return prev - 1;
       });
     }, 1000);
-
+  
     return () => clearInterval(timer);
   }, [contest, router]);
 
@@ -110,6 +134,7 @@ export default function ContestPage() {
         const err = error as ApiError;
         toast.error(
           err?.response?.data?.message || "Failed to fetch leaderboard",
+          toastTheme
         );
       } finally {
         setLoadingLeaderboard(false);

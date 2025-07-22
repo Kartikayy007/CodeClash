@@ -6,7 +6,7 @@ import LabelButton from "@/components/ui/LabelButton"
 // import { ArrowLeft } from 'lucide-react';
 import type { Contest } from "@/features/contests/types/contest.types"
 import { contestApi } from "@/features/contests/api/contestApi"
-import toast from "react-hot-toast"
+import toast, { Toaster } from "react-hot-toast"
 import Timer from "@/components/Contest/joinContest/Timer"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
@@ -47,6 +47,19 @@ export default function ContestDetails() {
   const [loading, setLoading] = useState(true)
   const [registering, setRegistering] = useState(false)
 
+  // Toast theme configuration
+  const toastTheme = {
+    style: {
+      background: '#1F2937',
+      color: '#F3F4F6',
+      borderRadius: '0.5rem',
+      padding: '1rem',
+      fontSize: '0.875rem',
+      maxWidth: '100%',
+    },
+    duration: 4000,
+  }
+
   useEffect(() => {
     const fetchContestDetails = async () => {
       if (!contestId) return
@@ -56,22 +69,18 @@ export default function ContestDetails() {
         if (response.contest.isRegistered === true && response.contest.status === "ONGOING") {
           router.push(`/contest/${contestId}`)
         }
-        // if (
-        //   response.contest.isRegistered === false &&
-        //   response.contest.status === "ONGOING"
-        // ) {
-        //   toast.error("Contest has already started");
-        //   setTimeout(() => {
-        //     router.push(`/contest/join`);
-        //   }, 1000);
-        // }
-        toast.success(response.message)
+
+        if(response.contest.status === "ENDED") {
+          router.push(`/contest-history/${contestId}`)
+        }
+        
+        toast.success(response.message, toastTheme)
         if (response.contest) {
           setContest(response.contest)
         }
       } catch (error) {
         console.error("Error fetching contest details:", error)
-        toast.error("Failed to fetch contest details")
+        toast.error("Failed to fetch contest details", toastTheme)
       } finally {
         setLoading(false)
       }
@@ -85,7 +94,7 @@ export default function ContestDetails() {
       setRegistering(true)
       const response = await contestApi.registerForContest(contest.id)
       if (response.data) {
-        toast.success(response.message || "Successfully joined the contest")
+        toast.success(response.message || "Successfully joined the contest", toastTheme)
         router.push(`/contest/${contestId}`)
         const updatedDetails = await contestApi.getContestDetails(contestId)
         if (updatedDetails.contest) {
@@ -95,7 +104,7 @@ export default function ContestDetails() {
     } catch (error: unknown) {
       const errorMessage = "Failed to join the contest"
       console.error(errorMessage, error)
-      toast.error(errorMessage)
+      toast.error(errorMessage, toastTheme)
     } finally {
       setRegistering(false)
     }
@@ -193,6 +202,7 @@ export default function ContestDetails() {
 
   return (
     <div className="min-h-screen py-2 md:p-2 relative overflow-hidden">
+      <Toaster position="top-center" toastOptions={toastTheme} />
       <style jsx global>{`
         .markdown-content {
           /* Base text styling */

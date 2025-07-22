@@ -5,7 +5,7 @@ export interface Contest {
   startTime: string;
   endTime: string;
   isPublic: boolean;
-  status: "UPCOMING" | "ONGOING" | "COMPLETED";
+  status: "UPCOMING" | "ONGOING" | "COMPLETED" | "ENDED";
   createdAt: string;
   organizationName: string | null;
   rules: string | null;

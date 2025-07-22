@@ -234,7 +234,7 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
                     <Users className="w-3 h-3 text-white/40" />
                     <span className="text-xs text-white/50 uppercase tracking-wide font-medium">Players</span>
                   </div>
-                  <div className="text-lg font-bold text-cyan-400">{formatScore(contest.participantCount)}</div>
+                  <div className="text-lg font-bold text-cyan-400 text-center">{formatScore(contest.participantCount)}</div>
                 </div>
 
                 {/* Duration */}
@@ -243,7 +243,7 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
                     <Clock className="w-3 h-3 text-white/40" />
                     <span className="text-xs text-white/50 uppercase tracking-wide font-medium">Duration</span>
                   </div>
-                  <div className="text-lg font-bold text-purple-400">
+                  <div className="text-lg font-bold text-purple-400 text-center">
                     {calculateDuration(contest.startTime, contest.endTime)}
                   </div>
                 </div>

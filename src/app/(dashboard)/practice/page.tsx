@@ -292,6 +292,19 @@ export default function PracticePage() {
   const router = useRouter()
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
+
+  // Toast theme configuration
+  const toastTheme = {
+    style: {
+      background: '#1F2937',
+      color: '#F3F4F6',
+      borderRadius: '0.5rem',
+      padding: '1rem',
+      fontSize: '0.875rem',
+      maxWidth: '100%',
+    },
+    duration: 4000,
+  }
   const [pagination, setPagination] = useState<PaginationInfo>({
     currentPage: 1,
     totalPages: 1,
@@ -344,12 +357,12 @@ export default function PracticePage() {
       console.error(error)
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
-          toast.error("Authentication failed. Please login again.")
+          toast.error("Authentication failed. Please login again.", toastTheme)
           router.push("/login")
         } else if (error.response?.status === 403) {
-          toast.error("Access forbidden")
+          toast.error("Access forbidden", toastTheme)
         } else {
-          toast.error("Failed to fetch questions")
+          toast.error("Failed to fetch questions", toastTheme)
         }
       } else {
         toast.error("Failed to fetch questions")

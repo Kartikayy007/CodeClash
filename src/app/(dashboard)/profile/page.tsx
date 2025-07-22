@@ -22,6 +22,19 @@ const ProfilePage = () => {
     "Current" | "Year" | "All"
   >("Current");
   const [startMonthIndex, setStartMonthIndex] = useState(0);
+
+  // Toast theme configuration
+  const toastTheme = {
+    style: {
+      background: '#1F2937',
+      color: '#F3F4F6',
+      borderRadius: '0.5rem',
+      padding: '1rem',
+      fontSize: '0.875rem',
+      maxWidth: '100%',
+    },
+    duration: 4000,
+  };
   const months = [
     "Jan",
     "Feb",
@@ -60,7 +73,7 @@ const ProfilePage = () => {
     dispatch(fetchProfile())
       .unwrap()
       .catch((error) => {
-        toast.error(error || "Failed to fetch profile");
+        toast.error(error || "Failed to fetch profile", toastTheme);
         router.push("/login");
       });
   }, [dispatch, router]);

@@ -20,10 +20,31 @@ const ShareContestModal: React.FC<ShareContestModalProps> = ({
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(contestLink);
-      toast.success("Link copied to clipboard!");
+      toast.success("Link copied to clipboard!", {
+        style: {
+          background: '#1F2937',
+          color: '#F3F4F6',
+          borderRadius: '0.5rem',
+          padding: '1rem',
+          fontSize: '0.875rem',
+          maxWidth: '100%',
+        },
+        duration: 4000,
+      });
     } catch (error: unknown) {
       toast.error(
         error instanceof Error ? error.message : "Failed to copy link",
+        {
+          style: {
+            background: '#1F2937',
+            color: '#F3F4F6',
+            borderRadius: '0.5rem',
+            padding: '1rem',
+            fontSize: '0.875rem',
+            maxWidth: '100%',
+          },
+          duration: 4000,
+        }
       );
     }
   };
@@ -31,10 +52,31 @@ const ShareContestModal: React.FC<ShareContestModalProps> = ({
   const handleCopyCode = async () => {
     try {
       await navigator.clipboard.writeText(contestId);
-      toast.success("Contest code copied to clipboard!");
+      toast.success("Contest code copied to clipboard!", {
+        style: {
+          background: '#1F2937',
+          color: '#F3F4F6',
+          borderRadius: '0.5rem',
+          padding: '1rem',
+          fontSize: '0.875rem',
+          maxWidth: '100%',
+        },
+        duration: 4000,
+      });
     } catch (error: unknown) {
       toast.error(
         error instanceof Error ? error.message : "Failed to copy contest code",
+        {
+          style: {
+            background: '#1F2937',
+            color: '#F3F4F6',
+            borderRadius: '0.5rem',
+            padding: '1rem',
+            fontSize: '0.875rem',
+            maxWidth: '100%',
+          },
+          duration: 4000,
+        }
       );
     }
   };

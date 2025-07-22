@@ -358,7 +358,7 @@ const ProblemsSidebar: React.FC<ProblemsSidebarProps> = ({
                   </div>
                 </>
               ) : (
-                <p className="text-gray-400 text-center py-8">No leaderboard data available</p>
+                <p className="text-gray-400 text-center py-8">No submissions yet</p>
               )}
             </>
           )}

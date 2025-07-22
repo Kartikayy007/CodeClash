@@ -94,6 +94,19 @@ const Details = () => {
     null,
   );
 
+  // Toast theme configuration
+  const toastTheme = {
+    style: {
+      background: '#1F2937',
+      color: '#F3F4F6',
+      borderRadius: '0.5rem',
+      padding: '1rem',
+      fontSize: '0.875rem',
+      maxWidth: '100%',
+    },
+    duration: 4000,
+  };
+
   useEffect(() => {
     const fetchContestDetails = async () => {
       const contestId = searchParams?.get("contestId");
@@ -266,10 +279,33 @@ const Details = () => {
 
       setInitialFormData(formData);
       setIsDirty(false);
-      toast.success("Contest updated successfully!");
+      toast.success("Contest updated successfully!", {
+        style: {
+          background: '#1F2937',
+          color: '#F3F4F6',
+          borderRadius: '0.5rem',
+          padding: '1rem',
+          fontSize: '0.875rem',
+          maxWidth: '100%',
+        },
+        duration: 4000,
+      });
     } catch (error) {
       const err = error as ApiError;
-      toast.error(err?.response?.data?.message || "Failed to update contest");
+      toast.error(
+        err?.response?.data?.message || "Failed to update contest",
+        {
+          style: {
+            background: '#1F2937',
+            color: '#F3F4F6',
+            borderRadius: '0.5rem',
+            padding: '1rem',
+            fontSize: '0.875rem',
+            maxWidth: '100%',
+          },
+          duration: 4000,
+        },
+      );
     }
   };
 
@@ -285,7 +321,7 @@ const Details = () => {
     const contestId = searchParams?.get("contestId");
 
     if (!contestId) {
-      toast.error("Contest ID not found");
+      toast.error("Contest ID not found", toastTheme);
       return;
     }
 
@@ -303,14 +339,14 @@ const Details = () => {
       setProblems((prev) => prev.filter((_, i) => i !== index));
     } catch (error) {
       const err = error as ApiError;
-      toast.error(err?.response?.data?.message || "Failed to delete problem");
+      toast.error(err?.response?.data?.message || "Failed to delete problem", toastTheme);
     }
   };
 
   const handleSaveProblem = async (problemData: Problem) => {
     const contestId = searchParams?.get("contestId");
     if (!contestId) {
-      toast.error("Contest ID not found");
+      toast.error("Contest ID not found", toastTheme);
       return;
     }
 
@@ -320,7 +356,7 @@ const Details = () => {
           contestId,
           questionId: problemData.id,
         });
-        toast.success("Problem added from library successfully!");
+        toast.success("Problem added from library successfully!", toastTheme);
       } else {
         await contestApi.addQuestion({
           contestId,
@@ -345,13 +381,13 @@ const Details = () => {
             isHidden: !tc.sample,
           })),
         });
-        toast.success("New problem added successfully!");
+        toast.success("New problem added successfully!", toastTheme);
       }
 
       setProblems((prev) => [...prev, problemData]);
     } catch (error) {
       const err = error as ApiError;
-      toast.error(err?.response?.data?.message || "Failed to add problem");
+      toast.error(err?.response?.data?.message || "Failed to add problem", toastTheme);
     }
   };
 
@@ -426,7 +462,7 @@ const Details = () => {
   if (showPreview) {
     const contestId = searchParams?.get("contestId");
     if (!contestId) {
-      toast.error("Contest ID not found");
+      toast.error("Contest ID not found", toastTheme);
       return null;
     }
 
@@ -513,7 +549,7 @@ const Details = () => {
             <button
               onClick={() => {
                 navigator.clipboard.writeText(searchParams?.get("contestId") || "");
-                toast.success("Contest code copied to clipboard!");
+                toast.success("Contest code copied to clipboard!", toastTheme);
               }}
               className="text-gray-400 hover:text-white transition-colors"
             >

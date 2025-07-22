@@ -14,7 +14,7 @@ import {
   updateMultipleProblemStatuses,
 } from "@/features/battle/slices/battleSlice";
 import { socketService } from "@/lib/socket";
-import toast from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import { setGameEnd } from "@/features/battle/slices/gameEndSlice";
 import { usePathname } from "next/navigation";
 import { submitBattleCode } from "../api/editorApi";
@@ -185,7 +185,32 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
     });
 
     if (!currentProblem) {
-      toast.error("No problem selected");
+      toast.error("Please select a problem", {
+        style: {
+          background: '#1F2937',
+          color: '#F3F4F6',
+          borderRadius: '0.5rem',
+          padding: '1rem',
+          fontSize: '0.875rem',
+          maxWidth: '100%',
+        },
+        duration: 4000,
+      });
+      return;
+    }
+
+    if (!language) {
+      toast.error("Please select a programming language", {
+        style: {
+          background: '#1F2937',
+          color: '#F3F4F6',
+          borderRadius: '0.5rem',
+          padding: '1rem',
+          fontSize: '0.875rem',
+          maxWidth: '100%',
+        },
+        duration: 4000,
+      });
       return;
     }
 
@@ -214,10 +239,30 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
         // Simulate the same response handling as the thunk
         const status = response.status;
         if (status === "ACCEPTED") {
-          toast.success("All test cases passed!");
+          toast.success("All test cases passed!", {
+            style: {
+              background: '#1F2937',
+              color: '#F3F4F6',
+              borderRadius: '0.5rem',
+              padding: '1rem',
+              fontSize: '0.875rem',
+              maxWidth: '100%',
+            },
+            duration: 4000,
+          });
           checkGameCompletion();
         } else if (status) {
-          toast.error(`Submission failed: ${status}`);
+          toast.error(`Submission failed: ${status}`, {
+            style: {
+              background: '#1F2937',
+              color: '#F3F4F6',
+              borderRadius: '0.5rem',
+              padding: '1rem',
+              fontSize: '0.875rem',
+              maxWidth: '100%',
+            },
+            duration: 4000,
+          });
         }
       });
     } else {
@@ -233,10 +278,30 @@ const TopBar = ({ matchId, input, onProblemChange }: TopBarProps) => {
         if (submitCode.fulfilled.match(action)) {
           const status = action.payload.status;
           if (status === "ACCEPTED") {
-            toast.success("All test cases passed!");
+            toast.success("All test cases passed!", {
+              style: {
+                background: '#1F2937',
+                color: '#F3F4F6',
+                borderRadius: '0.5rem',
+                padding: '1rem',
+                fontSize: '0.875rem',
+                maxWidth: '100%',
+              },
+              duration: 4000,
+            });
             checkGameCompletion();
           } else if (status) {
-            toast.error(`Submission failed: ${status}`);
+            toast.error(`Submission failed: ${status}`, {
+              style: {
+                background: '#1F2937',
+                color: '#F3F4F6',
+                borderRadius: '0.5rem',
+                padding: '1rem',
+                fontSize: '0.875rem',
+                maxWidth: '100%',
+              },
+              duration: 4000,
+            });
           }
         }
       });

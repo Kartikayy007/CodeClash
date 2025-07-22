@@ -458,7 +458,8 @@ export default function AdminDashboard() {
                           <strong>Input Format:</strong> {selectedSubmission.question.inputFormat}
                         </p>
                         <p>
-                          <strong>Output Format:</strong> {selectedSubmission.question.outputFormat}
+                          <strong>Output Format:</strong> 
+                          {selectedSubmission.question.outputFormat}
                         </p>
                         <p>
                           <strong>Constraints:</strong> {selectedSubmission.question.constraints}

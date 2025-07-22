@@ -245,7 +245,7 @@ const MyAnnouncements: React.FC<MyAnnouncementsProps> = ({ className = "" }) => 
                     <Users className="w-3 h-3 text-white/40" />
                     <span className="text-xs text-white/50 uppercase tracking-wide font-medium">Players</span>
                   </div>
-                  <div className="text-lg font-bold text-cyan-400">{formatScore(contest._count.participants)}</div>
+                  <div className="text-lg font-bold text-cyan-400 text-center">{formatScore(contest._count.participants)}</div>
                 </div>
                 {/* Duration */}
                 <div className="space-y-1">
@@ -253,7 +253,7 @@ const MyAnnouncements: React.FC<MyAnnouncementsProps> = ({ className = "" }) => 
                     <Clock className="w-3 h-3 text-white/40" />
                     <span className="text-xs text-white/50 uppercase tracking-wide font-medium">Duration</span>
                   </div>
-                  <div className="text-lg font-bold text-purple-400">
+                  <div className="text-lg font-bold text-purple-400 text-center">
                     {calculateDuration(contest.startTime, contest.endTime)}
                   </div>
                 </div>
