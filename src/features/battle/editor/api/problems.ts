@@ -30,9 +30,17 @@ export interface ProblemPreview {
   id: string;
   title: string;
   rating: number;
+  difficulty: "EASY" | "MEDIUM" | "HARD";
   score: number;
+  submissions: {
+    accepted?: number;
+    wrong_answer?: number;
+    time_limit_exceeded?: number;
+    compilation_error?: number;
+  };
   createdAt: string;
 }
+
 
 export interface ProblemListResponse {
   success: boolean;

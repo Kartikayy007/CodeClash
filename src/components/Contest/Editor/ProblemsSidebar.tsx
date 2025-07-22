@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useEffect, useState, useCallback } from "react"
-import { X, ChevronLeft, ChevronRight } from "lucide-react"
+import { X, ChevronLeft, ChevronRight, Check } from "lucide-react"
 import LabelButton from "@/components/ui/LabelButton"
 import type { ProblemPreview } from "@/features/battle/editor/api/problems"
 import Image from "next/image"
@@ -48,15 +48,30 @@ interface ProblemsSidebarProps {
 type SidebarTab = "problems" | "leaderboard"
 
 // Helper function to get difficulty based on rating
-const getDifficulty = (rating: number): { label: string; color: string } => {
-  if (rating < 1000) {
-    return { label: "Easy", color: "text-green-500" }
-  } else if (rating < 2000) {
-    return { label: "Medium", color: "text-yellow-500" }
-  } else {
-    return { label: "Hard", color: "text-red-500" }
+const getDifficulty = (difficulty: "EASY" | "MEDIUM" | "HARD") => {
+  if (difficulty === 'EASY') {
+    return { label: "EASY", color: "text-green-500" }
+  } else if (difficulty === 'MEDIUM') {
+    return { label: "MEDIUM", color: "text-yellow-500" }
+  } else if (difficulty === 'HARD') {
+    return { label: "HARD", color: "text-red-500" }
   }
 }
+
+interface ProblemSubmissions {
+  accepted?: number;
+  wrong_answer?: number;
+  time_limit_exceeded?: number;
+  compilation_error?: number;
+}
+
+const isProblemSolved = (submissions: ProblemSubmissions | undefined): boolean => {
+  if (!submissions || !submissions.accepted) {
+    return false;
+  }
+  return submissions.accepted > 0;
+}
+
 
 // Skeleton loading component for problem cards
 const ProblemCardSkeleton = () => (
@@ -170,38 +185,17 @@ const ProblemsSidebar: React.FC<ProblemsSidebarProps> = ({
     }
   }
 
-  // Get rank display with medal colors
-  const getRankDisplay = (rank: number) => {
-    const rankClasses = {
-      1: "bg-yellow-500 text-black", // Gold
-      2: "bg-gray-400 text-black", // Silver
-      3: "bg-orange-500 text-black", // Bronze
-    }
-
-    return (
-      <div
-        className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-          rankClasses[rank as keyof typeof rankClasses] || "bg-gray-600 text-white"
-        }`}
-      >
-        {rank}
-      </div>
-    )
-  }
-
   return (
     <div className={`fixed inset-0 z-50 ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}>
       <div
-        className={`fixed inset-0 bg-black transition-opacity duration-300 ease-in-out ${
-          isOpen ? "opacity-50" : "opacity-0"
-        }`}
+        className={`fixed inset-0 bg-black transition-opacity duration-300 ease-in-out ${isOpen ? "opacity-50" : "opacity-0"
+          }`}
         onClick={onClose}
       ></div>
 
       <div
-        className={`fixed left-0 top-0 h-full w-full sm:w-96 bg-[#1C202A] shadow-lg overflow-y-auto transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed left-0 top-0 h-full w-full sm:w-96 bg-[#1C202A] shadow-lg overflow-y-auto transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
@@ -215,21 +209,19 @@ const ProblemsSidebar: React.FC<ProblemsSidebarProps> = ({
         <div className="flex border-b border-gray-700">
           <button
             onClick={() => setActiveTab("problems")}
-            className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${
-              activeTab === "problems"
-                ? "text-cyan-400 bg-cyan-500/10 border-b-2 border-cyan-400"
-                : "text-gray-400 hover:text-white hover:bg-gray-700/50"
-            }`}
+            className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${activeTab === "problems"
+              ? "text-cyan-400 bg-cyan-500/10 border-b-2 border-cyan-400"
+              : "text-gray-400 hover:text-white hover:bg-gray-700/50"
+              }`}
           >
             Problems
           </button>
           <button
             onClick={() => setActiveTab("leaderboard")}
-            className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${
-              activeTab === "leaderboard"
-                ? "text-cyan-400 bg-cyan-500/10 border-b-2 border-cyan-400"
-                : "text-gray-400 hover:text-white hover:bg-gray-700/50"
-            }`}
+            className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${activeTab === "leaderboard"
+              ? "text-cyan-400 bg-cyan-500/10 border-b-2 border-cyan-400"
+              : "text-gray-400 hover:text-white hover:bg-gray-700/50"
+              }`}
           >
             Leaderboard
           </button>
@@ -249,13 +241,20 @@ const ProblemsSidebar: React.FC<ProblemsSidebarProps> = ({
               ) : problems.length > 0 ? (
                 <div className="space-y-4">
                   {problems.map((problem) => {
-                    const difficulty = getDifficulty(problem.rating)
+                    const difficulty = getDifficulty(problem.difficulty)
+                    const isSolved = isProblemSolved(problem.submissions)
+
                     return (
                       <div key={problem.id} className="bg-[#292C33] rounded-lg p-4">
                         <div className="flex justify-between items-start mb-2">
-                          <h3 className="text-white font-medium text-lg pr-2">{problem.title}</h3>
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-white font-medium text-lg pr-2">{problem.title}</h3>
+                            {isSolved && (
+                              <Check size={16} className="text-green-500 flex-shrink-0" />
+                            )}
+                          </div>
                           <div className="flex flex-col items-end flex-shrink-0">
-                            <span className={`${difficulty.color} text-sm font-medium`}>{difficulty.label}</span>
+                            <span className={`${difficulty?.color} text-sm font-medium`}>{difficulty?.label}</span>
                             <span className="text-gray-400 text-xs mt-1">Rating: {problem.rating}</span>
                           </div>
                         </div>
@@ -263,10 +262,14 @@ const ProblemsSidebar: React.FC<ProblemsSidebarProps> = ({
                           <span className="text-gray-300 text-sm">Score: {problem.score}</span>
                           <LabelButton
                             onClick={() => handleProblemSelect(problem.id)}
-                            variant="filled"
-                            className="text-sm py-1"
+                            variant={isSolved ? "light" : "filled"}
+                            className={`text-sm py-1 `}
                           >
-                            Solve
+                            {isSolved ? (
+                              "Solved"
+                            ) : (
+                              "Solve"
+                            )}
                           </LabelButton>
                         </div>
                       </div>
@@ -285,11 +288,18 @@ const ProblemsSidebar: React.FC<ProblemsSidebarProps> = ({
               ) : leaderboardData?.leaderboard.length ? (
                 <>
                   <div className="space-y-3">
-                    {leaderboardData.leaderboard.map((entry) => (
+                    {leaderboardData.leaderboard.map((entry, index) => (
                       <div key={entry.id} className="bg-[#292C33] rounded-lg p-3 sm:p-4">
                         <div className="flex justify-between items-center">
                           <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                            {getRankDisplay(entry.rank)}
+                            {/* Rank Display using index */}
+                            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${index === 0 ? "bg-yellow-500 text-black" : // Gold for 1st
+                              index === 1 ? "bg-gray-400 text-black" : // Silver for 2nd  
+                                index === 2 ? "bg-orange-500 text-black" : // Bronze for 3rd
+                                  "bg-gray-600 text-white" // Default for 4th+
+                              }`}>
+                              {index + 1}
+                            </div>
 
                             {/* Profile Image */}
                             <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-600 flex-shrink-0">
@@ -322,6 +332,7 @@ const ProblemsSidebar: React.FC<ProblemsSidebarProps> = ({
                       </div>
                     ))}
                   </div>
+
 
                   {/* Pagination */}
                   {leaderboardData.pagination.pages > 1 && (

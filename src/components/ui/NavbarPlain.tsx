@@ -34,40 +34,41 @@ const Navbar = () => {
 
   return (
     <nav className="relative bg-[#10141D] z-50">
-      <div className="flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
-        <div className="flex items-center gap-4">
+      <div className="flex justify-between items-center px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Image
             src="/logo.svg"
             alt="Code Clash"
-            width={162}
-            height={40}
+            width={120}
+            height={30}
+            className="sm:w-[162px] sm:h-[40px]"
             priority
           />
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 sm:gap-2">
           <button
             onClick={handleHome}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#2A2F3E] hover:bg-[#3A3F4E] transition-colors"
+            className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 md:px-4 py-2 rounded-lg bg-[#2A2F3E] hover:bg-[#3A3F4E] transition-colors"
           >
-            <Home size={20} className="text-white" />
-            <span className="text-white text-sm font-medium">Home</span>
+            <Home size={18} className="text-white sm:w-5 sm:h-5" />
+            <span className="hidden sm:inline text-white text-sm font-medium">Home</span>
           </button>
           
           <button
             onClick={handleSettings}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#2A2F3E] hover:bg-[#3A3F4E] transition-colors"
+            className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 md:px-4 py-2 rounded-lg bg-[#2A2F3E] hover:bg-[#3A3F4E] transition-colors"
           >
-            <Settings size={20} className="text-white" />
-            <span className="text-white text-sm font-medium">Settings</span>
+            <Settings size={18} className="text-white sm:w-5 sm:h-5" />
+            <span className="hidden sm:inline text-white text-sm font-medium">Settings</span>
           </button>
           
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#2A2F3E] hover:bg-[#3A3F4E] transition-colors"
+            className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 md:px-4 py-2 rounded-lg bg-[#2A2F3E] hover:bg-[#3A3F4E] transition-colors"
           >
-            <LogOut size={20} className="text-white" />
-            <span className="text-white text-sm font-medium">Logout</span>
+            <LogOut size={18} className="text-white sm:w-5 sm:h-5" />
+            <span className="hidden sm:inline text-white text-sm font-medium">Logout</span>
           </button>
         </div>
       </div>

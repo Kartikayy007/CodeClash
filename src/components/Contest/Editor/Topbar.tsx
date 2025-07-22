@@ -31,30 +31,34 @@ const Topbar = ({
   const [hasLoaded, setHasLoaded] = useState(false);
 
   const fetchContestQuestions = useCallback(async () => {
-    if (contestId && !hasLoaded) {
-      try {
-        setIsLoading(true);
-        const contestResponse = await contestApi.getContestDetails(contestId);
+  if (contestId && !hasLoaded) {
+    try {
+      setIsLoading(true);
+      const contestResponse = await contestApi.getContestDetails(contestId);
 
-        if (contestResponse.contest?.questions) {
-          const formattedQuestions: ProblemPreview[] =
-            contestResponse.contest.questions.map((question) => ({
-              id: question.id,
-              title: question.title,
-              rating: question.rating,
-              score: question.score,
-              createdAt: new Date().toISOString(),
-            }));
-          setContestQuestions(formattedQuestions);
-          setHasLoaded(true);
-        }
-      } catch (error) {
-        console.error("Failed to fetch contest questions:", error);
-      } finally {
-        setIsLoading(false);
+      if (contestResponse.contest?.questions) {
+        const formattedQuestions: ProblemPreview[] =
+          contestResponse.contest.questions.map((question) => ({
+            id: question.id,
+            title: question.title,
+            rating: question.rating,
+            difficulty: question.difficulty, // Add this line
+            score: question.score,
+            submissions: question.submissions || {}, // Add this line
+            createdAt: new Date().toISOString(),
+          }));
+        setContestQuestions(formattedQuestions);
+        setHasLoaded(true);
       }
+    } catch (error) {
+      console.error("Failed to fetch contest questions:", error);
+    } finally {
+      setIsLoading(false);
     }
-  }, [contestId, hasLoaded]);
+  }
+}, [contestId, hasLoaded]);
+
+
 
   const handleGridClick = () => {
     setShowSidebar(true);
