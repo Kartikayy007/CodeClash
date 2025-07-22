@@ -178,7 +178,7 @@ export default function AdminDashboard() {
 
     return userDetails.contestSubmissions
       .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-      .map((submission, index) => {
+      .map((submission) => {
         const date = new Date(submission.createdAt)
         return {
           time: date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
