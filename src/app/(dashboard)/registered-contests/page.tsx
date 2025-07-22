@@ -94,7 +94,7 @@ export default function RegisteredContestsPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [totalContests, setTotalContests] = useState(0)
-  const [filterStatus, setFilterStatus] = useState<"ALL" | "ONGOING" | "UPCOMING" | "COMPLETED">("ALL")
+  const [filterStatus] = useState<"ALL" | "ONGOING" | "UPCOMING" | "COMPLETED">("ALL")
   const PAGE_SIZE = 10 // Display 10 contests per page
   const router = useRouter()
 
