@@ -4,7 +4,7 @@ export interface Contest {
   title: string;
   startTime: string;
   endTime: string;
-  status: 'ONGOING' | 'COMPLETED' | 'UPCOMING';
+  status: 'ONGOING' | 'ENDED' | 'UPCOMING';
   creator: {
     id: string;
     username: string;
