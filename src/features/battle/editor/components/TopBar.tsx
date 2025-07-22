@@ -14,7 +14,7 @@ import {
   updateMultipleProblemStatuses,
 } from "@/features/battle/slices/battleSlice";
 import { socketService } from "@/lib/socket";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { setGameEnd } from "@/features/battle/slices/gameEndSlice";
 import { usePathname } from "next/navigation";
 import { submitBattleCode } from "../api/editorApi";
