@@ -8,14 +8,14 @@ import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Shield, Eye, Clock, CheckCircle, XCircle } from "lucide-react"
+import { Shield, Eye, Clock, CheckCircle, XCircle, RefreshCw } from "lucide-react"
 import type {
     Contest,
     ContestsResponse,
     LeaderboardResponse,
     LeaderboardEntry,
     UserDetailsResponse,
-    Submission, // Changed from ContestSubmission
+    Submission,
 } from "@/types/admin-api.types"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
@@ -26,15 +26,17 @@ export default function AdminDashboard() {
     const [selectedContest, setSelectedContest] = useState<Contest | null>(null)
     const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
     const [userDetails, setUserDetails] = useState<UserDetailsResponse | null>(null)
-    const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null) // Updated type
+    const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null)
+    const [selectedUserId, setSelectedUserId] = useState<string | null>(null) // Track the current user ID
   
     const [loading, setLoading] = useState(true)
+    const [refreshing, setRefreshing] = useState(false)
     const [leaderboardLoading, setLeaderboardLoading] = useState(false)
     const [userDetailsLoading, setUserDetailsLoading] = useState(false)
   
     const [showLeaderboard, setShowLeaderboard] = useState(false)
     const [showUserDetails, setShowUserDetails] = useState(false)
-    const [showSubmissionDetails, setShowSubmissionDetails] = useState(false) // New state for submission details dialog
+    const [showSubmissionDetails, setShowSubmissionDetails] = useState(false)
   
     // Get access token from cookies
     const getAccessToken = () => {
@@ -45,8 +47,13 @@ export default function AdminDashboard() {
     }
   
     // Fetch ongoing contests
-    const fetchContests = async () => {
-      setLoading(true)
+    const fetchContests = async (isRefresh = false) => {
+      if (isRefresh) {
+        setRefreshing(true)
+      } else {
+        setLoading(true)
+      }
+      
       try {
         const token = getAccessToken()
         const response = await fetch(`${API_BASE_URL}/api/v1/admin/contests?status=ONGOING`, {
@@ -77,6 +84,7 @@ export default function AdminDashboard() {
         console.error("Error fetching contests:", error)
       } finally {
         setLoading(false)
+        setRefreshing(false)
       }
     }
   
@@ -120,6 +128,7 @@ export default function AdminDashboard() {
     // Fetch user details
     const fetchUserDetails = async (contestId: string, userId: string) => {
       setUserDetailsLoading(true)
+      setSelectedUserId(userId) // Store the user ID
       try {
         const token = getAccessToken()
         const response = await fetch(`${API_BASE_URL}/api/v1/admin/contests/${contestId}/user-details/${userId}`, {
@@ -153,6 +162,19 @@ export default function AdminDashboard() {
         setUserDetailsLoading(false)
       }
     }
+
+    // Refresh function
+    const handleRefresh = () => {
+      fetchContests(true)
+      // If leaderboard is currently shown, refresh it too
+      if (showLeaderboard && selectedContest) {
+        fetchLeaderboard(selectedContest.id)
+      }
+      // If user details are currently shown, refresh them too
+      if (showUserDetails && selectedContest && selectedUserId) {
+        fetchUserDetails(selectedContest.id, selectedUserId)
+      }
+    }
   
     useEffect(() => {
       fetchContests()
@@ -169,9 +191,8 @@ export default function AdminDashboard() {
       }
     }
   
-    // New handler for viewing submission details
+    // Handler for viewing submission details
     const handleViewSubmissionDetails = (submission: Submission) => {
-      // Updated type
       setSelectedSubmission(submission)
       setShowSubmissionDetails(true)
     }
@@ -179,79 +200,90 @@ export default function AdminDashboard() {
     const getStatusColor = (status: string) => {
       switch (status) {
         case "ACCEPTED":
-          return "text-green-600"
+          return "text-green-600 dark:text-green-400"
         case "WRONG_ANSWER":
-          return "text-red-600"
+          return "text-red-600 dark:text-red-400"
         case "TIME_LIMIT_EXCEEDED":
-          return "text-yellow-600"
+          return "text-yellow-600 dark:text-yellow-400"
         case "RUNTIME_ERROR":
-          return "text-orange-600"
+          return "text-orange-600 dark:text-orange-400"
         default:
-          return "text-gray-600"
+          return "text-gray-600 dark:text-gray-400"
       }
     }
   
     const getStatusIcon = (status: string) => {
       switch (status) {
         case "ACCEPTED":
-          return <CheckCircle className="h-4 w-4 text-green-600" />
+          return <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
         case "WRONG_ANSWER":
-          return <XCircle className="h-4 w-4 text-red-600" />
+          return <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
         default:
-          return <Clock className="h-4 w-4 text-yellow-600" />
+          return <Clock className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
       }
     }
   
     return (
       <AdminProtectedRoute>
-        <div className="container mx-auto p-6 space-y-6">
+        <div className="container mx-auto p-6 space-y-6 dark:bg-gray-900 min-h-screen">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
-              <p className="text-muted-foreground">Manage CodeClash platform and monitor system activities</p>
+              <h1 className="text-3xl font-bold tracking-tight dark:text-white">Admin Dashboard</h1>
+              <p className="text-muted-foreground dark:text-gray-400">Manage CodeClash platform and monitor system activities</p>
             </div>
-            <Badge variant="secondary" className="flex items-center gap-2">
-              <Shield className="h-4 w-4" />
-              Admin Access
-            </Badge>
+            <div className="flex items-center gap-3">
+              <Button 
+                variant="outline" 
+                onClick={handleRefresh}
+                disabled={refreshing}
+                className="flex items-center gap-2 dark:border-gray-600 dark:text-white dark:hover:bg-gray-800"
+              >
+                <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+                {refreshing ? 'Refreshing...' : 'Refresh'}
+              </Button>
+              <Badge variant="secondary" className="flex items-center gap-2 dark:bg-gray-800 dark:text-gray-200">
+                <Shield className="h-4 w-4" />
+                Admin Access
+              </Badge>
+            </div>
           </div>
   
           {/* Ongoing Contests */}
-          <Card>
+          <Card className="dark:bg-gray-800 dark:border-gray-700">
             <CardHeader>
-              <CardTitle>Ongoing Contests</CardTitle>
-              <CardDescription>Monitor active coding competitions and their participants</CardDescription>
+              <CardTitle className="dark:text-white">Ongoing Contests</CardTitle>
+              <CardDescription className="dark:text-gray-400">Monitor active coding competitions and their participants</CardDescription>
             </CardHeader>
             <CardContent>
               {loading ? (
                 <div className="flex items-center justify-center p-8">
-                  <div className="text-muted-foreground">Loading contests...</div>
+                  <div className="text-muted-foreground dark:text-gray-400">Loading contests...</div>
                 </div>
               ) : contests.length === 0 ? (
                 <div className="flex items-center justify-center p-8">
-                  <div className="text-muted-foreground">No ongoing contests found</div>
+                  <div className="text-muted-foreground dark:text-gray-400">No ongoing contests found</div>
                 </div>
               ) : (
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead>Contest Title</TableHead>
-                      <TableHead>Creator</TableHead>
-                      <TableHead>Start Time</TableHead>
-                      <TableHead>End Time</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
+                    <TableRow className="dark:border-gray-600">
+                      <TableHead className="dark:text-gray-300">Contest Title</TableHead>
+                      <TableHead className="dark:text-gray-300">Creator</TableHead>
+                      <TableHead className="dark:text-gray-300">Start Time</TableHead>
+                      <TableHead className="dark:text-gray-300">End Time</TableHead>
+                      <TableHead className="dark:text-gray-300">Status</TableHead>
+                      <TableHead className="dark:text-gray-300">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {contests.map((contest) => (
-                      <TableRow key={contest.id}>
-                        <TableCell className="font-medium">{contest.title}</TableCell>
-                        <TableCell>{contest.creator.username}</TableCell>
-                        <TableCell>{new Date(contest.startTime).toLocaleString()}</TableCell>
-                        <TableCell>{new Date(contest.endTime).toLocaleString()}</TableCell>
+                      <TableRow key={contest.id} className="dark:border-gray-600">
+                        <TableCell className="font-medium dark:text-white">{contest.title}</TableCell>
+                        <TableCell className="dark:text-gray-300">{contest.creator.username}</TableCell>
+                        <TableCell className="dark:text-gray-300">{new Date(contest.startTime).toLocaleString()}</TableCell>
+                        <TableCell className="dark:text-gray-300">{new Date(contest.endTime).toLocaleString()}</TableCell>
                         <TableCell>
-                          <Badge variant="secondary">{contest.status}</Badge>
+                          <Badge variant="secondary" className="dark:bg-gray-700 dark:text-gray-200">{contest.status}</Badge>
                         </TableCell>
                         <TableCell>
                           <Button
@@ -259,6 +291,7 @@ export default function AdminDashboard() {
                             size="sm"
                             onClick={() => handleViewLeaderboard(contest)}
                             disabled={leaderboardLoading}
+                            className="dark:border-gray-600 dark:text-white dark:hover:bg-gray-700"
                           >
                             <Eye className="h-4 w-4 mr-2" />
                             View Leaderboard
@@ -274,36 +307,47 @@ export default function AdminDashboard() {
   
           {/* Leaderboard Dialog */}
           <Dialog open={showLeaderboard} onOpenChange={setShowLeaderboard}>
-            <DialogContent className="max-w-4xl max-h-[80vh]">
+            <DialogContent className="max-w-4xl max-h-[80vh] dark:bg-gray-800 dark:border-gray-600">
               <DialogHeader>
-                <DialogTitle>{selectedContest?.title} - Leaderboard</DialogTitle>
-                <DialogDescription>Contest participants ranked by score and submission time</DialogDescription>
+                <DialogTitle className="flex items-center justify-between dark:text-white">
+                  <span>{selectedContest?.title} - Leaderboard</span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => selectedContest && fetchLeaderboard(selectedContest.id)}
+                    disabled={leaderboardLoading}
+                    className="dark:text-white dark:hover:bg-gray-700"
+                  >
+                    <RefreshCw className={`h-4 w-4 ${leaderboardLoading ? 'animate-spin' : ''}`} />
+                  </Button>
+                </DialogTitle>
+                <DialogDescription className="dark:text-gray-400">Contest participants ranked by score and submission time</DialogDescription>
               </DialogHeader>
               <ScrollArea className="h-[60vh]">
                 {leaderboardLoading ? (
                   <div className="flex items-center justify-center p-8">
-                    <div className="text-muted-foreground">Loading leaderboard...</div>
+                    <div className="text-muted-foreground dark:text-gray-400">Loading leaderboard...</div>
                   </div>
                 ) : (
                   <Table>
                     <TableHeader>
-                      <TableRow>
-                        <TableHead>Rank</TableHead>
-                        <TableHead>Username</TableHead>
-                        <TableHead>Score</TableHead>
-                        <TableHead>Problems Solved</TableHead>
-                        <TableHead>Last Submission</TableHead>
-                        <TableHead>Actions</TableHead>
+                      <TableRow className="dark:border-gray-600">
+                        <TableHead className="dark:text-gray-300">Rank</TableHead>
+                        <TableHead className="dark:text-gray-300">Username</TableHead>
+                        <TableHead className="dark:text-gray-300">Score</TableHead>
+                        <TableHead className="dark:text-gray-300">Problems Solved</TableHead>
+                        <TableHead className="dark:text-gray-300">Last Submission</TableHead>
+                        <TableHead className="dark:text-gray-300">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {leaderboard.map((entry) => (
-                        <TableRow key={entry.user.id}>
-                          <TableCell className="font-medium">#{entry.rank}</TableCell>
-                          <TableCell>{entry.user.username}</TableCell>
-                          <TableCell>{entry.score}</TableCell>
-                          <TableCell>{entry.problemsSolved}</TableCell>
-                          <TableCell>
+                        <TableRow key={entry.user.id} className="dark:border-gray-600">
+                          <TableCell className="font-medium dark:text-white">#{entry.rank}</TableCell>
+                          <TableCell className="dark:text-gray-300">{entry.user.username}</TableCell>
+                          <TableCell className="dark:text-gray-300">{entry.score}</TableCell>
+                          <TableCell className="dark:text-gray-300">{entry.problemsSolved}</TableCell>
+                          <TableCell className="dark:text-gray-300">
                             {entry.lastSubmissionTime
                               ? new Date(entry.lastSubmissionTime).toLocaleString()
                               : "No submissions"}
@@ -314,6 +358,7 @@ export default function AdminDashboard() {
                               size="sm"
                               onClick={() => handleViewUserDetails(entry.user.id)}
                               disabled={userDetailsLoading}
+                              className="dark:border-gray-600 dark:text-white dark:hover:bg-gray-700"
                             >
                               <Eye className="h-4 w-4 mr-2" />
                               View Details
@@ -330,10 +375,21 @@ export default function AdminDashboard() {
   
           {/* User Details Dialog */}
           <Dialog open={showUserDetails} onOpenChange={setShowUserDetails}>
-            <DialogContent className="max-w-6xl max-h-[90vh]">
+            <DialogContent className="max-w-6xl max-h-[90vh] dark:bg-gray-800 dark:border-gray-600">
               <DialogHeader>
-                <DialogTitle>{userDetails?.userDetails.username} - Contest Details</DialogTitle>
-                <DialogDescription>
+                <DialogTitle className="flex items-center justify-between dark:text-white">
+                  <span>{userDetails?.userDetails.username} - Contest Details</span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => selectedContest && selectedUserId && fetchUserDetails(selectedContest.id, selectedUserId)}
+                    disabled={userDetailsLoading}
+                    className="dark:text-white dark:hover:bg-gray-700"
+                  >
+                    <RefreshCw className={`h-4 w-4 ${userDetailsLoading ? 'animate-spin' : ''}`} />
+                  </Button>
+                </DialogTitle>
+                <DialogDescription className="dark:text-gray-400">
                   Email: {userDetails?.userDetails.email} | Total Score: {userDetails?.totalScore} | Submissions:{" "}
                   {userDetails?.totalSubmissions}
                 </DialogDescription>
@@ -341,62 +397,62 @@ export default function AdminDashboard() {
               <ScrollArea className="h-[70vh]">
                 {userDetailsLoading ? (
                   <div className="flex items-center justify-center p-8">
-                    <div className="text-muted-foreground">Loading user details...</div>
+                    <div className="text-muted-foreground dark:text-gray-400">Loading user details...</div>
                   </div>
                 ) : userDetails ? (
                   <div className="space-y-6">
                     {/* User Stats */}
                     <div className="grid gap-4 md:grid-cols-4">
-                      <Card>
+                      <Card className="dark:bg-gray-700 dark:border-gray-600">
                         <CardContent className="p-4">
-                          <div className="text-2xl font-bold">{userDetails.totalScore}</div>
-                          <p className="text-xs text-muted-foreground">Total Score</p>
+                          <div className="text-2xl font-bold dark:text-white">{userDetails.totalScore}</div>
+                          <p className="text-xs text-muted-foreground dark:text-gray-400">Total Score</p>
                         </CardContent>
                       </Card>
-                      <Card>
+                      <Card className="dark:bg-gray-700 dark:border-gray-600">
                         <CardContent className="p-4">
-                          <div className="text-2xl font-bold">{userDetails.totalSubmissions}</div>
-                          <p className="text-xs text-muted-foreground">Total Submissions</p>
+                          <div className="text-2xl font-bold dark:text-white">{userDetails.totalSubmissions}</div>
+                          <p className="text-xs text-muted-foreground dark:text-gray-400">Total Submissions</p>
                         </CardContent>
                       </Card>
-                      <Card>
+                      <Card className="dark:bg-gray-700 dark:border-gray-600">
                         <CardContent className="p-4">
-                          <div className="text-2xl font-bold text-green-600">{userDetails.totalPassedTestCases}</div>
-                          <p className="text-xs text-muted-foreground">Passed Test Cases</p>
+                          <div className="text-2xl font-bold text-green-600 dark:text-green-400">{userDetails.totalPassedTestCases}</div>
+                          <p className="text-xs text-muted-foreground dark:text-gray-400">Passed Test Cases</p>
                         </CardContent>
                       </Card>
-                      <Card>
+                      <Card className="dark:bg-gray-700 dark:border-gray-600">
                         <CardContent className="p-4">
-                          <div className="text-2xl font-bold text-red-600">{userDetails.totalFailedTestCases}</div>
-                          <p className="text-xs text-muted-foreground">Failed Test Cases</p>
+                          <div className="text-2xl font-bold text-red-600 dark:text-red-400">{userDetails.totalFailedTestCases}</div>
+                          <p className="text-xs text-muted-foreground dark:text-gray-400">Failed Test Cases</p>
                         </CardContent>
                       </Card>
                     </div>
   
                     {/* Submissions */}
-                    <Card>
+                    <Card className="dark:bg-gray-700 dark:border-gray-600">
                       <CardHeader>
-                        <CardTitle>Contest Submissions</CardTitle>
+                        <CardTitle className="dark:text-white">Contest Submissions</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <Table>
                           <TableHeader>
-                            <TableRow>
-                              <TableHead>Question</TableHead>
-                              <TableHead>Language</TableHead>
-                              <TableHead>Status</TableHead>
-                              <TableHead>Score</TableHead>
-                              <TableHead>Test Cases</TableHead>
-                              <TableHead>Submitted At</TableHead>
-                              <TableHead>Actions</TableHead> {/* New column for actions */}
+                            <TableRow className="dark:border-gray-600">
+                              <TableHead className="dark:text-gray-300">Question</TableHead>
+                              <TableHead className="dark:text-gray-300">Language</TableHead>
+                              <TableHead className="dark:text-gray-300">Status</TableHead>
+                              <TableHead className="dark:text-gray-300">Score</TableHead>
+                              <TableHead className="dark:text-gray-300">Test Cases</TableHead>
+                              <TableHead className="dark:text-gray-300">Submitted At</TableHead>
+                              <TableHead className="dark:text-gray-300">Actions</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
                             {userDetails.contestSubmissions.map((submission) => (
-                              <TableRow key={submission.id}>
-                                <TableCell className="font-medium">{submission.question.title}</TableCell>
+                              <TableRow key={submission.id} className="dark:border-gray-600">
+                                <TableCell className="font-medium dark:text-white">{submission.question.title}</TableCell>
                                 <TableCell>
-                                  <Badge variant="outline">{submission.language}</Badge>
+                                  <Badge variant="outline" className="dark:border-gray-500 dark:text-gray-300">{submission.language}</Badge>
                                 </TableCell>
                                 <TableCell>
                                   <div className={`flex items-center gap-2 ${getStatusColor(submission.status)}`}>
@@ -404,17 +460,18 @@ export default function AdminDashboard() {
                                     {submission.status.replace("_", " ")}
                                   </div>
                                 </TableCell>
-                                <TableCell>{submission.score}</TableCell>
+                                <TableCell className="dark:text-gray-300">{submission.score}</TableCell>
                                 <TableCell>
-                                  <span className="text-green-600">{submission.passedTestCases}</span>/
-                                  <span className="text-gray-600">{submission.totalTestCases}</span>
+                                  <span className="text-green-600 dark:text-green-400">{submission.passedTestCases}</span>/
+                                  <span className="text-gray-600 dark:text-gray-400">{submission.totalTestCases}</span>
                                 </TableCell>
-                                <TableCell>{new Date(submission.createdAt).toLocaleString()}</TableCell>
+                                <TableCell className="dark:text-gray-300">{new Date(submission.createdAt).toLocaleString()}</TableCell>
                                 <TableCell>
                                   <Button
                                     variant="outline"
                                     size="sm"
                                     onClick={() => handleViewSubmissionDetails(submission)}
+                                    className="dark:border-gray-600 dark:text-white dark:hover:bg-gray-700"
                                   >
                                     <Eye className="h-4 w-4 mr-2" />
                                     View Code
@@ -434,10 +491,10 @@ export default function AdminDashboard() {
   
           {/* Submission Details Dialog */}
           <Dialog open={showSubmissionDetails} onOpenChange={setShowSubmissionDetails}>
-            <DialogContent className="max-w-4xl max-h-[90vh]">
+            <DialogContent className="max-w-4xl max-h-[90vh] dark:bg-gray-800 dark:border-gray-600">
               <DialogHeader>
-                <DialogTitle>{selectedSubmission?.question.title} - Submission Details</DialogTitle>
-                <DialogDescription>
+                <DialogTitle className="dark:text-white">{selectedSubmission?.question.title} - Submission Details</DialogTitle>
+                <DialogDescription className="dark:text-gray-400">
                   Language: {selectedSubmission?.language} | Status: {selectedSubmission?.status.replace("_", " ")} |
                   Score: {selectedSubmission?.score}
                 </DialogDescription>
@@ -446,61 +503,60 @@ export default function AdminDashboard() {
                 {selectedSubmission && (
                   <div className="space-y-6">
                     {/* Question Details */}
-                    <Card>
+                    <Card className="dark:bg-gray-700 dark:border-gray-600">
                       <CardHeader>
-                        <CardTitle>Question Details</CardTitle>
+                        <CardTitle className="dark:text-white">Question Details</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-2">
-                        <p>
+                        <p className="dark:text-gray-300">
                           <strong>Description:</strong> {selectedSubmission.question.description}
                         </p>
-                        <p>
+                        <p className="dark:text-gray-300">
                           <strong>Input Format:</strong> {selectedSubmission.question.inputFormat}
                         </p>
-                        <p>
-                          <strong>Output Format:</strong> 
-                          {selectedSubmission.question.outputFormat}
+                        <p className="dark:text-gray-300">
+                          <strong>Output Format:</strong> {selectedSubmission.question.outputFormat}
                         </p>
-                        <p>
+                        <p className="dark:text-gray-300">
                           <strong>Constraints:</strong> {selectedSubmission.question.constraints}
                         </p>
                       </CardContent>
                     </Card>
   
                     {/* Submitted Code */}
-                    <Card>
+                    <Card className="dark:bg-gray-700 dark:border-gray-600">
                       <CardHeader>
-                        <CardTitle>Submitted Code</CardTitle>
+                        <CardTitle className="dark:text-white">Submitted Code</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <ScrollArea className="h-64 rounded-md border p-4 font-mono text-sm bg-gray-50 dark:bg-gray-900">
+                        <ScrollArea className="h-64 rounded-md border dark:border-gray-600 p-4 font-mono text-sm bg-gray-50 dark:bg-gray-900">
                           <pre>
-                            <code>{selectedSubmission.code}</code>
+                            <code className="dark:text-gray-200">{selectedSubmission.code}</code>
                           </pre>
                         </ScrollArea>
                       </CardContent>
                     </Card>
   
                     {/* Test Cases */}
-                    <Card>
+                    <Card className="dark:bg-gray-700 dark:border-gray-600">
                       <CardHeader>
-                        <CardTitle>Test Cases</CardTitle>
+                        <CardTitle className="dark:text-white">Test Cases</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <Table>
                           <TableHeader>
-                            <TableRow>
-                              <TableHead>Input</TableHead>
-                              <TableHead>Expected Output</TableHead>
-                              <TableHead>Hidden</TableHead>
+                            <TableRow className="dark:border-gray-600">
+                              <TableHead className="dark:text-gray-300">Input</TableHead>
+                              <TableHead className="dark:text-gray-300">Expected Output</TableHead>
+                              <TableHead className="dark:text-gray-300">Hidden</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
                             {selectedSubmission.question.testCases.map((testCase, index) => (
-                              <TableRow key={testCase.id || index}>
-                                <TableCell className="font-mono text-xs">{testCase.input}</TableCell>
-                                <TableCell className="font-mono text-xs">{testCase.output}</TableCell>
-                                <TableCell>{testCase.isHidden ? "Yes" : "No"}</TableCell>
+                              <TableRow key={testCase.id || index} className="dark:border-gray-600">
+                                <TableCell className="font-mono text-xs dark:text-gray-300">{testCase.input}</TableCell>
+                                <TableCell className="font-mono text-xs dark:text-gray-300">{testCase.output}</TableCell>
+                                <TableCell className="dark:text-gray-300">{testCase.isHidden ? "Yes" : "No"}</TableCell>
                               </TableRow>
                             ))}
                           </TableBody>
@@ -515,5 +571,4 @@ export default function AdminDashboard() {
         </div>
       </AdminProtectedRoute>
     )
-  }
-  
+}
