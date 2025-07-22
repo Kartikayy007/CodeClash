@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { toast } from "react-hot-toast"
 import {
   Shield,
   Eye,
@@ -26,6 +27,10 @@ import {
   Calendar,
   Zap,
   Award,
+  Play,
+  Square,
+  UserX,
+  Ban,
 } from "lucide-react"
 import { CartesianGrid, XAxis, YAxis, Line, LineChart, Bar, BarChart } from "recharts"
 import type {
@@ -51,6 +56,10 @@ export default function AdminDashboard() {
   const [refreshing, setRefreshing] = useState(false)
   const [leaderboardLoading, setLeaderboardLoading] = useState(false)
   const [userDetailsLoading, setUserDetailsLoading] = useState(false)
+  const [startingContest, setStartingContest] = useState<string | null>(null)
+  const [endingContest, setEndingContest] = useState<string | null>(null)
+  const [kickingUser, setKickingUser] = useState<string | null>(null)
+  const [banningUser, setBanningUser] = useState<string | null>(null)
   const [showLeaderboard, setShowLeaderboard] = useState(false)
   const [showUserDetails, setShowUserDetails] = useState(false)
   const [showSubmissionDetails, setShowSubmissionDetails] = useState(false)
@@ -272,6 +281,198 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false)
       setRefreshing(false)
+    }
+  }
+
+  // Start contest
+  const startContest = async (contestId: string) => {
+    setStartingContest(contestId)
+    try {
+      const token = getAccessToken()
+      const response = await fetch(`${API_BASE_URL}/api/v1/contest/${contestId}/start`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+
+      if (response.status === 401 || response.status === 403) {
+        router.push("/dashboard")
+        return
+      }
+
+      const data = await response.json()
+
+      if (response.ok) {
+        toast({
+          title: "Success",
+          description: data.message || "Contest started successfully",
+        })
+        // Update the contest status locally
+        setContests(prev => prev.map(contest => 
+          contest.id === contestId 
+            ? { ...contest, status: "ONGOING", startTime: data.startTime }
+            : contest
+        ))
+      } else {
+        toast({
+          title: "Error",
+          description: data.error || "Failed to start contest",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      console.error("Error starting contest:", error)
+      toast({
+        title: "Error",
+        description: "An error occurred while starting the contest",
+        variant: "destructive",
+      })
+    } finally {
+      setStartingContest(null)
+    }
+  }
+
+  // End contest
+  const endContest = async (contestId: string) => {
+    setEndingContest(contestId)
+    try {
+      const token = getAccessToken()
+      const response = await fetch(`${API_BASE_URL}/api/v1/contest/${contestId}/end`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+
+      if (response.status === 401 || response.status === 403) {
+        router.push("/dashboard")
+        return
+      }
+
+      const data = await response.json()
+
+      if (response.ok) {
+        toast({
+          title: "Success",
+          description: data.message || "Contest ended successfully",
+        })
+        // Update the contest status locally
+        setContests(prev => prev.map(contest => 
+          contest.id === contestId 
+            ? { ...contest, status: "ENDED", endTime: data.endTime }
+            : contest
+        ))
+      } else {
+        toast({
+          title: "Error",
+          description: data.error || "Failed to end contest",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      console.error("Error ending contest:", error)
+      toast({
+        title: "Error",
+        description: "An error occurred while ending the contest",
+        variant: "destructive",
+      })
+    } finally {
+      setEndingContest(null)
+    }
+  }
+
+  // Kick user from contest
+  const kickUser = async (contestId: string, participantId: string) => {
+    setKickingUser(participantId)
+    try {
+      const token = getAccessToken()
+      const response = await fetch(`${API_BASE_URL}/api/v1/contests/${contestId}/kick/${participantId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+
+      if (response.status === 401 || response.status === 403) {
+        router.push("/dashboard")
+        return
+      }
+
+      const data = await response.json()
+
+      if (response.ok) {
+        toast({
+          title: "Success",
+          description: data.message || "User kicked successfully",
+        })
+        // Remove user from leaderboard
+        setLeaderboard(prev => prev.filter(entry => entry.user.id !== participantId))
+      } else {
+        toast({
+          title: "Error",
+          description: data.error || "Failed to kick user",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      console.error("Error kicking user:", error)
+      toast({
+        title: "Error",
+        description: "An error occurred while kicking the user",
+        variant: "destructive",
+      })
+    } finally {
+      setKickingUser(null)
+    }
+  }
+
+  // Ban user from contest
+  const banUser = async (contestId: string, participantId: string) => {
+    setBanningUser(participantId)
+    try {
+      const token = getAccessToken()
+      const response = await fetch(`${API_BASE_URL}/api/v1/contests/${contestId}/ban/${participantId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+
+      if (response.status === 401 || response.status === 403) {
+        router.push("/dashboard")
+        return
+      }
+
+      const data = await response.json()
+
+      if (response.ok) {
+        toast({
+          title: "Success",
+          description: data.message || "User banned successfully",
+        })
+        // Remove user from leaderboard
+        setLeaderboard(prev => prev.filter(entry => entry.user.id !== participantId))
+      } else {
+        toast({
+          title: "Error",
+          description: data.error || "Failed to ban user",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      console.error("Error banning user:", error)
+      toast({
+        title: "Error",
+        description: "An error occurred while banning the user",
+        variant: "destructive",
+      })
+    } finally {
+      setBanningUser(null)
     }
   }
 
@@ -625,7 +826,7 @@ export default function AdminDashboard() {
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <div className="min-w-[700px]">
+                  <div className="min-w-[900px]">
                     <Table>
                       <TableHeader>
                         <TableRow className="border-gray-600">
@@ -638,7 +839,8 @@ export default function AdminDashboard() {
                             End Time
                           </TableHead>
                           <TableHead className="text-gray-300 text-xs sm:text-sm">Status</TableHead>
-                          <TableHead className="text-gray-300 text-xs sm:text-sm">Actions</TableHead>
+                          <TableHead className="text-gray-300 text-xs sm:text-sm">Contest Actions</TableHead>
+                          <TableHead className="text-gray-300 text-xs sm:text-sm">View Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -655,9 +857,46 @@ export default function AdminDashboard() {
                               {new Date(contest.endTime).toLocaleString()}
                             </TableCell>
                             <TableCell>
-                              <Badge variant="secondary" className="bg-green-900 text-green-200 text-xs">
+                              <Badge 
+                                variant="secondary" 
+                                className={`text-xs ${
+                                  contest.status === "ONGOING" 
+                                    ? "bg-green-900 text-green-200" 
+                                    : contest.status === "ENDED"
+                                    ? "bg-red-900 text-red-200"
+                                    : "bg-gray-900 text-gray-200"
+                                }`}
+                              >
                                 {contest.status}
                               </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex gap-2">
+                                {contest.status !== "ONGOING" && contest.status !== "ENDED" && (
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => startContest(contest.id)}
+                                    disabled={startingContest === contest.id}
+                                    className="border-green-600 text-green-400 hover:bg-green-900 text-xs"
+                                  >
+                                    <Play className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                                    {startingContest === contest.id ? "Starting..." : "Start"}
+                                  </Button>
+                                )}
+                                {contest.status === "ONGOING" && (
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => endContest(contest.id)}
+                                    disabled={endingContest === contest.id}
+                                    className="border-red-600 text-red-400 hover:bg-red-900 text-xs"
+                                  >
+                                    <Square className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                                    {endingContest === contest.id ? "Ending..." : "End"}
+                                  </Button>
+                                )}
+                              </div>
                             </TableCell>
                             <TableCell>
                               <Button
@@ -711,7 +950,7 @@ export default function AdminDashboard() {
                     <div className="text-gray-400">Loading leaderboard...</div>
                   </div>
                 ) : (
-                  <div className="min-w-[600px]">
+                  <div className="min-w-[800px]">
                     <Table>
                       <TableHeader>
                         <TableRow className="border-gray-600">
@@ -722,7 +961,8 @@ export default function AdminDashboard() {
                           <TableHead className="text-gray-300 text-xs sm:text-sm hidden sm:table-cell">
                             Last Submission
                           </TableHead>
-                          <TableHead className="text-gray-300 text-xs sm:text-sm">Actions</TableHead>
+                          <TableHead className="text-gray-300 text-xs sm:text-sm">View Details</TableHead>
+                          <TableHead className="text-gray-300 text-xs sm:text-sm">Moderation</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -756,6 +996,34 @@ export default function AdminDashboard() {
                                 <span className="hidden sm:inline">View Details</span>
                                 <span className="sm:hidden">View</span>
                               </Button>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex gap-1">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => selectedContest && kickUser(selectedContest.id, entry.user.id)}
+                                  disabled={kickingUser === entry.user.id}
+                                  className="border-yellow-600 text-yellow-400 hover:bg-yellow-900 text-xs"
+                                >
+                                  <UserX className="h-3 w-3 sm:h-4 sm:w-4" />
+                                  <span className="hidden lg:inline ml-1">
+                                    {kickingUser === entry.user.id ? "Kicking..." : "Kick"}
+                                  </span>
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => selectedContest && banUser(selectedContest.id, entry.user.id)}
+                                  disabled={banningUser === entry.user.id}
+                                  className="border-red-600 text-red-400 hover:bg-red-900 text-xs"
+                                >
+                                  <Ban className="h-3 w-3 sm:h-4 sm:w-4" />
+                                  <span className="hidden lg:inline ml-1">
+                                    {banningUser === entry.user.id ? "Banning..." : "Ban"}
+                                  </span>
+                                </Button>
+                              </div>
                             </TableCell>
                           </TableRow>
                         ))}

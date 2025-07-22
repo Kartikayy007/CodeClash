@@ -587,7 +587,7 @@ export default function AccountSettings() {
             <div className="space-y-4">
               <div>
                 <label className="text-white text-sm sm:text-base font-medium">
-                  Type <span className="text-red-400 font-bold">"Delete"</span> to confirm
+                  Type <span className="text-red-400 font-bold">&apos;Delete&apos;</span> to confirm
                 </label>
                 <Input
                   value={deleteConfirmation}

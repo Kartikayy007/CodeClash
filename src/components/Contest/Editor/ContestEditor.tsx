@@ -64,7 +64,8 @@ int main() {
     return 0;
 }`,
     python: `# Write your code here`,
-    java: `class CodeClash {
+    java: `import java.util.*;
+ public class CodeClash {
     public static void main (String[] args) throws java.lang.Exception
     {
         // your code goes here
