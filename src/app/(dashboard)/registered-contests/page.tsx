@@ -227,7 +227,7 @@ export default function RegisteredContestsPage() {
         {/* Main Contests Section */}
         <div className="bg-[#1A1D24] rounded-xl border border-cyan-500/20 overflow-hidden">
           {/* Filter Buttons */}
-          <div className="px-6 py-4 flex flex-wrap gap-3 border-b border-cyan-500/20">
+          {/* <div className="px-6 py-4 flex flex-wrap gap-3 border-b border-cyan-500/20">
             {["ALL", "ONGOING", "UPCOMING", "COMPLETED"].map((status) => (
               <button
                 key={status}
@@ -244,7 +244,7 @@ export default function RegisteredContestsPage() {
                 {status === "ALL" ? "All Contests" : status.charAt(0) + status.slice(1).toLowerCase()}
               </button>
             ))}
-          </div>
+          </div> */}
 
           {/* Contest List Table */}
           {loading ? (
