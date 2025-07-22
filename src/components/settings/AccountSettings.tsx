@@ -41,6 +41,7 @@ export default function AccountSettings() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [deleteConfirmation, setDeleteConfirmation] = useState("")
   const [apiResponse, setApiResponse] = useState<{ success: boolean; error?: string; message?: string } | null>(null)
 
   const passwordForm = useForm<z.infer<typeof SettingsPasswordFormSchema>>({
@@ -69,6 +70,12 @@ export default function AccountSettings() {
         toast.error("New password must be different from current password", "Password change error");
         return;
       }
+      
+      await settingsApi.changePassword({
+        oldPassword: data.password,
+        newPassword: data.Newpassword,
+      })
+      
       setApiResponse({ success: true, message: "Password changed successfully" })
       toast.success("Password changed successfully", "Password changed successfully")
       setTimeout(() => {
@@ -86,10 +93,15 @@ export default function AccountSettings() {
     }
   }
 
-  const handleUsernameSubmit = async () => {
+  const handleUsernameSubmit = async (data: z.infer<typeof SettingsUsernameFormSchema>) => {
     setLoading(true)
     setApiResponse(null)
     try {
+      // ✅ ACTUAL API CALL
+      await settingsApi.changeUsername({
+        username: data.username
+      })
+      
       setApiResponse({ success: true, message: "Username changed successfully" })
       toast.success("Username changed successfully", "Username changed successfully")
       setTimeout(() => {
@@ -111,12 +123,16 @@ export default function AccountSettings() {
     setLoading(true)
     setApiResponse(null)
     try {
+      // ✅ ACTUAL API CALL
+      await settingsApi.deleteAccount()
+      
       setApiResponse({ success: true, message: "Account deleted successfully" })
       toast.success("Account deleted successfully", "Account deleted successfully")
       localStorage.removeItem("accessToken")
       setTimeout(() => {
         setIsDeleteModalOpen(false)
         setApiResponse(null)
+        router.push("/login") // Redirect after account deletion
       }, 2000)
     } catch (error: unknown) {
       const err = error as ApiError
@@ -145,7 +161,14 @@ export default function AccountSettings() {
   const handleModalClose = (modalSetter: (value: boolean) => void) => {
     modalSetter(false)
     setApiResponse(null)
+    // Reset delete confirmation when closing delete modal
+    if (modalSetter === setIsDeleteModalOpen) {
+      setDeleteConfirmation("")
+    }
   }
+
+  // Check if delete button should be enabled
+  const isDeleteButtonEnabled = deleteConfirmation.toLowerCase() === "delete"
 
   return (
     <div className="min-h-screen space-y-4 sm:space-y-6 md:space-y-8 px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6">
@@ -559,6 +582,22 @@ export default function AccountSettings() {
                 </div>
               )}
             </DialogHeader>
+            
+            {/* Delete Confirmation Input */}
+            <div className="space-y-4">
+              <div>
+                <label className="text-white text-sm sm:text-base font-medium">
+                  Type <span className="text-red-400 font-bold">"Delete"</span> to confirm
+                </label>
+                <Input
+                  value={deleteConfirmation}
+                  onChange={(e) => setDeleteConfirmation(e.target.value)}
+                  placeholder="Type Delete here"
+                  className="mt-2 bg-[#23263a] border-red-500/20 text-white placeholder:text-gray-500 focus:border-red-500/50 text-sm sm:text-base h-10 sm:h-11"
+                />
+              </div>
+            </div>
+
             <DialogFooter className="flex flex-col-reverse gap-2 sm:flex-row sm:gap-2 pt-4">
               <Button
                 type="button"
@@ -569,9 +608,13 @@ export default function AccountSettings() {
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border border-red-500/30 hover:from-red-500/30 hover:to-pink-500/30 text-sm sm:text-base h-10 w-full sm:w-auto"
+                className={`text-sm sm:text-base h-10 w-full sm:w-auto transition-all duration-200 ${
+                  isDeleteButtonEnabled
+                    ? "bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border border-red-500/30 hover:from-red-500/30 hover:to-pink-500/30"
+                    : "bg-gray-500/20 text-gray-500 border border-gray-500/30 cursor-not-allowed"
+                }`}
                 onClick={handleDeleteAccount}
-                disabled={loading}
+                disabled={loading || !isDeleteButtonEnabled}
               >
                 {loading ? "Deleting..." : "Delete Account"}
               </Button>
