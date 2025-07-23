@@ -2,6 +2,7 @@
 import { ChevronUp, ChevronDown } from "lucide-react"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/Carousel"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 interface ContestItem {
   title: string
@@ -17,18 +18,20 @@ interface ManageContestProps {
 }
 
 const ManageContest = ({ className = "" }: ManageContestProps) => {
+  const router = useRouter()
   const contestItems: ContestItem[] = [
     // Past contests
    
     // Current/Next upcoming (center)
     {
-      title: "Weekly Clash",
-      description: "Join every week for our weekly clash contest!",
+      title: "Sunday Clash",
+      description: "Join our Sunday Clash this sunday!",
       id: 3,
       status: "UPCOMING",
-      date: "Keep an eye for updates!",
-      time: "Coming Soon",
+      date: "July 27 2025",
+      time: "8:30 PM - 10:30 PM",
     },
+
 
     {
       title: "Upcoming Contests",
@@ -129,10 +132,15 @@ const ManageContest = ({ className = "" }: ManageContestProps) => {
                     {/* Join Button */}
                     {!isPast && (
                       <Button
-                        disabled
+                        onClick={() => {
+                          if (isCenter) {
+                            router.push("https://codeclash.tech/contest/join/0e24132c-c850-4b62-a893-c20309a719fd")
+                          }
+                        }}
+                        disabled={!isCenter}
                         className={`w-full rounded-2xl font-semibold transition-all duration-200 ${
                           isCenter
-                            ? "bg-gradient-to-r from-gray-400 to-gray-500 text-gray-300 cursor-not-allowed"
+                            ? "bg-gradient-to-r from-cyan-400 to-purple-500 text-white hover:opacity-90"
                             : "bg-gray-600/80 text-gray-300 cursor-not-allowed"
                         }`}
                       >
