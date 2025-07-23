@@ -28,7 +28,7 @@ interface ContestEditorProps {
 }
 
 interface SubmissionResult {
-  status: "ACCEPTED" | "WRONG_ANSWER" | "RUNTIME_ERROR" | "COMPILATION_ERROR" | "CONTEST_OVER" | "TIME_LIMIT_EXCEEDED";
+  status: "ACCEPTED" | "WRONG_ANSWER" | "RUNTIME_ERROR" | "COMPILATION_ERROR" | "CONTEST_OVER" | "TIME_LIMIT_EXCEEDED" | "BANNED";
   runtime: number;
   message?: string;
   submissionId?: string;
@@ -272,7 +272,7 @@ int main() {
       // Check for contest inactive error
       const axiosError = error as { response?: { data?: { error?: string, message?: string } }; message?: string };
       const errorMessage = axiosError?.response?.data?.error || axiosError?.response?.data?.message || axiosError?.message || "";
-      
+
       if (errorMessage.includes("You have not joined this contest")) {
         if (contestId) {
           router.push(`/contest/join/${contestId}`);
@@ -285,7 +285,15 @@ int main() {
           message: "Contest is over. Submissions are no longer accepted for this contest.",
         });
         setShowSubmissionResult(true);
+      } else if (errorMessage.includes("You have been banned from this contest")) {
+        setSubmissionResult({
+          status: "BANNED",
+          runtime: 0,
+          message: "You have been banned from this contest.",
+        });
+        setShowSubmissionResult(true);
       } else if (errorMessage === "TIME_LIMIT_EXCEEDED") {
+
         setSubmissionResult({
           status: "TIME_LIMIT_EXCEEDED",
           runtime: 0,
@@ -304,7 +312,7 @@ int main() {
         setTimeout(() => setShowFailureMeme(false), 5000);
         setShowSubmissionResult(true);
       }
-      
+
       console.error("Submit error:", error);
     } finally {
       setIsSubmitting(false);
@@ -345,8 +353,7 @@ int main() {
                   Submission Result
                 </h3>
                 <div
-                  className={`px-3 py-1 rounded-md font-medium text-xl shadow-lg ${
-                    submissionResult.status === "ACCEPTED"
+                  className={`px-3 py-1 rounded-md font-medium text-xl shadow-lg ${submissionResult.status === "ACCEPTED"
                       ? "bg-green-900/30 text-green-400 shadow-green-500/50"
                       : submissionResult.status === "WRONG_ANSWER"
                         ? "bg-red-900/30 text-red-400 shadow-red-500/50"
@@ -354,9 +361,12 @@ int main() {
                           ? "bg-orange-900/30 text-orange-400 shadow-orange-500/50"
                           : submissionResult.status === "TIME_LIMIT_EXCEEDED"
                             ? "bg-red-900/30 text-red-400 shadow-red-500/50"
-                            : "bg-yellow-900/30 text-yellow-400 shadow-yellow-500/50" 
-                  }`}
+                            : submissionResult.status === "BANNED"
+                              ? "bg-red-900/30 text-red-400 shadow-red-500/50"
+                              : "bg-yellow-900/30 text-yellow-400 shadow-yellow-500/50"
+                    }`}
                 >
+
                   {submissionResult.status.replace("_", " ")}
                 </div>
               </div>
@@ -380,11 +390,10 @@ int main() {
                     </div>
                     <div className="w-full bg-gray-700 rounded-full h-2.5">
                       <div
-                        className={`h-2.5 rounded-full ${
-                          submissionResult.status === "ACCEPTED"
-                            ? "bg-green-500"
-                            : "bg-orange-500"
-                        }`}
+                        className={`h-2.5 rounded-full ${submissionResult.status === "ACCEPTED"
+                          ? "bg-green-500"
+                          : "bg-orange-500"
+                          }`}
                         style={{
                           width: `${(submissionResult.testCasesPassed / submissionResult.totalTestCases) * 100}%`,
                         }}
@@ -469,7 +478,7 @@ int main() {
           colors={["#22c55e"]}
         />
       )}
-      
+
       {showFailureMeme && (
         <div className="fixed z-[1000]">
           <FollowCursor
@@ -484,7 +493,7 @@ int main() {
             wheelConfig={{ mass: 1, tension: 200, friction: 30 }}
           >
             <h1 className="text-white font-bold text-center">
-              
+
             </h1>
           </FollowCursor>
         </div>
@@ -512,7 +521,7 @@ int main() {
               <button
                 className={`${activeTab === "submissions" ? "text-white bg-white/10 rounded-md px-2 py-1" : "text-gray-500"} hover:text-gray-300 font-bold text-lg`}
                 onClick={() => setActiveTab("submissions")}
-              > 
+              >
                 Submissions
               </button>
             ) : null}
