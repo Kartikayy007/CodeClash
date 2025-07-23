@@ -109,7 +109,7 @@ const Page = () => {
                 variant="filled"
                 customSize={{ width: "56px", height: "30px" }}
                 className="text-sm whitespace-nowrap"
-                onClick={() => router.push("/login")}
+                onClick={() => router.push("/get-started")}
               >
                 Join Us
               </LabelButton>
@@ -146,7 +146,7 @@ const Page = () => {
               <LabelButton
                 variant="filled"
                 customSize={{ width: "100%", height: "32px" }}
-                onClick={() => router.push("/login")}
+                onClick={() => router.push("/get-started")}
               >
                 Join Us
               </LabelButton>
@@ -433,7 +433,7 @@ const Page = () => {
                   height: "44px",
                 }}
                 className="w-[180px] md:w-[200px]"
-                onClick={() => router.push("/join-now")}
+                onClick={() => router.push("/get-started")}
               >
                 Join Now
               </LabelButton>
