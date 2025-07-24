@@ -29,7 +29,7 @@ const ManageContest = ({ className = "" }: ManageContestProps) => {
       id: 3,
       status: "UPCOMING",
       date: "July 27 2025",
-      time: "8:30 PM - 10:30 PM",
+      time: "5:30 PM - 7:30 PM",
     },
 
 
