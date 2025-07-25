@@ -43,7 +43,7 @@ export const handleLoginError = ({ errors, form }: LoginErrorHandlerProps) => {
   }
 
   if (errors.password) {
-    toast.error("Invalid Credentials", "Please check your email and password");
+    toast.error("Invalid Password", "Retry or reset your password.");
     return true;
   }
   return false;
