@@ -309,7 +309,7 @@ export const useBattleWebSocket = () => {
       }
     };
     
-    const onMatchmakingTimeout = (data: any) => {
+    const onMatchmakingTimeout = () => {
       setState((prev) => ({ ...prev, isSearching: false}));
       toast.error("Matchmaking timed out. Please try again later.", { id: "matchmaking-timeout" });
       setIsMatchmakingModalOpen(false);
