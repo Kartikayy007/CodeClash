@@ -91,7 +91,7 @@ export default function ContestDetails() {
           router.push(`/contest-history/${contestId}`)
         }
         
-        toast.success(response.message, toastTheme)
+        // toast.success(response.message, toastTheme)
         if (response.contest) {
           setContest(response.contest)
         }
