@@ -41,7 +41,7 @@ export const handleLoginError = ({ errors, form }: LoginErrorHandlerProps) => {
     toast.error("Invalid Email", "Enter a valid email address.");
     return true;
   }
-
+ 
   if (errors.password) {
     toast.error("Invalid Password", "Retry or reset your password.");
     return true;
