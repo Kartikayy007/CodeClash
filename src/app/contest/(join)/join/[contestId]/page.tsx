@@ -47,6 +47,23 @@ export default function ContestDetails() {
   const [loading, setLoading] = useState(true)
   const [registering, setRegistering] = useState(false)
 
+  // **AUTH CHECK - Add this useEffect**
+  useEffect(() => {
+    const token = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('accessToken='));
+    
+    if (!token) {
+      // Set contest flags for redirect after auth
+      localStorage.setItem('needsAuthForContest', 'true');
+      localStorage.setItem('contestId', contestId);
+      
+      // Redirect to auth page
+      router.push('/get-started');
+      return;
+    }
+  }, [router, contestId]);
+
   // Toast theme configuration
   const toastTheme = {
     style: {
@@ -80,7 +97,7 @@ export default function ContestDetails() {
         }
       } catch (error) {
         console.error("Error fetching contest details:", error)
-        toast.error("Failed to fetch contest details", toastTheme)
+        toast.error("Please login or register to see contest details", toastTheme)
       } finally {
         setLoading(false)
       }
@@ -123,9 +140,6 @@ export default function ContestDetails() {
       case "Rules":
         return (
           <div className="markdown-content text-gray-300">
-            {/* <div>
-              <p className="font-medium mb-2">Rules</p>
-            </div> */}
             {contest.rules ? (
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{contest.rules}</ReactMarkdown>
             ) : (
@@ -136,19 +150,12 @@ export default function ContestDetails() {
       case "Score":
         return (
           <div className="markdown-content text-gray-300">
-            {/* <div>
-              <p className="font-medium mb-2">Scoring</p>
-            </div> */}
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{contest.score || "No scoring system specified"}</ReactMarkdown>
           </div>
         )
       case "Prizes":
         return (
           <div className="markdown-content text-gray-300">
-            {/* <div className="flex items-center gap-4 mb-4">
-              <Image src="/gold.svg" alt="1st Prize" width={40} height={40} />
-              <h3 className="text-xl font-medium">Prizes</h3>
-            </div> */}
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {contest.prizes || "No prize specified. Prizes will be announced soon."}
             </ReactMarkdown>

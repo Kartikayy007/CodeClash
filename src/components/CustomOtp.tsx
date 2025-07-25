@@ -187,9 +187,25 @@ const CustomOtp = () => {
             document.cookie = "registrationTimestamp=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
           }
           toast.success("Success", "OTP verified successfully");
-            setTimeout(() => {
-            router.push("/dashboard");
-            }, 200);
+          
+          // **CONTEST REDIRECT LOGIC**
+          setTimeout(() => {
+            const needsAuthForContest = localStorage.getItem('needsAuthForContest');
+            const contestId = localStorage.getItem('contestId');
+            
+            if (needsAuthForContest === 'true' && contestId) {
+              // Clean up flags
+              localStorage.removeItem('needsAuthForContest');
+              localStorage.removeItem('contestId');
+              
+              // Redirect to contest
+              router.push(`/contest/join/${contestId}`);
+              return;
+            }
+            
+            // Default redirect
+            router.push('/dashboard');
+          }, 1000);
         }
       } else if (verifyOtp.rejected.match(resultAction)) {
         setValidationState("error");

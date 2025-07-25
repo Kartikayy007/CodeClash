@@ -79,6 +79,24 @@ const AuthForm = ({ type, token, onResetLinkSent }: AuthFormProps) => {
   const [resetLinkSent, setResetLinkSent] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
 
+  // **CONTEST REDIRECT HELPER FUNCTION**
+  const handleAuthSuccess = () => {
+    const needsAuthForContest = localStorage.getItem('needsAuthForContest');
+    const contestId = localStorage.getItem('contestId');
+    
+    if (needsAuthForContest === 'true' && contestId) {
+      // Clean up flags
+      localStorage.removeItem('needsAuthForContest');
+      localStorage.removeItem('contestId');
+      
+      // Redirect to contest
+      router.push(`/contest/join/${contestId}`);
+      return true; // Indicate we handled the redirect
+    }
+    
+    return false; // No contest redirect needed
+  };
+
   useEffect(() => {
     if (timeLeft === 0) return;
 
@@ -156,6 +174,10 @@ const AuthForm = ({ type, token, onResetLinkSent }: AuthFormProps) => {
           form: form as UseFormReturn<z.infer<typeof LoginFormSchema>>,
           router,
         });
+        // **CHECK FOR CONTEST REDIRECT AFTER LOGIN**
+        if (!handleAuthSuccess()) {
+          router.push('/dashboard'); // Default redirect if no contest
+        }
       } else if (type === "register") {
         await handleRegister({
           values: values as z.infer<typeof RegisterFormSchema>,
@@ -163,6 +185,7 @@ const AuthForm = ({ type, token, onResetLinkSent }: AuthFormProps) => {
           setIsSubmitting,
           router,
         });
+        // Register goes to OTP verification, so no redirect here
       } else if (type === "forgot-password") {
         await handleForgotPassword({
           values: values as z.infer<typeof ForgotPasswordFormSchema>,
