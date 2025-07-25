@@ -308,7 +308,12 @@ export const useBattleWebSocket = () => {
         console.error("Error handling game end:", error);
       }
     };
-
+    
+    const onMatchmakingTimeout = (data: any) => {
+      setState((prev) => ({ ...prev, isSearching: false}));
+      toast.error("Matchmaking timed out. Please try again later.", { id: "matchmaking-timeout" });
+      setIsMatchmakingModalOpen(false);
+    };
     socketService.on("game_end", handleGameEnd);
     socketService.on("game_state_update", onGameStateUpdate);
     socketService.on("connect", onConnect);
@@ -319,6 +324,7 @@ export const useBattleWebSocket = () => {
     socketService.on("match_aborted", onMatchAborted);
     socketService.on("matchmaking_error", onMatchmakingError);
     socketService.on("auth_error", onAuthError);
+    socketService.on("matchmaking_timeout",onMatchmakingTimeout)
 
     return () => {
       console.log("🧹 Cleaning up battle websocket event listeners");
@@ -331,6 +337,7 @@ export const useBattleWebSocket = () => {
       socketService.off("matchmaking_error", onMatchmakingError);
       socketService.off("auth_error", onAuthError);
       socketService.off("game_state_update", onGameStateUpdate);
+      socketService.off("matchmaking_timeout",onMatchmakingTimeout)
       socketService.off("game_end", handleGameEnd);
 
       if (
