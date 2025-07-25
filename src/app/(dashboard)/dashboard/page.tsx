@@ -141,12 +141,12 @@ export default function Dashboard() {
 
         {/* Mobile Layout - Single column */}
         <div className="flex flex-col gap-6 px-4 md:hidden mb-6">
+          <ManageContest />
           <UserStats />
           <PerformanceInsights />
           <RecentMatches />
           <Leaderboard />
           <RecentContests />
-          <ManageContest />
           <WinTrendChart winTrend={winTrend} />
         </div>
       </div>
