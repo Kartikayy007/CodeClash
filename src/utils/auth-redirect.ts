@@ -1,4 +1,6 @@
-export const handlePostAuthRedirect = (router: any) => {
+import { NextRouter } from 'next/router';
+
+export const handlePostAuthRedirect = (router: NextRouter) => {
   const needsAuthForContest = localStorage.getItem('needsAuthForContest');
   const contestId = localStorage.getItem('contestId');
   
