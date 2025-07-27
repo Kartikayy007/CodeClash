@@ -157,11 +157,11 @@ export default function PastContestPage() {
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4 text-cyan-400" />
                 <span className="text-gray-400">Created by</span>
-                {/* <span className="text-white font-medium">{contest?.creator?.username}</span> */}
+                <span className="text-white font-medium">{contest?.creator?.username}</span>
               </div>
               {contest?.organizationName && (
                 <>
-                  {/* <span className="text-gray-500">•</span> */}
+                  <span className="text-gray-500">•</span>
                   <span className="text-purple-400 font-medium">{contest.organizationName}</span>
                 </>
               )}
