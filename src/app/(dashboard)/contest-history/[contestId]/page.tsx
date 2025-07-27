@@ -13,6 +13,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Leaderboard from "@/components/Contest/contestPage/Leaderboard"
 import ProblemSet from "@/components/Contest/PreviewContest/ProblemSet"
+import ReactMarkdown from "react-markdown"
 
 interface Contest {
   id: string
@@ -147,16 +148,20 @@ export default function PastContestPage() {
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <h2 className="text-2xl font-bold text-white mb-2">{contest?.title}</h2>
-            {contest?.description && <p className="text-gray-300 leading-relaxed mb-4">{contest.description}</p>}
+            {contest?.description && (
+              <div className="prose prose-invert text-gray-300 leading-relaxed mb-4">
+                <ReactMarkdown>{contest.description}</ReactMarkdown>
+              </div>
+            )}
             <div className="flex items-center gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4 text-cyan-400" />
                 <span className="text-gray-400">Created by</span>
-                <span className="text-white font-medium">{contest?.creator?.username}</span>
+                {/* <span className="text-white font-medium">{contest?.creator?.username}</span> */}
               </div>
               {contest?.organizationName && (
                 <>
-                  <span className="text-gray-500">•</span>
+                  {/* <span className="text-gray-500">•</span> */}
                   <span className="text-purple-400 font-medium">{contest.organizationName}</span>
                 </>
               )}
@@ -246,7 +251,7 @@ export default function PastContestPage() {
                   );
                 })()}
               </div>
-              <div className="flex justify-between items-center">
+              {/* <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-400">Rank</span>
                 {(() => {
                   const rank = (contest.userStats as Record<string, unknown>)?.rank;
@@ -256,7 +261,7 @@ export default function PastContestPage() {
                     </span>
                   );
                 })()}
-              </div>
+              </div> */}
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-400">Joined</span>
                 <span className="text-sm text-gray-300">
