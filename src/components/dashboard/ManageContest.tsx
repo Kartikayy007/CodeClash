@@ -25,9 +25,9 @@ const ManageContest = ({ className = "" }: ManageContestProps) => {
     // Current/Next upcoming (center)
     {
       title: "Sunday Clash",
-      description: "Join our Sunday Clash this sunday!",
+      description: "Join our Sunday Clash this Sunday!",
       id: 3,
-      status: "UPCOMING",
+      status: "ENDED",
       date: "July 27 2025",
       time: "5:30 PM - 7:30 PM",
     },
