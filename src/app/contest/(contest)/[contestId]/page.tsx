@@ -143,21 +143,21 @@ export default function ContestPage() {
 
     fetchLeaderboard();
 
-    const updateInterval = setInterval(
-      async () => {
-        try {
-          const updateResponse = await contestApi.updateLeaderboard(contestId);
-          if (updateResponse.success) {
-            fetchLeaderboard();
-          }
-        } catch (error) {
-          console.error("Failed to update leaderboard:", error);
-        }
-      },
-      15 * 60 * 1000,
-    );
+    // const updateInterval = setInterval(
+    //   async () => {
+    //     try {
+    //       const updateResponse = await contestApi.updateLeaderboard(contestId);
+    //       if (updateResponse.success) {
+    //         fetchLeaderboard();
+    //       }
+    //     } catch (error) {
+    //       console.error("Failed to update leaderboard:", error);
+    //     }
+    //   },
+    //   15 * 60 * 1000,
+    // );
 
-    return () => clearInterval(updateInterval);
+  //   return () => clearInterval(updateInterval);
   }, [contestId, activeTab, leaderboardPage]);
 
   useEffect(() => {

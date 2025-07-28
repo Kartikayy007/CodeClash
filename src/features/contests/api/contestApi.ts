@@ -9,7 +9,6 @@ import {
   DeleteQuestionPayload,
   DeleteQuestionResponse,
   LeaderboardResponse,
-  UpdateLeaderboardResponse,
   AddQuestionFromLibraryPayload,
   AddQuestionFromLibraryResponse,
   UserContestSubmissionsResponse,
@@ -150,21 +149,21 @@ export const contestApi = {
     return response.data;
   },
 
-  updateLeaderboard: async (
-    contestId: string,
-  ): Promise<UpdateLeaderboardResponse> => {
-    const token = localStorage.getItem("accessToken");
-    const response = await api.post<UpdateLeaderboardResponse>(
-      `${BASE_URL}/api/v1/contest/${contestId}/leaderboard`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-    return response.data;
-  },
+  // updateLeaderboard: async (
+  //   contestId: string,
+  // ): Promise<UpdateLeaderboardResponse> => {
+  //   const token = localStorage.getItem("accessToken");
+  //   const response = await api.post<UpdateLeaderboardResponse>(
+  //     `${BASE_URL}/api/v1/contest/${contestId}/leaderboard`,
+  //     {},
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     },
+  //   );
+  //   return response.data;
+  // },
 
   addQuestionFromLibrary: async (
     data: AddQuestionFromLibraryPayload,
