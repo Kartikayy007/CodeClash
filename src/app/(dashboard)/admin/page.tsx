@@ -64,11 +64,11 @@ export default function AdminDashboard() {
   const [showUserDetails, setShowUserDetails] = useState(false)
   const [showSubmissionDetails, setShowSubmissionDetails] = useState(false)
 
-  // Sort and rank leaderboard data
+  
   const sortedLeaderboard = useMemo(() => {
     return [...leaderboard]
       .sort((a, b) => {
-        // Sort by score descending, then by problems solved descending, then by last submission time ascending
+        
         if (b.score !== a.score) return b.score - a.score
         if (b.problemsSolved !== a.problemsSolved) return b.problemsSolved - a.problemsSolved
         if (!a.lastSubmissionTime && !b.lastSubmissionTime) return 0
@@ -82,12 +82,12 @@ export default function AdminDashboard() {
       }))
   }, [leaderboard])
 
-  // Sort contests by start time (most recent first)
+  
   const sortedContests = useMemo(() => {
     return [...contests].sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime())
   }, [contests])
 
-  // Chart data for score distribution (normal axis)
+  
   const scoreDistributionData = useMemo(() => {
     const scoreRanges = [
       { range: "0-50", min: 0, max: 50, count: 0 },
@@ -106,7 +106,7 @@ export default function AdminDashboard() {
     return scoreRanges.filter((range) => range.count > 0)
   }, [sortedLeaderboard])
 
-  // Chart data for problems solved distribution (normal axis)
+  
   const problemsSolvedData = useMemo(() => {
     const distribution: { [key: number]: number } = {}
 
@@ -123,7 +123,7 @@ export default function AdminDashboard() {
       .sort((a, b) => a.problemsNum - b.problemsNum)
   }, [sortedLeaderboard])
 
-  // User-specific chart data
+  
   const userScoreProgressData = useMemo(() => {
     if (!userDetails) return []
 
@@ -137,7 +137,7 @@ export default function AdminDashboard() {
       }))
   }, [userDetails])
 
-  // Test case success rate over time
+  
   const testCaseSuccessData = useMemo(() => {
     if (!userDetails) return []
 
@@ -152,7 +152,7 @@ export default function AdminDashboard() {
       }))
   }, [userDetails])
 
-  // Performance by question
+  
   const questionPerformanceData = useMemo(() => {
     if (!userDetails) return []
 
@@ -181,7 +181,7 @@ export default function AdminDashboard() {
     return Array.from(questionMap.values())
   }, [userDetails])
 
-  // Submission timeline data
+  
   const submissionTimelineData = useMemo(() => {
     if (!userDetails) return []
 
@@ -228,7 +228,7 @@ export default function AdminDashboard() {
     },
   }
 
-  // Get access token from cookies
+  
   const getAccessToken = () => {
     return document.cookie
       .split("; ")
@@ -236,7 +236,7 @@ export default function AdminDashboard() {
       ?.split("=")[1]
   }
 
-  // Fetch ongoing contests
+  
   const fetchContests = async (isRefresh = false) => {
     if (isRefresh) {
       setRefreshing(true)
@@ -284,7 +284,7 @@ export default function AdminDashboard() {
     }
   }
 
-  // Start contest
+  
   const startContest = async (contestId: string) => {
     setStartingContest(contestId)
     try {
@@ -305,7 +305,7 @@ export default function AdminDashboard() {
       const data = await response.json()
 
       if (response.ok) {
-        // Update the contest status locally
+        
         setContests(prev => prev.map(contest => 
           contest.id === contestId 
             ? { ...contest, status: "ONGOING", startTime: data.startTime }
@@ -322,7 +322,7 @@ export default function AdminDashboard() {
     }
   }
 
-  // End contest
+  
   const endContest = async (contestId: string) => {
     setEndingContest(contestId)
     try {
@@ -344,7 +344,7 @@ export default function AdminDashboard() {
 
       if (response.ok) {
          
-        // Update the contest status locally
+        
         setContests(prev => prev.map(contest => 
           contest.id === contestId 
             ? { ...contest, status: "ENDED", endTime: data.endTime }
@@ -361,7 +361,7 @@ export default function AdminDashboard() {
     }
   }
 
-  // Kick user from contest
+  
   const kickUser = async (contestId: string, participantId: string) => {
     setKickingUser(participantId)
     try {
@@ -392,7 +392,7 @@ export default function AdminDashboard() {
 
       if (response.ok) {
          
-        // Remove user from leaderboard
+        
         setLeaderboard(prev => prev.filter(entry => entry.user.id !== participantId))
       } else {
          
@@ -405,7 +405,7 @@ export default function AdminDashboard() {
     }
   }
 
-  // Ban user from contest
+  
   const banUser = async (contestId: string, participantId: string) => {
     setBanningUser(participantId)
     try {
@@ -435,7 +435,7 @@ export default function AdminDashboard() {
       }
       if (response.ok) {
          
-        // Remove user from leaderboard
+        
         setLeaderboard(prev => prev.filter(entry => entry.user.id !== participantId))
       } else {
          
@@ -448,7 +448,7 @@ export default function AdminDashboard() {
     }
   }
 
-  // Fetch contest leaderboard
+  
   const fetchLeaderboard = async (contestId: string) => {
     setLeaderboardLoading(true)
     try {
@@ -491,7 +491,7 @@ export default function AdminDashboard() {
     }
   }
 
-  // Fetch user details
+  
   const fetchUserDetails = async (contestId: string, userId: string) => {
     setUserDetailsLoading(true)
     setSelectedUserId(userId)
@@ -535,7 +535,7 @@ export default function AdminDashboard() {
     }
   }
 
-  // Refresh function
+  
   const handleRefresh = () => {
     fetchContests(true)
     if (showLeaderboard && selectedContest) {
@@ -682,7 +682,6 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {/* Charts with normal axis */}
           {sortedLeaderboard.length > 0 && (
             <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
               <Card className="bg-gray-900 border-gray-700">
@@ -779,7 +778,6 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {/* Ongoing Contests */}
           <Card className="bg-gray-900 border-gray-700">
             <CardHeader>
               <CardTitle className="text-white">Ongoing Contests</CardTitle>
@@ -893,7 +891,6 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          {/* Leaderboard Dialog */}
           <Dialog open={showLeaderboard} onOpenChange={setShowLeaderboard}>
             <DialogContent className="w-[95vw] max-w-6xl h-[90vh] max-h-[80vh] bg-gray-900 border-gray-600">
               <DialogHeader>
@@ -1007,7 +1004,6 @@ export default function AdminDashboard() {
             </DialogContent>
           </Dialog>
 
-          {/* User Details Dialog with New Charts */}
           <Dialog open={showUserDetails} onOpenChange={setShowUserDetails}>
             <DialogContent className="w-[95vw] max-w-7xl h-[95vh] max-h-[90vh] bg-gray-900 border-gray-600">
               <DialogHeader>
@@ -1037,7 +1033,6 @@ export default function AdminDashboard() {
                   </div>
                 ) : userDetails ? (
                   <div className="space-y-4 sm:space-y-6">
-                    {/* User Stats */}
                     <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
                       <Card className="bg-gray-800 border-gray-600">
                         <CardContent className="p-3 sm:p-4">

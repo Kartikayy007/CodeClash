@@ -12,7 +12,7 @@ export type AuthChildProps = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: ReactElement<AuthChildProps>;
+  children: React.ReactNode;
 }>) {
   return (
     <main className="flex h-screen w-full">
