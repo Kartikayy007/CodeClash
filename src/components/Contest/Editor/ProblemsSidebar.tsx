@@ -139,7 +139,7 @@ const ProblemsSidebar: React.FC<ProblemsSidebarProps> = ({
       try {
         setIsLeaderboardLoading(true)
         const response = await fetch(
-          `https://codeclash.goyalshivansh.tech/api/v1/contest/${contestId}/leaderboard?page=${page}`,
+          `https://codeclash.silive.in/api/v1/contest/${contestId}/leaderboard?page=${page}`,
           {
             headers: {
               "Content-Type": "application/json",

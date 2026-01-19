@@ -73,7 +73,7 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
       }
 
       try {
-        const response = await fetch("https://codeclash.goyalshivansh.tech/api/v1/contest/my-contests", {
+        const response = await fetch("https://codeclash.silive.in/api/v1/contest/my-contests", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -88,7 +88,7 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
         const data = await response.json()
         console.log("Fetched contests data:", data)
 
-       
+
 
         if (data.contests && Array.isArray(data.contests)) {
           setContests(data.contests)
@@ -99,7 +99,7 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
       } catch (error) {
         console.error("Error fetching contests:", error)
         setContests([])
-        
+
       } finally {
         setLoading(false)
       }

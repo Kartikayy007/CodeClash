@@ -36,7 +36,7 @@ export default function ContestsPage() {
 
       try {
         const response = await fetch(
-          "https://codeclash.goyalshivansh.tech/api/v1/contest/my-contests",
+          "https://codeclash.silive.in/api/v1/contest/my-contests",
           {
             headers: {
               "Content-Type": "application/json",

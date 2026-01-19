@@ -92,7 +92,7 @@ export default function RecentMatches({ className = "" }: RecentMatchesProps) {
 
       try {
         const response = await fetch(
-          "https://codeclash.goyalshivansh.tech/api/v1/user/recent-matches?page=1&limit=12",
+          "https://codeclash.silive.in/api/v1/user/recent-matches?page=1&limit=12",
           {
             method: "GET",
             headers: {
