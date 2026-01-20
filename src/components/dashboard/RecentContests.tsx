@@ -73,7 +73,7 @@ export default function RecentContests({ className = "" }: RecentContestsProps) 
       }
 
       try {
-        const response = await fetch("https://codeclash.goyalshivansh.tech/api/v1/contest/my-contests", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/contest/my-contests`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
