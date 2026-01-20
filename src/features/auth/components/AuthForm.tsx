@@ -83,17 +83,17 @@ const AuthForm = ({ type, token, onResetLinkSent }: AuthFormProps) => {
   const handleAuthSuccess = () => {
     const needsAuthForContest = localStorage.getItem('needsAuthForContest');
     const contestId = localStorage.getItem('contestId');
-    
+
     if (needsAuthForContest === 'true' && contestId) {
       // Clean up flags
       localStorage.removeItem('needsAuthForContest');
       localStorage.removeItem('contestId');
-      
+
       // Redirect to contest
       router.push(`/contest/join/${contestId}`);
       return true; // Indicate we handled the redirect
     }
-    
+
     return false; // No contest redirect needed
   };
 
@@ -114,20 +114,20 @@ const AuthForm = ({ type, token, onResetLinkSent }: AuthFormProps) => {
       email: "",
       ...(type === "reset-password"
         ? {
-            Newpassword: "",
-            confirmPassword: "",
-          }
+          Newpassword: "",
+          confirmPassword: "",
+        }
         : type === "register"
           ? {
-              username: "",
-              password: "",
-              terms: false,
-            }
+            username: "",
+            password: "",
+            terms: false,
+          }
           : type === "login"
             ? {
-                password: "",
-                rememberMe: false,
-              }
+              password: "",
+              rememberMe: false,
+            }
             : {}),
     },
     mode: "onChange",
@@ -165,6 +165,7 @@ const AuthForm = ({ type, token, onResetLinkSent }: AuthFormProps) => {
           dispatch,
           setIsSubmitting,
           form: form as UseFormReturn<z.infer<typeof ResetPasswordFormSchema>>,
+          router,
         });
       } else if (type === "login") {
         await handleLogin({

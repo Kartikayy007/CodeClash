@@ -175,6 +175,7 @@ export interface ResetPasswordHandlerProps
   extends BaseAuthHandlerProps<z.infer<typeof ResetPasswordFormSchema>> {
   token?: string;
   form: UseFormReturn<z.infer<typeof ResetPasswordFormSchema>>;
+  router: AppRouterInstance;
 }
 
 export interface LoginHandlerProps

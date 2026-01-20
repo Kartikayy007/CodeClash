@@ -12,7 +12,6 @@ import { register } from "@/features/auth/thunks/registerThunk";
 import { resetPassword } from "@/features/auth/thunks/resetPasswordThunk";
 import { resetPasswordWithToken } from "@/features/auth/thunks/resetPasswordWithTokenThunk";
 import { checkEmail } from "@/features/auth/thunks/checkEmailThunk";
-import router from "next/router";
 import { setCredentials } from "../slices/authSlice";
 
 export const handleResetPassword = async ({
@@ -20,6 +19,7 @@ export const handleResetPassword = async ({
   token,
   dispatch,
   setIsSubmitting,
+  router,
 }: ResetPasswordHandlerProps) => {
   if (!values.Newpassword || !values.confirmPassword) {
     toast.error("Password Required", "Please enter a new password");
