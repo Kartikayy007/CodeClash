@@ -55,7 +55,7 @@ export default function Leaderboard({ className = "" }: LeaderboardProps) {
       }
 
       try {
-        const response = await fetch("https://codeclash.goyalshivansh.tech/api/v1/user/leaderboard?page=1&limit=8", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/leaderboard?page=1&limit=8`, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
