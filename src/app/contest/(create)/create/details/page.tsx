@@ -130,28 +130,15 @@ const Details = () => {
           throw new Error("Invalid date format received");
         }
 
-        const formatDate = (date: Date) => {
-          const year = date.getFullYear();
-          const month = String(date.getMonth() + 1).padStart(2, "0");
-          const day = String(date.getDate()).padStart(2, "0");
-          return `${year}-${month}-${day}`;
-        };
-
-        const formatTime = (date: Date) => {
-          const hours = String(date.getHours()).padStart(2, "0");
-          const minutes = String(date.getMinutes()).padStart(2, "0");
-          return `${hours}:${minutes}`;
-        };
-
         const formattedData = {
           name: contestData.title || "",
           startTime: {
-            date: formatDate(startTime),
-            time: formatTime(startTime),
+            date: startTime.toISOString().split("T")[0],
+            time: startTime.toTimeString().slice(0, 5),
           },
           endTime: {
-            date: formatDate(endTime),
-            time: formatTime(endTime),
+            date: endTime.toISOString().split("T")[0],
+            time: endTime.toTimeString().slice(0, 5),
           },
           organizationName: contestData.organizationName || "",
           description: contestData.description || "",
@@ -181,11 +168,11 @@ const Details = () => {
                 outputFormat: q.outputFormat || "",
                 testCases: Array.isArray(q.testCases)
                   ? q.testCases.map((tc: TestCase) => ({
-                    input: tc.input || "",
-                    output: tc.output || "",
-                    sample: !tc.isHidden,
-                    strength: 1,
-                  }))
+                      input: tc.input || "",
+                      output: tc.output || "",
+                      sample: !tc.isHidden,
+                      strength: 1,
+                    }))
                   : [],
               }),
             ),
@@ -197,12 +184,12 @@ const Details = () => {
             name: contestData.title,
             description: contestData.description,
             startTime: {
-              date: formatDate(startTime),
-              time: formatTime(startTime),
+              date: startTime.toISOString().split("T")[0],
+              time: startTime.toTimeString().slice(0, 5),
             },
             endTime: {
-              date: formatDate(endTime),
-              time: formatTime(endTime),
+              date: endTime.toISOString().split("T")[0],
+              time: endTime.toTimeString().slice(0, 5),
             },
           }),
         );
@@ -262,17 +249,28 @@ const Details = () => {
     // Debug timezone info
     console.log('--- FORM SUBMISSION TIMEZONE DEBUG ---');
     console.log('Form data (raw):', formData);
-
+    
     // Log date conversions
-    const startDateTime = new Date(`${formData.startTime.date}T${formData.startTime.time}:00`);
-    const endDateTime = new Date(`${formData.endTime.date}T${formData.endTime.time}:00`);
+    const startDateStr = `${formData.startTime.date} ${formData.startTime.time}:00`;
+    const endDateStr = `${formData.endTime.date} ${formData.endTime.time}:00`;
+    console.log('Start time string:', startDateStr);
+    console.log('End time string:', endDateStr);
+    
+    // Parse dates to check interpretation
+    const parsedStartDate = new Date(startDateStr);
+    const parsedEndDate = new Date(endDateStr);
+    console.log('Parsed start (ISO):', parsedStartDate.toISOString());
+    console.log('Parsed start (Local):', parsedStartDate.toString());
+    console.log('Parsed end (ISO):', parsedEndDate.toISOString());
+    console.log('Parsed end (Local):', parsedEndDate.toString());
+    console.log('Current timezone offset:', new Date().getTimezoneOffset() / -60);
 
     try {
       await contestApi.updateContest(contestId, {
         title: formData.name,
         description: formData.description,
-        startTime: startDateTime.toISOString(),
-        endTime: endDateTime.toISOString(),
+        startTime: `${formData.startTime.date} ${formData.startTime.time}:00`,
+        endTime: `${formData.endTime.date} ${formData.endTime.time}:00`,
         rules: formData.rules,
         prizes: formData.prizes,
         score: formData.score,
@@ -312,7 +310,7 @@ const Details = () => {
   };
 
 
-  const handleAddProblem = () => { };
+  const handleAddProblem = () => {};
 
   const handleCreateProblem = () => {
     setShowCreateProblem(true);
@@ -402,19 +400,21 @@ const Details = () => {
               <div className="space-y-4">
                 <button
                   onClick={() => setActiveSection("basic")}
-                  className={`w-full text-left px-4 py-2 rounded-lg ${activeSection === "basic"
-                    ? "bg-[#1A1D24] text-white"
-                    : "text-gray-400 hover:text-white"
-                    }`}
+                  className={`w-full text-left px-4 py-2 rounded-lg ${
+                    activeSection === "basic"
+                      ? "bg-[#1A1D24] text-white"
+                      : "text-gray-400 hover:text-white"
+                  }`}
                 >
                   Basic Details
                 </button>
                 <button
                   onClick={() => setActiveSection("description")}
-                  className={`w-full text-left px-4 py-2 rounded-lg ${activeSection === "description"
-                    ? "bg-[#1A1D24] text-white"
-                    : "text-gray-400 hover:text-white"
-                    }`}
+                  className={`w-full text-left px-4 py-2 rounded-lg ${
+                    activeSection === "description"
+                      ? "bg-[#1A1D24] text-white"
+                      : "text-gray-400 hover:text-white"
+                  }`}
                 >
                   Contest Description
                 </button>
@@ -521,19 +521,21 @@ const Details = () => {
             <div className="flex flex-wrap gap-4">
               <button
                 onClick={() => setActiveTab("details")}
-                className={`pb-2 ${activeTab === "details"
-                  ? "text-[#C879EB] border-b-2 border-[#C879EB]"
-                  : "text-white hover:text-gray-400 transition-all duration-200"
-                  }`}
+                className={`pb-2 ${
+                  activeTab === "details"
+                    ? "text-[#C879EB] border-b-2 border-[#C879EB]"
+                    : "text-white hover:text-gray-400 transition-all duration-200"
+                }`}
               >
                 Details
               </button>
               <button
                 onClick={() => setActiveTab("problems")}
-                className={`pb-2 ${activeTab === "problems"
-                  ? "text-[#C879EB] border-b-2 border-[#C879EB]"
-                  : "text-white hover:text-gray-400 transition-all duration-200"
-                  }`}
+                className={`pb-2 ${
+                  activeTab === "problems"
+                    ? "text-[#C879EB] border-b-2 border-[#C879EB]"
+                    : "text-white hover:text-gray-400 transition-all duration-200"
+                }`}
               >
                 Problems
               </button>
