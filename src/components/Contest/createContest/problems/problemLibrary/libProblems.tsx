@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, Filter, X } from "lucide-react"
 import LabelButton from "@/components/ui/LabelButton"
 import {
   fetchProblem,
@@ -9,9 +9,17 @@ import {
   type Problem,
   type ProblemPreview,
 } from "@/features/battle/editor/api/problems"
+import { getProblems, getProblemById, filterProblems } from "@/utils/practiceProblems"
 import toast from "react-hot-toast"
 import ProblemDetailModal from "./ProblemDetailModal"
 import type { Problem as ContestProblem } from "@/types/problem.types"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog"
 
 interface LibProblemsProps {
   onBack: () => void
@@ -19,7 +27,7 @@ interface LibProblemsProps {
 }
 
 const LibProblems: React.FC<LibProblemsProps> = ({ onAddProblems }) => {
-  const [searchQuery ] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
   const [selectedProblems, setSelectedProblems] = useState<Set<string>>(new Set())
   const [problems, setProblems] = useState<ProblemPreview[]>([])
   const [loading, setLoading] = useState(true)
@@ -30,26 +38,50 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onAddProblems }) => {
   }>({})
   const [viewingProblem, setViewingProblem] = useState<Problem | null>(null)
   const [loadingProblemDetail, setLoadingProblemDetail] = useState(false)
-  const [ratingFilter] = useState("all")
-  const [customRating] = useState({ from: "", to: "" })
+  const [selectedDifficulty, setSelectedDifficulty] = useState<"EASY" | "MEDIUM" | "HARD" | "ALL">("ALL")
+  const [ratingRange, setRatingRange] = useState({ min: "", max: "" })
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
   const [addLoading, setAddLoading] = useState(false)
+  const [useLocalProblems] = useState(true) // Use local problems.json by default
 
   const fetchProblems = React.useCallback(async () => {
     try {
       setLoading(true)
-      const response = await fetchProblemList(currentPage, 10)
-      setProblems(response.data.questions)
-      setTotalPages(response.data.meta.totalPages)
+      
+      if (useLocalProblems) {
+        // Use local problems.json
+        const minRating = ratingRange.min ? Number.parseInt(ratingRange.min) : undefined
+        const maxRating = ratingRange.max ? Number.parseInt(ratingRange.max) : undefined
+        
+        const result = filterProblems(
+          {
+            searchQuery: searchQuery.trim() || undefined,
+            difficulty: selectedDifficulty !== "ALL" ? selectedDifficulty : undefined,
+            ratingMin: minRating && !isNaN(minRating) ? minRating : undefined,
+            ratingMax: maxRating && !isNaN(maxRating) ? maxRating : undefined,
+          },
+          currentPage,
+          10
+        )
+        
+        setProblems(result.problems)
+        setTotalPages(result.totalPages)
+      } else {
+        // Fallback to API
+        const response = await fetchProblemList(currentPage, 10)
+        setProblems(response.data.questions)
+        setTotalPages(response.data.meta.totalPages)
+      }
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : "Failed to fetch problems")
     } finally {
       setLoading(false)
     }
-  }, [currentPage])
+  }, [currentPage, searchQuery, selectedDifficulty, ratingRange.min, ratingRange.max, useLocalProblems])
 
   React.useEffect(() => {
     fetchProblems()
-  }, [fetchProblems, currentPage])
+  }, [fetchProblems])
 
   const handleToggleSelect = async (problemId: string) => {
     const newSelected = new Set(selectedProblems)
@@ -58,7 +90,19 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onAddProblems }) => {
     } else {
       if (!selectedProblemDetails[problemId]) {
         try {
-          const problemDetail = await fetchProblem(problemId)
+          // Try to get problem from local problems first, then fallback to API
+          let problemDetail: Problem
+          if (problemId.startsWith("practice-")) {
+            const localProblem = getProblemById(problemId)
+            if (localProblem) {
+              problemDetail = localProblem
+            } else {
+              problemDetail = await fetchProblem(problemId)
+            }
+          } else {
+            problemDetail = await fetchProblem(problemId)
+          }
+          
           setSelectedProblemDetails((prev) => ({
             ...prev,
             [problemId]: problemDetail,
@@ -78,12 +122,15 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onAddProblems }) => {
     try {
       const selectedProblemsList = Array.from(selectedProblems).map((id) => {
         const problem = selectedProblemDetails[id]
+        if (!problem) {
+          throw new Error(`Problem ${id} not found`)
+        }
         return {
-          id: problem.id,
+          id: problem.id, // Keep the ID (will be "practice-X" for local problems)
           name: problem.title,
           title: problem.title,
-          maxScore: 100,
-          score: 0,
+          maxScore: problem.rating || 100, // Use rating as default score
+          score: problem.rating || 100,
           rating: problem.rating,
           description: problem.description,
           inputFormat: problem.inputFormat,
@@ -98,6 +145,8 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onAddProblems }) => {
         }
       })
       onAddProblems(selectedProblemsList)
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Failed to prepare problems")
     } finally {
       setAddLoading(false)
     }
@@ -110,7 +159,19 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onAddProblems }) => {
       if (selectedProblemDetails[problemId]) {
         setViewingProblem(selectedProblemDetails[problemId])
       } else {
-        const problemDetail = await fetchProblem(problemId)
+        // Try to get problem from local problems first, then fallback to API
+        let problemDetail: Problem
+        if (problemId.startsWith("practice-")) {
+          const localProblem = getProblemById(problemId)
+          if (localProblem) {
+            problemDetail = localProblem
+          } else {
+            problemDetail = await fetchProblem(problemId)
+          }
+        } else {
+          problemDetail = await fetchProblem(problemId)
+        }
+        
         setSelectedProblemDetails((prev) => ({
           ...prev,
           [problemId]: problemDetail,
@@ -124,30 +185,14 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onAddProblems }) => {
     }
   }
 
-  const getFilteredProblems = (problems: ProblemPreview[]) => {
-    return problems.filter((problem) => {
-      if (searchQuery && !problem.title.toLowerCase().includes(searchQuery.toLowerCase())) {
-        return false
-      }
-      switch (ratingFilter) {
-        case "less1000":
-          return problem.rating < 1000
-        case "greater1000":
-          return problem.rating >= 1000
-        case "greater1500":
-          return problem.rating >= 1500
-        case "custom":
-          const from = Number.parseInt(customRating.from)
-          const to = Number.parseInt(customRating.to)
-          if (!isNaN(from) && !isNaN(to)) {
-            return problem.rating >= from && problem.rating <= to
-          }
-          return true
-        default:
-          return true
-      }
-    })
+  const handleClearFilters = () => {
+    setSearchQuery("")
+    setSelectedDifficulty("ALL")
+    setRatingRange({ min: "", max: "" })
+    setCurrentPage(1)
   }
+
+  const hasActiveFilters = searchQuery.trim() !== "" || selectedDifficulty !== "ALL" || ratingRange.min !== "" || ratingRange.max !== ""
 
   // Pagination helper function
   const getVisiblePages = () => {
@@ -192,39 +237,62 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onAddProblems }) => {
             </button>
           </div> */}
 
-          {/* Search and Add Button Row */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center">
-            {/* <div className="flex-1 max-w-md">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                <input
-                  type="text"
-                  placeholder="Enter Problem Name"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-[42px] sm:h-[45px] pl-10 pr-4 rounded-lg bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border border-cyan-500/20 focus:outline-none focus:border-cyan-500/40 text-white text-sm sm:text-base shadow-lg shadow-cyan-500/10 transition-all duration-200"
-                />
+          {/* Search, Filter and Add Button Row */}
+          <div className="flex flex-col gap-3 sm:gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center">
+              <div className="flex-1 max-w-md">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search problems..."
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value)
+                      setCurrentPage(1) // Reset to first page on search
+                    }}
+                    className="w-full h-[42px] sm:h-[45px] pl-4 pr-4 rounded-lg bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border border-cyan-500/20 focus:outline-none focus:border-cyan-500/40 text-white text-sm sm:text-base shadow-lg shadow-cyan-500/10 transition-all duration-200"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                    >
+                      <X size={18} />
+                    </button>
+                  )}
+                </div>
               </div>
-            </div> */}
-            <LabelButton
-              variant="light"
-              onClick={handleAddSelected}
-              disabled={selectedProblems.size === 0 || addLoading}
-              className="w-full text-sm sm:text-base"
-            >
-              {addLoading
-                ? "Adding..."
-                : `Add Questions ${selectedProblems.size > 0 ? `(${selectedProblems.size})` : ""}`}
-            </LabelButton>
+              <button
+                onClick={() => setIsFilterModalOpen(true)}
+                className="relative flex items-center gap-2 px-4 py-2.5 bg-[#282c33] border border-cyan-500/20 rounded-lg text-white hover:bg-cyan-500/10 hover:border-cyan-500/40 transition-all whitespace-nowrap"
+              >
+                <Filter size={18} />
+                <span>Filters</span>
+                {hasActiveFilters && (
+                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-500 rounded-full border-2 border-[#282c33]"></span>
+                )}
+              </button>
+              <LabelButton
+                variant="light"
+                onClick={handleAddSelected}
+                disabled={selectedProblems.size === 0 || addLoading}
+                className="w-full sm:w-auto text-sm sm:text-base"
+              >
+                {addLoading
+                  ? "Adding..."
+                  : `Add Questions ${selectedProblems.size > 0 ? `(${selectedProblems.size})` : ""}`}
+              </LabelButton>
+            </div>
           </div>
         </div>
 
         {/* Problems Table */}
         <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl overflow-hidden border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
           {/* Desktop Table Header */}
-          <div className="hidden sm:grid sm:grid-cols-3 lg:grid-cols-4 p-4 text-white border-b border-cyan-500/20 bg-gradient-to-r from-cyan-500/10 to-blue-500/10">
+          <div className="hidden sm:grid sm:grid-cols-4 lg:grid-cols-5 p-4 text-white border-b border-cyan-500/20 bg-gradient-to-r from-cyan-500/10 to-blue-500/10">
             <div className="text-center font-semibold text-sm lg:text-base">Select</div>
             <div className="text-center font-semibold text-sm lg:text-base lg:col-span-2">Problem Name</div>
+            <div className="text-center font-semibold text-sm lg:text-base">Difficulty</div>
             <div className="text-center font-semibold text-sm lg:text-base">Rating</div>
           </div>
 
@@ -234,12 +302,12 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onAddProblems }) => {
               <div className="p-6 sm:p-8 text-center text-gray-400">
                 <div className="text-sm sm:text-base">Loading problems...</div>
               </div>
-            ) : getFilteredProblems(problems).length === 0 ? (
+            ) : problems.length === 0 ? (
               <div className="p-6 sm:p-8 text-center text-gray-400">
                 <div className="text-sm sm:text-base">No problems found</div>
               </div>
             ) : (
-              getFilteredProblems(problems).map((problem) => (
+              problems.map((problem) => (
                 <div
                   key={problem.id}
                   className="hover:bg-gradient-to-r hover:from-cyan-500/5 hover:to-blue-500/5 transition-all duration-200"
@@ -261,6 +329,19 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onAddProblems }) => {
                           >
                             {problem.title}
                           </div>
+                          <div className="mt-1.5">
+                            <span
+                              className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                                problem.difficulty === "EASY"
+                                  ? "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 border border-green-500/30"
+                                  : problem.difficulty === "MEDIUM"
+                                    ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border border-yellow-500/30"
+                                    : "bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border border-red-500/30"
+                              }`}
+                            >
+                              {problem.difficulty}
+                            </span>
+                          </div>
                         </div>
                       </div>
                       <div className="text-emerald-400 font-medium text-sm flex-shrink-0">{problem.rating}</div>
@@ -268,7 +349,7 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onAddProblems }) => {
                   </div>
 
                   {/* Desktop Layout */}
-                  <div className="hidden sm:grid sm:grid-cols-3 lg:grid-cols-4 p-3 lg:p-4 items-center">
+                  <div className="hidden sm:grid sm:grid-cols-4 lg:grid-cols-5 p-3 lg:p-4 items-center">
                     <div className="text-center">
                       <input
                         type="checkbox"
@@ -282,6 +363,19 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onAddProblems }) => {
                       onClick={() => handleProblemClick(problem.id)}
                     >
                       <span className="break-words">{problem.title}</span>
+                    </div>
+                    <div className="text-center">
+                      <span
+                        className={`inline-flex items-center px-2.5 py-1 rounded text-xs font-medium ${
+                          problem.difficulty === "EASY"
+                            ? "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 border border-green-500/30"
+                            : problem.difficulty === "MEDIUM"
+                              ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border border-yellow-500/30"
+                              : "bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border border-red-500/30"
+                        }`}
+                      >
+                        {problem.difficulty}
+                      </span>
                     </div>
                     <div className="text-center text-emerald-400 font-medium text-sm lg:text-base">
                       {problem.rating}
@@ -355,6 +449,89 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onAddProblems }) => {
           )}
         </div>
       </div>
+
+      {/* Filter Modal */}
+      <Dialog open={isFilterModalOpen} onOpenChange={setIsFilterModalOpen}>
+        <DialogContent className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border-cyan-500/20 text-white max-w-md shadow-lg shadow-cyan-500/10 [&>button]:text-gray-400 [&>button]:hover:text-white">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-white">Filter Problems</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-6 py-4">
+            {/* Difficulty Filter */}
+            <div>
+              <label className="block text-sm text-gray-400 mb-3 font-medium">Difficulty</label>
+              <div className="flex flex-wrap gap-2">
+                {(["ALL", "EASY", "MEDIUM", "HARD"] as const).map((difficulty) => (
+                  <button
+                    key={difficulty}
+                    onClick={() => {
+                      setSelectedDifficulty(difficulty)
+                      setCurrentPage(1)
+                    }}
+                    className={`px-4 py-2 rounded-lg border transition-all text-sm ${
+                      selectedDifficulty === difficulty
+                        ? "bg-cyan-500 border-cyan-500 text-white shadow-lg shadow-cyan-500/25"
+                        : "bg-[#282c33] border-cyan-500/20 text-gray-300 hover:bg-cyan-500/10 hover:border-cyan-500/40"
+                    }`}
+                  >
+                    {difficulty}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Rating Range Filter */}
+            <div>
+              <label className="block text-sm text-gray-400 mb-3 font-medium">Rating Range</label>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
+                <input
+                  type="number"
+                  placeholder="Min Rating"
+                  value={ratingRange.min}
+                  onChange={(e) => {
+                    setRatingRange(prev => ({ ...prev, min: e.target.value }))
+                    setCurrentPage(1)
+                  }}
+                  className="w-full sm:flex-1 px-3 sm:px-4 py-2 bg-[#282c33] border border-cyan-500/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/20 text-sm"
+                />
+                <span className="hidden sm:inline text-gray-400 text-sm flex-shrink-0">-</span>
+                <input
+                  type="number"
+                  placeholder="Max Rating"
+                  value={ratingRange.max}
+                  onChange={(e) => {
+                    setRatingRange(prev => ({ ...prev, max: e.target.value }))
+                    setCurrentPage(1)
+                  }}
+                  className="w-full sm:flex-1 px-3 sm:px-4 py-2 bg-[#282c33] border border-cyan-500/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/20 text-sm"
+                />
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter className="flex flex-col sm:flex-row gap-2">
+            {hasActiveFilters && (
+              <button
+                onClick={() => {
+                  handleClearFilters()
+                  setIsFilterModalOpen(false)
+                }}
+                className="w-full sm:w-auto px-4 py-2 text-cyan-400 hover:text-cyan-300 transition-colors text-sm flex items-center justify-center gap-2 border border-cyan-500/20 rounded-lg hover:bg-cyan-500/10"
+              >
+                <X size={16} />
+                Clear All Filters
+              </button>
+            )}
+            <button
+              onClick={() => setIsFilterModalOpen(false)}
+              className="w-full sm:w-auto px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors font-medium"
+            >
+              Apply Filters
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Problem Detail Modal */}
       {(viewingProblem || loadingProblemDetail) && (

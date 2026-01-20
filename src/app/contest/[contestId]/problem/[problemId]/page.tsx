@@ -38,13 +38,18 @@ const ProblemPage = () => {
     if (!endTime) return
 
     const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer)
-          return 0
-        }
-        return prev - 1
-      })
+      // Recalculate time left from actual end time to prevent drift
+      const endTimeMs = new Date(endTime).getTime()
+      const now = new Date().getTime()
+      const timeLeftInSeconds = Math.floor((endTimeMs - now) / 1000)
+      
+      if (timeLeftInSeconds <= 0) {
+        clearInterval(timer)
+        setTimeLeft(0)
+        return
+      }
+      
+      setTimeLeft(timeLeftInSeconds)
     }, 1000)
 
     return () => clearInterval(timer)

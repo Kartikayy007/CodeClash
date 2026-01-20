@@ -3,10 +3,17 @@
 import type React from "react"
 import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import axios from "axios"
 import toast from "react-hot-toast"
 import LabelButton from "@/components/ui/LabelButton"
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoreHorizontal } from "lucide-react"
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoreHorizontal, Search, Filter, X } from "lucide-react"
+import { filterProblems } from "@/utils/practiceProblems"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog"
 
 interface Question {
   id: string
@@ -138,13 +145,13 @@ const EnhancedPagination = ({
       disabled={disabled}
       className={`
         ${size === "sm" ? "px-2 py-1 min-w-[32px] h-8 text-sm" : "px-3 py-2 min-w-[40px] h-10"}
-        rounded-lg border transition-all duration-200 flex items-center justify-center
+        rounded-lg border transition-all duration-300 ease-in-out flex items-center justify-center
         ${
           active
-            ? "bg-cyan-500 border-cyan-500 text-white shadow-lg shadow-cyan-500/25"
-            : "border-cyan-500/20 bg-[#1a1d26] text-gray-300 hover:bg-cyan-500/10 hover:border-cyan-500/40 hover:text-white"
+            ? "bg-cyan-500 border-cyan-500 text-white shadow-lg shadow-cyan-500/25 scale-105"
+            : "border-cyan-500/20 bg-[#1a1d26] text-gray-300 hover:bg-cyan-500/10 hover:border-cyan-500/40 hover:text-white hover:scale-105"
         }
-        ${disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : "cursor-pointer"}
+        ${disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : "cursor-pointer active:scale-95"}
         ${className}
       `}
     >
@@ -292,6 +299,10 @@ export default function PracticePage() {
   const router = useRouter()
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedDifficulty, setSelectedDifficulty] = useState<"EASY" | "MEDIUM" | "HARD" | "ALL">("ALL")
+  const [ratingRange, setRatingRange] = useState({ min: "", max: "" })
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
 
   // Toast theme configuration
   const toastTheme = {
@@ -313,68 +324,66 @@ export default function PracticePage() {
     hasPrev: false,
   })
 
-  const getDifficultyFromRating = useCallback((rating: number): string => {
-    if (rating <= 1200) return "EASY"
-    if (rating <= 1600) return "MEDIUM"
-    return "HARD"
-  }, [])
-
   const fetchQuestions = useCallback(async (page = 1) => {
     try {
       setLoading(true)
-      const token = localStorage.getItem("accessToken")
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/contest/questions/all`, {
-        params: {
-          page: page,
-          limit: 10,
+      
+      // Small delay to ensure shimmer is visible
+      await new Promise(resolve => setTimeout(resolve, 100))
+      
+      const minRating = ratingRange.min ? Number.parseInt(ratingRange.min) : undefined
+      const maxRating = ratingRange.max ? Number.parseInt(ratingRange.max) : undefined
+
+      const result = filterProblems(
+        {
+          searchQuery: searchQuery.trim() || undefined,
+          difficulty: selectedDifficulty !== "ALL" ? selectedDifficulty : undefined,
+          ratingMin: minRating && !isNaN(minRating) ? minRating : undefined,
+          ratingMax: maxRating && !isNaN(maxRating) ? maxRating : undefined,
         },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        page,
+        10
+      )
+
+      const mappedQuestions = result.problems.map((q) => ({
+        id: q.id,
+        title: q.title,
+        rating: q.rating,
+        score: q.score,
+        difficulty: q.difficulty,
+        status: null as "SOLVED" | "UNSOLVED" | null,
+      }))
+
+      setQuestions(mappedQuestions)
+      setPagination({
+        currentPage: page,
+        totalPages: result.totalPages,
+        totalQuestions: result.total,
+        hasNext: page < result.totalPages,
+        hasPrev: page > 1,
       })
-
-      const data = response.data
-      if (data?.success && data?.data?.questions) {
-        const mappedQuestions = data.data.questions.map((q: Question) => ({
-          ...q,
-          difficulty: getDifficultyFromRating(q.rating),
-          status: null,
-        }))
-
-        setQuestions(mappedQuestions)
-        const meta = data.data.meta || {}
-        setPagination({
-          currentPage: meta.page || page,
-          totalPages: meta.totalPages || 1,
-          totalQuestions: meta.total || mappedQuestions.length,
-          hasNext: (meta.page || page) < (meta.totalPages || 1),
-          hasPrev: (meta.page || page) > 1,
-        })
-      } else {
-        throw new Error("Invalid response")
-      }
     } catch (error) {
       console.error(error)
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401) {
-          toast.error("Authentication failed. Please login again.", toastTheme)
-          router.push("/login")
-        } else if (error.response?.status === 403) {
-          toast.error("Access forbidden", toastTheme)
-        } else {
-          toast.error("Failed to fetch questions", toastTheme)
-        }
-      } else {
-        toast.error("Failed to fetch questions")
-      }
+      toast.error("Failed to load practice problems", toastTheme)
     } finally {
       setLoading(false)
     }
-  }, [router, getDifficultyFromRating])
+  }, [searchQuery, selectedDifficulty, ratingRange.min, ratingRange.max])
 
   useEffect(() => {
+    // Ensure loading state is set when component mounts
+    setLoading(true)
+    setPagination(prev => ({ ...prev, currentPage: 1 }))
     fetchQuestions(1)
   }, [fetchQuestions])
+
+  const handleClearFilters = () => {
+    setSearchQuery("")
+    setSelectedDifficulty("ALL")
+    setRatingRange({ min: "", max: "" })
+  }
+
+  const hasActiveFilters = searchQuery.trim() !== "" || selectedDifficulty !== "ALL" || ratingRange.min !== "" || ratingRange.max !== ""
 
   const handleSolve = (id: string) => {
     router.push(`/practice/${id}`)
@@ -382,11 +391,19 @@ export default function PracticePage() {
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= pagination.totalPages && newPage !== pagination.currentPage) {
+      // Show loading state immediately for smooth transition
+      setLoading(true)
+      
+      // Scroll smoothly to top of problems container
+      setTimeout(() => {
+        document.querySelector(".problems-container")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        })
+      }, 100)
+      
+      // Fetch new questions
       fetchQuestions(newPage)
-      document.querySelector(".problems-container")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      })
     }
   }
 
@@ -398,9 +415,120 @@ export default function PracticePage() {
           <p className="text-gray-400">Sharpen your coding skills with our curated problem set</p>
         </div>
 
+        {/* Search and Filter Bar */}
+        <div className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-4 md:p-6 border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
+          <div className="flex items-center gap-4">
+            {/* Search Bar */}
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                placeholder="Search problems by title or description..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-[#282c33] border border-cyan-500/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/20 transition-all"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                >
+                  <X size={18} />
+                </button>
+              )}
+            </div>
+
+            {/* Filter Button */}
+            <button
+              onClick={() => setIsFilterModalOpen(true)}
+              className="relative flex items-center gap-2 px-4 py-3 bg-[#282c33] border border-cyan-500/20 rounded-lg text-white hover:bg-cyan-500/10 hover:border-cyan-500/40 transition-all whitespace-nowrap"
+            >
+              <Filter size={20} />
+              <span className="hidden sm:inline">Filters</span>
+              {hasActiveFilters && (
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-500 rounded-full border-2 border-[#282c33]"></span>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Filter Modal */}
+        <Dialog open={isFilterModalOpen} onOpenChange={setIsFilterModalOpen}>
+          <DialogContent className="bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border-cyan-500/20 text-white w-[calc(100vw-2rem)] sm:w-[calc(100vw-3rem)] max-w-md mx-auto p-4 sm:p-6 shadow-lg shadow-cyan-500/10 [&>button]:text-gray-400 [&>button]:hover:text-white [&>button]:right-2 [&>button]:top-2 sm:[&>button]:right-4 sm:[&>button]:top-4">
+            <DialogHeader>
+              <DialogTitle className="text-xl sm:text-2xl font-bold text-white">Filter Problems</DialogTitle>
+            </DialogHeader>
+            
+            <div className="space-y-4 sm:space-y-6 py-2 sm:py-4">
+              {/* Difficulty Filter */}
+              <div>
+                <label className="block text-xs sm:text-sm text-gray-400 mb-2 sm:mb-3 font-medium">Difficulty</label>
+                <div className="flex flex-wrap gap-2">
+                  {(["ALL", "EASY", "MEDIUM", "HARD"] as const).map((difficulty) => (
+                    <button
+                      key={difficulty}
+                      onClick={() => setSelectedDifficulty(difficulty)}
+                      className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border transition-all text-xs sm:text-sm flex-1 min-w-[calc(50%-0.25rem)] sm:min-w-0 sm:flex-initial ${
+                        selectedDifficulty === difficulty
+                          ? "bg-cyan-500 border-cyan-500 text-white shadow-lg shadow-cyan-500/25"
+                          : "bg-[#282c33] border-cyan-500/20 text-gray-300 hover:bg-cyan-500/10 hover:border-cyan-500/40"
+                      }`}
+                    >
+                      {difficulty}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Rating Range Filter */}
+              <div>
+                <label className="block text-xs sm:text-sm text-gray-400 mb-2 sm:mb-3 font-medium">Rating Range</label>
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
+                  <input
+                    type="number"
+                    placeholder="Min Rating"
+                    value={ratingRange.min}
+                    onChange={(e) => setRatingRange(prev => ({ ...prev, min: e.target.value }))}
+                    className="w-full sm:flex-1 px-3 sm:px-4 py-2 bg-[#282c33] border border-cyan-500/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/20 text-sm"
+                  />
+                  <span className="hidden sm:inline text-gray-400 text-sm flex-shrink-0">-</span>
+                  <input
+                    type="number"
+                    placeholder="Max Rating"
+                    value={ratingRange.max}
+                    onChange={(e) => setRatingRange(prev => ({ ...prev, max: e.target.value }))}
+                    className="w-full sm:flex-1 px-3 sm:px-4 py-2 bg-[#282c33] border border-cyan-500/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/20 text-sm"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-2 mt-4 sm:mt-0">
+              {hasActiveFilters && (
+                <button
+                  onClick={() => {
+                    handleClearFilters()
+                    setIsFilterModalOpen(false)
+                  }}
+                  className="w-full sm:w-auto px-4 py-2.5 text-cyan-400 hover:text-cyan-300 transition-colors text-sm flex items-center justify-center gap-2 border border-cyan-500/20 rounded-lg hover:bg-cyan-500/10"
+                >
+                  <X size={16} />
+                  Clear All Filters
+                </button>
+              )}
+              <button
+                onClick={() => setIsFilterModalOpen(false)}
+                className="w-full sm:w-auto px-4 py-2.5 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors font-medium text-sm sm:text-base"
+              >
+                Apply Filters
+              </button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
         <div className="problems-container bg-gradient-to-br from-[#1a1d26] to-[#1e222c] rounded-xl p-4 md:p-6 border border-cyan-500/20 shadow-lg shadow-cyan-500/10">
           {loading ? (
-            <div className="space-y-4">
+            <div className="space-y-4 animate-in fade-in duration-300">
               <ProblemSkeleton />
               <ProblemSkeleton />
               <ProblemSkeleton />
@@ -409,10 +537,11 @@ export default function PracticePage() {
             </div>
           ) : questions.length > 0 ? (
             <div className="space-y-4">
-              {questions.map((problem) => (
+              {questions.map((problem, index) => (
                 <div
                   key={problem.id}
-                  className="flex flex-col md:flex-row md:items-center justify-between bg-gradient-to-br from-[#282c33] to-[#2a2e35] rounded-xl p-4 border border-cyan-500/20 shadow-lg shadow-cyan-500/5 hover:shadow-cyan-500/10 transition-all duration-200"
+                  className="flex flex-col md:flex-row md:items-center justify-between bg-gradient-to-br from-[#282c33] to-[#2a2e35] rounded-xl p-4 border border-cyan-500/20 shadow-lg shadow-cyan-500/5 hover:shadow-cyan-500/10 transition-all duration-300 ease-in-out opacity-0 animate-[fadeIn_0.3s_ease-in-out_forwards]"
+                  style={{ animationDelay: `${index * 30}ms` }}
                 >
                   <div className="flex-1 mb-3 md:mb-0">
                     <h3 className="text-lg font-medium text-white mb-2">{problem.title}</h3>

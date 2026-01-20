@@ -68,9 +68,10 @@ export default function ContestPage() {
           }
 
           if (response.contest.status === "ONGOING") {
-            const endTime = new Date(response.contest.endTime).getTime();
+            // Ensure endTime is parsed correctly as UTC ISO string
+            const endTimeMs = new Date(response.contest.endTime).getTime();
             const now = new Date().getTime();
-            const timeLeftInSeconds = Math.floor((endTime - now) / 1000);
+            const timeLeftInSeconds = Math.floor((endTimeMs - now) / 1000);
             setTimeLeft(timeLeftInSeconds > 0 ? timeLeftInSeconds : 0);
           }
         }
@@ -104,18 +105,22 @@ export default function ContestPage() {
     if (contest.status !== "ONGOING") return;
   
     const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          router.push("/contest/join");
-          return 0;
-        }
-        return prev - 1;
-      });
+      // Recalculate time left from actual end time to prevent drift
+      const endTimeMs = new Date(contest.endTime).getTime();
+      const now = new Date().getTime();
+      const timeLeftInSeconds = Math.floor((endTimeMs - now) / 1000);
+      
+      if (timeLeftInSeconds <= 0) {
+        clearInterval(timer);
+        router.push(`/contest-history/${contestId}`);
+        return;
+      }
+      
+      setTimeLeft(timeLeftInSeconds);
     }, 1000);
   
     return () => clearInterval(timer);
-  }, [contest, router]);
+  }, [contest, contestId, router]);
 
   useEffect(() => {
     if (activeTab !== "Leaderboard" || !contestId) return;

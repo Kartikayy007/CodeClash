@@ -7,7 +7,9 @@ import { Pencil, Trash } from "lucide-react";
 import CreateProblem from "./createProblem";
 import Image from "next/image";
 import LibProblems from "./problemLibrary/libProblems";
+import ProblemDetailModal from "./problemLibrary/ProblemDetailModal";
 import { Problem } from "@/types/problem.types";
+import { Problem as BattleProblem } from "@/features/battle/editor/api/problems";
 import { toast } from "react-hot-toast";
 
 interface ApiError {
@@ -58,6 +60,7 @@ const Problems: React.FC<ProblemComponentProps> = ({
   const [showLibrary, setShowLibrary] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
+  const [viewingProblem, setViewingProblem] = useState<BattleProblem | null>(null);
 
   const handleEditClick = (problem: Problem) => {
     setEditingProblem(problem);
@@ -206,6 +209,41 @@ const Problems: React.FC<ProblemComponentProps> = ({
       .finally(() => setActionLoading(false));
   };
 
+  // Convert contest Problem to BattleProblem for the modal
+  const convertToBattleProblem = (problem: Problem): BattleProblem => {
+    const difficulty: "EASY" | "MEDIUM" | "HARD" = 
+      problem.rating < 1000 ? "EASY" : problem.rating < 2000 ? "MEDIUM" : "HARD";
+    
+    return {
+      id: problem.id || "",
+      title: problem.name,
+      description: problem.description || "",
+      inputFormat: problem.inputFormat || "",
+      outputFormat: problem.outputFormat || "",
+      constraints: problem.constraints || "",
+      difficulty,
+      rating: problem.rating || 0,
+      timeLimit: 1000, // Default value
+      memoryLimit: 256, // Default value
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      testCases: (problem.testCases || []).map((tc, index) => ({
+        id: `${problem.id || "problem"}-tc-${index}`,
+        questionId: problem.id || "",
+        input: tc.input || "",
+        output: tc.output || "",
+        isHidden: !tc.sample,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      })),
+    };
+  };
+
+  const handleProblemClick = (problem: Problem) => {
+    const battleProblem = convertToBattleProblem(problem);
+    setViewingProblem(battleProblem);
+  };
+
   if (showLibrary) {
     return (
       <LibProblems
@@ -286,7 +324,11 @@ const Problems: React.FC<ProblemComponentProps> = ({
                   key={index}
                   className="grid grid-cols-6 md:grid-cols-8 px-3 md:px-6 py-3 md:py-4 text-white items-center hover:bg-gradient-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-200 group"
                 >
-                  <div className="col-span-4 md:col-span-5 font-medium truncate pr-2 text-sm md:text-base">
+                  <div 
+                    className="col-span-4 md:col-span-5 font-medium truncate pr-2 text-sm md:text-base cursor-pointer hover:text-cyan-400 transition-colors duration-200"
+                    onClick={() => handleProblemClick(problem)}
+                    title="Click to view problem details"
+                  >
                     {problem.name}
                   </div>
                   <div className="col-span-1 md:col-span-2 text-center text-cyan-400 text-sm md:text-base font-medium">
@@ -416,6 +458,15 @@ const Problems: React.FC<ProblemComponentProps> = ({
             </div>
           </div>
         </div>
+      )}
+
+      {/* Problem Detail Modal */}
+      {viewingProblem && (
+        <ProblemDetailModal
+          problem={viewingProblem}
+          isLoading={false}
+          onClose={() => setViewingProblem(null)}
+        />
       )}
     </div>
   );

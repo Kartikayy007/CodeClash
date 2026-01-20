@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getProblemById } from "@/utils/practiceProblems";
 
 export interface TestCase {
   id: string;
@@ -56,6 +57,16 @@ export interface ProblemListResponse {
 }
 
 export async function fetchProblem(problemId: string): Promise<Problem> {
+  // Check if it's a practice problem (starts with "practice-")
+  if (problemId.startsWith("practice-")) {
+    const problem = getProblemById(problemId);
+    if (problem) {
+      return problem;
+    }
+    throw new Error(`Practice problem ${problemId} not found`);
+  }
+  
+  // Otherwise, fetch from API
   const token = localStorage.getItem("accessToken");
   const response = await axios.get(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/question/${problemId}`,

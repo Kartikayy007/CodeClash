@@ -246,31 +246,19 @@ const Details = () => {
     const contestId = searchParams?.get("contestId");
     if (!contestId || !isDirty) return;
 
-    // Debug timezone info
-    console.log('--- FORM SUBMISSION TIMEZONE DEBUG ---');
-    console.log('Form data (raw):', formData);
-    
-    // Log date conversions
-    const startDateStr = `${formData.startTime.date} ${formData.startTime.time}:00`;
-    const endDateStr = `${formData.endTime.date} ${formData.endTime.time}:00`;
-    console.log('Start time string:', startDateStr);
-    console.log('End time string:', endDateStr);
-    
-    // Parse dates to check interpretation
-    const parsedStartDate = new Date(startDateStr);
-    const parsedEndDate = new Date(endDateStr);
-    console.log('Parsed start (ISO):', parsedStartDate.toISOString());
-    console.log('Parsed start (Local):', parsedStartDate.toString());
-    console.log('Parsed end (ISO):', parsedEndDate.toISOString());
-    console.log('Parsed end (Local):', parsedEndDate.toString());
-    console.log('Current timezone offset:', new Date().getTimezoneOffset() / -60);
-
     try {
+      const startDateTime = new Date(
+        `${formData.startTime.date}T${formData.startTime.time}:00`,
+      );
+      const endDateTime = new Date(
+        `${formData.endTime.date}T${formData.endTime.time}:00`,
+      );
+
       await contestApi.updateContest(contestId, {
         title: formData.name,
         description: formData.description,
-        startTime: `${formData.startTime.date} ${formData.startTime.time}:00`,
-        endTime: `${formData.endTime.date} ${formData.endTime.time}:00`,
+        startTime: startDateTime.toISOString(),
+        endTime: endDateTime.toISOString(),
         rules: formData.rules,
         prizes: formData.prizes,
         score: formData.score,
@@ -351,8 +339,7 @@ const Details = () => {
     }
 
     try {
-      if (problemData.id) {
-        await contestApi.addQuestionFromLibrary({
+      if (problemData.id && !problemData.id.startsWith("practice-")) {        await contestApi.addQuestionFromLibrary({
           contestId,
           questionId: problemData.id,
         });
@@ -360,7 +347,7 @@ const Details = () => {
       } else {
         await contestApi.addQuestion({
           contestId,
-          title: problemData.name,
+          title: problemData.name || problemData.title,
           description: problemData.description,
           inputFormat: problemData.inputFormat,
           outputFormat: problemData.outputFormat,
@@ -372,7 +359,7 @@ const Details = () => {
                 ? "MEDIUM"
                 : "HARD",
           rating: problemData.rating,
-          score: problemData.maxScore,
+          score: problemData.maxScore || problemData.score || 100,
           timeLimit: 1000,
           memoryLimit: 256,
           testCases: problemData.testCases.map((tc) => ({
@@ -381,7 +368,7 @@ const Details = () => {
             isHidden: !tc.sample,
           })),
         });
-        toast.success("New problem added successfully!", toastTheme);
+        toast.success("Problem added successfully!", toastTheme);
       }
 
       setProblems((prev) => [...prev, problemData]);
