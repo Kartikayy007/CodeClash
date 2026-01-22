@@ -76,8 +76,8 @@ int main() {
 `,
   });
   const [testCases, setTestCases] = useState<TestCase[]>([]);
-  const [runResult, setRunResult] = useState<string | null>(null);
-  const [runError, setRunError] = useState<string | null>(null);
+  const [runResult, setRunResult] = useState<string[]>([]);
+  const [runError, setRunError] = useState<string[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [problem, setProblem] = useState<Problem | null>(null);
@@ -96,6 +96,7 @@ int main() {
   const [isCustomInputMode, setIsCustomInputMode] = useState(false);
   const [customInput, setCustomInput] = useState("");
 
+  // Fetch problem details
   useEffect(() => {
     const getProblem = async () => {
       try {
@@ -115,6 +116,7 @@ int main() {
     getProblem();
   }, [problemId]);
 
+  // Set code based on selected language
   useEffect(() => {
     if (isInitialLoad.current) {
       setCode(codeByLanguage[language] || "");
@@ -122,6 +124,7 @@ int main() {
     }
   }, [codeByLanguage, language]);
 
+  // Load saved code from localStorage
   useEffect(() => {
     const savedData = localStorage.getItem(`code-${problemId}`);
     if (savedData) {
@@ -137,6 +140,7 @@ int main() {
     }
   }, [problemId]);
 
+  // Auto-save code to localStorage
   useEffect(() => {
     if (code && language) {
       const updatedCodeByLanguage = {
@@ -166,6 +170,7 @@ int main() {
     }
   }, [code, language, problemId, codeByLanguage]);
 
+  // Handle language change
   const handleLanguageChange = (newLanguage: string) => {
     console.log("Language changed to:", newLanguage);
     setCodeByLanguage((prev) => ({
@@ -189,29 +194,68 @@ int main() {
     }, 100);
   };
 
+  // Run Test Cases
   const handleRun = async () => {
     try {
       setIsRunning(true);
-      setRunError(null);
-      setRunResult(null);
+      const initialResults = new Array(testCases.length).fill("");
+      setRunError([...initialResults]);
+      setRunResult([...initialResults]);
 
-      const response = await runCode({
-        code,
-        language,
-        input: isCustomInputMode
-          ? customInput
-          : testCases[activeTestCase]?.input || "",
-        contestId: contestId || "",
-        questionId: problemId,
-      });
+      let firstFailureIndex: number | null = null;
 
-      if (response.body.error) {
-        setRunError(response.body.error);
-      } else {
-        setRunResult(response.body.output);
+      for (let i = 0; i < testCases.length; i++) {
+        const response = await runCode({
+          code,
+          language,
+          input: isCustomInputMode
+            ? customInput
+            : testCases[i]?.input || "",
+          contestId: contestId || "",
+          questionId: problemId,
+        });
+        const data = response.body;
+
+        const output = data.output || "";
+        const error = data.error || "";
+
+        if (error) {
+          setRunError((prev) => {
+            const next = [...prev];
+            next[i] = error;
+            return next;
+          });
+          if (firstFailureIndex === null) {
+            firstFailureIndex = i;
+          }
+        } else {
+          setRunResult((prev) => {
+            const next = [...prev];
+            next[i] = output;
+            return next;
+          });
+
+          // Check if output is correct
+          const expectedOutput = testCases[i]?.output || "";
+          const isCorrect = output.trim().replace(/\r\n/g, "\n") === expectedOutput.trim().replace(/\r\n/g, "\n");
+
+          if (!isCorrect && firstFailureIndex === null && !isCustomInputMode) {
+            firstFailureIndex = i;
+          }
+        }
       }
+
+      if (firstFailureIndex !== null) {
+        setActiveTestCase(firstFailureIndex);
+      }
+
     } catch (error) {
-      setRunError("Failed to run code. Please try again.");
+      setRunError((prev) => {
+        const next = [...prev];
+        if (next.length > 0) next[0] = "Failed to run code. Please try again.";
+        else return ["Failed to run code. Please try again."];
+        return next;
+      });
       console.error("Run error:", error);
     } finally {
       setIsRunning(false);
@@ -219,6 +263,7 @@ int main() {
     }
   };
 
+  // Submit Code
   const handleSubmit = async () => {
     if (!contestId) return;
     try {
@@ -354,16 +399,16 @@ int main() {
                 </h3>
                 <div
                   className={`px-3 py-1 rounded-md font-medium text-xl shadow-lg ${submissionResult.status === "ACCEPTED"
-                      ? "bg-green-900/30 text-green-400 shadow-green-500/50"
-                      : submissionResult.status === "WRONG_ANSWER"
-                        ? "bg-red-900/30 text-red-400 shadow-red-500/50"
-                        : submissionResult.status === "RUNTIME_ERROR"
-                          ? "bg-orange-900/30 text-orange-400 shadow-orange-500/50"
-                          : submissionResult.status === "TIME_LIMIT_EXCEEDED"
+                    ? "bg-green-900/30 text-green-400 shadow-green-500/50"
+                    : submissionResult.status === "WRONG_ANSWER"
+                      ? "bg-red-900/30 text-red-400 shadow-red-500/50"
+                      : submissionResult.status === "RUNTIME_ERROR"
+                        ? "bg-orange-900/30 text-orange-400 shadow-orange-500/50"
+                        : submissionResult.status === "TIME_LIMIT_EXCEEDED"
+                          ? "bg-red-900/30 text-red-400 shadow-red-500/50"
+                          : submissionResult.status === "BANNED"
                             ? "bg-red-900/30 text-red-400 shadow-red-500/50"
-                            : submissionResult.status === "BANNED"
-                              ? "bg-red-900/30 text-red-400 shadow-red-500/50"
-                              : "bg-yellow-900/30 text-yellow-400 shadow-yellow-500/50"
+                            : "bg-yellow-900/30 text-yellow-400 shadow-yellow-500/50"
                     }`}
                 >
 
@@ -552,9 +597,10 @@ int main() {
             <TestCases
               ref={testCasesComponentRef}
               testCases={testCases}
-              runResult={runResult}
-              runError={runError}
+              runResult={runResult[activeTestCase]}
+              runError={runError[activeTestCase]}
               isRunning={isRunning}
+              activeCase={activeTestCase}
               onCaseChange={setActiveTestCase}
               customInput={customInput}
               setCustomInput={setCustomInput}
