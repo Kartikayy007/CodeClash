@@ -203,8 +203,8 @@ int main() {
       setRunResult([...initialResults]);
 
       let firstFailureIndex: number | null = null;
-
-      for (let i = 0; i < testCases.length; i++) {
+      const caseLength = isCustomInputMode ? 1 : testCases.length;
+      for (let i = 0; i < caseLength; i++) {
         const response = await runCode({
           code,
           language,
