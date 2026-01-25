@@ -14,7 +14,7 @@ export default function AdminProtectedRoute({
   children,
   fallbackUrl = '/dashboard',
   loadingComponent = <div className="flex items-center justify-center min-h-screen">Loading...</div>,
-  adminKey = 'jellybean'
+  adminKey = process.env.NEXT_PUBLIC_ADMIN_KEY,
 }: AdminProtectedRouteProps) {
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +26,6 @@ export default function AdminProtectedRoute({
       try {
         // Check if the correct admin key is provided in query params
         const providedKey = searchParams.get('key');
-        
         if (providedKey === adminKey) {
           setIsAuthorized(true);
         } else {
