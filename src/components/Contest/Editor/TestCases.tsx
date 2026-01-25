@@ -20,6 +20,7 @@ interface TestCasesProps {
   runError?: string | null;
   isRunning?: boolean;
   onCaseChange?: (caseIndex: number) => void;
+  activeCase?: number;
   customInput: string;
   setCustomInput: (input: string) => void;
   isCustomInputMode: boolean;
@@ -34,6 +35,7 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
       runError,
       isRunning,
       onCaseChange,
+      activeCase: activeCaseProp,
       customInput,
       setCustomInput,
       isCustomInputMode,
@@ -45,6 +47,15 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
     const resultsRef = useRef<HTMLDivElement>(null);
 
+    // Sync from parent prop
+    useEffect(() => {
+      if (activeCaseProp !== undefined && activeCaseProp !== activeCase) {
+        setActiveCase(activeCaseProp);
+      }
+    }, [activeCaseProp, activeCase]);
+
+
+
     // Expose methods to parent components via forwardRef
     useImperativeHandle(ref, () => ({
       scrollToResults: () => {
@@ -55,6 +66,7 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
       },
     }));
 
+    // Update onCaseChange when activeCase changes
     useEffect(() => {
       if (onCaseChange && !isCustomInputMode) {
         onCaseChange(activeCase);
@@ -145,11 +157,10 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
                     setActiveCase(index);
                     if (onCaseChange) onCaseChange(index);
                   }}
-                  className={`px-3 py-1 rounded text-sm ${
-                    activeCase === index
-                      ? "bg-[#292C33] text-white"
-                      : "text-gray-400 hover:text-white"
-                  }`}
+                  className={`px-3 py-1 rounded text-sm ${activeCase === index
+                    ? "bg-[#292C33] text-white"
+                    : "text-gray-400 hover:text-white"
+                    }`}
                 >
                   Case {index + 1}
                 </button>
@@ -160,9 +171,8 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
           <div className="flex ml-auto">
             <button
               onClick={() => setIsCustomInputMode(!isCustomInputMode)}
-              className={`p-2 text-[#999] hover:bg-[#292C33] hover:text-[#fff] rounded-lg ${
-                isCustomInputMode ? "bg-[#292C33] text-white" : ""
-              }`}
+              className={`p-2 text-[#999] hover:bg-[#292C33] hover:text-[#fff] rounded-lg ${isCustomInputMode ? "bg-[#292C33] text-white" : ""
+                }`}
               title={
                 isCustomInputMode
                   ? "Switch to test cases"
@@ -176,16 +186,16 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
 
         <div className="flex-1 flex flex-col p-4 gap-4 overflow-auto scrollbar-hide">
           {/* Input section with controlled height */}
-          <div className="flex flex-col h-32 max-h-32">
+          <div className="flex flex-col h-35 max-h-35">
             <h4 className="text-sm text-gray-400 mb-1">
               {isCustomInputMode ? "Custom Input:" : "Input:"}
             </h4>
-            <div className="flex-1 overflow-auto">
+            <div className="flex-1 overflow-auto bg-[#292C33] rounded-sm">
               {isCustomInputMode ? (
                 <textarea
                   value={customInput}
                   onChange={(e) => setCustomInput(e.target.value)}
-                  className="bg-[#292C33] p-2 rounded font-mono text-sm text-white w-full h-full resize-none border-0 focus:outline-none scrollbar-none"
+                  className="bg-[#292C33] p-2 min-h-32 rounded font-mono text-sm text-white w-full h-full resize-none border-0 focus:outline-none scrollbar-none"
                   placeholder="Enter your custom input here..."
                 />
               ) : (
@@ -197,7 +207,7 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
           </div>
 
           {/* Output sections with remaining height */}
-          <div className="flex-1 flex flex-col min-h-0 scrollbar-hide">
+          <div className="flex-1 min-h-0 scrollbar-hide">
             {!isCustomInputMode && (
               <div className="flex-1 min-h-0 mb-4">
                 <div className="flex justify-between items-center mb-1">
@@ -208,7 +218,7 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
                     </span>
                   )}
                 </div>
-                <div className="h-32 overflow-auto">
+                <div className="h-32 overflow-auto bg-[#292C33] rounded-sm">
                   <pre className="bg-[#292C33] p-2 rounded whitespace-pre-wrap font-mono text-sm text-white h-full">
                     {(testCases[activeCase]?.output || "").replace(/\\n/g, '\n')}
                   </pre>
@@ -253,13 +263,12 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
                   </div>
                 ) : runResult !== null ? (
                   <div
-                    className={`rounded-md p-3 text-sm overflow-auto h-32 ${
-                      isCorrect === true && !isCustomInputMode
-                        ? "bg-green-900/20 border border-green-600/30 text-green-200"
-                        : isCorrect === false && !isCustomInputMode
-                          ? "bg-red-900/20 border border-red-600/30 text-red-200"
-                          : "bg-[#292C33] text-white"
-                    }`}
+                    className={`rounded-md p-3 text-sm overflow-auto h-32 ${isCorrect === true && !isCustomInputMode
+                      ? "bg-green-900/20 border border-green-600/30 text-green-200"
+                      : isCorrect === false && !isCustomInputMode
+                        ? "bg-red-900/20 border border-red-600/30 text-red-200"
+                        : "bg-[#292C33] text-white"
+                      }`}
                   >
                     {runResult === "" ? (
                       <div className="italic text-gray-400">(Empty output)</div>
