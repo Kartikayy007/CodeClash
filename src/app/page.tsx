@@ -5,13 +5,31 @@ import LabelButton from "@/components/ui/LabelButton";
 import { useState } from "react";
 import { Twitter, Instagram, Linkedin } from "lucide-react";
 import Link from "next/link";
-
+import MagicBento, { MagicCard } from "@/components/MagicBento";
 const Page = () => {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [testimonialPage, setTestimonialPage] = useState(0);
 
   const testimonials = [
+    {
+      text: "Custom challenges with friends are so much fun! It's the best way to learn and compete in a friendly way.",
+      name: "Emily T.",
+      role: "Coding Enthusiast",
+      image: "/emily.svg",
+    },
+    {
+      text: "Code Clash transformed my coding practice. The challenges are engaging and push my limits!",
+      name: "David M.",
+      role: "Junior Developer",
+      image: "/david.svg",
+    },
+    {
+      text: "The instant feedback after each battle helped me understand my mistakes and grow as a programmer.",
+      name: "Nina G.",
+      role: "Machine Learning Intern",
+      image: "/nina.svg",
+    },
     {
       text: "Custom challenges with friends are so much fun! It's the best way to learn and compete in a friendly way.",
       name: "Emily T.",
@@ -85,24 +103,24 @@ const Page = () => {
           </button>
           <ul className="hidden md:flex items-center gap-4 lg:gap-8 font-[600]">
             <li>
-              <button className="text-white hover:text-gray-300 transition-colors">
+              <Link href="#home" className="text-white hover:text-gray-300 transition-colors">
                 Home
-              </button>
+              </Link>
             </li>
             <li>
-              <button className="text-white hover:text-gray-300 transition-colors">
+              <Link href="#features" className="text-white hover:text-gray-300 transition-colors">
                 Features
-              </button>
+              </Link>
             </li>
             <li>
-              <button className="text-white hover:text-gray-300 transition-colors">
+              <Link href="#about" className="text-white hover:text-gray-300 transition-colors">
                 About
-              </button>
+              </Link>
             </li>
             <li>
-              <button className="text-white hover:text-gray-300 transition-colors">
+              <Link href="#footer" className="text-white hover:text-gray-300 transition-colors">
                 Contact
-              </button>
+              </Link>
             </li>
             <li>
               <LabelButton
@@ -123,24 +141,40 @@ const Page = () => {
         <div className="md:hidden fixed top-16 left-0 right-0 w-screen bg-[#1A1D24] p-4 z-40 shadow-lg">
           <ul className="flex flex-col gap-4">
             <li>
-              <button className="text-white hover:text-gray-300 transition-colors w-full text-left px-4">
+              <Link
+                href="#home"
+                className="text-white hover:text-gray-300 transition-colors w-full text-left px-4 block"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 Home
-              </button>
+              </Link>
             </li>
             <li>
-              <button className="text-white hover:text-gray-300 transition-colors w-full text-left px-4">
+              <Link
+                href="#features"
+                className="text-white hover:text-gray-300 transition-colors w-full text-left px-4 block"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 Features
-              </button>
+              </Link>
             </li>
             <li>
-              <button className="text-white hover:text-gray-300 transition-colors w-full text-left px-4">
+              <Link
+                href="#about"
+                className="text-white hover:text-gray-300 transition-colors w-full text-left px-4 block"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 About
-              </button>
+              </Link>
             </li>
             <li>
-              <button className="text-white hover:text-gray-300 transition-colors w-full text-left px-4">
+              <Link
+                href="#footer"
+                className="text-white hover:text-gray-300 transition-colors w-full text-left px-4 block"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 Contact
-              </button>
+              </Link>
             </li>
             <li className="px-4">
               <LabelButton
@@ -156,7 +190,7 @@ const Page = () => {
       )}
 
       {/* Top padding to account for fixed navbar */}
-      <div className="pt-16"></div>
+      <div id="home" className="pt-16"></div>
 
       <section className="flex flex-col md:flex-row justify-between items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-20 gap-8">
         <div className="flex-1">
@@ -197,132 +231,171 @@ const Page = () => {
         </div>
       </section>
 
-      <section className="flex flex-col items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20">
+      <section id="features" className="flex flex-col items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20">
         <h2 className="text-white font-[600] text-2xl sm:text-3xl mb-8 sm:mb-16 text-center">
           Why Choose Us?
         </h2>
-        <div className="flex flex-col lg:flex-row gap-4">
-          <div className="flex flex-col gap-4">
-            <div className="rounded-2xl p-4 sm:p-8 w-full lg:w-[522px] h-auto sm:h-[512px] bg-[#0000ff]/0 backdrop-blur-[206.80px] relative overflow-hidden">
-              <Image
-                src="/gradient.png"
-                alt="Gradient Background"
-                fill
-                className="object-cover opacity-70"
-                priority
-              />
-              <div className="relative z-10">
-                <h3 className="text-white text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 w-full sm:w-[211px] text-center leading-7">
-                  Coding Challenges
-                </h3>
-                <p className="mb-4 sm:mb-8 w-full sm:w-[404px] text-white text-base sm:text-lg font-medium leading-6 sm:leading-7">
-                  Solve challenges tailored for all skill levels, from beginner
-                  to advanced.
-                </p>
-                <div className="w-full flex justify-center items-start relative">
-                  <Image
-                    src="/box1.svg"
-                    alt="Coding Challenges"
-                    width={360}
-                    height={360}
-                    className="w-[200px] sm:w-[360px] h-auto object-contain"
-                    priority
-                  />
+        {/*relacing the magicbento card layout*/}
+        <MagicBento>
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="flex flex-col gap-4">
+              <MagicCard
+                enableTilt={true}
+                className="card flex flex-col justify-between relative rounded-2xl p-4 sm:p-8 w-full lg:w-[522px] h-auto sm:h-[512px] bg-[#0000ff]/0 backdrop-blur-[206.80px] overflow-hidden border border-[#392e4e] transition-colors duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] card--border-glow"
+                style={{
+                  '--glow-x': '50%',
+                  '--glow-y': '50%',
+                  '--glow-intensity': '0',
+                  '--glow-radius': '200px'
+                } as React.CSSProperties}
+              >
+                <Image
+                  src="/gradient.png"
+                  alt="Gradient Background"
+                  fill
+                  className="object-cover opacity-70 absolute inset-0 z-0 pointer-events-none"
+                  priority
+                />
+                <div className="relative z-10">
+                  <h3 className="text-white text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 w-full sm:w-[211px] text-center leading-7">
+                    Coding Challenges
+                  </h3>
+                  <p className="mb-4 sm:mb-8 w-full sm:w-[404px] text-white text-base sm:text-lg font-medium leading-6 sm:leading-7">
+                    Solve challenges tailored for all skill levels, from beginner
+                    to advanced.
+                  </p>
+                  <div className="w-full flex justify-center items-start relative mt-4 h-40">
+                    <Image
+                      src="/box1.svg"
+                      alt="Coding Challenges"
+                      width={360}
+                      height={360}
+                      className="w-[200px] sm:w-[360px] h-auto object-contain absolute -top-10"
+                      priority
+                    />
+                  </div>
                 </div>
-              </div>
+              </MagicCard>
+
+              <MagicCard
+                enableTilt={true}
+                className="card flex flex-col justify-between relative bg-[#1E1B2E] rounded-2xl p-4 sm:p-8 w-full lg:w-[522px] h-auto sm:h-80 bg-[#0000ff]/0 backdrop-blur-[206.80px] overflow-hidden border border-[#392e4e] transition-colors duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] card--border-glow"
+                style={{
+                  '--glow-x': '50%',
+                  '--glow-y': '50%',
+                  '--glow-intensity': '0',
+                  '--glow-radius': '200px'
+                } as React.CSSProperties}
+              >
+                <Image
+                  src="/gradient2.png"
+                  alt="Gradient Background"
+                  fill
+                  className="object-cover opacity-50 absolute inset-0 z-0 pointer-events-none"
+                  priority
+                />
+                <div className="relative z-10">
+                  <h3 className="text-white text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 w-full sm:w-[211px] text-center sm:text-left">
+                    Community
+                  </h3>
+                  <p className="mb-4 sm:mb-8 w-full sm:w-[404px] text-white text-base sm:text-lg font-medium leading-6 sm:leading-7">
+                    Join a thriving community of passionate programmers.
+                  </p>
+                  <div className="w-full h-[150px] sm:h-[200px] flex justify-center items-center relative sm:bottom-12">
+                    <Image
+                      src="/box3.svg"
+                      alt="Community"
+                      width={260}
+                      height={260}
+                      className="w-[180px] sm:w-[260px] h-auto object-contain"
+                      priority
+                    />
+                  </div>
+                </div>
+              </MagicCard>
             </div>
 
-            <div className="bg-[#1E1B2E] rounded-2xl p-4 sm:p-8 w-full lg:w-[522px] h-auto sm:h-80 bg-[#0000ff]/0 backdrop-blur-[206.80px] relative overflow-hidden">
-              <Image
-                src="/gradient2.png"
-                alt="Gradient Background"
-                fill
-                className="object-cover opacity-50"
-                priority
-              />
-              <div className="relative z-10">
-                <h3 className="text-white text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 w-full sm:w-[211px] text-center sm:text-left">
-                  Community
-                </h3>
-                <p className="mb-4 sm:mb-8 w-full sm:w-[404px] text-white text-base sm:text-lg font-medium leading-6 sm:leading-7">
-                  Join a thriving community of passionate programmers.
-                </p>
-                <div className="w-full h-[150px] sm:h-[200px] flex justify-center items-center relative sm:bottom-12">
-                  <Image
-                    src="/box3.svg"
-                    alt="Community"
-                    width={260}
-                    height={260}
-                    className="w-[180px] sm:w-[260px] h-auto object-contain"
-                    priority
-                  />
+            <div className="flex flex-col gap-4">
+              <MagicCard
+                enableTilt={true}
+                className="card flex flex-col justify-between relative bg-[#1E1B2E] rounded-2xl p-4 sm:p-8 w-full lg:w-[522px] h-auto sm:h-80 bg-[#0000ff]/0 backdrop-blur-[206.80px] overflow-hidden border border-[#392e4e] transition-colors duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] card--border-glow"
+                style={{
+                  '--glow-x': '50%',
+                  '--glow-y': '50%',
+                  '--glow-intensity': '0',
+                  '--glow-radius': '200px'
+                } as React.CSSProperties}
+              >
+                <Image
+                  src="/gradient1.png"
+                  alt="Gradient Background"
+                  fill
+                  className="object-cover opacity-10 absolute inset-0 z-0 pointer-events-none"
+                  priority
+                />
+                <div className="relative z-10">
+                  <h3 className="text-white text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 w-full sm:w-[211px] text-center sm:text-left">
+                    Tutorials
+                  </h3>
+                  <p className="mb-4 sm:mb-8 w-full sm:w-[404px] text-white text-base sm:text-lg font-medium leading-6 sm:leading-7">
+                    Master concepts with interactive tutorials and expert-guided
+                    paths.
+                  </p>
+                  <div className="w-full h-[150px] sm:h-[200px] flex justify-center items-center relative sm:bottom-12">
+                    <Image
+                      src="/box2.svg"
+                      alt="Tutorials"
+                      width={250}
+                      height={250}
+                      className="w-[180px] sm:w-[250px] h-auto object-contain"
+                      priority
+                    />
+                  </div>
                 </div>
-              </div>
+              </MagicCard>
+
+              <MagicCard
+                enableTilt={true}
+                className="card flex flex-col justify-between relative rounded-2xl p-4 sm:p-8 w-full lg:w-[522px] h-auto sm:h-[512px] bg-[#0000ff]/0 backdrop-blur-[206.80px] overflow-hidden border border-[#392e4e] transition-colors duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] card--border-glow"
+                style={{
+                  '--glow-x': '50%',
+                  '--glow-y': '50%',
+                  '--glow-intensity': '0',
+                  '--glow-radius': '200px'
+                } as React.CSSProperties}
+              >
+                <Image
+                  src="/gradient3.png"
+                  alt="Gradient Background"
+                  fill
+                  className="object-cover opacity-90 absolute inset-0 z-0 pointer-events-none"
+                  priority
+                />
+                <div className="relative z-10">
+                  <h3 className="text-white text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 w-full sm:w-[211px] text-center sm:text-left">
+                    Leaderboards
+                  </h3>
+                  <p className="mb-4 sm:mb-8 w-full sm:w-[404px] text-white text-base sm:text-lg font-medium leading-6 sm:leading-7">
+                    Climb the ranks as you compete with coders worldwide.
+                  </p>
+                  <div className="w-full h-[150px] sm:h-[200px] flex justify-center items-center relative top-12 sm:bottom-12">
+                    <Image
+                      src="/box4.svg"
+                      alt="Leaderboards"
+                      width={360}
+                      height={360}
+                      className="w-[180px] sm:w-[360px] h-auto object-contain"
+                      priority
+                    />
+                  </div>
+                </div>
+              </MagicCard>
             </div>
           </div>
-
-          <div className="flex flex-col gap-4">
-            <div className="bg-[#1E1B2E] rounded-2xl p-4 sm:p-8 w-full lg:w-[522px] h-auto sm:h-80 bg-[#0000ff]/0 backdrop-blur-[206.80px] relative overflow-hidden">
-              <Image
-                src="/gradient1.png"
-                alt="Gradient Background"
-                fill
-                className="object-cover opacity-10"
-                priority
-              />
-              <div className="relative z-10">
-                <h3 className="text-white text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 w-full sm:w-[211px] text-center sm:text-left">
-                  Tutorials
-                </h3>
-                <p className="mb-4 sm:mb-8 w-full sm:w-[404px] text-white text-base sm:text-lg font-medium leading-6 sm:leading-7">
-                  Master concepts with interactive tutorials and expert-guided
-                  paths.
-                </p>
-                <div className="w-full h-[150px] sm:h-[200px] flex justify-center items-center relative sm:bottom-12">
-                  <Image
-                    src="/box2.svg"
-                    alt="Tutorials"
-                    width={250}
-                    height={250}
-                    className="w-[180px] sm:w-[250px] h-auto object-contain"
-                    priority
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="rounded-2xl p-4 sm:p-8 w-full lg:w-[522px] h-auto sm:h-[512px] bg-[#0000ff]/0 backdrop-blur-[206.80px] relative overflow-hidden">
-              <Image
-                src="/gradient3.png"
-                alt="Gradient Background"
-                fill
-                className="object-cover opacity-90"
-                priority
-              />
-              <div className="relative z-10">
-                <h3 className="text-white text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 w-full sm:w-[211px] text-center sm:text-left">
-                  Leaderboards
-                </h3>
-                <p className="mb-4 sm:mb-8 w-full sm:w-[404px] text-white text-base sm:text-lg font-medium leading-6 sm:leading-7">
-                  Climb the ranks as you compete with coders worldwide.
-                </p>
-                <div className="w-full h-[150px] sm:h-[200px] flex justify-center items-center relative top-12 sm:bottom-12">
-                  <Image
-                    src="/box4.svg"
-                    alt="Leaderboards"
-                    width={360}
-                    height={360}
-                    className="w-[180px] sm:w-[360px] h-auto object-contain"
-                    priority
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        </MagicBento>
       </section>
 
-      <section className="flex flex-col items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-20">
+      <section id="about" className="flex flex-col items-center w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20 py-20">
         <h2 className="text-white font-[600] text-3xl mb-16 text-center">
           What Coders Say About Code Clash
         </h2>
@@ -338,38 +411,44 @@ const Page = () => {
 
           <div className="overflow-hidden">
             <div
-              className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full transition-transform duration-300"
+              className="flex transition-transform duration-300 ease-in-out"
               style={{
                 transform: `translateX(-${testimonialPage * 100}%)`,
               }}
             >
-              {testimonials.map((testimonial, index) => (
-                <div
-                  key={index}
-                  className="bg-[#1A1D24] rounded-lg p-8 hover:bg-[#212631] transition-colors flex flex-col items-center text-center relative"
-                >
-                  <Image
-                    height={32}
-                    width={152}
-                    src="/quote.svg"
-                    alt="Quote icon"
-                    className="absolute top-0 left-0"
-                  />
-                  <p className="text-gray-300 z-10 text-lg mb-6 font-[600]">
-                    {testimonial.text}
-                  </p>
-                  <div className="w-20 h-20 relative mb-6 rounded-full overflow-hidden">
-                    <Image
-                      src={testimonial.image}
-                      alt={testimonial.name}
-                      fill
-                      className="object-cover"
-                    />
+              {[0, 1].map((pageIndex) => (
+                <div key={pageIndex} className="min-w-full px-1">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+                    {testimonials.slice(pageIndex * 3, (pageIndex + 1) * 3).map((testimonial, index) => (
+                      <div
+                        key={index}
+                        className="bg-[#1A1D24] rounded-lg p-8 hover:bg-[#212631] transition-colors flex flex-col items-center text-center relative"
+                      >
+                        <Image
+                          height={32}
+                          width={152}
+                          src="/quote.svg"
+                          alt="Quote icon"
+                          className="absolute top-0 left-0"
+                        />
+                        <p className="text-gray-300 z-10 text-lg mb-6 font-[600]">
+                          {testimonial.text}
+                        </p>
+                        <div className="w-20 h-20 relative mb-6 rounded-full overflow-hidden">
+                          <Image
+                            src={testimonial.image}
+                            alt={testimonial.name}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <h3 className="text-white font-semibold">
+                          {testimonial.name}
+                        </h3>
+                        <p className="text-gray-400">{testimonial.role}</p>
+                      </div>
+                    ))}
                   </div>
-                  <h3 className="text-white font-semibold">
-                    {testimonial.name}
-                  </h3>
-                  <p className="text-gray-400">{testimonial.role}</p>
                 </div>
               ))}
             </div>
@@ -491,7 +570,7 @@ const Page = () => {
         </div>
       )} */}
 
-      <footer className="bg-[#10141D] text-white py-16">
+      <footer id="footer" className="bg-[#10141D] text-white py-16">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-20">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             <div className="space-y-6">
