@@ -72,13 +72,11 @@ int main() {
 
     }
 }`,
-    javascript: `
-    // Input is available in variable named input or readline()
-    // Print output like this:
-    // console.log(answer);
-    //var raw = input;
-    // Write your code here
-`,
+    javascript: `// Input is available in variable named input or readline()
+// Print output like this:
+// console.log(answer);
+//var raw = input;
+// Write your code here`,
   });
   const [testCases, setTestCases] = useState<TestCase[]>([]);
   const [runResult, setRunResult] = useState<string | null>(null);
@@ -359,16 +357,16 @@ int main() {
                 </h3>
                 <div
                   className={`px-3 py-1 rounded-md font-medium text-xl shadow-lg ${submissionResult.status === "ACCEPTED"
-                      ? "bg-green-900/30 text-green-400 shadow-green-500/50"
-                      : submissionResult.status === "WRONG_ANSWER"
-                        ? "bg-red-900/30 text-red-400 shadow-red-500/50"
-                        : submissionResult.status === "RUNTIME_ERROR"
-                          ? "bg-orange-900/30 text-orange-400 shadow-orange-500/50"
-                          : submissionResult.status === "TIME_LIMIT_EXCEEDED"
+                    ? "bg-green-900/30 text-green-400 shadow-green-500/50"
+                    : submissionResult.status === "WRONG_ANSWER"
+                      ? "bg-red-900/30 text-red-400 shadow-red-500/50"
+                      : submissionResult.status === "RUNTIME_ERROR"
+                        ? "bg-orange-900/30 text-orange-400 shadow-orange-500/50"
+                        : submissionResult.status === "TIME_LIMIT_EXCEEDED"
+                          ? "bg-red-900/30 text-red-400 shadow-red-500/50"
+                          : submissionResult.status === "BANNED"
                             ? "bg-red-900/30 text-red-400 shadow-red-500/50"
-                            : submissionResult.status === "BANNED"
-                              ? "bg-red-900/30 text-red-400 shadow-red-500/50"
-                              : "bg-yellow-900/30 text-yellow-400 shadow-yellow-500/50"
+                            : "bg-yellow-900/30 text-yellow-400 shadow-yellow-500/50"
                     }`}
                 >
 
