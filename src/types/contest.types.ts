@@ -1,5 +1,6 @@
 export interface ContestDetails {
   name: string;
+  slug: string;
   startTime: {
     date: string;
     time: string;

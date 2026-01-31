@@ -136,6 +136,7 @@ export interface RegisterContestResponse {
 
 export interface UpdateContestPayload {
   title: string;
+  slug: string;
   description: string;
   startTime: string;
   endTime: string;
