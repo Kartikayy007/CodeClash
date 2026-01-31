@@ -6,6 +6,7 @@ import LabelButton from "@/components/ui/LabelButton";
 import Image from "next/image";
 import { contestApi } from "@/features/contests/api/contestApi";
 import { toast } from "react-hot-toast";
+import Loader from "@/components/ui/Loader";
 
 interface ApiError {
   response?: {
@@ -25,6 +26,7 @@ export default function CreateContest() {
     endTime: "",
     description: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -74,6 +76,7 @@ export default function CreateContest() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       const startDateTime = new Date(
         `${formData.startDate}T${formData.startTime}:00`,
@@ -101,6 +104,8 @@ export default function CreateContest() {
     } catch (error) {
       const err = error as ApiError;
       toast.error(err?.response?.data?.message || "Failed to create contest");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -156,6 +161,7 @@ export default function CreateContest() {
                 required
                 className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                   focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
+                disabled={isSubmitting}
               />
             </div>
 
@@ -173,6 +179,7 @@ export default function CreateContest() {
                   required
                   className=" w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                     focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
+                  disabled={isSubmitting}
                 />
               </div>
               <div className="form-item">
@@ -188,6 +195,7 @@ export default function CreateContest() {
                   required
                   className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                     focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
+                  disabled={isSubmitting}
                 />
               </div>
             </div>
@@ -206,6 +214,7 @@ export default function CreateContest() {
                   required
                   className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                     focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
+                  disabled={isSubmitting}
                 />
               </div>
               <div className="form-item">
@@ -221,13 +230,21 @@ export default function CreateContest() {
                   required
                   className="w-full h-[45px] px-3 sm:px-4 py-2 rounded-md bg-transparent border-2 border-[#D1D1D1] 
                     focus:outline-none transition-all duration-500 text-sm sm:text-base text-white"
+                  disabled={isSubmitting}
                 />
               </div>
             </div>
 
             <div className="flex justify-end">
-              <LabelButton type="submit" className="w-full">
-                Create Contest
+              <LabelButton type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <Loader size="small" />
+                    <span>Creating...</span>
+                  </div>
+                ) : (
+                  "Create Contest"
+                )}
               </LabelButton>
             </div>
           </form>

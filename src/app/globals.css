@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --shadow-drop: rgba(0, 0, 0, 0.25);
   --shadow-inner1: rgba(255, 255, 255, 0.15);

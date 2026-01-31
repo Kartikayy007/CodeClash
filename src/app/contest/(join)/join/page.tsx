@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import LabelButton from "@/components/ui/LabelButton";
 import Image from "next/image";
 import { contestApi } from "@/features/contests/api/contestApi";
+import Loader from "@/components/ui/Loader";
 
 interface ApiError {
   response?: {
@@ -17,6 +18,7 @@ interface ApiError {
 export default function JoinContest() {
   const [contestCode, setContestCode] = useState("");
   const [error, setError] = useState("");
+  const [isJoining, setIsJoining] = useState(false);
   const router = useRouter();
 
   const handleJoinContest = async (e: React.FormEvent) => {
@@ -30,6 +32,7 @@ export default function JoinContest() {
     
 
     try {
+      setIsJoining(true);
       const contestResponse = await contestApi.getContestDetails(contestCode);
       if (contestResponse.contest) {
         router.push(`/contest/join/${contestCode}`);
@@ -41,6 +44,8 @@ export default function JoinContest() {
     } catch (error) {
       const err = error as ApiError;
       setError(err?.response?.data?.message || "Contest not found");
+    } finally {
+      setIsJoining(false);
     }
   };
 
@@ -108,13 +113,21 @@ export default function JoinContest() {
                   text-sm sm:text-base
                   text-white
                   placeholder:text-gray-400`}
+                  disabled={isJoining}
                 />
                 {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
               </div>
             </div>
 
-            <LabelButton type="submit" className="w-full">
-              Join Contest
+            <LabelButton type="submit" className="w-full" disabled={isJoining}>
+              {isJoining ? (
+                <div className="flex items-center justify-center gap-2">
+                  <Loader size="small" />
+                  <span>Joining...</span>
+                </div>
+              ) : (
+                "Join Contest"
+              )}
             </LabelButton>
           </form>
         </div>

@@ -203,7 +203,7 @@ export default function ContestTable({ contests, loading, error }: ContestTableP
                     </div>
                   </td>
                   <td className="py-4 px-6 text-center">
-                    {contest.status === "UPCOMING" ? (
+                    {contest.status === "UPCOMING" || contest.status === "ONGOING" ? (
                       <button
                         onClick={(e) => handleEditClick(e, contest)}
                         className="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 border border-cyan-500/30 hover:from-cyan-500/30 hover:to-blue-500/30 transition-all duration-200"
