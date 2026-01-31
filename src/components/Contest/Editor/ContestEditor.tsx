@@ -451,7 +451,7 @@ int main() {
                 )}
 
               <div className="flex flex-wrap items-center gap-4 text-sm">
-                {submissionResult.executionTime !== undefined && (
+                {/* {submissionResult.executionTime !== undefined && (
                   <>
                     <div className="text-gray-300 flex items-center gap-2">
                       <span className="text-gray-500">Runtime:</span>{" "}
@@ -459,7 +459,7 @@ int main() {
                     </div>
                     <div className="h-4 border-r border-gray-700"></div>
                   </>
-                )}
+                )} */}
                 <div className="text-gray-300 flex items-center gap-2">
                   <span className="text-gray-500">Language:</span>{" "}
                   {submittedLanguage.charAt(0).toUpperCase() +
