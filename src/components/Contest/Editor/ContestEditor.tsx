@@ -72,13 +72,11 @@ int main() {
 
     }
 }`,
-    javascript: `
-    // Input is available in variable named input or readline()
-    // Print output like this:
-    // console.log(answer);
-    //var raw = input;
-    // Write your code here
-`,
+    javascript: `// Input is available in variable named input or readline()
+// Print output like this:
+// console.log(answer);
+//var raw = input;
+// Write your code here`,
   });
   const [testCases, setTestCases] = useState<TestCase[]>([]);
   const [runResult, setRunResult] = useState<string[]>([]);
