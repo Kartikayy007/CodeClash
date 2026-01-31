@@ -1,5 +1,5 @@
 # CodeClash 
-
+  
 CodeClash is a modern, interactive coding contest platform built with Next.js that enables developers to participate in competitive programming challenges. Whether you're looking to improve your coding skills, prepare for technical interviews, or compete with peers, CodeClash provides a feature-rich environment for all your competitive programming needs.
 
 ## Features
