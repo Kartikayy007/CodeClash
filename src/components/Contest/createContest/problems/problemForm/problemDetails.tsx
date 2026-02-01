@@ -8,6 +8,7 @@ interface ProblemDetailsFormData {
   inputFormat: string;
   constraints: string;
   outputFormat: string;
+  timeLimit: string;
 }
 
 interface ProblemDetailsFormProps {
@@ -44,7 +45,7 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-3 gap-6">
         <div>
           <label className="block text-[#D1D1D1] text-[14px] mb-2 font-medium">
             Rating
@@ -79,6 +80,24 @@ const ProblemDetailsForm: React.FC<ProblemDetailsFormProps> = ({
           />
           {errors.maxScore && (
             <p className="text-red-500 text-sm mt-1">Max score is required</p>
+          )}
+        </div>
+        <div>
+          <label className="block text-[#D1D1D1] text-[14px] mb-2 font-medium">
+            Time Limit (s)
+          </label>
+          <input
+            type="number"
+            name="timeLimit"
+            value={formData.timeLimit}
+            onChange={onChange}
+            data-error={errors.timeLimit || undefined}
+            className={`w-full h-[45px] px-4 py-2 rounded-lg bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border shadow-lg shadow-cyan-500/10
+              ${errors.timeLimit ? "border-red-500 error-outline" : "border-cyan-500/20"}
+              focus:outline-none focus:border-cyan-500/40 transition-all duration-200 text-sm text-white`}
+          />
+          {errors.timeLimit && (
+            <p className="text-red-500 text-sm mt-1">Time Limit is required</p>
           )}
         </div>
       </div>

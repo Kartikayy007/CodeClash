@@ -20,6 +20,7 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
     name: "",
     rating: "",
     maxScore: "",
+    timeLimit: "",
     description: "",
     inputFormat: "",
     constraints: "",
@@ -73,6 +74,11 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
     }
     if (!formData.maxScore.trim()) {
       newErrors.maxScore = true;
+      isValid = false;
+      hasDetailsErrors = true;
+    }
+    if (!formData.timeLimit.trim()) {
+      newErrors.timeLimit = true;
       isValid = false;
       hasDetailsErrors = true;
     }
@@ -151,6 +157,7 @@ const CreateProblem: React.FC<CreateProblemProps> = ({ onBack, onSave }) => {
         name: formData.name,
         maxScore: parseInt(formData.maxScore),
         rating: parseInt(formData.rating),
+        timeLimit: parseInt(formData.timeLimit) * 1000,
         description: unescapeNewlines(formData.description),
         inputFormat: unescapeNewlines(formData.inputFormat),
         constraints: unescapeNewlines(formData.constraints),

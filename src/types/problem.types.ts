@@ -7,6 +7,7 @@ export interface Problem {
   inputFormat: string;
   constraints: string;
   outputFormat: string;
+  timeLimit: number;
   testCases: Array<{
     input: string;
     output: string;
@@ -23,6 +24,7 @@ export interface ProblemFormData {
   inputFormat: string;
   constraints: string;
   outputFormat: string;
+  timeLimit: string;
   testCases: Array<{
     input: string;
     output: string;
