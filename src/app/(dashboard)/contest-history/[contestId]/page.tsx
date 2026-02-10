@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Leaderboard from "@/components/Contest/contestPage/Leaderboard"
 import ProblemSet from "@/components/Contest/PreviewContest/ProblemSet"
 import ReactMarkdown from "react-markdown"
+import { sortProblemsByDifficulty } from "@/utils/problemSort"
 
 interface Contest {
   id: string
@@ -24,7 +25,7 @@ interface Contest {
   isPublic: boolean
   status: "UPCOMING" | "ONGOING" | "ENDED"
   createdAt: string
-  organizationName?: string| null
+  organizationName?: string | null
   creator: {
     id: string
     username: string
@@ -284,7 +285,7 @@ export default function PastContestPage() {
   const renderLeaderboardTab = () => (
     <Leaderboard
       contestId={contestId}
-    />  
+    />
   )
 
   const handleViewProblem = useCallback(
@@ -294,13 +295,18 @@ export default function PastContestPage() {
     [router, contestId],
   )
 
-  const renderQuestionsTab = () => (
-    <ProblemSet
-      problems={contest?.questions || []}
-      onSolveProblem={handleViewProblem}
-      isLoading={loading}
-    />
-  )
+  const renderQuestionsTab = () => {
+    // Sort problems by difficulty: EASY -> MEDIUM -> HARD
+    const sortedProblems = sortProblemsByDifficulty(contest?.questions || []);
+
+    return (
+      <ProblemSet
+        problems={sortedProblems}
+        onSolveProblem={handleViewProblem}
+        isLoading={loading}
+      />
+    );
+  };
 
 
 
@@ -368,34 +374,34 @@ export default function PastContestPage() {
         {/* Tabs */}
         <Tabs defaultValue="overview" className="mb-8">
           <TabsList className="grid w-full grid-cols-3 bg-gradient-to-br from-[#1a1d26] to-[#1e222c] border border-cyan-500/20">
-            <TabsTrigger 
-              value="overview" 
+            <TabsTrigger
+              value="overview"
               className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-cyan-500/25"
             >
               Overview
             </TabsTrigger>
-            <TabsTrigger 
-              value="leaderboard" 
+            <TabsTrigger
+              value="leaderboard"
               className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-cyan-500/25"
             >
               Leaderboard
             </TabsTrigger>
-            <TabsTrigger 
-              value="questions" 
+            <TabsTrigger
+              value="questions"
               className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-cyan-500/25"
             >
               Questions
             </TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="overview" className="mt-8">
             {renderOverviewTab()}
           </TabsContent>
-          
+
           <TabsContent value="leaderboard" className="mt-8">
             {renderLeaderboardTab()}
           </TabsContent>
-          
+
           <TabsContent value="questions" className="mt-8">
             {renderQuestionsTab()}
           </TabsContent>

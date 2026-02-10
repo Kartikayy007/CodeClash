@@ -13,6 +13,7 @@ import { Timer } from "lucide-react";
 import ProblemSet from "@/components/Contest/PreviewContest/ProblemSet";
 import Leaderboard from "@/components/Contest/contestPage/Leaderboard";
 import MySubmissions from "@/components/Contest/contestPage/MySubmissions";
+import { sortProblemsByDifficulty } from "@/utils/problemSort";
 
 interface ApiError {
   response: {
@@ -205,18 +206,21 @@ export default function ContestPage() {
   const renderTabContent = () => {
     switch (activeTab) {
       case "Problem Set":
+        const problems = contest?.questions.map((q) => ({
+          id: q.id,
+          title: q.title,
+          rating: q.rating || 0,
+          score: q.score || 0,
+          difficulty: q.difficulty,
+          status: (q.submissions?.accepted && q.submissions.accepted > 0 ? "SOLVED" : null) as "SOLVED" | "UNSOLVED" | null,
+        })) || [];
+
+        // Sort problems by difficulty
+        const sortedProblems = sortProblemsByDifficulty(problems);
+
         return (
           <ProblemSet
-            problems={
-              contest?.questions.map((q) => ({
-                id: q.id,
-                title: q.title,
-                rating: q.rating || 0,
-                score: q.score || 0,
-                difficulty: q.difficulty,
-                status: q.submissions?.accepted && q.submissions.accepted > 0 ? "SOLVED" : null,
-              })) || []
-            }
+            problems={sortedProblems}
             onSolveProblem={handleSolveProblem}
             isLoading={loadingProblems}
           />

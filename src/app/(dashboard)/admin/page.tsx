@@ -236,7 +236,7 @@ export default function AdminDashboard() {
       ?.split("=")[1]
   }
 
-  
+  // fetch contest
   const fetchContests = async (isRefresh = false) => {
     if (isRefresh) {
       setRefreshing(true)
@@ -284,7 +284,7 @@ export default function AdminDashboard() {
     }
   }
 
-  
+  // start contest
   const startContest = async (contestId: string) => {
     setStartingContest(contestId)
     try {
@@ -322,7 +322,7 @@ export default function AdminDashboard() {
     }
   }
 
-  
+  // end contest
   const endContest = async (contestId: string) => {
     setEndingContest(contestId)
     try {
@@ -361,7 +361,7 @@ export default function AdminDashboard() {
     }
   }
 
-  
+//kick user  
   const kickUser = async (contestId: string, participantId: string) => {
     setKickingUser(participantId)
     try {
@@ -405,7 +405,7 @@ export default function AdminDashboard() {
     }
   }
 
-  
+  //Ban user
   const banUser = async (contestId: string, participantId: string) => {
     setBanningUser(participantId)
     try {
@@ -448,7 +448,7 @@ export default function AdminDashboard() {
     }
   }
 
-  
+  // Fetch
   const fetchLeaderboard = async (contestId: string) => {
     setLeaderboardLoading(true)
     try {
@@ -491,7 +491,7 @@ export default function AdminDashboard() {
     }
   }
 
-  
+  // Fetch user details
   const fetchUserDetails = async (contestId: string, userId: string) => {
     setUserDetailsLoading(true)
     setSelectedUserId(userId)
