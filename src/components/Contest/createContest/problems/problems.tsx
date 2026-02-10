@@ -34,6 +34,7 @@ interface ProblemComponentProps {
     inputFormat: string;
     constraints: string;
     outputFormat: string;
+    timeLimit: number;
     testCases: Array<{
       input: string;
       output: string;
@@ -93,6 +94,7 @@ const Problems: React.FC<ProblemComponentProps> = ({
         inputFormat: "",
         constraints: "",
         outputFormat: "",
+        timeLimit: editedProblem.timeLimit || 1000,
         testCases: [],
       });
       toast.success("Problem updated successfully");
@@ -151,6 +153,7 @@ const Problems: React.FC<ProblemComponentProps> = ({
         inputFormat: data.inputFormat || "",
         constraints: data.constraints || "",
         outputFormat: data.outputFormat || "",
+        timeLimit: data.timeLimit || 1000,
         testCases:
           data.testCases?.map((tc) => ({
             input: tc.input || "",
@@ -191,6 +194,7 @@ const Problems: React.FC<ProblemComponentProps> = ({
         inputFormat: problem.inputFormat || "",
         constraints: problem.constraints || "",
         outputFormat: problem.outputFormat || "",
+        timeLimit: problem.timeLimit || 1000,
         testCases:
           problem.testCases?.map((tc) => ({
             input: tc.input || "",

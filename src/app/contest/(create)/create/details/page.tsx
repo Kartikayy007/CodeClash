@@ -52,6 +52,7 @@ interface Problem {
   inputFormat: string;
   constraints: string;
   outputFormat: string;
+  timeLimit: number;
   testCases: Array<{
     input: string;
     output: string;
@@ -168,6 +169,7 @@ const Details = () => {
                 inputFormat: q.inputFormat || "",
                 constraints: q.constraints || "",
                 outputFormat: q.outputFormat || "",
+                timeLimit: 1000,
                 testCases: Array.isArray(q.testCases)
                   ? q.testCases.map((tc: TestCase) => ({
                       input: tc.input || "",
@@ -376,7 +378,7 @@ const Details = () => {
                 : "HARD",
           rating: problemData.rating,
           score: problemData.maxScore,
-          timeLimit: 1000,
+          timeLimit: problemData.timeLimit || 1000,
           memoryLimit: 256,
           testCases: problemData.testCases.map((tc) => ({
             input: tc.input,

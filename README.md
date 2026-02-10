@@ -5,7 +5,7 @@ CodeClash is a modern, interactive coding contest platform built with Next.js th
 ## Features
 
 ### Contest Ecosystem
-- **Advanced Contest Management**: Create, join, and manage coding contests with flexible configuration options
+- **Advanced Contest Management**: Create , join, and manage coding contests with flexible configuration options
 - **Public & Private Contests**: Host both public contests for everyone and private contests for your organization or friends
 - **Contest Templates**: Save time with reusable contest templates for recurring events
 - **Multiple Contest Formats**: Support for various contest formats including ACM-ICPC style, CodeForces style, and custom formats
