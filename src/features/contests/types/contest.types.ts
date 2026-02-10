@@ -1,6 +1,7 @@
 export interface Contest {
   id: string;
   title: string;
+  slug?: string;
   description: string;
   startTime: string;
   endTime: string;
@@ -26,10 +27,10 @@ export interface Contest {
     submissions: Array<{
       questionId: string;
       status:
-        | "ACCEPTED"
-        | "WRONG_ANSWER"
-        | "TIME_LIMIT_EXCEEDED"
-        | "RUNTIME_ERROR";
+      | "ACCEPTED"
+      | "WRONG_ANSWER"
+      | "TIME_LIMIT_EXCEEDED"
+      | "RUNTIME_ERROR";
       submittedAt: string;
     }>;
   };
@@ -56,14 +57,14 @@ export interface SubmissionItem {
   code: string;
   language: string;
   status:
-    | "ACCEPTED"
-    | "WRONG_ANSWER"
-    | "RUNTIME_ERROR"
-    | "COMPILATION_ERROR"
-    | "TIME_LIMIT_EXCEEDED"
-    | "MEMORY_LIMIT_EXCEEDED"
-    | "SEGMENTATION_FAULT"
-    | "INFINITE_LOOP";
+  | "ACCEPTED"
+  | "WRONG_ANSWER"
+  | "RUNTIME_ERROR"
+  | "COMPILATION_ERROR"
+  | "TIME_LIMIT_EXCEEDED"
+  | "MEMORY_LIMIT_EXCEEDED"
+  | "SEGMENTATION_FAULT"
+  | "INFINITE_LOOP";
   executionTime: number | null;
   memory: string | null;
   failedTestCase: number | null;
@@ -136,6 +137,7 @@ export interface RegisterContestResponse {
 
 export interface UpdateContestPayload {
   title: string;
+  slug: string;
   description: string;
   startTime: string;
   endTime: string;

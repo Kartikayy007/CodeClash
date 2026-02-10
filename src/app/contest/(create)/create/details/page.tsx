@@ -69,6 +69,7 @@ const Details = () => {
   const [activeSection, setActiveSection] = useState<ContestSection>("basic");
   const [formData, setFormData] = useState<ContestDetails>({
     name: "",
+    slug: "",
     startTime: {
       date: "",
       time: "",
@@ -132,6 +133,7 @@ const Details = () => {
 
         const formattedData = {
           name: contestData.title || "",
+          slug: contestData.slug || "",
           startTime: {
             date: startTime.toISOString().split("T")[0],
             time: startTime.toTimeString().slice(0, 5),
@@ -268,6 +270,7 @@ const Details = () => {
     try {
       await contestApi.updateContest(contestId, {
         title: formData.name,
+        slug: formData.slug,
         description: formData.description,
         startTime: `${formData.startTime.date} ${formData.startTime.time}:00`,
         endTime: `${formData.endTime.date} ${formData.endTime.time}:00`,
