@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Leaderboard from "@/components/Contest/contestPage/Leaderboard"
 import ProblemSet from "@/components/Contest/PreviewContest/ProblemSet"
 import ReactMarkdown from "react-markdown"
-
+import { sortProblemsByDifficulty } from "@/utils/problemSort"
 interface Contest {
   id: string
   title: string
@@ -294,13 +294,16 @@ export default function PastContestPage() {
     [router, contestId],
   )
 
-  const renderQuestionsTab = () => (
-    <ProblemSet
-      problems={contest?.questions || []}
-      onSolveProblem={handleViewProblem}
-      isLoading={loading}
-    />
-  )
+  const renderQuestionsTab = () => {
+    const sortedProblems = sortProblemsByDifficulty(contest?.questions || []);
+    return (
+      <ProblemSet
+        problems={sortedProblems}
+        onSolveProblem={handleViewProblem}
+        isLoading={loading}
+      />
+    );
+};
 
 
 

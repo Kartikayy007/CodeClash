@@ -8,7 +8,7 @@ import ProblemSet from "@/components/Contest/PreviewContest/ProblemSet";
 // import Leaderboard from '@/components/Contest/contestPage/Leaderboard';
 // import MySubmissions from '@/components/Contest/contestPage/MySubmissions';
 import ContestInsights from "@/components/Contest/contestPage/ContestInsights";
-
+import { sortProblemsByDifficulty } from "@/utils/problemSort";
 interface PreviewProblem {
   id: string;
   title: string;
@@ -77,14 +77,15 @@ export default function PreviewContest({ contest }: PreviewContestProps) {
   // const [searchQuery, setSearchQuery] = useState('');
 
   // Placeholder data for preview
-  const problems: PreviewProblem[] = contest.problems.map((p) => ({
+  const problems: PreviewProblem[] = sortProblemsByDifficulty(contest.problems.map((p) => ({
     id: p.id || crypto.randomUUID(),
     title: p.name,
     rating: p.rating,
     score: p.score,
     status: null,
     difficulty: p.rating < 1000 ? "EASY" : p.rating < 2000 ? "MEDIUM" : "HARD",
-  }));
+  }))
+);
 
   const insights: ContestInsights = {
     rank: 1,
