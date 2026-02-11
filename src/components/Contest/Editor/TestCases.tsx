@@ -149,7 +149,7 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
           </h3>
 
           {!isCustomInputMode && testCases.length > 0 && (
-            <div className="flex gap-2 ml-4">
+            <div className="flex gap-2 ml-4 overflow-x-auto flex-nowrap [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               {testCases.map((_, index) => (
                 <button
                   key={index}
@@ -157,7 +157,7 @@ const TestCases = forwardRef<TestCasesRef, TestCasesProps>(
                     setActiveCase(index);
                     if (onCaseChange) onCaseChange(index);
                   }}
-                  className={`px-3 py-1 rounded text-sm ${activeCase === index
+                  className={`px-3 py-1 rounded text-sm flex-shrink-0 ${activeCase === index
                     ? "bg-[#292C33] text-white"
                     : "text-gray-400 hover:text-white"
                     }`}
