@@ -89,6 +89,8 @@ const LibProblems: React.FC<LibProblemsProps> = ({ onAddProblems }) => {
           inputFormat: problem.inputFormat,
           constraints: problem.constraints,
           outputFormat: problem.outputFormat,
+          timeLimit: problem.timeLimit,
+          memoryLimit: problem.memoryLimit,
           testCases: problem.testCases.map((tc) => ({
             input: tc.input,
             output: tc.output,
