@@ -71,7 +71,7 @@ const ProblemPage = () => {
 
   return (
     <div className="min-h-screen bg-[#10141D]">
-      <div className="flex md:-mt-16 mt-0 flex-col sm:flex-row items-center justify-end gap-4 p-4 text-white bg-[#10151c]">
+      <div className="flex md:-mt-16 mt-0 flex-col justify-start sm:flex-row sm:items-center sm:justify-end gap-4 p-4 text-white bg-[#10151c]">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
