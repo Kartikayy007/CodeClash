@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react"
 import ContestEditor from "@/components/Contest/Editor/ContestEditor"
-import { useParams } from "next/navigation"
+import { useRouter, useParams } from "next/navigation";
 import { contestApi } from "@/features/contests/api/contestApi"
 import { Home, Clock, AlertTriangle } from "lucide-react"
 import Link from "next/link"
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 
 const ProblemPage = () => {
+  const router = useRouter()
   const params = useParams()
   const problemId = params?.problemId as string
   const contestId = params?.contestId as string
@@ -26,6 +27,10 @@ const ProblemPage = () => {
           const timeLeftInSeconds = Math.floor((endTimeMs - now) / 1000)
           setTimeLeft(timeLeftInSeconds > 0 ? timeLeftInSeconds : 0)
         }
+        if (!response.contest.isRegistered) {
+            router.push(`/contest/join/${contestId}`);
+            return;
+          }
       } catch (error) {
         console.error("Failed to fetch contest details:", error)
       }
