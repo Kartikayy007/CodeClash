@@ -66,6 +66,10 @@ export default function ContestPage() {
             router.push(`/contest/join/${contestId}`);
             return;
           }
+          if (!response.contest.isRegistered) {
+            router.push(`/contest/join/${contestId}`);
+            return;
+          }
 
           if (response.contest.status === "ONGOING") {
             const endTime = new Date(response.contest.endTime).getTime();
