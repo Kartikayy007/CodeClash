@@ -63,17 +63,18 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background py-2 md:p-2">
       <div className="max-w-auto mx-auto">
         {/* Mobile Action Buttons */}
-        <div className="flex flex-col gap-3 mb-6 lg:hidden">
-          <div className="flex gap-3">
-            <div className="flex-1">
+        {/* <div className="flex flex-col gap-3 mb-6 lg:hidden"> */}
+        <div className="flex flex-row gap-3 mb-6 lg:hidden">
+          {/* <div className="flex gap-3"> */}
+          {/* <div className="flex-1">
               <PlayButton />
-            </div>
-            <div className="flex-1">
-              <LabelButton variant="filled" onClick={() => router.push("/contest/join")} className="w-full">
-                Play Contest
-              </LabelButton>
-            </div>
+            </div> */}
+          <div className="flex-1">
+            <LabelButton variant="filled" onClick={() => router.push("/contest/join")} className="w-full">
+              Play Contest
+            </LabelButton>
           </div>
+          {/* </div> */}
           <div className="flex-1">
             <LabelButton variant="filled" onClick={() => router.push("/practice")} className="w-full">
               Practice Now
@@ -98,11 +99,11 @@ export default function Dashboard() {
           {/* Column 3 */}
           <div className="flex flex-col gap-6">
             {/* Desktop Action Buttons */}
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-row gap-3">
               <div className="flex gap-3">
-                <div className="flex-1">
-                  <PlayButton />
-                </div>
+                {/* <div className="flex-1">
+                   <PlayButton /> 
+                </div> */}
                 <div className="flex-1">
                   <LabelButton variant="filled" onClick={() => router.push("/contest/join")} className="w-full">
                     Play Contest
